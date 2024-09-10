@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -8,12 +9,30 @@ import { KeycloakService } from 'keycloak-angular';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
+
 export class LoginComponent {
 
-  constructor(private keycloakService: KeycloakService) {}
+  loggedIn = false;
+
+  constructor(private authService: AuthService) {}
   
-  logIn() {
-    console.log("Test");
-    this.keycloakService.login();
+  ngOnInit(): void {
+    this.updateLoggedIn();
+  }
+
+  updateLoggedIn() {
+    this.authService.isAuthenticated().then(loggedIn => {
+      this.loggedIn = loggedIn;
+    });
+  }
+
+  async logIn() {
+    this.authService.login();
+    this.updateLoggedIn();
+  }
+
+  async logOut() {
+    this.authService.logout();
+    this.updateLoggedIn();
   }
 }

@@ -1,6 +1,14 @@
 <div>
     <div class="image-container">
+        <div>
+            @if (loggedIn) {
+                The user is logged in
+              } @else {
+                The user is not logged in
+              } 
+        </div>
         <button (click)="logIn()">login</button>
+        <button (click)="logOut()">log out</button>
         <!--
         <div class="p-2">
             <a class="text-white" href="{{footerLink}}" target="_blank">{{ footerName }}</a>

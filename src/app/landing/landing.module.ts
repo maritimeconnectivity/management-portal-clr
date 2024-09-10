@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { LandingComponent } from './landing.component';
 import { LandingRoutingModule } from './landing-routing.module';
 import { KeycloakService } from 'keycloak-angular';
-import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { AuthModule } from '../auth/auth.module';
     LandingRoutingModule,
     LoginComponent,
     ProcessDialogComponent,
-    RegisterDialogComponent,
-    AuthModule
+    RegisterDialogComponent
   ],
   providers: [
   ]

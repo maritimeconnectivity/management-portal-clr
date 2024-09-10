@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ClarityModule } from "@clr/angular";
 import { initializeKeycloak } from './auth/auth.init';
-import { KeycloakService } from 'keycloak-angular';
+import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 
 @NgModule({
   declarations: [
@@ -15,9 +15,16 @@ import { KeycloakService } from 'keycloak-angular';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    ClarityModule,
+    ClarityModule
   ],
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeKeycloak,
+      multi: true,
+      deps: [KeycloakService]
+    },
+    KeycloakService
   ],
   bootstrap: [AppComponent]
 })
