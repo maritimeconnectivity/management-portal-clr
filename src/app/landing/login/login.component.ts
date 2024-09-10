@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { KeycloakService } from 'keycloak-angular';
 
 @Component({
   selector: 'app-login',
@@ -9,4 +10,10 @@ import { Component } from '@angular/core';
 })
 export class LoginComponent {
 
+  constructor(private keycloakService: KeycloakService) {}
+  
+  logIn() {
+    console.log("Test");
+    this.keycloakService.login();
+  }
 }

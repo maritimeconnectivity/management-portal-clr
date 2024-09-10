@@ -6,6 +6,8 @@ import { RegisterDialogComponent } from './register-dialog/register-dialog.compo
 import { RouterModule } from '@angular/router';
 import { LandingComponent } from './landing.component';
 import { LandingRoutingModule } from './landing-routing.module';
+import { KeycloakService } from 'keycloak-angular';
+import { AuthModule } from '../auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,10 @@ import { LandingRoutingModule } from './landing-routing.module';
     LandingRoutingModule,
     LoginComponent,
     ProcessDialogComponent,
-    RegisterDialogComponent
+    RegisterDialogComponent,
+    AuthModule
+  ],
+  providers: [
   ]
 })
 export class LandingModule { }

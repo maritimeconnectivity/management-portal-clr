@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+
+.image-container { 
+    background: url("../../../assets/images/sea_background.jpg") no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.description-font {
+    font-family: 'Quicksand', sans-serif;
+}
+
+.title-font {
+    font-family: 'Staatliches', cursive;
+    font-size: 4rem;
+}
+
+.subtitle-font {
+    font-family: 'Staatliches', cursive;
+    font-size: 3rem;
+    
+}
+
+.trans-background {
+    min-width: 500px;
+    background:rgba(255, 255, 255, 0);
+    border: 0px;
+    color: white;
+}
+
+.mcp-logo {
+    width: 50%;
+    min-width: 300px;
+    max-width: 400px;
+    -webkit-filter: drop-shadow( 10px 10px 30px rgba(0, 0, 0, .7));
+    filter: drop-shadow( 10px 10px 30px rgba(0, 0, 0, .7));
+}

@@ -1,9 +1,11 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ClarityModule } from "@clr/angular";
+import { initializeKeycloak } from './auth/auth.init';
+import { KeycloakService } from 'keycloak-angular';
 
 @NgModule({
   declarations: [
@@ -13,9 +15,10 @@ import { ClarityModule } from "@clr/angular";
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    ClarityModule
+    ClarityModule,
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

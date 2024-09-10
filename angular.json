@@ -8,7 +8,8 @@
   "projects": {
     "management-portal-clr": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
