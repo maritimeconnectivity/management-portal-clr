@@ -28,7 +28,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/@cds/core/global.min.css",
+              "node_modules/@cds/core/styles/theme.dark.min.css",
+              "node_modules/@clr/ui/clr-ui.min.css"
             ],
             "scripts": []
           },
@@ -63,10 +66,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "management-portal-clr:build:production"
+              "buildTarget": "management-portal-clr:build:production"
             },
             "development": {
-              "browserTarget": "management-portal-clr:build:development"
+              "buildTarget": "management-portal-clr:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +77,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "management-portal-clr:build"
+            "buildTarget": "management-portal-clr:build"
           }
         },
         "test": {
@@ -90,7 +93,10 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/@cds/core/global.min.css",
+              "node_modules/@cds/core/styles/theme.dark.min.css",
+              "node_modules/@clr/ui/clr-ui.min.css"
             ],
             "scripts": []
           }
