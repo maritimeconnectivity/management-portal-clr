@@ -1,25 +1,16 @@
-import { Injectable } from "@angular/core";
-import { Router, UrlTree } from "@angular/router";
-import { KeycloakAuthGuard, KeycloakService } from "keycloak-angular";
 
-@Injectable({
-  providedIn: 'root'
-})
-export class AuthGuard extends KeycloakAuthGuard {
-  constructor(
-    protected override readonly router: Router,
-    protected readonly keycloak: KeycloakService
-  ) {
-    super(router, keycloak);
-  }
+import { inject } from '@angular/core';
+import { CanActivateFn, Router } from '@angular/router';
+import { AuthService } from './auth.service';
 
-  async isAccessAllowed(): Promise<boolean | UrlTree> {
-    return true;
-    /*
-    if (!this.authenticated) {
-      await this.router.navigate(['/login']);
+export const authGuard: CanActivateFn = async (route, state) => {
+    const authService = inject(AuthService);
+    const router = inject(Router);
+
+    if (await authService.isAuthenticated() == false) {
+        router.navigate(['/login']);
+        return false;
     }
-    return this.authenticated;
-    */
-  }
-}
+
+    return await authService.isAuthenticated();
+};
