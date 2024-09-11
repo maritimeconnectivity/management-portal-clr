@@ -1,6 +1,14 @@
 {
   "name": "management-portal-clr",
-  "version": "0.0.0",
+  "version": "0.0.1",
+  "license": "Apache license 2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maritimeconnectivity/management-portal-clr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maritimeconnectivity/management-portal-clr/issues"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
