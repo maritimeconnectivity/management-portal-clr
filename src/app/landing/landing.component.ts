@@ -20,7 +20,7 @@ import { Component } from '@angular/core';
  * a component for landing module
  */
 @Component({
-  selector: 'ngx-landing',
+  selector: 'mp-landing',
   template: '<router-outlet></router-outlet>',
 })
 export class LandingComponent{

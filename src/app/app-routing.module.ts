@@ -30,8 +30,10 @@ export const routes: Routes = [
     loadChildren: () => import('./landing/landing.module')
       .then(m => m.LandingModule),
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  //*
+  //{ path: '', redirectTo: 'pages', pathMatch: 'full' },
+  //{ path: '**', redirectTo: 'pages' },
+  //*/
 ];
 
 const config: ExtraOptions = {

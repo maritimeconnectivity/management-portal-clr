@@ -9,5 +9,5 @@ import { LayoutModule } from "../../layout/layout.module";
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  title = 'management-portal-clr';
+  title = 'a fancy dashboard';
 }

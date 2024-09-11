@@ -14,19 +14,22 @@ import { AboutComponent } from './about/about.component';
 */
 import { authGuard } from '../auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { PagesComponent } from './pages/pages.component';
+import { PagesComponent } from './pages.component';
 
 const routes: Routes = [
   {
   path: '',
   component: PagesComponent,
-  canActivate: [authGuard],
+  //canActivate: [authGuard],
   children: [
     {
-      path: 'dashboard',
+      path: '',
       component: DashboardComponent,
-    }
+    },
+    { path: '', redirectTo: '', pathMatch: 'full' },
+    { path: '**', redirectTo: '' },
     /*
+    
     // identity registry
     {
       path: 'ir/devices',

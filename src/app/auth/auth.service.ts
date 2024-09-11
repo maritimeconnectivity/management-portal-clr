@@ -11,7 +11,7 @@ export class AuthService {
 
   public async login() {
     await this.keycloakService.login({
-        redirectUri:'http://localhost:4200/pages/dashboard'
+        redirectUri:'http://localhost:4200/pages'
     });
   }
 
