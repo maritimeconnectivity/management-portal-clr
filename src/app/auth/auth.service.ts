@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 
 @Injectable({
@@ -6,10 +7,12 @@ import { KeycloakService } from 'keycloak-angular';
 })
 export class AuthService {
 
-  constructor(private keycloakService: KeycloakService) {}
+  constructor(private keycloakService: KeycloakService, private router: Router) {}
 
   public async login() {
-    await this.keycloakService.login();
+    await this.keycloakService.login({
+        redirectUri:'http://localhost:4200/pages/dashboard'
+    });
   }
 
   public async logout() {
