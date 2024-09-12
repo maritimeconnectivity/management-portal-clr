@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-import { AppConfig } from './../app.config';
-import { KeycloakService } from 'keycloak-angular';
-import Keycloak from 'keycloak-js';
+import {AppConfig} from '../app.config';
+import {KeycloakService} from 'keycloak-angular';
 
 
-export const initializeKeycloak = (keycloak: KeycloakService) =>{
-  return () =>
-    keycloak.init({
-      config: {
-        url: AppConfig.OIDC_BASE_PATH + '/auth/',
-        realm: 'MCP',
-        clientId: 'MCP-Portal'
-      },
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri:
-          window.location.origin + '/assets/silent-check-sso.html'
-      }
-    });
+export const initializeKeycloak = (keycloak: KeycloakService) => {
+    return () =>
+        keycloak.init({
+            config: {
+                url: AppConfig.OIDC_BASE_PATH + '/auth/',
+                realm: 'MCP',
+                clientId: 'MCP-Portal',
+            },
+            enableBearerInterceptor: true,
+            initOptions: {
+                onLoad: 'check-sso',
+                silentCheckSsoRedirectUri:
+                    window.location.origin + '/assets/silent-check-sso.html'
+            }
+        });
 }
 
 /*
