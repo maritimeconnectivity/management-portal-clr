@@ -8,7 +8,8 @@ import {ApiModule as MIRApiModule} from './backend-api/identity-registry';
 import {ApiModule as MSRApiModule} from './backend-api/service-registry';
 import {ApiModule as SECOMApiModule} from './backend-api/secom';
 import {initializeKeycloak} from './auth/auth.init';
-import {KeycloakService} from 'keycloak-angular';
+import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
+import {provideHttpClient} from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import {KeycloakService} from 'keycloak-angular';
         ClarityModule,
         MIRApiModule,
         MSRApiModule,
-        SECOMApiModule
+        SECOMApiModule,
+        KeycloakAngularModule
     ],
     providers: [
         {
@@ -30,7 +32,7 @@ import {KeycloakService} from 'keycloak-angular';
             multi: true,
             deps: [KeycloakService]
         },
-        KeycloakService
+        provideHttpClient()
     ],
     bootstrap: [AppComponent]
 })
