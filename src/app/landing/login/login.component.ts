@@ -1,11 +1,14 @@
 import { Component, Injectable } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from 'src/app/auth/auth.service';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+    imports: [
+        NgIf
+    ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

@@ -5,6 +5,7 @@ import { HeaderComponent } from './header/header.component';
 import { LayoutComponent } from './layout/layout.component';
 import { MainComponent } from './main/main.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import {RouterLink, RouterLinkActive} from "@angular/router";
 
 
 @NgModule({
@@ -16,7 +17,9 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   ],
   imports: [
     CommonModule,
-    ClarityModule
+    ClarityModule,
+    RouterLink,
+    RouterLinkActive
   ],
   exports: [
     LayoutComponent

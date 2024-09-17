@@ -9,7 +9,7 @@ import {ApiModule as MSRApiModule} from './backend-api/service-registry';
 import {ApiModule as SECOMApiModule} from './backend-api/secom';
 import {initializeKeycloak} from './auth/auth.init';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
-import {provideHttpClient} from "@angular/common/http";
+import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -32,7 +32,7 @@ import {provideHttpClient} from "@angular/common/http";
             multi: true,
             deps: [KeycloakService]
         },
-        provideHttpClient()
+        provideHttpClient(withInterceptorsFromDi())
     ],
     bootstrap: [AppComponent]
 })
