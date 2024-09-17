@@ -14,8 +14,8 @@ import { SortObject } from './sortObject';
 import { Vessel } from './vessel';
 
 export interface PageVessel { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     pageable?: PageableObject;
     first?: boolean;
     last?: boolean;

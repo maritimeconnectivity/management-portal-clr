@@ -112,58 +112,6 @@ export class DeviceControllerService {
 
     /**
      * 
-     * Create a new device identity
-     * @param body 
-     * @param orgMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createDevice1(body: Device, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Device>;
-    public createDevice1(body: Device, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Device>>;
-    public createDevice1(body: Device, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Device>>;
-    public createDevice1(body: Device, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createDevice1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling createDevice1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<Device>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/device`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Delete a device identity
      * @param orgMrn 
      * @param deviceMrn 
@@ -199,52 +147,6 @@ export class DeviceControllerService {
         ];
 
         return this.httpClient.request<any>('delete',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Delete a device identity
-     * @param orgMrn 
-     * @param deviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteDevice1(orgMrn: string, deviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteDevice1(orgMrn: string, deviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteDevice1(orgMrn: string, deviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteDevice1(orgMrn: string, deviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteDevice1.');
-        }
-
-        if (deviceMrn === null || deviceMrn === undefined) {
-            throw new Error('Required parameter deviceMrn was null or undefined when calling deleteDevice1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -302,52 +204,6 @@ export class DeviceControllerService {
 
     /**
      * 
-     * Get a specific device identity
-     * @param orgMrn 
-     * @param deviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDevice1(orgMrn: string, deviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Device>;
-    public getDevice1(orgMrn: string, deviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Device>>;
-    public getDevice1(orgMrn: string, deviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Device>>;
-    public getDevice1(orgMrn: string, deviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getDevice1.');
-        }
-
-        if (deviceMrn === null || deviceMrn === undefined) {
-            throw new Error('Required parameter deviceMrn was null or undefined when calling getDevice1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Device>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Get the certificate of the specified device with the specified serial number
      * @param orgMrn 
      * @param deviceMrn 
@@ -388,57 +244,6 @@ export class DeviceControllerService {
         ];
 
         return this.httpClient.request<Certificate>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the certificate of the specified device with the specified serial number
-     * @param orgMrn 
-     * @param deviceMrn 
-     * @param serialNumber 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getDeviceCert1(orgMrn: string, deviceMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
-    public getDeviceCert1(orgMrn: string, deviceMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
-    public getDeviceCert1(orgMrn: string, deviceMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
-    public getDeviceCert1(orgMrn: string, deviceMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getDeviceCert1.');
-        }
-
-        if (deviceMrn === null || deviceMrn === undefined) {
-            throw new Error('Required parameter deviceMrn was null or undefined when calling getDeviceCert1.');
-        }
-
-        if (serialNumber === null || serialNumber === undefined) {
-            throw new Error('Required parameter serialNumber was null or undefined when calling getDeviceCert1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Certificate>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -511,67 +316,6 @@ export class DeviceControllerService {
 
     /**
      * 
-     * Get a page of device identities of the specified organization
-     * @param orgMrn 
-     * @param page Zero-based page index (0..N)
-     * @param size The size of the page to be returned
-     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getOrganizationDevices1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageDevice>;
-    public getOrganizationDevices1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageDevice>>;
-    public getOrganizationDevices1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageDevice>>;
-    public getOrganizationDevices1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganizationDevices1.');
-        }
-
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (page !== undefined && page !== null) {
-            queryParameters = queryParameters.set('page', <any>page);
-        }
-        if (size !== undefined && size !== null) {
-            queryParameters = queryParameters.set('size', <any>size);
-        }
-        if (sort) {
-            sort.forEach((element) => {
-                queryParameters = queryParameters.append('sort', <any>element);
-            })
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<PageDevice>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/devices`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Create a new device certificate using CSR
      * @param body A PEM encoded PKCS#10 CSR
      * @param orgMrn 
@@ -594,65 +338,6 @@ export class DeviceControllerService {
 
         if (deviceMrn === null || deviceMrn === undefined) {
             throw new Error('Required parameter deviceMrn was null or undefined when calling newDeviceCertFromCsr.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/pem-certificate-chain'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/x-pem-file',
-            'text/plain'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<string>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}/certificate/issue-new/csr`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Create a new device certificate using CSR
-     * @param body A PEM encoded PKCS#10 CSR
-     * @param orgMrn 
-     * @param deviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public newDeviceCertFromCsr1(body: string, orgMrn: string, deviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public newDeviceCertFromCsr1(body: string, orgMrn: string, deviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public newDeviceCertFromCsr1(body: string, orgMrn: string, deviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public newDeviceCertFromCsr1(body: string, orgMrn: string, deviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling newDeviceCertFromCsr1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling newDeviceCertFromCsr1.');
-        }
-
-        if (deviceMrn === null || deviceMrn === undefined) {
-            throw new Error('Required parameter deviceMrn was null or undefined when calling newDeviceCertFromCsr1.');
         }
 
         let headers = this.defaultHeaders;
@@ -752,68 +437,6 @@ export class DeviceControllerService {
 
     /**
      * 
-     * Revoke the device certificate with the given serial number
-     * @param body 
-     * @param orgMrn 
-     * @param deviceMrn 
-     * @param certId The serial number of the certificate given in decimal
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public revokeDeviceCert1(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public revokeDeviceCert1(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public revokeDeviceCert1(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public revokeDeviceCert1(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling revokeDeviceCert1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling revokeDeviceCert1.');
-        }
-
-        if (deviceMrn === null || deviceMrn === undefined) {
-            throw new Error('Required parameter deviceMrn was null or undefined when calling revokeDeviceCert1.');
-        }
-
-        if (certId === null || certId === undefined) {
-            throw new Error('Required parameter certId was null or undefined when calling revokeDeviceCert1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Update an existing device identity
      * @param body 
      * @param orgMrn 
@@ -859,63 +482,6 @@ export class DeviceControllerService {
         }
 
         return this.httpClient.request<any>('put',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Update an existing device identity
-     * @param body 
-     * @param orgMrn 
-     * @param deviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateDevice1(body: Device, orgMrn: string, deviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateDevice1(body: Device, orgMrn: string, deviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateDevice1(body: Device, orgMrn: string, deviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateDevice1(body: Device, orgMrn: string, deviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateDevice1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateDevice1.');
-        }
-
-        if (deviceMrn === null || deviceMrn === undefined) {
-            throw new Error('Required parameter deviceMrn was null or undefined when calling updateDevice1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/device/${encodeURIComponent(String(deviceMrn))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

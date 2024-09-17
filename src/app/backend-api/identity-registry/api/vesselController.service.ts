@@ -113,58 +113,6 @@ export class VesselControllerService {
 
     /**
      * 
-     * Create a new vessel identity
-     * @param body 
-     * @param orgMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createVessel1(body: Vessel, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Vessel>;
-    public createVessel1(body: Vessel, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Vessel>>;
-    public createVessel1(body: Vessel, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Vessel>>;
-    public createVessel1(body: Vessel, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createVessel1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling createVessel1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<Vessel>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Delete a specific vessel identity
      * @param orgMrn 
      * @param vesselMrn 
@@ -211,52 +159,6 @@ export class VesselControllerService {
 
     /**
      * 
-     * Delete a specific vessel identity
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteVessel1(orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteVessel1(orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteVessel1(orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteVessel1(orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteVessel1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling deleteVessel1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Get a page of vessel identities of the specified organization
      * @param orgMrn 
      * @param page Zero-based page index (0..N)
@@ -272,67 +174,6 @@ export class VesselControllerService {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling getOrganizationVessels.');
-        }
-
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (page !== undefined && page !== null) {
-            queryParameters = queryParameters.set('page', <any>page);
-        }
-        if (size !== undefined && size !== null) {
-            queryParameters = queryParameters.set('size', <any>size);
-        }
-        if (sort) {
-            sort.forEach((element) => {
-                queryParameters = queryParameters.append('sort', <any>element);
-            })
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<PageVessel>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessels`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get a page of vessel identities of the specified organization
-     * @param orgMrn 
-     * @param page Zero-based page index (0..N)
-     * @param size The size of the page to be returned
-     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getOrganizationVessels1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageVessel>;
-    public getOrganizationVessels1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageVessel>>;
-    public getOrganizationVessels1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageVessel>>;
-    public getOrganizationVessels1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganizationVessels1.');
         }
 
 
@@ -425,52 +266,6 @@ export class VesselControllerService {
 
     /**
      * 
-     * Get a specific vessel identity
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getVessel1(orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Vessel>;
-    public getVessel1(orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Vessel>>;
-    public getVessel1(orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Vessel>>;
-    public getVessel1(orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getVessel1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling getVessel1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Vessel>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Get the vessel identity certificate with the given serial number
      * @param orgMrn 
      * @param vesselMrn 
@@ -511,57 +306,6 @@ export class VesselControllerService {
         ];
 
         return this.httpClient.request<Certificate>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the vessel identity certificate with the given serial number
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param serialNumber 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getVesselCert1(orgMrn: string, vesselMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
-    public getVesselCert1(orgMrn: string, vesselMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
-    public getVesselCert1(orgMrn: string, vesselMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
-    public getVesselCert1(orgMrn: string, vesselMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getVesselCert1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling getVesselCert1.');
-        }
-
-        if (serialNumber === null || serialNumber === undefined) {
-            throw new Error('Required parameter serialNumber was null or undefined when calling getVesselCert1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Certificate>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -619,52 +363,6 @@ export class VesselControllerService {
 
     /**
      * 
-     * Get the set of service identities that are linked to the specified vessel identity
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getVesselServices1(orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Array<Service>>;
-    public getVesselServices1(orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<Service>>>;
-    public getVesselServices1(orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<Service>>>;
-    public getVesselServices1(orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getVesselServices1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling getVesselServices1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Array<Service>>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/services`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Create a new vessel identity certificate using CSR
      * @param body A PEM encoded PKCS#10 CSR
      * @param orgMrn 
@@ -687,65 +385,6 @@ export class VesselControllerService {
 
         if (vesselMrn === null || vesselMrn === undefined) {
             throw new Error('Required parameter vesselMrn was null or undefined when calling newVesselCertFromCsr.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/pem-certificate-chain'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/x-pem-file',
-            'text/plain'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<string>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/certificate/issue-new/csr`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Create a new vessel identity certificate using CSR
-     * @param body A PEM encoded PKCS#10 CSR
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public newVesselCertFromCsr1(body: string, orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public newVesselCertFromCsr1(body: string, orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public newVesselCertFromCsr1(body: string, orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public newVesselCertFromCsr1(body: string, orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling newVesselCertFromCsr1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling newVesselCertFromCsr1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling newVesselCertFromCsr1.');
         }
 
         let headers = this.defaultHeaders;
@@ -832,68 +471,6 @@ export class VesselControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Revoke the vessel identity certificate with the given serial number
-     * @param body 
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param certId The serial number of the certificate given in decimal
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public revokeVesselCert1(body: CertificateRevocation, orgMrn: string, vesselMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public revokeVesselCert1(body: CertificateRevocation, orgMrn: string, vesselMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public revokeVesselCert1(body: CertificateRevocation, orgMrn: string, vesselMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public revokeVesselCert1(body: CertificateRevocation, orgMrn: string, vesselMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling revokeVesselCert1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling revokeVesselCert1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling revokeVesselCert1.');
-        }
-
-        if (certId === null || certId === undefined) {
-            throw new Error('Required parameter certId was null or undefined when calling revokeVesselCert1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
         return this.httpClient.request<any>('post',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
             {
                 body: body,
@@ -952,63 +529,6 @@ export class VesselControllerService {
         }
 
         return this.httpClient.request<any>('put',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Update a specific vessel identity
-     * @param body 
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateVessel1(body: Vessel, orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateVessel1(body: Vessel, orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateVessel1(body: Vessel, orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateVessel1(body: Vessel, orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateVessel1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateVessel1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling updateVessel1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -97,47 +97,6 @@ export class CertificateControllerService {
 
     /**
      * 
-     * Get the CRL of the specified CA
-     * @param caAlias 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getCRL1(caAlias: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getCRL1(caAlias: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getCRL1(caAlias: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getCRL1(caAlias: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (caAlias === null || caAlias === undefined) {
-            throw new Error('Required parameter caAlias was null or undefined when calling getCRL1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/x-pem-file'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<string>('get',`${this.basePath}/x509/api/certificates/crl/${encodeURIComponent(String(caAlias))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * GET mapping for OCSP
      * @param caAlias 
      * @param ocspRequest OCSP request that is encoded as defined in RFC 6960 Appendix A.1
@@ -184,52 +143,6 @@ export class CertificateControllerService {
 
     /**
      * 
-     * GET mapping for OCSP
-     * @param caAlias 
-     * @param ocspRequest OCSP request that is encoded as defined in RFC 6960 Appendix A.1
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getOCSP1(caAlias: string, ocspRequest: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getOCSP1(caAlias: string, ocspRequest: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getOCSP1(caAlias: string, ocspRequest: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getOCSP1(caAlias: string, ocspRequest: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (caAlias === null || caAlias === undefined) {
-            throw new Error('Required parameter caAlias was null or undefined when calling getOCSP1.');
-        }
-
-        if (ocspRequest === null || ocspRequest === undefined) {
-            throw new Error('Required parameter ocspRequest was null or undefined when calling getOCSP1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/ocsp-response'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<string>('get',`${this.basePath}/x509/api/certificates/ocsp/${encodeURIComponent(String(caAlias))}/${encodeURIComponent(String(ocspRequest))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * POST mapping for OCSP
      * @param body OCSP request that is encoded as defined in RFC 6960 Appendix A.1
      * @param caAlias 
@@ -247,58 +160,6 @@ export class CertificateControllerService {
 
         if (caAlias === null || caAlias === undefined) {
             throw new Error('Required parameter caAlias was null or undefined when calling postOCSP.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/ocsp-response'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/ocsp-request'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<string>('post',`${this.basePath}/x509/api/certificates/ocsp/${encodeURIComponent(String(caAlias))}`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * POST mapping for OCSP
-     * @param body OCSP request that is encoded as defined in RFC 6960 Appendix A.1
-     * @param caAlias 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public postOCSP1(body: string, caAlias: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public postOCSP1(body: string, caAlias: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public postOCSP1(body: string, caAlias: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public postOCSP1(body: string, caAlias: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling postOCSP1.');
-        }
-
-        if (caAlias === null || caAlias === undefined) {
-            throw new Error('Required parameter caAlias was null or undefined when calling postOCSP1.');
         }
 
         let headers = this.defaultHeaders;

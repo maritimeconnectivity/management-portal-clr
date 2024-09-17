@@ -112,58 +112,6 @@ export class MmsControllerService {
 
     /**
      * 
-     * Creates a new MMS
-     * @param body 
-     * @param orgMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createMMS1(body: MMS, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<MMS>;
-    public createMMS1(body: MMS, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MMS>>;
-    public createMMS1(body: MMS, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MMS>>;
-    public createMMS1(body: MMS, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createMMS1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling createMMS1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<MMS>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/mms`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Delete an MMS identity
      * @param orgMrn 
      * @param mmsMrn 
@@ -199,52 +147,6 @@ export class MmsControllerService {
         ];
 
         return this.httpClient.request<any>('delete',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/mms/${encodeURIComponent(String(mmsMrn))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Delete an MMS identity
-     * @param orgMrn 
-     * @param mmsMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteMMS1(orgMrn: string, mmsMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteMMS1(orgMrn: string, mmsMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteMMS1(orgMrn: string, mmsMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteMMS1(orgMrn: string, mmsMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteMMS1.');
-        }
-
-        if (mmsMrn === null || mmsMrn === undefined) {
-            throw new Error('Required parameter mmsMrn was null or undefined when calling deleteMMS1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/mms/${encodeURIComponent(String(mmsMrn))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -302,52 +204,6 @@ export class MmsControllerService {
 
     /**
      * 
-     * Get a specific MMS identity
-     * @param orgMrn 
-     * @param mmsMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getMMS1(orgMrn: string, mmsMrn: string, observe?: 'body', reportProgress?: boolean): Observable<MMS>;
-    public getMMS1(orgMrn: string, mmsMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<MMS>>;
-    public getMMS1(orgMrn: string, mmsMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<MMS>>;
-    public getMMS1(orgMrn: string, mmsMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getMMS1.');
-        }
-
-        if (mmsMrn === null || mmsMrn === undefined) {
-            throw new Error('Required parameter mmsMrn was null or undefined when calling getMMS1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<MMS>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/mms/${encodeURIComponent(String(mmsMrn))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Get the certificate of the specified MMS with the specified serial number
      * @param orgMrn 
      * @param mmsMrn 
@@ -370,57 +226,6 @@ export class MmsControllerService {
 
         if (serialNumber === null || serialNumber === undefined) {
             throw new Error('Required parameter serialNumber was null or undefined when calling getMMSCert.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Certificate>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/mms/${encodeURIComponent(String(mmsMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the certificate of the specified MMS with the specified serial number
-     * @param orgMrn 
-     * @param mmsMrn 
-     * @param serialNumber 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getMMSCert1(orgMrn: string, mmsMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
-    public getMMSCert1(orgMrn: string, mmsMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
-    public getMMSCert1(orgMrn: string, mmsMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
-    public getMMSCert1(orgMrn: string, mmsMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getMMSCert1.');
-        }
-
-        if (mmsMrn === null || mmsMrn === undefined) {
-            throw new Error('Required parameter mmsMrn was null or undefined when calling getMMSCert1.');
-        }
-
-        if (serialNumber === null || serialNumber === undefined) {
-            throw new Error('Required parameter serialNumber was null or undefined when calling getMMSCert1.');
         }
 
         let headers = this.defaultHeaders;
@@ -511,67 +316,6 @@ export class MmsControllerService {
 
     /**
      * 
-     * Get a page of MMS identities belonging to the given organization
-     * @param orgMrn 
-     * @param page Zero-based page index (0..N)
-     * @param size The size of the page to be returned
-     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getOrganizationMMSes1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageMMS>;
-    public getOrganizationMMSes1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageMMS>>;
-    public getOrganizationMMSes1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageMMS>>;
-    public getOrganizationMMSes1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganizationMMSes1.');
-        }
-
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (page !== undefined && page !== null) {
-            queryParameters = queryParameters.set('page', <any>page);
-        }
-        if (size !== undefined && size !== null) {
-            queryParameters = queryParameters.set('size', <any>size);
-        }
-        if (sort) {
-            sort.forEach((element) => {
-                queryParameters = queryParameters.append('sort', <any>element);
-            })
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<PageMMS>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/mmses`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Create a new MMS certificate using CSR
      * @param body A PEM encoded PKCS#10 CSR
      * @param orgMrn 
@@ -631,65 +375,6 @@ export class MmsControllerService {
 
     /**
      * 
-     * Create a new MMS certificate using CSR
-     * @param body A PEM encoded PKCS#10 CSR
-     * @param orgMrn 
-     * @param mmsMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public newMMSCertFromCsr1(body: string, orgMrn: string, mmsMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public newMMSCertFromCsr1(body: string, orgMrn: string, mmsMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public newMMSCertFromCsr1(body: string, orgMrn: string, mmsMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public newMMSCertFromCsr1(body: string, orgMrn: string, mmsMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling newMMSCertFromCsr1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling newMMSCertFromCsr1.');
-        }
-
-        if (mmsMrn === null || mmsMrn === undefined) {
-            throw new Error('Required parameter mmsMrn was null or undefined when calling newMMSCertFromCsr1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/pem-certificate-chain'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/x-pem-file',
-            'text/plain'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<string>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/mms/${encodeURIComponent(String(mmsMrn))}/certificate/issue-new/csr`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Revoke the MMS certificate with the given serial number
      * @param body 
      * @param orgMrn 
@@ -717,68 +402,6 @@ export class MmsControllerService {
 
         if (certId === null || certId === undefined) {
             throw new Error('Required parameter certId was null or undefined when calling revokeMMSCert.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/mms/${encodeURIComponent(String(mmsMrn))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Revoke the MMS certificate with the given serial number
-     * @param body 
-     * @param orgMrn 
-     * @param mmsMrn 
-     * @param certId The serial number of the certificate given in decimal
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public revokeMMSCert1(body: CertificateRevocation, orgMrn: string, mmsMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public revokeMMSCert1(body: CertificateRevocation, orgMrn: string, mmsMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public revokeMMSCert1(body: CertificateRevocation, orgMrn: string, mmsMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public revokeMMSCert1(body: CertificateRevocation, orgMrn: string, mmsMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling revokeMMSCert1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling revokeMMSCert1.');
-        }
-
-        if (mmsMrn === null || mmsMrn === undefined) {
-            throw new Error('Required parameter mmsMrn was null or undefined when calling revokeMMSCert1.');
-        }
-
-        if (certId === null || certId === undefined) {
-            throw new Error('Required parameter certId was null or undefined when calling revokeMMSCert1.');
         }
 
         let headers = this.defaultHeaders;
@@ -859,63 +482,6 @@ export class MmsControllerService {
         }
 
         return this.httpClient.request<any>('put',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/mms/${encodeURIComponent(String(mmsMrn))}`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Update an existing MMS identity
-     * @param body 
-     * @param orgMrn 
-     * @param mmsMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateMMS1(body: MMS, orgMrn: string, mmsMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateMMS1(body: MMS, orgMrn: string, mmsMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateMMS1(body: MMS, orgMrn: string, mmsMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateMMS1(body: MMS, orgMrn: string, mmsMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateMMS1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateMMS1.');
-        }
-
-        if (mmsMrn === null || mmsMrn === undefined) {
-            throw new Error('Required parameter mmsMrn was null or undefined when calling updateMMS1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/mms/${encodeURIComponent(String(mmsMrn))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

@@ -110,58 +110,6 @@ export class AgentControllerService {
 
     /**
      * 
-     * Creates a new agent
-     * @param body 
-     * @param orgMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createAgent1(body: Agent, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Agent>;
-    public createAgent1(body: Agent, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Agent>>;
-    public createAgent1(body: Agent, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Agent>>;
-    public createAgent1(body: Agent, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createAgent1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling createAgent1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<Agent>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/agent`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Deletes a given agent
      * @param orgMrn 
      * @param agentId 
@@ -208,52 +156,6 @@ export class AgentControllerService {
 
     /**
      * 
-     * Deletes a given agent
-     * @param orgMrn 
-     * @param agentId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteAgent1(orgMrn: string, agentId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteAgent1(orgMrn: string, agentId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteAgent1(orgMrn: string, agentId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteAgent1(orgMrn: string, agentId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteAgent1.');
-        }
-
-        if (agentId === null || agentId === undefined) {
-            throw new Error('Required parameter agentId was null or undefined when calling deleteAgent1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/agent/${encodeURIComponent(String(agentId))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Returns the list of all organization that can be acted on behalf of
      * @param orgMrn 
      * @param page Zero-based page index (0..N)
@@ -269,67 +171,6 @@ export class AgentControllerService {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling getActingOnBehalfOf.');
-        }
-
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (page !== undefined && page !== null) {
-            queryParameters = queryParameters.set('page', <any>page);
-        }
-        if (size !== undefined && size !== null) {
-            queryParameters = queryParameters.set('size', <any>size);
-        }
-        if (sort) {
-            sort.forEach((element) => {
-                queryParameters = queryParameters.append('sort', <any>element);
-            })
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<PageAgent>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/acting-on-behalf-of`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Returns the list of all organization that can be acted on behalf of
-     * @param orgMrn 
-     * @param page Zero-based page index (0..N)
-     * @param size The size of the page to be returned
-     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getActingOnBehalfOf1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageAgent>;
-    public getActingOnBehalfOf1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageAgent>>;
-    public getActingOnBehalfOf1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageAgent>>;
-    public getActingOnBehalfOf1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getActingOnBehalfOf1.');
         }
 
 
@@ -422,52 +263,6 @@ export class AgentControllerService {
 
     /**
      * 
-     * Get a specific agent
-     * @param orgMrn 
-     * @param agentId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getAgent1(orgMrn: string, agentId: number, observe?: 'body', reportProgress?: boolean): Observable<Agent>;
-    public getAgent1(orgMrn: string, agentId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Agent>>;
-    public getAgent1(orgMrn: string, agentId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Agent>>;
-    public getAgent1(orgMrn: string, agentId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getAgent1.');
-        }
-
-        if (agentId === null || agentId === undefined) {
-            throw new Error('Required parameter agentId was null or undefined when calling getAgent1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Agent>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/agent/${encodeURIComponent(String(agentId))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Returns a page of agents for the given organization
      * @param orgMrn 
      * @param page Zero-based page index (0..N)
@@ -483,67 +278,6 @@ export class AgentControllerService {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling getAgents.');
-        }
-
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (page !== undefined && page !== null) {
-            queryParameters = queryParameters.set('page', <any>page);
-        }
-        if (size !== undefined && size !== null) {
-            queryParameters = queryParameters.set('size', <any>size);
-        }
-        if (sort) {
-            sort.forEach((element) => {
-                queryParameters = queryParameters.append('sort', <any>element);
-            })
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<PageAgent>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/agents`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Returns a page of agents for the given organization
-     * @param orgMrn 
-     * @param page Zero-based page index (0..N)
-     * @param size The size of the page to be returned
-     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getAgents1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageAgent>;
-    public getAgents1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageAgent>>;
-    public getAgents1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageAgent>>;
-    public getAgents1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getAgents1.');
         }
 
 
@@ -635,63 +369,6 @@ export class AgentControllerService {
         }
 
         return this.httpClient.request<Agent>('put',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/agent/${encodeURIComponent(String(agentId))}`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Update an existing agent
-     * @param body 
-     * @param orgMrn 
-     * @param agentId 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateAgent1(body: Agent, orgMrn: string, agentId: number, observe?: 'body', reportProgress?: boolean): Observable<Agent>;
-    public updateAgent1(body: Agent, orgMrn: string, agentId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Agent>>;
-    public updateAgent1(body: Agent, orgMrn: string, agentId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Agent>>;
-    public updateAgent1(body: Agent, orgMrn: string, agentId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateAgent1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateAgent1.');
-        }
-
-        if (agentId === null || agentId === undefined) {
-            throw new Error('Required parameter agentId was null or undefined when calling updateAgent1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<Agent>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/agent/${encodeURIComponent(String(agentId))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

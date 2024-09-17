@@ -19,8 +19,6 @@ import { Observable }                                        from 'rxjs';
 
 import { VesselMrnVesselImageBody } from '../model/vesselMrnVesselImageBody';
 import { VesselMrnVesselImageBody1 } from '../model/vesselMrnVesselImageBody1';
-import { VesselMrnVesselImageBody2 } from '../model/vesselMrnVesselImageBody2';
-import { VesselMrnVesselImageBody3 } from '../model/vesselMrnVesselImageBody3';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -115,61 +113,6 @@ export class VesselImageControllerService {
 
     /**
      * 
-     * Create a new vessel image using POST
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param body 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createVesselImagePost1(orgMrn: string, vesselMrn: string, body?: VesselMrnVesselImageBody2, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public createVesselImagePost1(orgMrn: string, vesselMrn: string, body?: VesselMrnVesselImageBody2, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public createVesselImagePost1(orgMrn: string, vesselMrn: string, body?: VesselMrnVesselImageBody2, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public createVesselImagePost1(orgMrn: string, vesselMrn: string, body?: VesselMrnVesselImageBody2, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling createVesselImagePost1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling createVesselImagePost1.');
-        }
-
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'image/png',
-            'image/jpeg'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Delete the image of a specified vessel
      * @param orgMrn 
      * @param vesselMrn 
@@ -205,52 +148,6 @@ export class VesselImageControllerService {
         ];
 
         return this.httpClient.request<any>('delete',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Delete the image of a specified vessel
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteVesselImage1(orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteVesselImage1(orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteVesselImage1(orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteVesselImage1(orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteVesselImage1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling deleteVesselImage1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -309,53 +206,6 @@ export class VesselImageControllerService {
 
     /**
      * 
-     * Get the image of a specified vessel
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getVesselImage1(orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getVesselImage1(orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getVesselImage1(orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getVesselImage1(orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getVesselImage1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling getVesselImage1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'image/png',
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Create or update a vessel image using PUT
      * @param body 
      * @param orgMrn 
@@ -402,64 +252,6 @@ export class VesselImageControllerService {
         }
 
         return this.httpClient.request<any>('put',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Create or update a vessel image using PUT
-     * @param body 
-     * @param orgMrn 
-     * @param vesselMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateVesselImagePut1(body: string, orgMrn: string, vesselMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateVesselImagePut1(body: string, orgMrn: string, vesselMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateVesselImagePut1(body: string, orgMrn: string, vesselMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateVesselImagePut1(body: string, orgMrn: string, vesselMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateVesselImagePut1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateVesselImagePut1.');
-        }
-
-        if (vesselMrn === null || vesselMrn === undefined) {
-            throw new Error('Required parameter vesselMrn was null or undefined when calling updateVesselImagePut1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'image/png',
-            'image/jpeg'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/vessel/${encodeURIComponent(String(vesselMrn))}/vesselImage`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,

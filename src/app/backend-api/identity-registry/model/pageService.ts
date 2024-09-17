@@ -14,8 +14,8 @@ import { Service } from './service';
 import { SortObject } from './sortObject';
 
 export interface PageService { 
-    totalElements?: number;
     totalPages?: number;
+    totalElements?: number;
     pageable?: PageableObject;
     first?: boolean;
     last?: boolean;

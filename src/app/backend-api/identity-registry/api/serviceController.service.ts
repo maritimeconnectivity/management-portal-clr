@@ -114,58 +114,6 @@ export class ServiceControllerService {
 
     /**
      * 
-     * Create a new service identity
-     * @param body 
-     * @param orgMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public createService1(body: Service, orgMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Service>;
-    public createService1(body: Service, orgMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Service>>;
-    public createService1(body: Service, orgMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Service>>;
-    public createService1(body: Service, orgMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling createService1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling createService1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<Service>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Delete a specific service identity
      * @param orgMrn 
      * @param serviceMrn 
@@ -205,57 +153,6 @@ export class ServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Delete a specific service identity
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param version 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteService1(orgMrn: string, serviceMrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteService1(orgMrn: string, serviceMrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteService1(orgMrn: string, serviceMrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteService1(orgMrn: string, serviceMrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteService1.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling deleteService1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling deleteService1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
         return this.httpClient.request<any>('delete',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}`,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -274,63 +171,17 @@ export class ServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteService2(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteService2(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteService2(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteService2(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteService1(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteService1(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteService1(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteService1(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteService2.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling deleteService1.');
         }
 
         if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling deleteService2.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<any>('delete',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Delete a specific service identity
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public deleteService3(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteService3(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteService3(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteService3(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling deleteService3.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling deleteService3.');
+            throw new Error('Required parameter serviceMrn was null or undefined when calling deleteService1.');
         }
 
         let headers = this.defaultHeaders;
@@ -421,67 +272,6 @@ export class ServiceControllerService {
 
     /**
      * 
-     * Get a page of service identities of the specified organization
-     * @param orgMrn 
-     * @param page Zero-based page index (0..N)
-     * @param size The size of the page to be returned
-     * @param sort Sorting criteria in the format: property,(asc|desc). Default sort order is ascending. Multiple sort criteria are supported.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getOrganizationServices1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<PageService>;
-    public getOrganizationServices1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageService>>;
-    public getOrganizationServices1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageService>>;
-    public getOrganizationServices1(orgMrn: string, page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getOrganizationServices1.');
-        }
-
-
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (page !== undefined && page !== null) {
-            queryParameters = queryParameters.set('page', <any>page);
-        }
-        if (size !== undefined && size !== null) {
-            queryParameters = queryParameters.set('size', <any>size);
-        }
-        if (sort) {
-            sort.forEach((element) => {
-                queryParameters = queryParameters.append('sort', <any>element);
-            })
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<PageService>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/services`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Get the service identity with the given MRN. If a direct match cannot be found, the service that was last created and has the given MRN as a prefix of its MRN followed by an additional namespace will be returned.
      * @param orgMrn 
      * @param serviceMrn 
@@ -499,52 +289,6 @@ export class ServiceControllerService {
 
         if (serviceMrn === null || serviceMrn === undefined) {
             throw new Error('Required parameter serviceMrn was null or undefined when calling getService.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Service>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the service identity with the given MRN. If a direct match cannot be found, the service that was last created and has the given MRN as a prefix of its MRN followed by an additional namespace will be returned.
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getService1(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<Service>;
-    public getService1(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Service>>;
-    public getService1(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Service>>;
-    public getService1(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getService1.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getService1.');
         }
 
         let headers = this.defaultHeaders;
@@ -618,7 +362,7 @@ export class ServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Certificate>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/certificate/${encodeURIComponent(String(serialNumber))}`,
+        return this.httpClient.request<Certificate>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/certificate/${encodeURIComponent(String(serialNumber))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -633,15 +377,14 @@ export class ServiceControllerService {
      * Get the service identity certificate with the given serial number
      * @param orgMrn 
      * @param serviceMrn 
-     * @param version 
      * @param serialNumber 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getServiceCert1(orgMrn: string, serviceMrn: string, version: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
-    public getServiceCert1(orgMrn: string, serviceMrn: string, version: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
-    public getServiceCert1(orgMrn: string, serviceMrn: string, version: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
-    public getServiceCert1(orgMrn: string, serviceMrn: string, version: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getServiceCert1(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
+    public getServiceCert1(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
+    public getServiceCert1(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
+    public getServiceCert1(orgMrn: string, serviceMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling getServiceCert1.');
@@ -649,10 +392,6 @@ export class ServiceControllerService {
 
         if (serviceMrn === null || serviceMrn === undefined) {
             throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceCert1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling getServiceCert1.');
         }
 
         if (serialNumber === null || serialNumber === undefined) {
@@ -674,109 +413,7 @@ export class ServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Certificate>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/certificate/${encodeURIComponent(String(serialNumber))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the service identity certificate with the given serial number
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param serialNumber 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getServiceCert2(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
-    public getServiceCert2(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
-    public getServiceCert2(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
-    public getServiceCert2(orgMrn: string, serviceMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceCert2.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceCert2.');
-        }
-
-        if (serialNumber === null || serialNumber === undefined) {
-            throw new Error('Required parameter serialNumber was null or undefined when calling getServiceCert2.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
         return this.httpClient.request<Certificate>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the service identity certificate with the given serial number
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param serialNumber 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getServiceCert3(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
-    public getServiceCert3(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
-    public getServiceCert3(orgMrn: string, serviceMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
-    public getServiceCert3(orgMrn: string, serviceMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceCert3.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceCert3.');
-        }
-
-        if (serialNumber === null || serialNumber === undefined) {
-            throw new Error('Required parameter serialNumber was null or undefined when calling getServiceCert3.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Certificate>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/certificate/${encodeURIComponent(String(serialNumber))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -842,14 +479,13 @@ export class ServiceControllerService {
      * Get the Keycloak JBoss XML configuration for the specified service if it exists
      * @param orgMrn 
      * @param serviceMrn 
-     * @param version 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getServiceJbossXml1(orgMrn: string, serviceMrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getServiceJbossXml1(orgMrn: string, serviceMrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getServiceJbossXml1(orgMrn: string, serviceMrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getServiceJbossXml1(orgMrn: string, serviceMrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getServiceJbossXml1(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public getServiceJbossXml1(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public getServiceJbossXml1(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public getServiceJbossXml1(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling getServiceJbossXml1.');
@@ -857,56 +493,6 @@ export class ServiceControllerService {
 
         if (serviceMrn === null || serviceMrn === undefined) {
             throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceJbossXml1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling getServiceJbossXml1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<string>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/jbossxml`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the Keycloak JBoss XML configuration for the specified service if it exists
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getServiceJbossXml2(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getServiceJbossXml2(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getServiceJbossXml2(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getServiceJbossXml2(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceJbossXml2.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceJbossXml2.');
         }
 
         let headers = this.defaultHeaders;
@@ -925,52 +511,6 @@ export class ServiceControllerService {
         ];
 
         return this.httpClient.request<string>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/jbossxml`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the Keycloak JBoss XML configuration for the specified service if it exists
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getServiceJbossXml3(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getServiceJbossXml3(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getServiceJbossXml3(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getServiceJbossXml3(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceJbossXml3.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceJbossXml3.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<string>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/jbossxml`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1021,57 +561,6 @@ export class ServiceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<string>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/keycloakjson`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the Keycloak JSON configuration for the specified service if it exists
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param version 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getServiceKeycloakJson1(orgMrn: string, serviceMrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getServiceKeycloakJson1(orgMrn: string, serviceMrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getServiceKeycloakJson1(orgMrn: string, serviceMrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getServiceKeycloakJson1(orgMrn: string, serviceMrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceKeycloakJson1.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceKeycloakJson1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling getServiceKeycloakJson1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
         return this.httpClient.request<string>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/keycloakjson`,
             {
                 withCredentials: this.configuration.withCredentials,
@@ -1090,17 +579,17 @@ export class ServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getServiceKeycloakJson2(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getServiceKeycloakJson2(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getServiceKeycloakJson2(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getServiceKeycloakJson2(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getServiceKeycloakJson1(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public getServiceKeycloakJson1(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public getServiceKeycloakJson1(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public getServiceKeycloakJson1(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceKeycloakJson2.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceKeycloakJson1.');
         }
 
         if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceKeycloakJson2.');
+            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceKeycloakJson1.');
         }
 
         let headers = this.defaultHeaders;
@@ -1119,52 +608,6 @@ export class ServiceControllerService {
         ];
 
         return this.httpClient.request<string>('get',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/keycloakjson`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the Keycloak JSON configuration for the specified service if it exists
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getServiceKeycloakJson3(orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public getServiceKeycloakJson3(orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public getServiceKeycloakJson3(orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public getServiceKeycloakJson3(orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceKeycloakJson3.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceKeycloakJson3.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<string>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/keycloakjson`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -1198,57 +641,6 @@ export class ServiceControllerService {
 
         if (version === null || version === undefined) {
             throw new Error('Required parameter version was null or undefined when calling getServiceVersion.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<Service>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}`,
-            {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Get the service identity with the given MRN and version
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param version 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getServiceVersion1(orgMrn: string, serviceMrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<Service>;
-    public getServiceVersion1(orgMrn: string, serviceMrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Service>>;
-    public getServiceVersion1(orgMrn: string, serviceMrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Service>>;
-    public getServiceVersion1(orgMrn: string, serviceMrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServiceVersion1.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServiceVersion1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling getServiceVersion1.');
         }
 
         let headers = this.defaultHeaders;
@@ -1335,63 +727,6 @@ export class ServiceControllerService {
 
     /**
      * 
-     * Get a page of service identities with a given MRN prefix
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param pageable 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public getServices1(orgMrn: string, serviceMrn: string, pageable: Pageable, observe?: 'body', reportProgress?: boolean): Observable<PageService>;
-    public getServices1(orgMrn: string, serviceMrn: string, pageable: Pageable, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<PageService>>;
-    public getServices1(orgMrn: string, serviceMrn: string, pageable: Pageable, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<PageService>>;
-    public getServices1(orgMrn: string, serviceMrn: string, pageable: Pageable, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling getServices1.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling getServices1.');
-        }
-
-        if (pageable === null || pageable === undefined) {
-            throw new Error('Required parameter pageable was null or undefined when calling getServices1.');
-        }
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (pageable !== undefined && pageable !== null) {
-            queryParameters = queryParameters.set('pageable', <any>pageable);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-        ];
-
-        return this.httpClient.request<PageService>('get',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/services/${encodeURIComponent(String(serviceMrn))}`,
-            {
-                params: queryParameters,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
      * Update the MRN of a Service entity that currently has an instance version registered and delete the instance version entirely. Note that if the new MRN is different from the current MRN of the Service this operation will revoke all certificates that are currently associated with the Service entity. Also note that the result of performing this operation cannot be reverted.
      * @param body 
      * @param orgMrn 
@@ -1442,68 +777,6 @@ export class ServiceControllerService {
         }
 
         return this.httpClient.request<any>('patch',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/migrate`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Update the MRN of a Service entity that currently has an instance version registered and delete the instance version entirely. Note that if the new MRN is different from the current MRN of the Service this operation will revoke all certificates that are currently associated with the Service entity. Also note that the result of performing this operation cannot be reverted.
-     * @param body 
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param version 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public migrateServiceMrn1(body: ServicePatch, orgMrn: string, serviceMrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public migrateServiceMrn1(body: ServicePatch, orgMrn: string, serviceMrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public migrateServiceMrn1(body: ServicePatch, orgMrn: string, serviceMrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public migrateServiceMrn1(body: ServicePatch, orgMrn: string, serviceMrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling migrateServiceMrn1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling migrateServiceMrn1.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling migrateServiceMrn1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling migrateServiceMrn1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('patch',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/migrate`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -1580,18 +853,17 @@ export class ServiceControllerService {
 
     /**
      * 
-     * DEPRECATED: Certificates cannot be issued for a service with a version until it has been migrated using the the endpoint at /api/org/{orgMrn}/service/{serviceMrn}/{version}/migrate. This endpoint will return an error if called.
+     * Create a new service identity certificate using CSR
      * @param body A PEM encoded PKCS#10 CSR
      * @param orgMrn 
      * @param serviceMrn 
-     * @param version 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public newServiceCertFromCsr1(body: string, orgMrn: string, serviceMrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public newServiceCertFromCsr1(body: string, orgMrn: string, serviceMrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public newServiceCertFromCsr1(body: string, orgMrn: string, serviceMrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public newServiceCertFromCsr1(body: string, orgMrn: string, serviceMrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public newServiceCertFromCsr1(body: string, orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
+    public newServiceCertFromCsr1(body: string, orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
+    public newServiceCertFromCsr1(body: string, orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
+    public newServiceCertFromCsr1(body: string, orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling newServiceCertFromCsr1.');
@@ -1603,128 +875,6 @@ export class ServiceControllerService {
 
         if (serviceMrn === null || serviceMrn === undefined) {
             throw new Error('Required parameter serviceMrn was null or undefined when calling newServiceCertFromCsr1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling newServiceCertFromCsr1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/pem-certificate-chain'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/x-pem-file',
-            'text/plain'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<string>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/certificate/issue-new/csr`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Create a new service identity certificate using CSR
-     * @param body A PEM encoded PKCS#10 CSR
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public newServiceCertFromCsr2(body: string, orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public newServiceCertFromCsr2(body: string, orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public newServiceCertFromCsr2(body: string, orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public newServiceCertFromCsr2(body: string, orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling newServiceCertFromCsr2.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling newServiceCertFromCsr2.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling newServiceCertFromCsr2.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json',
-            'application/pem-certificate-chain'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/x-pem-file',
-            'text/plain'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<string>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/certificate/issue-new/csr`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Create a new service identity certificate using CSR
-     * @param body A PEM encoded PKCS#10 CSR
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public newServiceCertFromCsr3(body: string, orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<string>;
-    public newServiceCertFromCsr3(body: string, orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<string>>;
-    public newServiceCertFromCsr3(body: string, orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<string>>;
-    public newServiceCertFromCsr3(body: string, orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling newServiceCertFromCsr3.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling newServiceCertFromCsr3.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling newServiceCertFromCsr3.');
         }
 
         let headers = this.defaultHeaders;
@@ -1833,15 +983,14 @@ export class ServiceControllerService {
      * @param body 
      * @param orgMrn 
      * @param serviceMrn 
-     * @param version 
      * @param certId The serial number of the certificate given in decimal
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public revokeServiceCert1(body: CertificateRevocation, orgMrn: string, serviceMrn: string, version: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public revokeServiceCert1(body: CertificateRevocation, orgMrn: string, serviceMrn: string, version: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public revokeServiceCert1(body: CertificateRevocation, orgMrn: string, serviceMrn: string, version: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public revokeServiceCert1(body: CertificateRevocation, orgMrn: string, serviceMrn: string, version: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public revokeServiceCert1(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public revokeServiceCert1(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public revokeServiceCert1(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public revokeServiceCert1(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling revokeServiceCert1.');
@@ -1853,10 +1002,6 @@ export class ServiceControllerService {
 
         if (serviceMrn === null || serviceMrn === undefined) {
             throw new Error('Required parameter serviceMrn was null or undefined when calling revokeServiceCert1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling revokeServiceCert1.');
         }
 
         if (certId === null || certId === undefined) {
@@ -1883,131 +1028,7 @@ export class ServiceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Revoke the service identity certificate with the given serial number
-     * @param body 
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param certId The serial number of the certificate given in decimal
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public revokeServiceCert2(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public revokeServiceCert2(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public revokeServiceCert2(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public revokeServiceCert2(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling revokeServiceCert2.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling revokeServiceCert2.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling revokeServiceCert2.');
-        }
-
-        if (certId === null || certId === undefined) {
-            throw new Error('Required parameter certId was null or undefined when calling revokeServiceCert2.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
         return this.httpClient.request<any>('post',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Revoke the service identity certificate with the given serial number
-     * @param body 
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param certId The serial number of the certificate given in decimal
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public revokeServiceCert3(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public revokeServiceCert3(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public revokeServiceCert3(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public revokeServiceCert3(body: CertificateRevocation, orgMrn: string, serviceMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling revokeServiceCert3.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling revokeServiceCert3.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling revokeServiceCert3.');
-        }
-
-        if (certId === null || certId === undefined) {
-            throw new Error('Required parameter certId was null or undefined when calling revokeServiceCert3.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('post',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/certificate/${encodeURIComponent(String(certId))}/revoke`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -2069,68 +1090,6 @@ export class ServiceControllerService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * DEPRECATED: A service with a version cannot be updated until it has been migrated using the endpoint at /api/org/{orgMrn}/service/{serviceMrn}/{version}/migrate. This endpoint will return an error if called.
-     * @param body 
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param version 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateService1(body: Service, orgMrn: string, serviceMrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateService1(body: Service, orgMrn: string, serviceMrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateService1(body: Service, orgMrn: string, serviceMrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateService1(body: Service, orgMrn: string, serviceMrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateService1.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateService1.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling updateService1.');
-        }
-
-        if (version === null || version === undefined) {
-            throw new Error('Required parameter version was null or undefined when calling updateService1.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
         return this.httpClient.request<any>('put',`${this.basePath}/oidc/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}/${encodeURIComponent(String(version))}`,
             {
                 body: body,
@@ -2151,78 +1110,21 @@ export class ServiceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateService2(body: Service, orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateService2(body: Service, orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateService2(body: Service, orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateService2(body: Service, orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateService1(body: Service, orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateService1(body: Service, orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateService1(body: Service, orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateService1(body: Service, orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateService2.');
+            throw new Error('Required parameter body was null or undefined when calling updateService1.');
         }
 
         if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateService2.');
+            throw new Error('Required parameter orgMrn was null or undefined when calling updateService1.');
         }
 
         if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling updateService2.');
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            '*/*'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<any>('put',`${this.basePath}/x509/api/org/${encodeURIComponent(String(orgMrn))}/service/${encodeURIComponent(String(serviceMrn))}`,
-            {
-                body: body,
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * Update a specific service identity
-     * @param body 
-     * @param orgMrn 
-     * @param serviceMrn 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateService3(body: Service, orgMrn: string, serviceMrn: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateService3(body: Service, orgMrn: string, serviceMrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateService3(body: Service, orgMrn: string, serviceMrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateService3(body: Service, orgMrn: string, serviceMrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateService3.');
-        }
-
-        if (orgMrn === null || orgMrn === undefined) {
-            throw new Error('Required parameter orgMrn was null or undefined when calling updateService3.');
-        }
-
-        if (serviceMrn === null || serviceMrn === undefined) {
-            throw new Error('Required parameter serviceMrn was null or undefined when calling updateService3.');
+            throw new Error('Required parameter serviceMrn was null or undefined when calling updateService1.');
         }
 
         let headers = this.defaultHeaders;
