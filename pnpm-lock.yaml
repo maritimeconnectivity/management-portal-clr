@@ -32,9 +32,15 @@ importers:
       '@angular/router':
         specifier: ^18.2.3
         version: 18.2.3(@angular/common@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(@angular/platform-browser@18.2.3(@angular/animations@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10)))(@angular/common@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10)))(rxjs@7.8.1)
+      '@cds/core':
+        specifier: ^6.13.0
+        version: 6.13.0
       '@clr/angular':
         specifier: ^17.3.0
         version: 17.3.0(@angular/cdk@18.2.3(@angular/common@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/common@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(@cds/core@6.13.0)(@clr/ui@17.3.0(@cds/core@6.13.0))
+      '@clr/ui':
+        specifier: ^17.3.0
+        version: 17.3.0(@cds/core@6.13.0)
       keycloak-angular:
         specifier: ^16.0.1
         version: 16.0.1(@angular/common@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(@angular/router@18.2.3(@angular/common@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(@angular/platform-browser@18.2.3(@angular/animations@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10)))(@angular/common@18.2.3(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10))(rxjs@7.8.1))(@angular/core@18.2.3(rxjs@7.8.1)(zone.js@0.14.10)))(rxjs@7.8.1))(keycloak-js@25.0.5)
@@ -57,12 +63,6 @@ importers:
       '@angular/cli':
         specifier: ^18.2.3
         version: 18.2.3(chokidar@3.6.0)
-      '@cds/core':
-        specifier: ^6.13.0
-        version: 6.13.0
-      '@clr/ui':
-        specifier: ^17.3.0
-        version: 17.3.0(@cds/core@6.13.0)
       '@types/jasmine':
         specifier: ~4.3.0
         version: 4.3.6
