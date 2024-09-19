@@ -1,0 +1,11 @@
+<div *ngIf="labelValues">
+    <table class="table table-vertical">
+        <tbody>
+            <tr *ngFor="let labelValue of labelValues">
+                <th>{{labelValue.label}}</th>
+                <td>{{labelValue.value}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<clr-spinner *ngIf="isLoading">Loading</clr-spinner>
