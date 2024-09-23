@@ -28,6 +28,8 @@ export class DashboardComponent implements OnInit {
                 const labelValues: LabelValueModel[] = [];
                 labelValues.push({label: "Name", value: org.name});
                 labelValues.push({label: "MRN", value: org.mrn});
+                labelValues.push({label: "Email", value: org.email, isEmail: true});
+                labelValues.push({label: "URL", value: org.url, isLink: true});
                 this.labelValues = labelValues;
                 this.isLoading = false;
             }

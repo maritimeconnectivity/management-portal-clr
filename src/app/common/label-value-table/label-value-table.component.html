@@ -1,10 +1,18 @@
 <div *ngIf="labelValues">
     <table class="table table-vertical table-noborder">
         <tbody>
-            <tr *ngFor="let labelValue of labelValues">
-                <th>{{labelValue.label}}</th>
-                <td>{{labelValue.value}}</td>
-            </tr>
+        <tr *ngFor="let labelValue of labelValues">
+            <th>{{ labelValue.label }}</th>
+            <td>
+                @if (labelValue.isEmail) {
+                    <a [href]="'mailto:' + labelValue.value" target="_blank">{{ labelValue.value }}</a>
+                } @else if (labelValue.isLink) {
+                    <a [href]="labelValue.value" target="_blank">{{ labelValue.value }}</a>
+                } @else {
+                    {{ labelValue.value }}
+                }
+            </td>
+        </tr>
         </tbody>
     </table>
 </div>

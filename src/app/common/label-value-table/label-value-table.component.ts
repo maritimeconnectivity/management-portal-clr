@@ -5,6 +5,8 @@ import {ClrSpinnerModule} from "@clr/angular";
 export interface LabelValueModel {
     label: string;
     value: string;
+    isLink?: boolean;
+    isEmail?: boolean;
 }
 
 @Component({
