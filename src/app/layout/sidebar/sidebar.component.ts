@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { MENU_ITEMS } from 'src/app/pages/pages-menu';
+import { ClarityIcons, helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon);
 
 @Component({
   selector: 'mp-sidebar',

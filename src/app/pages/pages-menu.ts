@@ -53,7 +53,7 @@ export const MENU_ITEMS: any[] = [
   },
   {
     title: 'menu.ledger',
-    icon: 'network-glove',
+    icon: 'network-globe',
     children: [
       {
         title: 'menu.ledger.search',
@@ -67,7 +67,7 @@ export const MENU_ITEMS: any[] = [
   },
   {
     title: 'menu.about',
-    icon: 'bulb-outline',
+    icon: 'help-info',
     link: '/pages/about',
   },
 ];
