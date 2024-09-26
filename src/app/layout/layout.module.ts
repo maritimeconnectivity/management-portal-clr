@@ -6,7 +6,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { MainComponent } from './main/main.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {RouterLink, RouterLinkActive} from "@angular/router";
-
+import { SharedModule } from '../common/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -16,10 +16,10 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
     LayoutComponent
   ],
   imports: [
-    CommonModule,
+    SharedModule,
     ClarityModule,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
   ],
   exports: [
     LayoutComponent
