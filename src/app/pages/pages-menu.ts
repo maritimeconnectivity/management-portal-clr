@@ -21,7 +21,7 @@
 export const MENU_ITEMS: any[] = [
   {
     title: 'menu.ir',
-    icon: 'lock-outline',
+    icon: 'lock',
     children: [
       {
         title: 'menu.ir.organizations',
@@ -35,7 +35,7 @@ export const MENU_ITEMS: any[] = [
   },
   {
     title: 'menu.sr',
-    icon: 'layers-outline',
+    icon: 'layers',
     children: [
       {
         title: 'menu.sr.instances',
@@ -53,7 +53,7 @@ export const MENU_ITEMS: any[] = [
   },
   {
     title: 'menu.ledger',
-    icon: 'radio-outline',
+    icon: 'network-glove',
     children: [
       {
         title: 'menu.ledger.search',
