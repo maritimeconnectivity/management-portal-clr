@@ -1,0 +1,210 @@
+{
+    "landing": {
+        "title": {
+            "serviceName": "관리 포털",
+            "environmentName": "환경"
+        },
+        "button": {
+            "login": "로그인",
+            "register": "가입",
+            "registerInfo": "가입에 대한 정보를 알고 싶어요"
+        },
+        "footer": {
+            "shortIntro": "관리 포탈은 관리자들이 해사 자원을 관리하기 위한 웹사이트입니다. 다음의 MCP 컴포넌트를 사용합니다: ",
+            "mirName": "Maritime Identity Registry",
+            "namesConnector": ",",
+            "msrName": "Maritime Service Registry",
+            "disclamer": "관리 포털의 개발은 선박해양플랜트연구소의 “Development of Open Platform Technologies for Smart Maritime Safety and Industries” 과제 지원 하에 수행되었습니다."
+        }
+    },
+    "registrationProcess": {
+        "title": "가입 절차 안내",
+        "button": {
+            "prev": "이전",
+            "next": "다음"
+        },
+        "step1": {
+            "title": "가입 요청",
+            "content": "처음 화면의 가입 버튼을 눌러 가입 절차를 시작합니다. 가입 약관을 읽고 난 후 동의를 하시면 소속 기관에 대한 정보를 채울 수 있는 폼을 볼 수 있습니다. 작성 후 제출 버튼을 누르시면 가입 요청이 완료되고 관리자로부터 기관 이메일로 확인 메일이 도착하게 됩니다."
+        },
+        "step2": {
+            "title": "기관 인증",
+            "content": "관리자는 수신된 기관 정보에 대한 검증을 수행합니다. 검증 절차와 기준은 MCP 인증 서비스 제공자의 정책을 따르게 됩니다."
+        },
+        "step3": {
+            "title": "요청 승인",
+            "content": "검증이 완료되면 관리자는 승인 메일과 임시 비밀번호를 요청자에게 보내게 됩니다. 처음 로그인 후 비밀번호를 반드시 변경해주세요."
+        },
+        "step4": {
+            "title": "가입 완료",
+            "content": "MIR과 MSR, MSR 분산원장을 사용하실 수 있습니다. 관리 포털에 로그인하셔서 MIR과 MSR에 기관의 자원들을 등록하고 관리하세요."
+        }
+    },
+    "register": {
+        "title": "가입 요청 ",
+        "submitTitle": "가입 신청 기관 정보",
+        "button": {
+            "agree": "동의",
+            "disagree": "동의하지 않음",
+            "close": "닫기"
+        },
+        "termsOfUse": {
+            "title": "가입 약관"
+        },
+        "submitted": {
+            "title": "요청하신 정보가 접수되었습니다.",
+            "content": "MIR 관리자가 기관 정보 검토 후 연락드릴 예정입니다."
+        }
+    },
+    "ir": {
+        "about": {
+            "title": "Maritime Identity Registry란?",
+            "intro": "Maritime Identity Registry (MIR)은 자원의 ID 관리를 담당하고 MCP의 엔티티에 보안 기능을 제공합니다. 특히 MIR은 다음과 같은 기능을 제공합니다:",
+            "firstFunction": "첫째, 신원 관리: MIR은 각 해양 자원(예: 장치, 인간, 조직, 서비스 또는 선박)을 MIR에 등록하고 고유한 신원을 부여할 수 있도록 합니다(해양 자원 이름 - MRN - 할당).",
+            "secondFunction": "둘째, PKI(Public Key Infrastructure): MIR은 각 MCP 엔터티가 해당하는 암호화 ID, 즉 공개/개인 키 쌍과 해당 ID에 바인딩된 공개 키가 있는 인증서를 보유하도록 합니다.",
+            "thirdFunction": "셋째, MIR은 확립된 인터넷 표준(OAUTH 2.0 / OpenID Connect)을 기반으로 웹 서비스의 인증 및 안전한 통합을 가능하게 하는 인증을 위한 인프라를 제공합니다.",
+            "portal": {
+                "title": "MCP 관리 포털을 통해 MIR을 사용하는 방법",
+                "description": "MCP 관리 포털은 MCP 사용자에게 프런트 엔드 인터페이스를 제공하는 것을 목표로 합니다. MCP 관리 포털의 모든 것은 로그인한 사용자의 조직을 중심으로 합니다. ID 레지스트리 섹션의 모든 엔터티에는 사용자 소유 조직에 대한 데이터만 있습니다. 조직 자체의 엔터티: 선박, 장치, 사용자, 서비스는 비공개로 간주되며 다른 사람에게 절대 표시되지 않습니다. 자산에 대한 페이지를 통해 자산에 대한 인증서를 발행할 수도 있습니다."
+            },
+            "howto": {
+                "title": "사용법",
+                "user": {
+                    "title": "일반 사용자",
+                    "description": "왼쪽 메뉴의 조직 이름 아래에서 MCP 엔터티 유형별로 분류된 조직에 속한 자산을 볼 수 있습니다."
+                },
+                "orgAdmin": {
+                    "title": "기관 관리자",
+                    "description": "왼쪽 메뉴의 조직 이름 아래에서 MCP 엔터티 유형별로 분류된 조직에 속한 자산을 볼 수 있습니다. 유형(예: 사용자, 선박, 장치 등)에 따라 자산을 등록/업데이트/제거할 수 있는 하나 이상의 권한이 있을 수 있습니다."
+                },
+                "mirAdmin": {
+                    "title": "MIR 관리자",
+                    "description": "'관리' 메뉴에서 조직 목록이 MIR에 속하는 것을 볼 수 있습니다."
+                }
+            }
+        }        
+    },
+    "sr": {
+        "about": {
+            "title": "Maritime Service Registry 란?",
+            "intro": "Maritime Service Registry (MSR)은 해양 이해 관계자가 사용자들이 검색할 수 있도록 서비스를 등록할 수 있는 레지스트리입니다. 공급자, 서비스 유형, mrn 및 지리 영역과 같은 검색 매개 변수를 사용하여 서비스를 검색할 수 있습니다.",
+            "portal": {
+                "title": "MCP 관리 포털을 통해 MSR을 사용하는 방법",
+                "description": "MCP 관리 포털은 MCP 사용자에게 프런트 엔드 인터페이스를 제공하는 것을 목표로 합니다. 서비스는 서비스 레지스트리 섹션에서 등록되고 검색될 수 있습니다. MSR 관리자와 연락 후 회사의 서비스를 등록하고 편집할 수 있습니다. Service Registry 아래의 검색 페이지에서 얻는 검색 결과는 등록한 MSR로 제한됩니다."
+            },
+            "howto": {
+                "title": "사용법",
+                "user": {
+                    "title": "일반 사용자",
+                    "description": "검색 페이지는 SECOM 표준 API를 통해 서비스를 찾는 데 도움이 됩니다."
+                },
+                "orgAdmin": {
+                    "title": "기관 관리자",
+                    "description": "왼쪽 메뉴의 소속 기관 이름 아래 조직에 속한 서비스를 보고 편집할 수 있습니다. "
+                },
+                "mirAdmin": {
+                    "title": "MSR 관리자",
+                    "description": "서비스 목록 및 상세 페이지에서 서비스를 관리할 수 있습니다."
+                }
+            }
+        }        
+    },
+    "ledger": {
+        "about": {
+            "title": "MSR 분산원장이란?",
+            "intro": "Maritime Service Registry Ledger (MSR Ledger)는 서비스의 메타 정보를 유지하기 위한 분산 원장입니다. 관리 포털은 MSR 원장을 통해 검색할 수 있는 인터페이스를 제공합니다.",
+            "portal": {
+                "title": "MCP 관리 포털을 통해 MSR 분산원장을 사용하는 방법",
+                "description": "MCP 관리 포털은 MCP 사용자에게 프런트 엔드 인터페이스를 제공하는 것을 목표로 합니다. 검색 결과에는 서비스 정보와 이를 소유한 MSR이 모두 포함됩니다."
+            },
+            "howto": {
+                "title": "사용법",
+                "user": {
+                    "title": "일반 사용자",
+                    "description": "검색 페이지는 전 세계적으로 서비스를 검색하는 데 도움이 되며 결과는 MSR 전체에서 제공됩니다."
+                },
+                "orgAdmin": {
+                    "title": "기간 관리자",
+                    "description": "MSR 분산원장에 서비스 등록을 요청할 수 있습니다. 계속 진행하려면 MSR 공급자에게 문의하십시오."
+                }
+            }
+        }        
+    },
+    "portal": {
+        "about": {
+            "title": "정보",
+            "info": {
+                "version": "버전",
+                "provider": "제공사",
+                "environment": "운영환경",
+                "contact": "연락처"
+            }
+        }
+    },    
+    "menu": {
+        "ir": "인증 레지스트리",
+        "ir.organizations": "모든 기관",
+        "ir.guide": "도움말",
+        "sr": "서비스 레지스트리",
+        "sr.instances": "모든 서비스",
+        "sr.search": "검색",
+        "sr.guide": "도움말",
+        "ledger": "글로벌 서비스 검색",
+        "ledger.search": "MSR 분산원장 검색",
+        "ledger.guide": "도움말",
+        "about": "정보",
+        "ir.admin": "가입 요청 승인",
+        "ir.org": "소속 기관",
+        "ir.org.info": "기관 정보",
+        "ir.org.devices": "기기",
+        "ir.org.services": "서비스 ID",
+        "ir.org.users": "사용자",
+        "ir.org.vessels": "선박",
+        "ir.org.roles": "권한",
+        "sr.org": "소속 기관",
+        "sr.org.services": "서비스"
+    },
+    "table": {
+        "resource": {
+            "device": {
+                "name": "Nameeeeeee"
+            }
+        }
+    },
+    "success": {
+        "resource": {
+            "delete": " - 성공적으로 삭제되었습니다",
+            "update": " - 성공적으로 업데이트되었습니다",
+            "create": " - 성공적으로 생성되었습니다",
+            "approveOrganization": "가입 요청이 승인되었습니다",
+            "uploadImage": "업로드된 이미지가 성공적으로 삭제되었습니다"
+        }
+    },
+    "warning": {
+        "resource": {
+            "beforeRevoke": " 이 자원을 위해 발급된 모든 인증서가 해지됩니다",
+            "beforeDeletion": "삭제 하시겠습니까?"
+        }
+    },
+    "error": {
+        "resource": {
+            "noDataService": "해당 DataService가 없습니다 - ",
+            "permissionError": "권한이 없습니다",
+            "missingInformation": "누락된 정보가 있습니다",
+            "approveOrganization": {
+                "userCreation": "조직이 승인되었지만 사용자 생성에 실패했습니다. 나중에 조직 메뉴로 이동하여 사용자를 다시 만들 수 있습니다. - ",
+                "roleCreation": "조직이 승인되었지만 역할 생성에 실패했습니다 - ",
+                "reject": "조직이 승인되지 않았습니다 - "
+            },
+            "noUser": "사용자 데이터 없음",
+            "fetchOrgInfo": "조직 정보를 가져오는 중 오류가 발생했습니다.",
+            "creationFailed" : "생성 실패 - ",
+            "updateFailed" : "업데이트 실패 - ",
+            "errorInDeletion": "삭제 실패 - ",
+            "updateImageFailed": "이미지를 업데이트하는 중에 오류가 발생했습니다 - "
+        }
+    },
+    "header": {
+        "logout": "로그아웃"
+    }
+}

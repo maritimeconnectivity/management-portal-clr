@@ -1,0 +1,212 @@
+{
+    "landing": {
+        "title": {
+            "serviceName": "Management Portal",
+            "environmentName": "environment"
+        },
+        "button": {
+            "login": "Log in",
+            "register": "Register",
+            "registerInfo": "I want to know more about registration"
+        },
+        "footer": {
+            "shortIntro": "Management Portal is a website for administrators who manage their resources in ",
+            "mirName": "Maritime Identity Registry",
+            "namesConnector": " and ",
+            "msrName": "Maritime Service Registry",
+            "disclamer": "The development of Management Portal has funded by KRISO\nunder the project “Development of Open Platform Technologies for Smart Maritime Safety and Industries”"
+        }
+    },
+    "registrationProcess": {
+        "title": "Registration process",
+        "button": {
+            "prev": "prev",
+            "next": "next"
+        },
+        "step1": {
+            "title": "Request to join",
+            "content": "Press Register button in the front page to begin with. After you agree with the terms of use, a form for information on your organization will be given and needs to be filled with. After press Submit button, you will be soon notified if the submission of your information is successful or not."
+        },
+        "step2": {
+            "title": "Vetting of organization",
+            "content": "The administrator receives the information and investigate the authenticity of the information. The level of details in this investigation is up to the policy of an MCP identity service provider."
+        },
+        "step3": {
+            "title": "Approval of request",
+            "content": "The administrator sends you an e-mail for approal of request if everything is okay. Remember the given credential in the e-mail is temporary and needs to be replaced by your own password."
+        },
+        "step4": {
+            "title": "Ready to use MIR, MSR and the MSR Ledger through Management portal!",
+            "content": "Now you are accessible to Management portal and able to manage your resources in MIR and also service instances in MSR."
+        }
+    },
+    "register": {
+        "title": "Request to join ",
+        "submitTitle": "Requested information to join",
+        "button": {
+            "agree": "Agree",
+            "disagree": "Disagree",
+            "close": "Close"
+        },
+        "termsOfUse": {
+            "title": "Terms of use"
+        },
+        "submitted": {
+            "title": "Your information has been successfully submitted!",
+            "content": "MIR Administrator will process the information and be in contact with you."
+        }
+    },
+    "ir": {
+        "about": {
+            "title": "What is Maritime Identity Registry",
+            "intro": "Maritime Identity Registry (MIR) is responsible for identity management and providing security functionality to the entities of the MCP. In particular, the MIR will provide the following functionality:",
+            "firstFunction": "Firstly, Identity Management: The MIR enables that each maritime entity (such as a device, human, organization, service, or ship) can be registered as an entity of the MCP and be equipped with a unique identity (by assigning a Maritime Resource Name (MRN)).",
+            "secondFunction": "Secondly, Public Key Infrastructure (PKI): The MIR ensures that each MCP entity holds a corresponding cryptographic identity, i.e., a public / private key pair and a certificate with the public key bound to their identity.",
+            "thirdFunction": "Thirdly, the MIR provides the infrastructure for authentication, which enables authorization and secure integration of web services, based on the established internet standards (OAUTH 2.0 / OpenID Connect).",
+            "portal": {
+                "title": "How to use MIR through MCP Management Portal",
+                "description": "MCP management portal aims to provide a front-end interface to MCP users. Everything in the MCP Management Portal is centered around the organization of the logged in user. Every entity in the Identity Registry section, only has data for the users own organization. An organization’s own entities: vessels, devices, users, services are considered private and will never be shown to others. You can also issue certificates for your assets through a page for an asset."
+            },
+            "howto": {
+                "title": "How to use",
+                "user": {
+                    "title": "For user",
+                    "description": "Under your organization name from the menu on left, you can see the assets belongs to your organization categorized by the MCP entity type."
+                },
+                "orgAdmin": {
+                    "title": "For organization admin",
+                    "description": "Under your organization name from the menu on left, you can see the assets belongs to your organization categorized by the MCP entity type. You might have one or more permissions to register/update/remove assets according to their types, e.g., user, vessels, devices and etc."
+                },
+                "mirAdmin": {
+                    "title": "For MIR admin",
+                    "description": "Under 'Administration' menu, you can see the organization list belongs to your MIR."
+                }
+            }
+        }        
+    },
+    "sr": {
+        "about": {
+            "title": "What is Maritime Service Registry",
+            "intro": "Maritime Service Registry (MSR) is a registry where maritime stakeholders can register services for others to discover. It is possible to search for services with search parameters like providers, service type, mrn and geographical coverage areas.",
+            "portal": {
+                "title": "How to use MSR through MCP Management Portal",
+                "description": "MCP management portal aims to provide a front-end interface to MCP users. Services are registered and able to be discovered under the Service Registry section. You can register and edit your company's services after contact with MSR admin. The search results you get from Search page under the Service Registry will be limited to the MSR that you are registered."
+            },
+            "howto": {
+                "title": "How to use",
+                "user": {
+                    "title": "For user",
+                    "description": "Search page will help you to discover services through the SECOM standard API"
+                },
+                "orgAdmin": {
+                    "title": "For organization admin",
+                    "description": "Under your organization name from the menu on left, you can see and edit services belongs to your organization. "
+                },
+                "mirAdmin": {
+                    "title": "For MSR admin",
+                    "description": "You can manage services in the service list and detail pages."
+                }
+            }
+        }        
+    },
+    "ledger": {
+        "about": {
+            "title": "What is MSR Ledger",
+            "intro": "Maritime Service Registry Ledger (MSR Ledger)is a distributed ledger for maintaining meta-information of services. The management portal will give you interface to search through the MSR ledger.",
+            "portal": {
+                "title": "How to use MSR Ledger through MCP Management Portal",
+                "description": "MCP management portal aims to provide a front-end interface to MCP users. Search result will contain both service info and also the MSR that owns it."
+            },
+            "howto": {
+                "title": "How to use",
+                "user": {
+                    "title": "For user",
+                    "description": "Search page will help you to discover services globally and the results will be from across the MSRs"
+                },
+                "orgAdmin": {
+                    "title": "For organization admin",
+                    "description": "You can request a registration of your service into the MSR ledger. Contact the MSR provider to proceed further."
+                }
+            }
+        }        
+    },
+    "portal": {
+        "about": {
+            "title": "Information",
+            "info": {
+                "version": "Version",
+                "provider": "Provider",
+                "environment": "Environment",
+                "contact": "Contact"
+            }
+        }
+    },    
+    "menu": {
+        "ir": "Identity Registry",
+        "ir.organizations": "Organizations",
+        "ir.guide": "User Guide",
+        "sr": "Service Registry",
+        "sr.instances": "Services",
+        "sr.search": "Search",
+        "sr.guide": "User Guide",
+        "ledger": "Global Service Discovery",
+        "ledger.search": "MSR Ledger Search",
+        "ledger.guide": "User Guide",
+        "about": "About",
+        "ir.admin": "Approve organization",
+        "ir.org": "My Organization",
+        "ir.org.info": "Info",
+        "ir.org.devices": "Devices",
+        "ir.org.services": "ID Services",
+        "ir.org.users": "Users",
+        "ir.org.vessels": "Vessels",
+        "ir.org.roles": "Roles",
+        "sr.org": "My Organization",
+        "sr.org.services": "Services"
+    },
+    "table": {
+        "resource": {
+            "device": {
+                "name": {
+                    "title": "Nameeeeeee"
+                }
+            }
+        }
+    },
+    "success": {
+        "resource": {
+            "delete": " has been successfully deleted",
+            "update": " has been updated",
+            "create": " has been created",
+            "approveOrganization": "Organization approved",
+            "uploadImage": "Uploaded image has been successfully deleted"
+        }
+    },
+    "warning": {
+        "resource": {
+            "beforeRevoke": " All certificates under this entity will be revoked",
+            "beforeDeletion": "Are you sure you want to delete?"
+        }
+    },
+    "error": {
+        "resource": {
+            "noDataService": "There's no such DataService - ",
+            "permissionError": "You don't have right permission",
+            "missingInformation": "There is missing information",
+            "approveOrganization": {
+                "userCreation": "The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ",
+                "roleCreation": "The organization was approved, but role creation failed - ",
+                "reject": "The organization is not approved - "
+            },
+            "noUser": "No user data",
+            "fetchOrgInfo": "Error in fetching organization information",
+            "creationFailed" : "Creation has failed - ",
+            "updateFailed" : "Update has failed - ",
+            "errorInDeletion": "Deletion has failed - ",
+            "updateImageFailed": "There was error in updating image - "
+        }
+    },
+    "header": {
+        "logout": "Log out"
+    }
+}
