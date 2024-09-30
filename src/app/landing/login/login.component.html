@@ -1,5 +1,5 @@
-<div>
-    <div class="image-container">
+<div class="image-container" style="height: 100vh;">
+    <div >
         <div>
             @if (loggedIn) {
                 The user is logged in
@@ -9,20 +9,20 @@
         </div>
         <button *ngIf="!loggedIn" (click)="logIn()">login</button>
         <button *ngIf="loggedIn" (click)="logOut()">log out</button>
-        <!--
+
         <div class="p-2">
             <a class="text-white" href="{{footerLink}}" target="_blank">{{ footerName }}</a>
         </div>
         <div class="ml-auto p-2">
             <span class="text-white">Language: </span>
-            <select [selected]="currentLang" (selectedChange)="changeLang($event)" status="primary">
-                <option *ngFor="let lang of langs" [value]="lang.code"> {{ lang.name }}</nb-option>
-            </select>
+            <select clrSelect #languageOption [(ngModel)]="currentLang" (change)="changeLang(languageOption.value)">
+                @for (option of langs; track option.code) {
+                    <option [value]="option.code" >{{ option.name }}</option>
+                }
+              </select>
         </div>
-        -->
     </div>
-    <div class="image-container">
-        <!--
+    <div>
         <div class="trans-background">
             <div class="trans-background flex justify-content-center">
                 <div class="row">
@@ -30,6 +30,7 @@
                         <img class="mcp-logo p-4" src = "{{ logo_img }}" alt="Logo"/>
                     </div>
                 </div>
+                
                 <div class="row">
                     <div class="col text-center w-100">
                         <p class="title-font text-white p-3 w-100">{{ serviceProviderName }}</p>
@@ -37,9 +38,11 @@
                         <h5 class="description-font p-1 text-white w-100">{{environmentName}} {{ 'landing.title.environmentName' | translate }}</h5>
                     </div>
                 </div>
+                
                 <div class="row justify-content-center p-4">
                     <div class="buttons-row">
                         <button status="primary" nbButton type="button" (click)="logIn()">{{ 'landing.button.login' | translate }}</button>
+                        <button class="btn btn-primary" (click)="openModal('lg')">Large Modal</button>
                         <button status="success" nbButton type="button" (click)="createRegisterDialog()">{{ 'landing.button.register' | translate }}</button>
                     </div>
                 </div>
@@ -63,6 +66,14 @@
                 </div>
             </div>
         </div>
-        -->
     </div>
 </div>
+
+<clr-modal #modal [(clrModalOpen)]="opened" [clrModalSize]="size">
+    <div class="modal-title">{{ size }} modal</div>
+    <div class="modal-body">I am a {{ size | lowercase }} modal.</div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="opened = false">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="opened = false">Ok</button>
+    </div>
+  </clr-modal>
