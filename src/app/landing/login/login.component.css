@@ -15,12 +15,12 @@
 
 .title-font {
     font-family: 'Staatliches', cursive;
-    font-size: 4rem;
+    font-size: 3rem;
 }
 
 .subtitle-font {
     font-family: 'Staatliches', cursive;
-    font-size: 3rem;
+    font-size: 2rem;
     
 }
 
@@ -37,4 +37,8 @@
     max-width: 400px;
     -webkit-filter: drop-shadow( 10px 10px 30px rgba(0, 0, 0, .7));
     filter: drop-shadow( 10px 10px 30px rgba(0, 0, 0, .7));
+}
+
+.text-white {
+    color: white;
 }
