@@ -25,7 +25,8 @@ import { SharedModule } from 'src/app/common/shared/shared.module';
 })
 
 export class LoginComponent {
-  @ViewChild('modal', { static: true }) modal: ClrModal | undefined;
+  @ViewChild('regInfoModal', { static: true }) regInfoModal: ClrModal | undefined;
+  @ViewChild('regInputModal', { static: true }) regInputModal: ClrModal | undefined;
   
   langs = languages;
   footerLink = AppConfig.FOOTER_LINK;
@@ -38,7 +39,8 @@ export class LoginComponent {
   logo_img = AppConfig.LOGO_IMG;
   
   size = "lg";
-  opened = false;
+  regInfoOpened = false;
+  regInputOpened = false;
   
   constructor(private authService: AuthService,
     public translate: TranslateService,
@@ -85,9 +87,15 @@ export class LoginComponent {
   createProcessDialog() {
     //this.dialogService.open(ProcessDialogComponent);
   }
-  openModal(size: string) {
-    this.size = size;
+  openRegInfoModal() {
+    this.size = 'lg';
 
-    this.modal?.open();
+    this.regInfoModal?.open();
+  }
+
+  openRegInputModal() {
+    this.size = 'lg';
+
+    this.regInputModal?.open();
   }
 }

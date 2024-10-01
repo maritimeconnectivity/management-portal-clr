@@ -36,7 +36,7 @@
             "content": "The administrator sends you an e-mail for approal of request if everything is okay. Remember the given credential in the e-mail is temporary and needs to be replaced by your own password."
         },
         "step4": {
-            "title": "Ready to use MIR, MSR and the MSR Ledger through Management portal!",
+            "title": "Ready to use Management portal!",
             "content": "Now you are accessible to Management portal and able to manage your resources in MIR and also service instances in MSR."
         }
     },

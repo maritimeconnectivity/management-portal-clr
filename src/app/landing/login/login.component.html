@@ -40,15 +40,14 @@
                 </div>
                 
                 <div class="row justify-content-center p-4">
-                    <div class="buttons-row">
-                        <button status="primary" nbButton type="button" (click)="logIn()">{{ 'landing.button.login' | translate }}</button>
-                        <button class="btn btn-primary" (click)="openModal('lg')">Large Modal</button>
-                        <button status="success" nbButton type="button" (click)="createRegisterDialog()">{{ 'landing.button.register' | translate }}</button>
+                    <div class="text-center">
+                        <button class="btn btn-primary" (click)="logIn()">{{ 'landing.button.login' | translate }}</button>
+                        <button class="btn btn-primary" (click)="openRegInputModal()">{{ 'landing.button.register' | translate }}</button>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col text-center p-2">
-                        <button class="text-white" nbButton type="button" (click)="createProcessDialog()" size="small" outline>{{ 'landing.button.registerInfo' | translate }}</button>
+                        <button class="btn btn-secondary" (click)="openRegInfoModal()">{{ 'landing.button.registerInfo' | translate }}</button>
                     </div>
                 </div>
                 <div class="row">
@@ -69,11 +68,63 @@
     </div>
 </div>
 
-<clr-modal #modal [(clrModalOpen)]="opened" [clrModalSize]="size">
-    <div class="modal-title">{{ size }} modal</div>
-    <div class="modal-body">I am a {{ size | lowercase }} modal.</div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline" (click)="opened = false">Cancel</button>
-      <button type="button" class="btn btn-primary" (click)="opened = false">Ok</button>
+<clr-modal #regInfoModal [(clrModalOpen)]="regInfoOpened" [clrModalSize]="size">
+    <div class="modal-title">
+        {{ 'registrationProcess.title' | translate }}
     </div>
+    <div class="modal-body">
+        <ul class="clr-timeline">
+            <li class="clr-timeline-step">
+              <div class="clr-timeline-step-header">Step 1</div>
+              <cds-icon role="img" shape="circle" aria-label="Not started"></cds-icon>
+              <div class="clr-timeline-step-body">
+                <span class="clr-timeline-step-title">{{ 'registrationProcess.step1.title' | translate }}</span>
+                <span class="clr-timeline-step-description">{{ 'registrationProcess.step1.content' | translate }}</span>
+              </div>
+            </li>
+            <li class="clr-timeline-step">
+                <div class="clr-timeline-step-header">Step 2</div>
+                <cds-icon role="img" shape="circle" aria-label="Not started"></cds-icon>
+                <div class="clr-timeline-step-body">
+                  <span class="clr-timeline-step-title">{{ 'registrationProcess.step2.title' | translate }}</span>
+                  <span class="clr-timeline-step-description">{{ 'registrationProcess.step2.content' | translate }}</span>
+                </div>
+              </li>
+              <li class="clr-timeline-step">
+                <div class="clr-timeline-step-header">Step 3</div>
+                <cds-icon role="img" shape="circle" aria-label="Not started"></cds-icon>
+                <div class="clr-timeline-step-body">
+                  <span class="clr-timeline-step-title">{{ 'registrationProcess.step3.title' | translate }}</span>
+                  <span class="clr-timeline-step-description">{{ 'registrationProcess.step3.content' | translate }}</span>
+                </div>
+              </li>
+              <li class="clr-timeline-step">
+                <div class="clr-timeline-step-header">Step 4</div>
+                <cds-icon role="img" shape="circle" aria-label="Not started"></cds-icon>
+                <div class="clr-timeline-step-body">
+                  <span class="clr-timeline-step-title">{{ 'registrationProcess.step4.title' | translate }}</span>
+                  <span class="clr-timeline-step-description">{{ 'registrationProcess.step4.content' | translate }}</span>
+                </div>
+              </li>
+          </ul>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="regInfoOpened = false">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="regInfoOpened = false">Ok</button>
+    </div>
+    
+  </clr-modal>
+
+  <clr-modal #regInputModal [(clrModalOpen)]="regInputOpened" [clrModalSize]="size">
+    <div class="modal-title">
+        {{ 'register.title' | translate }}{{environmentName}}
+    </div>
+    <div class="modal-body">
+        dfef
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="regInputOpened = false">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="regInputOpened = false">Ok</button>
+    </div>
+    
   </clr-modal>
