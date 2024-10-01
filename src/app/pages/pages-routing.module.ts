@@ -15,6 +15,10 @@ import { AboutComponent } from './about/about.component';
 import { authGuard } from '../auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
+import { IrGuideComponent } from './ir-guide/ir-guide.component';
+import { AboutComponent } from './about/about.component';
+import { SrSearchComponent } from './sr-search/sr-search.component';
+import { SrGuideComponent } from './sr-guide/sr-guide.component';
 
 const routes: Routes = [
   {
@@ -26,8 +30,25 @@ const routes: Routes = [
       path: '',
       component: DashboardComponent,
     },
+    {
+      path: 'ir/guide',
+      component: IrGuideComponent,
+    },
+    {
+      path: 'about',
+      component: AboutComponent,
+    },
+    {
+      path: 'sr/search',
+      component: SrSearchComponent,
+    },
+    {
+      path: 'sr/guide',
+      component: SrGuideComponent,
+    },
     { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '**', redirectTo: '' },
+    
     /*
     
     // identity registry
@@ -81,10 +102,7 @@ const routes: Routes = [
       loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
-    {
-      path: 'ir/guide',
-      component: IrGuideComponent,
-    },
+    
     // service registry
     {
       path: 'sr/instances',
@@ -101,14 +119,7 @@ const routes: Routes = [
       loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
-    {
-      path: 'sr/search',
-      component: SrSearchComponent,
-    },
-    {
-      path: 'sr/guide',
-      component: SrGuideComponent,
-    },
+    
     {
       path: 'ledger/search',
       component: MsrLedgerSearchComponent,
@@ -117,10 +128,7 @@ const routes: Routes = [
       path: 'ledger/guide',
       component: LedgerGuideComponent,
     },
-    {
-      path: 'about',
-      component: AboutComponent,
-    },
+    
     {
       path: '',
       redirectTo: 'ir/guide',

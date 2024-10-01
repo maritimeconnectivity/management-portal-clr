@@ -1,0 +1,18 @@
+
+<clr-datagrid>
+    <clr-dg-column>Component name</clr-dg-column>
+    <clr-dg-column>Version</clr-dg-column>
+    <clr-dg-column>Provider name</clr-dg-column>
+    <clr-dg-column>Contact</clr-dg-column>
+    
+    @for (comp of components; track comp) {
+        <clr-dg-row>
+            <clr-dg-cell>{{ comp.name }}</clr-dg-cell>
+            <clr-dg-cell>{{ comp.version }}</clr-dg-cell>
+            <clr-dg-cell>{{ comp.provider }}</clr-dg-cell>
+            <clr-dg-cell>{{ comp.contact }}</clr-dg-cell>
+        </clr-dg-row>
+    }
+    
+</clr-datagrid>
+  
