@@ -19,6 +19,7 @@ import { IrGuideComponent } from './ir-guide/ir-guide.component';
 import { AboutComponent } from './about/about.component';
 import { SrSearchComponent } from './sr-search/sr-search.component';
 import { SrGuideComponent } from './sr-guide/sr-guide.component';
+import { EntityViewComponent } from './entity-view/entity-view.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
     {
       path: '',
       component: DashboardComponent,
+    },
+    {
+      path: 'ir/organizations',
+      component: EntityViewComponent,
     },
     {
       path: 'ir/guide',
