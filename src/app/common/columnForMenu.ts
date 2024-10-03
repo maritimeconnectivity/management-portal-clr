@@ -35,6 +35,7 @@ export const ColumnForResource: {[key: string]: object} = {
       immutable: true,
       required: true,
       shortIdType: 'device',
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<org_id>:<unique_id>'",
     },
     name: {
       title: 'Name',
@@ -64,6 +65,7 @@ export const ColumnForResource: {[key: string]: object} = {
     createdAt: {
       title: 'Created at',
       type: 'string',
+      description: 'Time of creation',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -75,6 +77,7 @@ export const ColumnForResource: {[key: string]: object} = {
     updatedAt: {
       title: 'Updated at',
       type: 'string',
+      description: 'Time of last update',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -162,6 +165,7 @@ export const ColumnForResource: {[key: string]: object} = {
     createdAt: {
       title: 'Created at',
       type: 'string',
+      description: 'Time of creation',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -173,6 +177,7 @@ export const ColumnForResource: {[key: string]: object} = {
     updatedAt: {
       title: 'Updated at',
       type: 'string',
+      description: 'Time of last update',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -297,6 +302,7 @@ export const ColumnForResource: {[key: string]: object} = {
     createdAt: {
       title: 'Created at',
       type: 'string',
+      description: 'Time of creation',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -308,6 +314,7 @@ export const ColumnForResource: {[key: string]: object} = {
     updatedAt: {
       title: 'Updated at',
       type: 'string',
+      description: 'Time of last update',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -372,6 +379,7 @@ export const ColumnForResource: {[key: string]: object} = {
     createdAt: {
       title: 'Created at',
       type: 'string',
+      description: 'Time of creation',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -383,6 +391,7 @@ export const ColumnForResource: {[key: string]: object} = {
     updatedAt: {
       title: 'Updated at',
       type: 'string',
+      description: 'Time of last update',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -477,6 +486,7 @@ export const ColumnForResource: {[key: string]: object} = {
     createdAt: {
       title: 'Created at',
       type: 'string',
+      description: 'Time of creation',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -488,6 +498,7 @@ export const ColumnForResource: {[key: string]: object} = {
     updatedAt: {
       title: 'Updated at',
       type: 'string',
+      description: 'Time of last update',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -559,6 +570,7 @@ export const ColumnForResource: {[key: string]: object} = {
     createdAt: {
       title: 'Created at',
       type: 'string',
+      description: 'Time of creation',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -570,6 +582,7 @@ export const ColumnForResource: {[key: string]: object} = {
     updatedAt: {
       title: 'Updated at',
       type: 'string',
+      description: 'Time of last update',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -651,6 +664,7 @@ export const ColumnForResource: {[key: string]: object} = {
     createdAt: {
       title: 'Created at',
       type: 'string',
+      description: 'Time of creation',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -662,6 +676,7 @@ export const ColumnForResource: {[key: string]: object} = {
     updatedAt: {
       title: 'Updated at',
       type: 'string',
+      description: 'Time of last update',
       filter: false,
       valuePrepareFunction: (timestamp: any) => {
         return convertTime(timestamp);
@@ -1049,6 +1064,7 @@ export const ColumnForResource: {[key: string]: object} = {
     publishedAt: {
       title: 'Created at',
       type: 'string',
+      description: 'Time of creation',
       filter: false,
       immutable: true,
       notShowOnEdit: true,
@@ -1057,6 +1073,7 @@ export const ColumnForResource: {[key: string]: object} = {
     lastUpdatedAt: {
       title: 'Updated at',
       type: 'string',
+      description: 'Time of last update',
       filter: false,
       immutable: true,
       notShowOnEdit: true,
