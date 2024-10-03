@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { SharedModule } from '../../common/shared/shared.module';
 import { ClrFormsModule } from '@clr/angular';
-import { FormControl, FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { ResourceType } from 'src/app/common/menuType';
+import { filterUndefinedAttributes } from 'src/app/common/filterObject';
 
 @Component({
   selector: 'app-entity-form',
@@ -11,7 +12,8 @@ import { ResourceType } from 'src/app/common/menuType';
   imports: [
     SharedModule,
     ClrFormsModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   templateUrl: './entity-form.component.html',
   styleUrl: './entity-form.component.css'
@@ -26,15 +28,19 @@ export class EntityFormComponent {
    */
   @Input() isForNew: boolean = false;
 
-  model: FormControl | undefined;
+  entityForm = new FormGroup({});
+  model: FormControl<any> | undefined;
   columnForMenu: {[key: string]: any} = {};
   isEditing = false;
   shortId = '';
+  entity: any = {};
 
   contextForAttributes = 'detail';
 
   submit = () => {
-    console.log('Form submitted');
+    // Filter attributes with undefined values
+    const filteredAttributes = filterUndefinedAttributes(this.entity);
+    console.log(filteredAttributes);
   }
   resetForm = () => {
     console.log('Form reset');
@@ -49,6 +55,7 @@ export class EntityFormComponent {
    */
   setForm = () => {
     Object.entries(ColumnForResource[this.menuType.toString()]).map(([key, value]) => {
+      this.entityForm.addControl(key, new FormControl(''));
       this.columnForMenu[key] = value;
       console.log(key, value);
       /*
@@ -59,6 +66,8 @@ export class EntityFormComponent {
         */
     }  
     );
+
+    console.log(this.entityForm);
   }
 
   /**

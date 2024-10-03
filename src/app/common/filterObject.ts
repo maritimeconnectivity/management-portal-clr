@@ -1,0 +1,1 @@
+export const filterUndefinedAttributes = (entity: {}) => Object.fromEntries(Object.entries(entity).filter(([key, value]) => value !== undefined))

@@ -3,10 +3,10 @@
     <div class="card">
       <div class="card-header">
         <div class="clr-row">
-          <div class="clr-col-lg-10">
-            Header
+          <div class="clr-col-lg-8">
+            Register new {{menuType}}
           </div>
-          <div class="clr-col-lg-2">
+          <div class="clr-col-lg-4">
             <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
             <button class="btn btn-warning" (click)="resetForm()">Reset</button>
           </div>
@@ -14,10 +14,13 @@
       </div>
       <div class="card-block">
         <div class="card-text">
-          <form clrForm>
+          {{ model | json }}
+          <form clrForm [formGroup]="entityForm">
             <clr-input-container *ngFor="let menu of columnForMenu | keyvalue">
               <label>{{menu.value.title}}</label>
-              <input clrInput type="text" [(ngModel)]="model" [name]="menu.key" />
+              <input clrInput [type]="menu.value.type" [formControlName]="menu.key" [(ngModel)]="entity[menu.key]" [required]="menu.value.required === true" />
+              <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+              <clr-control-error>Please enter a value</clr-control-error>
               <!--
               <div class="form-group row" *ngIf="isForNew && menuType !== 'role' && needShortId(menu.key)">
                 <div class="label col-sm-3 col-form-label">Short ID for {{menu.value.title}}</div>
