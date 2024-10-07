@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ClarityModule, ClrDatagridModule } from '@clr/angular';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { ClarityIcons, downloadIcon, plusIcon, timesIcon } from '@cds/core/icon';
+import { toCamelCase } from 'src/app/common/stringUtil';
 ClarityIcons.addIcons(downloadIcon, timesIcon, plusIcon);
 
 @Component({
@@ -30,5 +31,8 @@ export class SmartTableComponent {
 
   onSelect(id: string) {
     console.log('Selected', id);
+  }
+  toID(name: string) {
+    return toCamelCase(name);
   }
 }

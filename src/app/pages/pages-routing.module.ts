@@ -20,6 +20,7 @@ import { AboutComponent } from './about/about.component';
 import { SrSearchComponent } from './sr-search/sr-search.component';
 import { SrGuideComponent } from './sr-guide/sr-guide.component';
 import { EntityViewComponent } from './entity-view/entity-view.component';
+import { ListViewComponent } from './list-view/list-view.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,10 @@ const routes: Routes = [
     {
       path: 'about',
       component: AboutComponent,
+    },
+    {
+      path: 'sr/instances',
+      component: ListViewComponent,
     },
     {
       path: 'sr/search',

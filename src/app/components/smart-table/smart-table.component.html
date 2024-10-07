@@ -9,6 +9,11 @@
                     </button>
                 </div>
             }
+            @if (onDelete !== undefined) {
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
+                </div>
+            }
             @if (onDelete !== undefined && onDownload !== undefined) {
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
@@ -23,9 +28,9 @@
 
     <clr-dg-placeholder class="datagrid-empty">{{placeholder}}</clr-dg-placeholder>
     <clr-dg-row *clrDgItems="let datum of source" [clrDgItem]="datum">
-        <clr-dg-cell>{{ datum.id }}</clr-dg-cell>
-        <clr-dg-cell (click)="onSelect(datum.name)">{{ datum.name }}</clr-dg-cell>
-        <clr-dg-cell>{{ datum.age }}</clr-dg-cell>
+        @for (itemName of columns; track itemName){
+            <clr-dg-cell>{{ datum[toID(itemName)] }}</clr-dg-cell>
+        }
       </clr-dg-row>
     
     <clr-dg-footer>
