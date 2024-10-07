@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '../common/shared/shared.module';
 import { EntityFormComponent } from './entity-form/entity-form.component';
+import { ClarityModule } from '@clr/angular';
 
 
 
@@ -10,7 +11,8 @@ import { EntityFormComponent } from './entity-form/entity-form.component';
   imports: [
     EntityFormComponent,
     CommonModule,
-    SharedModule
+    SharedModule,
+    ClarityModule,
   ],
   exports: [
     EntityFormComponent

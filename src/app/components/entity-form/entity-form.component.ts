@@ -7,7 +7,7 @@ import { ResourceType } from 'src/app/common/menuType';
 import { filterUndefinedAttributes } from 'src/app/common/filterObject';
 import { JsonPipe } from '@angular/common';
 import { mrnRegex } from 'src/app/common/mrnRegex';
-
+import { CertTableComponent } from "../cert-table/cert-table.component";
 
 @Component({
   selector: 'app-entity-form',
@@ -18,6 +18,7 @@ import { mrnRegex } from 'src/app/common/mrnRegex';
     FormsModule,
     ReactiveFormsModule,
     JsonPipe,
+    CertTableComponent
 ],
   templateUrl: './entity-form.component.html',
   styleUrl: './entity-form.component.css'
