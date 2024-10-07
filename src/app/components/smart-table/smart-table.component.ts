@@ -16,6 +16,7 @@ ClarityIcons.addIcons(downloadIcon, timesIcon, plusIcon);
 })
 export class SmartTableComponent {
   @Input() source: any[] = [];
+  @Input() placeholder: string = 'We couldn\'t find any data!';
   @Input() onDownload: ((selected: any[]) => void) | undefined;
   @Input() onDelete: ((selected: any[]) => void) | undefined;
   @Input() onAdd: (() => void) | undefined;

@@ -22,6 +22,7 @@
     <clr-dg-column>Valid from</clr-dg-column>
     <clr-dg-column>Valid until</clr-dg-column>
     
+    <clr-dg-placeholder class="datagrid-empty">{{placeholder}}</clr-dg-placeholder>
     <clr-dg-row *clrDgItems="let datum of source" [clrDgItem]="datum">
         <clr-dg-cell>{{ datum.id }}</clr-dg-cell>
         <clr-dg-cell (click)="onSelect(datum.name)">{{ datum.name }}</clr-dg-cell>

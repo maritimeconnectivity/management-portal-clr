@@ -22,7 +22,7 @@ export class CertTableComponent {
   onAdd = () => {
     console.log('Add');
   }
-  
+  empty = [];
   data = [
     {
       id: 1,
