@@ -8,6 +8,7 @@ import { filterUndefinedAttributes } from 'src/app/common/filterObject';
 import { JsonPipe } from '@angular/common';
 import { mrnRegex } from 'src/app/common/mrnRegex';
 
+
 @Component({
   selector: 'app-entity-form',
   standalone: true,
@@ -16,7 +17,7 @@ import { mrnRegex } from 'src/app/common/mrnRegex';
     ClrFormsModule,
     FormsModule,
     ReactiveFormsModule,
-    JsonPipe
+    JsonPipe,
 ],
   templateUrl: './entity-form.component.html',
   styleUrl: './entity-form.component.css'
@@ -38,15 +39,15 @@ export class EntityFormComponent {
 
   @ViewChild(ClrForm, { static: true }) clrForm: ClrForm | undefined;
   
-  viewContext = 'detail';
+  viewContext = 'edit';
 
   entityForm: FormGroup = new FormGroup({});
   columnForMenu: {[key: string]: any} = {};
   isEditing = false;
   shortId = '';
   entity: any = {mrn: this.mrnPrefix};
-
-  contextForAttributes = 'detail';
+  entityMrn = '';
+  mode = 'view';
 
   constructor(private formBuilder: FormBuilder) {
     this.setForm();
@@ -66,6 +67,14 @@ export class EntityFormComponent {
   }
   resetForm = () => {
     this.setForm();
+  }
+
+  cancel = () => {
+    this.mode = 'view';
+  }
+
+  edit = () => {
+    this.mode = 'edit';
   }
 
   ngOnInit(): void {
@@ -98,7 +107,7 @@ export class EntityFormComponent {
     Object.entries(ColumnForResource[this.menuType.toString()]).map(([key, value]) => {
       if (!value.visibleFrom)
         return;
-      if (value.visibleFrom && !value.visibleFrom.includes(this.contextForAttributes))
+      if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
         return;
       if (key === 'mrn') {
         const mrnReg: RegExp = new RegExp(mrnRegex());
@@ -133,21 +142,6 @@ export class EntityFormComponent {
    */
   getShortIdType = (resourceType: string) => {
     return this.columnForMenu[resourceType] ? this.columnForMenu[resourceType].shortIdType : undefined;
-  }
-
-  addShortIdToMrn = (field: string, shortId: string) => {
-    /*
-    const mrn = this.mrnHelperService.mrnMask( this.getShortIdType(field), this.orgShortId) + shortId;
-    this.formGroup.get(field).setValue(mrn);
-    if (field === 'orgMrn') {
-      this.orgShortId = !this.orgShortId ? this.formGroup.get('orgMrn').value.split(":").pop():
-        this.orgShortId;
-      if (this.formGroup.get('adminMrn')) {
-        const adminShortId = this.formGroup.get('adminMrn').value.split(":").pop();
-        this.formGroup.get('adminMrn').setValue(this.mrnHelperService.mrnMaskForUserOfOrg(this.orgShortId) + adminShortId);
-      }
-    }
-    */
   }
 
   sortColumnForMenu = (a: any, b: any) => {

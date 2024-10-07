@@ -1,100 +1,133 @@
-<div class="clr-row">
-  <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-    <div class="card">
-      <div class="card-header">
-        <div class="clr-row">
-          <div class="clr-col-lg-8">
-            Register new {{menuType}}
-          </div>
-          <div class="clr-col-lg-4">
-            <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
-            <button class="btn btn-warning" (click)="resetForm()">Reset</button>
-          </div>
+@if (mode == 'edit'){
+  <div class="clr-row">
+    <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+      <div class="card">
+        <div class="card-header">
+          Register new {{menuType}}
         </div>
-      </div>
-      <div class="card-block">
-        <div class="card-text">
-          <form clrForm [formGroup]="entityForm">
-            <clr-input-container *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
-              <label>{{menu.value.title}}</label>
-              @if (menu.key === 'mrn'){
-                <input clrInput [type]="menu.value.type"
-                  [formControlName]="menu.key"
-                  [required]="menu.value.required === true"
-                  [placeholder]="mrnPrefix"
-                  (ngModelChange)="onMrnChange($event)"
-                  (keydown)="onMrnKeyDown($event)"/>
-              } @else {
-                <input clrInput [type]="menu.value.type" [formControlName]="menu.key" [required]="menu.value.required === true" />
-              }
-              
-              <clr-control-helper>{{menu.value.description}}</clr-control-helper>
-              @if (menu.value.error){
-                <clr-control-error>{{menu.value.error}}</clr-control-error>
-              } @else {
-                <clr-control-error>Please enter a value</clr-control-error>
-              }
-              
-              <!--
-              <div class="form-group row" *ngIf="isForNew && menuType !== 'role' && needShortId(menu.key)">
-                <div class="label col-sm-3 col-form-label">Short ID for {{menu.value.title}}</div>
-                <div class="col-sm-9 my-auto">
-                  
-                  <input type="text" fullWidth id="input_shortId_{{menu.key}}" class="form-control" required="menu.value.required === true" (change)="addShortIdToMrn(menu.key, '')" value="{{shortId}}">
-                </div>
-              </div>
-              -->
-              <!--
-              <div class="form-group row" *ngIf="!isEditing || (isEditing && isFieldVisible(menu.key))">
-                <div for="input{{menu.key}}" class="label col-sm-3 col-form-label" nbPopover="{{menu.value.description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{menu.value.title}}</div>
-                <div class="col-sm-9 my-auto">
-                  <ngx-input-button-list *ngIf="menu.value.type === 'stringArray'" [items]="loadedData[menu.key]" [isEditing]="isEditing"
-                    [options]="menu.value.options" [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"></ngx-input-button-list>
-                  <ngx-input-image *ngIf="!isForNew && menu.value.type === 'image'" [isEditing]="isEditing" [orgMrn]="orgMrn" [entityMrn]="entityMrn"
-                    [menuType]="menuType" [allowedExtensions]="menu.value.allowedExtensions"></ngx-input-image>
-                  <ngx-input-mcp-entity *ngIf="menu.value.type === 'vessel'" [entity]="loadedData[menu.key]" [isEditing]="isEditing" [orgMrn]="orgMrn"
-                  [menuType]="'vessel'" [required]="menu.value.required" (onUpdate)="onLinkChanged($event)"></ngx-input-mcp-entity>
-                  <ngx-input-file-list *ngIf="menu.value.type === 'fileArray'" [fieldName]="menu.key" [docIds]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
-                    [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
-                    (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
-                  <ngx-input-file-list *ngIf="menu.value.type === 'file'" [fieldName]="menu.key" [file]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
-                    [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
-                    (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
-                  <span *ngIf="!isEditing && menu.value.type === 'string' && menuType !== 'instance' && isForTime(menu.key)" id="keyword.name">{{ convertTimeString(formGroup.get(menu.key).value) }}</span>
-                  <span *ngIf="!isEditing && menu.value.type === 'string' && !isForTime(menu.key)" innerHtml="{{ formGroup.get(menu.key).value | textFormatter }}"></span>
-                  <button type='button' class="m-0" fullWidth nbButton (click)="openXmlDialog(loadedData[menu.key], isEditing)" *ngIf="!isEditing && menu.value.type === 'xml'">Read XML</button>
-                  <div *ngIf="isEditing" >
-                    <input *ngIf="menu.value.type === 'string' && !menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
-                    status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
-                    formControlName="{{menu.key}}"
-                    placeholder="{{menu.value.placeholder !== undefined ? menu.value.placeholder : ''}}"
-                    required="{{menu.value.required === true}}">
-                    <input *ngIf="menu.value.type === 'string' && menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
-                    status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
-                    formControlName="{{menu.key}}" hidden
-                    required="{{menu.value.required === true}}"> 
-                    <nb-select *ngIf="menu.value.type === 'string' && menu.value.options" type="string" (selectedChange)="onMenuItemSelected({key: menu.key, value: $event, type: menu.value.type})"
-                    [(selected)]="formGroup.get(menu.key).value"
-                    status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
-                    fullWidth required="menu.value.required === true">
-                      <nb-option *ngFor="let option of menu.value.options" value="{{option.value}}">{{option.title}}</nb-option>
-                    </nb-select>
-                    <button type='button' nbButton class="m-0" fullWidth (click)="openXmlDialog(formGroup.get(menu.key).value, isEditing)" *ngIf="menu.value.type === 'xml'">Edit XML</button>
+        <div class="card-block">
+          <div class="card-text">
+            <form clrForm [formGroup]="entityForm" class="ng-untouched">
+              <clr-input-container ngClass="clr-form-control-disabled" *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
+                <label>{{menu.value.title}}</label>
+                @if (menu.key === 'mrn'){
+                  <input clrInput [type]="menu.value.type"
+                    [formControlName]="menu.key"
+                    [required]="menu.value.required === true"
+                    [placeholder]="mrnPrefix"
+                    (ngModelChange)="onMrnChange($event)"
+                    (keydown)="onMrnKeyDown($event)"/>
+                } @else {
+                  <input clrInput [type]="menu.value.type" [formControlName]="menu.key" [required]="menu.value.required === true" />
+                }
+                
+                <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                @if (menu.value.error){
+                  <clr-control-error>{{menu.value.error}}</clr-control-error>
+                } @else {
+                  <clr-control-error>Please enter a value</clr-control-error>
+                }
+                
+                <!--
+                <div class="form-group row" *ngIf="isForNew && menuType !== 'role' && needShortId(menu.key)">
+                  <div class="label col-sm-3 col-form-label">Short ID for {{menu.value.title}}</div>
+                  <div class="col-sm-9 my-auto">
+                    
+                    <input type="text" fullWidth id="input_shortId_{{menu.key}}" class="form-control" required="menu.value.required === true" (change)="addShortIdToMrn(menu.key, '')" value="{{shortId}}">
                   </div>
                 </div>
-              </div>
-              -->
-            </clr-input-container>
-          </form>
+                -->
+                <!--
+                <div class="form-group row" *ngIf="!isEditing || (isEditing && isFieldVisible(menu.key))">
+                  <div for="input{{menu.key}}" class="label col-sm-3 col-form-label" nbPopover="{{menu.value.description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{menu.value.title}}</div>
+                  <div class="col-sm-9 my-auto">
+                    <ngx-input-button-list *ngIf="menu.value.type === 'stringArray'" [items]="loadedData[menu.key]" [isEditing]="isEditing"
+                      [options]="menu.value.options" [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"></ngx-input-button-list>
+                    <ngx-input-image *ngIf="!isForNew && menu.value.type === 'image'" [isEditing]="isEditing" [orgMrn]="orgMrn" [entityMrn]="entityMrn"
+                      [menuType]="menuType" [allowedExtensions]="menu.value.allowedExtensions"></ngx-input-image>
+                    <ngx-input-mcp-entity *ngIf="menu.value.type === 'vessel'" [entity]="loadedData[menu.key]" [isEditing]="isEditing" [orgMrn]="orgMrn"
+                    [menuType]="'vessel'" [required]="menu.value.required" (onUpdate)="onLinkChanged($event)"></ngx-input-mcp-entity>
+                    <ngx-input-file-list *ngIf="menu.value.type === 'fileArray'" [fieldName]="menu.key" [docIds]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
+                      [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
+                      (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
+                    <ngx-input-file-list *ngIf="menu.value.type === 'file'" [fieldName]="menu.key" [file]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
+                      [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
+                      (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
+                    <span *ngIf="!isEditing && menu.value.type === 'string' && menuType !== 'instance' && isForTime(menu.key)" id="keyword.name">{{ convertTimeString(formGroup.get(menu.key).value) }}</span>
+                    <span *ngIf="!isEditing && menu.value.type === 'string' && !isForTime(menu.key)" innerHtml="{{ formGroup.get(menu.key).value | textFormatter }}"></span>
+                    <button type='button' class="m-0" fullWidth nbButton (click)="openXmlDialog(loadedData[menu.key], isEditing)" *ngIf="!isEditing && menu.value.type === 'xml'">Read XML</button>
+                    <div *ngIf="isEditing" >
+                      <input *ngIf="menu.value.type === 'string' && !menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
+                      status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
+                      formControlName="{{menu.key}}"
+                      placeholder="{{menu.value.placeholder !== undefined ? menu.value.placeholder : ''}}"
+                      required="{{menu.value.required === true}}">
+                      <input *ngIf="menu.value.type === 'string' && menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
+                      status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
+                      formControlName="{{menu.key}}" hidden
+                      required="{{menu.value.required === true}}"> 
+                      <nb-select *ngIf="menu.value.type === 'string' && menu.value.options" type="string" (selectedChange)="onMenuItemSelected({key: menu.key, value: $event, type: menu.value.type})"
+                      [(selected)]="formGroup.get(menu.key).value"
+                      status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
+                      fullWidth required="menu.value.required === true">
+                        <nb-option *ngFor="let option of menu.value.options" value="{{option.value}}">{{option.title}}</nb-option>
+                      </nb-select>
+                      <button type='button' nbButton class="m-0" fullWidth (click)="openXmlDialog(formGroup.get(menu.key).value, isEditing)" *ngIf="menu.value.type === 'xml'">Edit XML</button>
+                    </div>
+                  </div>
+                </div>
+                -->
+              </clr-input-container>
+            </form>
+          </div>
         </div>
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-primary">Footer Action 1</button>
-        <button class="btn btn-warning">Footer Action 2</button>
+        <div class="card-footer">
+          <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
+          <button class="btn btn-warning" (click)="resetForm()">Reset</button>
+          <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+} @else if (mode == 'view'){
+  <div class="clr-row">
+    <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+      <div class="card">
+        <div class="card-header">
+          {{menuType}} - {{entityMrn}}
+        </div>
+        <div class="card-block">
+          <div class="card-text">
+            <form clrForm [formGroup]="entityForm" class="ng-untouched">
+              <div class="clr-form-horizontal clr-form-control clr-row" *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
+                <ng-content select="label"></ng-content>
+                <label class="clr-control-label">{{menu.value.title}}</label>
+                <div class="clr-control-container">
+                  <div class="clr-control-container clr-col-md-10 clr-col-12" ng-reflect-ng-class="clr-col-md-10 clr-col-12">
+                    <div class="clr-input-wrapper">
+                      <input _ngcontent-ng-c4085800364="" clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true" [value]="menu.value.title" id="clr-form-control-1" class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted" required="" aria-describedby="clr-form-control-1-helper" disabled>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="clr-form-horizontal clr-form-control clr-row">
+                <label class="clr-control-label">Certificates</label>
+                
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" (click)="edit()">Edit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+
+}
+
+
 <!--
 
 <nb-card>
