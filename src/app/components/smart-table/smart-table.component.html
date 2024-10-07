@@ -1,25 +1,31 @@
 
 <clr-datagrid [(clrDgSelected)]="selected">
-    <clr-dg-action-bar>
-        <div class="btn-group">
-        <button type="button" class="btn btn-sm btn-secondary" (click)="onAdd && onAdd()"><cds-icon shape="plus"></cds-icon>
-            {{ addText }}
-        </button>
-        </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete && onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
-            <button type="button" class="btn btn-sm btn-secondary" (click)="onDownload && onDownload(selected)" ><cds-icon shape="download"></cds-icon> {{downloadText}}</button>
-        </div>
-    </clr-dg-action-bar>
-
+    @if (onAdd || onDelete || onDownload) {
+        <clr-dg-action-bar>
+            @if (onAdd !== undefined) {
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onAdd()"><cds-icon shape="plus"></cds-icon>
+                        {{ addText }}
+                    </button>
+                </div>
+            }
+            @if (onDelete !== undefined && onDownload !== undefined) {
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDownload(selected)" ><cds-icon shape="download"></cds-icon> {{downloadText}}</button>
+                </div>
+            }
+        </clr-dg-action-bar>
+    }
+    
     <clr-dg-column>ID</clr-dg-column>
     <clr-dg-column>Valid from</clr-dg-column>
     <clr-dg-column>Valid until</clr-dg-column>
     
-    <clr-dg-row *clrDgItems="let user of users" [clrDgItem]="user">
-        <clr-dg-cell>{{ user.id }}</clr-dg-cell>
-        <clr-dg-cell (click)="onSelect(user.name)">{{ user.name }}</clr-dg-cell>
-        <clr-dg-cell>{{ user.age }}</clr-dg-cell>
+    <clr-dg-row *clrDgItems="let datum of source" [clrDgItem]="datum">
+        <clr-dg-cell>{{ datum.id }}</clr-dg-cell>
+        <clr-dg-cell (click)="onSelect(datum.name)">{{ datum.name }}</clr-dg-cell>
+        <clr-dg-cell>{{ datum.age }}</clr-dg-cell>
       </clr-dg-row>
     
     <clr-dg-footer>

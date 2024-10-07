@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SmartTableComponent } from "../smart-table/smart-table.component";
 
 @Component({
@@ -9,6 +9,8 @@ import { SmartTableComponent } from "../smart-table/smart-table.component";
   styleUrl: './cert-table.component.css'
 })
 export class CertTableComponent {
+  @Input() context: string = 'active';
+
   onRevoke = (selected: any[]) => {
     console.log(selected);
   }
@@ -20,4 +22,37 @@ export class CertTableComponent {
   onAdd = () => {
     console.log('Add');
   }
+  
+  data = [
+    {
+      id: 1,
+      name: 'John',
+      email: '',
+      age: 30
+    },
+    {
+      id: 2,
+      name: 'Doe',
+      email: '',
+      age: 25
+    },
+    {
+      id: 3,
+      name: 'Jane',
+      email: '',
+      age: 28
+    },
+    {
+      id: 4,
+      name: 'Alice',
+      email: '',
+      age: 24
+    },
+    {
+      id: 5,
+      name: 'Bob',
+      email: '',
+      age: 23
+    }
+  ];
 }
