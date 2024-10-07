@@ -1,2 +1,3 @@
 <app-smart-table [columns]="columns" [source]="data" [onDelete]="onDelete" [onAdd]="onAdd"
+    (onRowSelect)="onRowSelect($event)"
     placeholder="There is no data."></app-smart-table>

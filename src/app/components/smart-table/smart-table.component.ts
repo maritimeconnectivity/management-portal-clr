@@ -3,6 +3,7 @@ import { ClarityModule, ClrDatagridModule } from '@clr/angular';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { ClarityIcons, downloadIcon, plusIcon, timesIcon } from '@cds/core/icon';
 import { toCamelCase } from 'src/app/common/stringUtils';
+
 ClarityIcons.addIcons(downloadIcon, timesIcon, plusIcon);
 
 @Component({
@@ -22,6 +23,7 @@ export class SmartTableComponent {
   @Input() onDownload: ((selected: any[]) => void) | undefined;
   @Input() onDelete: ((selected: any[]) => void) | undefined;
   @Input() onAdd: (() => void) | undefined;
+  @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
   @Input() deleteText: string = 'Delete';
   @Input() downloadText: string = 'Download';
   @Input() addText: string = 'Add';
@@ -32,6 +34,14 @@ export class SmartTableComponent {
   onSelect(id: string) {
     console.log('Selected', id);
   }
+
+  userRowSelect = (selected: any) => {
+    if (this.onRowSelect) {
+      this.onRowSelect.emit(selected);
+    }
+  }
+
+
   toID(name: string) {
     return toCamelCase(name);
   }

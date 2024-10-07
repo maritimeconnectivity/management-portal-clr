@@ -33,4 +33,8 @@ export class ListViewComponent {
   onAdd = () => {
     console.log("Add");
   }
+
+  onRowSelect = (selected: any) => {
+    console.log(selected);
+  }
 }
