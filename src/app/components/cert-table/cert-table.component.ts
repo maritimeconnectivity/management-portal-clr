@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SmartTableComponent } from "../smart-table/smart-table.component";
+import { ActiveCertificatesColumn, RevokedCertificatesColumn } from 'src/app/common/columnForCertificate';
 
 @Component({
   selector: 'app-cert-table',
@@ -23,6 +24,10 @@ export class CertTableComponent {
     console.log('Add');
   }
   empty = [];
+
+  columnsForActive = ActiveCertificatesColumn;
+  columnsForRevoked = RevokedCertificatesColumn;
+  
   data = [
     {
       id: 1,
