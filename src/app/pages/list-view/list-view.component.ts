@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SmartTableComponent } from "../../components/smart-table/smart-table.component";
 import { ComponentsModule } from 'src/app/components/components.module';
+import { DeviceControllerService } from 'src/app/backend-api/identity-registry';
+import { ResourceType } from 'src/app/common/menuType';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-view',
@@ -12,19 +15,36 @@ import { ComponentsModule } from 'src/app/components/components.module';
   styleUrl: './list-view.component.css'
 })
 export class ListViewComponent {
+  @Input() resourceType: ResourceType = ResourceType.Device;
+  isLoading: boolean = false;
+  orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
+
   columns = ["MRN", "Name", "Updated At"];
-  data = [
-    { mrn: "urn:mrn:mcp:device:mcc:core:syncer", name: "Sync Device", updatedAt: "2020-11-16 12:31:40" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:test-device", name: "Test Device", updatedAt: "2021-12-10 10:52:06" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:new", name: "New", updatedAt: "2022-05-05 14:09:16" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:k-er", name: "Korea Edge Router", updatedAt: "2023-09-26 14:11:31" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:test", name: "Test Device", updatedAt: "2023-12-15 12:24:24" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:eu-er", name: "EU Edge Router", updatedAt: "2024-01-31 14:06:04" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:dmcsmmpaga", name: "DMC-SMMP-Agent-A", updatedAt: "2024-05-29 14:00:15" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:ecdis-test-001", name: "ECDIS test 001", updatedAt: "2024-06-26 06:28:42" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:aivnappagent", name: "AIVN-APP-AGENT", updatedAt: "2024-07-22 07:22:18" },
-    { mrn: "urn:mrn:mcp:device:mcc:core:dmcsmmpagb", name: "DMC-SMMP-Agent-B", updatedAt: "2024-07-25 11:57:20" }
-  ];
+  data: { mrn: string; name: string; updatedAt: Date | undefined; }[] = [];
+  
+
+  constructor(
+    private router: Router,
+    private deviceService: DeviceControllerService) {
+    this.isLoading = true;
+  }
+
+  ngOnInit() {
+    this.deviceService.getOrganizationDevices(this.orgMrn).subscribe(devicesPage => {
+      if (devicesPage.content?.length) {
+        const devices = devicesPage.content;
+        const data = devices.map(device => {
+          return {
+            mrn: device.mrn,
+            name: device.name,
+            updatedAt: device.updatedAt
+          }
+        });
+        this.data = data;
+        this.isLoading = false;
+      }
+    });
+  }
   
   onDelete = (selected: any[]) => {
     console.log(selected);
@@ -35,6 +55,8 @@ export class ListViewComponent {
   }
 
   onRowSelect = (selected: any) => {
-    console.log(selected);
+    const id = selected.mrn;// this.menuType === ResourceType.Instance ? event.data.id : event.data.mrn;
+    this.router.navigate(['pages/ir/device',
+      encodeURIComponent(id)]);
   }
 }

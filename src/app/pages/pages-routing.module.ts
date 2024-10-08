@@ -33,7 +33,23 @@ const routes: Routes = [
       component: DashboardComponent,
     },
     {
-      path: 'ir/organizations',
+      path: 'ir/organization',
+      component: EntityViewComponent,
+    },
+    {
+      path: 'ir/device',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/device/:id',
+      component: EntityViewComponent,
+    },
+    {
+      path: 'ir/service',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/service/:id',
       component: EntityViewComponent,
     },
     {
@@ -45,7 +61,7 @@ const routes: Routes = [
       component: AboutComponent,
     },
     {
-      path: 'sr/instances',
+      path: 'sr/instance',
       component: ListViewComponent,
     },
     {
@@ -59,6 +75,7 @@ const routes: Routes = [
     { path: '', redirectTo: '', pathMatch: 'full' },
     { path: '**', redirectTo: '' },
     
+
     /*
     
     // identity registry

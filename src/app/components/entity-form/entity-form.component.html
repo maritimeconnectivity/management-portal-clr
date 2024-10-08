@@ -16,9 +16,9 @@
                     [required]="menu.value.required === true"
                     [placeholder]="mrnPrefix"
                     (ngModelChange)="onMrnChange($event)"
-                    (keydown)="onMrnKeyDown($event)"/>
+                    (keydown)="onMrnKeyDown($event)"  [style.width.px]=400/>
                 } @else {
-                  <input clrInput [type]="menu.value.type" [formControlName]="menu.key" [required]="menu.value.required === true" />
+                  <input clrInput [type]="menu.value.type" [formControlName]="menu.key" [required]="menu.value.required === true"  [style.width.px]=400 />
                 }
                 
                 <clr-control-helper>{{menu.value.description}}</clr-control-helper>
@@ -103,7 +103,11 @@
                 <label class="clr-control-label">{{menu.value.title}}</label>
                   <div class="clr-control-container clr-col-md-10 clr-col-12" ng-reflect-ng-class="clr-col-md-10 clr-col-12">
                     <div class="clr-input-wrapper">
-                      <input _ngcontent-ng-c4085800364="" clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true" [value]="menu.value.title" id="clr-form-control-1" class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted" required="" aria-describedby="clr-form-control-1-helper" disabled>
+                      @if (entity[menu.key]) {
+                        <input clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true" [value]="entity[menu.key]" id="clr-form-control-1" class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted" required="" aria-describedby="clr-form-control-1-helper" disabled [style.width.px]=400>
+                      } @else {
+                        <input clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true" [value]="" id="clr-form-control-1" class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted" required="" aria-describedby="clr-form-control-1-helper" disabled  [style.width.px]=400>
+                      }
                     </div>
                   </div>
               </div>

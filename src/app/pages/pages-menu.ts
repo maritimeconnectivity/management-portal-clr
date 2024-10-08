@@ -25,7 +25,7 @@ export const MENU_ITEMS: any[] = [
     children: [
       {
         title: 'menu.ir.organizations',
-        link: '/pages/ir/organizations',
+        link: '/pages/ir/organization',
       },
       {
         title: 'menu.ir.guide',
@@ -39,7 +39,7 @@ export const MENU_ITEMS: any[] = [
     children: [
       {
         title: 'menu.sr.instances',
-        link: '/pages/sr/instances',
+        link: '/pages/sr/instance',
       },
       {
         title: 'menu.sr.search',
@@ -74,7 +74,7 @@ export const MENU_ITEMS: any[] = [
 
 export const MIR_MENU_FOR_ADMIN = {
   title: 'menu.ir.admin',
-  link: '/pages/ir/orgcandidates',
+  link: '/pages/ir/orgcandidate',
 };
 
 export const MIR_MENU_FOR_ORG = {
@@ -83,23 +83,23 @@ export const MIR_MENU_FOR_ORG = {
   children: [
     {
       title: 'menu.ir.org.devices',
-      link: '/pages/ir/devices',
+      link: '/pages/ir/device',
     },
     {
       title: 'menu.ir.org.services',
-      link: '/pages/ir/services',
+      link: '/pages/ir/service',
     },
     {
       title: 'menu.ir.org.users',
-      link: '/pages/ir/users',
+      link: '/pages/ir/user',
     },
     {
       title: 'menu.ir.org.vessels',
-      link: '/pages/ir/vessels',
+      link: '/pages/ir/vessel',
     },
     {
       title: 'menu.ir.org.roles',
-      link: '/pages/ir/roles',
+      link: '/pages/ir/role',
     },
   ],
 };

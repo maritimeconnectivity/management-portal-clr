@@ -12,7 +12,7 @@ import {LabelValueModel, LabelValueTableComponent} from "../../common/label-valu
 })
 export class DashboardComponent implements OnInit {
     title = 'a fancy dashboard';
-    isLoading: boolean;
+    isLoading: boolean = false;
     organization?: Organization;
     labelValues?: LabelValueModel[];
 

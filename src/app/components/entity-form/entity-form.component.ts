@@ -33,6 +33,8 @@ export class EntityFormComponent {
    */
   @Input() isForNew: boolean = false;
 
+  @Input() entity: any = {};
+
   /**
    * an mrn of organization owning the chosen entity
    */
@@ -46,7 +48,6 @@ export class EntityFormComponent {
   columnForMenu: {[key: string]: any} = {};
   isEditing = false;
   shortId = '';
-  entity: any = {mrn: this.mrnPrefix};
   entityMrn = '';
   mode = 'view';
 
@@ -56,15 +57,24 @@ export class EntityFormComponent {
     this.entityForm.patchValue(this.entity);
   }
 
+  ngOnInit(): void {
+    this.setForm();
+    this.entityForm.patchValue(this.entity);
+    this.shortId = "Hello";
+  }
+
+  ngOnChanges(simpleChange: any) {
+    this.entity = simpleChange.entity.currentValue && simpleChange.entity.currentValue;
+    this.entityForm.patchValue(this.entity);
+  }
+
   submit = () => {
     // Filter attributes with undefined values
-    console.log(this.entityForm.valid);
     if (!this.entityForm.valid) {
       this.entityForm.markAllAsTouched();
       this.clrForm?.markAsTouched();
     }
     const filteredAttributes = filterUndefinedAttributes(this.entity);
-    console.log(filteredAttributes);
   }
   resetForm = () => {
     this.setForm();
@@ -76,11 +86,6 @@ export class EntityFormComponent {
 
   edit = () => {
     this.mode = 'edit';
-  }
-
-  ngOnInit(): void {
-    this.shortId = "Hello";
-    
   }
 
   onMrnKeyDown(event: Event) {
@@ -117,6 +122,7 @@ export class EntityFormComponent {
         formElements[key] = ['', value.required ? Validators.required : undefined];
       }
       this.columnForMenu[key] = value;
+      
       /*
       if (Array.isArray((value as any)['visibleFrom']) && // array type checking with type assertion
         (value as any)['visibleFrom'].includes(this.contextForAttributes) && // context filtering, either detail or list
@@ -147,5 +153,9 @@ export class EntityFormComponent {
 
   sortColumnForMenu = (a: any, b: any) => {
     return a.order > b.order ? -1 : 1;
+  }
+
+  private updateEntity(values: any) {
+    Object.assign(this.entity, values);
   }
 }
