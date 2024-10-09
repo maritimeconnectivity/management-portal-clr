@@ -40,14 +40,14 @@ export const ActiveCertificatesColumn = {
  * a json format for revoked certificates articulating how the corresponding interface should work
  */
 export const RevokedCertificatesColumn = {
-  revokeInfo: {
+  revokedAt: {
     title: 'Revoked from',
     type: 'string',
     valuePrepareFunction: (timestamp: any) => {
       return convertTime(timestamp);
     },
   },
-  revokeReasonText: {
+  revokeReason: {
     title: 'Reason',
     type: 'string',
   },
