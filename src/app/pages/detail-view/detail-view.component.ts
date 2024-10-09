@@ -1,27 +1,24 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { DeviceControllerService } from 'src/app/backend-api/identity-registry';
 import { ItemType } from 'src/app/common/menuType';
-import { SharedModule } from 'src/app/common/shared/shared.module';
-import { ComponentsModule } from 'src/app/components/components.module';
-import { EntityFormComponent } from 'src/app/components/entity-form/entity-form.component';
+import { ItemFormComponent } from 'src/app/components/item-form/item-form.component';
 
 @Component({
-  selector: 'app-entity-view',
+  selector: 'app-detail-view',
   standalone: true,
   imports: [
-    SharedModule,
-    ComponentsModule
+    ItemFormComponent
   ],
-  templateUrl: './entity-view.component.html',
-  styleUrl: './entity-view.component.css'
+  templateUrl: './detail-view.component.html',
+  styleUrl: './detail-view.component.css'
 })
-export class EntityViewComponent {
-  entityType: ItemType = ItemType.Device;
+export class DetailViewComponent {
+  itemType: ItemType = ItemType.Device;
   orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
   id: string = "";
-  entity: any = {};
+  item: any = {};
 
   constructor(private route: ActivatedRoute,
     private deviceControllerService: DeviceControllerService
@@ -31,7 +28,7 @@ export class EntityViewComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.parseMyUrl().then(() => {
-      this.fetchContent(this.entityType, this.id);
+      this.fetchContent(this.itemType, this.id);
     });
     
     this.route.queryParams.subscribe(params => {
@@ -42,14 +39,14 @@ export class EntityViewComponent {
   parseMyUrl = (): Promise<void> => {
     return firstValueFrom(this.route.url).then(url => {
       this.id = decodeURIComponent(url.pop()?.path || "");
-      this.entityType = url.pop()?.path as ItemType;
+      this.itemType = url.pop()?.path as ItemType;
     });
   }
   
   fetchContent = (entityType: ItemType, id: string) => {
     if (entityType === ItemType.Device) {
       this.deviceControllerService.getDevice(this.orgMrn, id).subscribe(device => {
-        this.entity = device;
+        this.item = device;
       });
     }
   }

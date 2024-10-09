@@ -19,8 +19,8 @@ import { IrGuideComponent } from './ir-guide/ir-guide.component';
 import { AboutComponent } from './about/about.component';
 import { SrSearchComponent } from './sr-search/sr-search.component';
 import { SrGuideComponent } from './sr-guide/sr-guide.component';
-import { EntityViewComponent } from './entity-view/entity-view.component';
 import { ListViewComponent } from './list-view/list-view.component';
+import { DetailViewComponent } from './detail-view/detail-view.component';
 
 const routes: Routes = [
   {
@@ -34,7 +34,7 @@ const routes: Routes = [
     },
     {
       path: 'ir/organization',
-      component: EntityViewComponent,
+      component: ListViewComponent,
     },
     {
       path: 'ir/device',
@@ -42,7 +42,7 @@ const routes: Routes = [
     },
     {
       path: 'ir/device/:id',
-      component: EntityViewComponent,
+      component: DetailViewComponent,
     },
     {
       path: 'ir/service',
@@ -50,11 +50,11 @@ const routes: Routes = [
     },
     {
       path: 'ir/service/:id',
-      component: EntityViewComponent,
+      component: DetailViewComponent,
     },
     {
       path: 'ir/guide',
-      component: IrGuideComponent,
+      component: ListViewComponent,
     },
     {
       path: 'about',
