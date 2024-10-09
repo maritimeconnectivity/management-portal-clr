@@ -30,7 +30,6 @@ export enum ItemType {
   Design = 'design',
   InstanceOfOrg = 'instanceorg',
   OrgCandidate = 'orgcandidate',
-  NewOrganization = 'newOrganization',
   LedgerInstance = 'ledgerInstance',
   Certificate = 'certificate',
 }
