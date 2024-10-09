@@ -1,0 +1,42 @@
+<div class="clr-row">
+    <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+      <div class="card">
+        <div class="card-header">
+          {{itemType}} - {{itemId}}
+        </div>
+        <div class="card-block">
+          <div class="card-text">
+            <div>
+              <div class="clr-form-horizontal clr-form-control clr-row" *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
+                <label class="clr-control-label">{{menu.value.title}}</label>
+                  <div class="clr-control-container clr-col-md-10 clr-col-12" ng-reflect-ng-class="clr-col-md-10 clr-col-12">
+                    <div class="clr-input-wrapper">
+                      @if (item[menu.key]) {
+                        <input clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true" [value]="item[menu.key]" id="clr-form-control-1" class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted" required="" aria-describedby="clr-form-control-1-helper" disabled [style.width.px]=400>
+                      } @else {
+                        <input clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true" [value]="" id="clr-form-control-1" class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted" required="" aria-describedby="clr-form-control-1-helper" disabled  [style.width.px]=400>
+                      }
+                    </div>
+                  </div>
+              </div>
+              <div class="clr-form-horizontal clr-form-control clr-row">
+                <label class="clr-control-label">Active certificates</label>
+                <div style="overflow-y: auto; flex: 1 1 auto; padding-left: 0.5rem; padding-right: 0.5rem;">
+                  <app-cert-table context="active"/>
+                </div>
+              </div>
+              <div class="clr-form-horizontal clr-form-control clr-row">
+                <label class="clr-control-label">Revoked certificates</label>
+                <div style="overflow-y: auto; flex: 1 1 auto; padding-left: 0.5rem; padding-right: 0.5rem;">
+                  <app-cert-table context="revoked"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn btn-primary" (click)="edit()">Edit</button>
+        </div>
+      </div>
+    </div>
+</div>

@@ -17,7 +17,7 @@
 /**
  * enum for menu types being used for routing
  */
-export enum ResourceType {
+export enum ItemType {
   Device = 'device',
   Organization = 'organization',
   Service = 'service',
@@ -32,13 +32,14 @@ export enum ResourceType {
   OrgCandidate = 'orgcandidate',
   NewOrganization = 'newOrganization',
   LedgerInstance = 'ledgerInstance',
+  Certificate = 'certificate',
 }
 
 /**
  * scope of resource type in MIR
  */
-export const MIRResourceType: string[] = [ ResourceType.Device, ResourceType.Vessel, ResourceType.User,
-  ResourceType.Service, ResourceType.Role, ResourceType.Agent ];
+export const MIRItemType: string[] = [ ItemType.Device, ItemType.Vessel, ItemType.User,
+  ItemType.Service, ItemType.Role, ItemType.Agent ];
 
 /**
  * enum of MCP entity types. Entity is a subset of resource.

@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { SmartTableComponent } from "../smart-table/smart-table.component";
 import { ActiveCertificatesColumn, RevokedCertificatesColumn } from 'src/app/common/columnForCertificate';
+import { ItemType } from 'src/app/common/menuType';
 
 @Component({
   selector: 'app-cert-table',
@@ -11,7 +12,7 @@ import { ActiveCertificatesColumn, RevokedCertificatesColumn } from 'src/app/com
 })
 export class CertTableComponent {
   @Input() context: string = 'active';
-
+  itemType: ItemType = ItemType.Certificate;
   onRevoke = (selected: any[]) => {
     console.log(selected);
   }

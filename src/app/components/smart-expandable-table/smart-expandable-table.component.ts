@@ -1,23 +1,22 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ClarityModule, ClrDatagridModule } from '@clr/angular';
-import { SharedModule } from 'src/app/common/shared/shared.module';
 import { ClarityIcons, downloadIcon, plusIcon, timesIcon } from '@cds/core/icon';
 import { toCamelCase } from 'src/app/common/stringUtils';
 import { ItemType } from 'src/app/common/menuType';
-
-ClarityIcons.addIcons(downloadIcon, timesIcon, plusIcon);
+import { ItemViewComponent } from "../item-view/item-view.component";
 
 @Component({
-  selector: 'app-smart-table',
+  selector: 'app-smart-expandable-table',
   standalone: true,
   imports: [
     ClarityModule,
-    ClrDatagridModule
-],
-  templateUrl: './smart-table.component.html',
-  styleUrl: './smart-table.component.css'
+    ClrDatagridModule,
+    ItemViewComponent
+  ],
+  templateUrl: './smart-expandable-table.component.html',
+  styleUrl: './smart-expandable-table.component.css'
 })
-export class SmartTableComponent {
+export class SmartExpandableTableComponent {
   @Input() source: any[] = [];
   @Input() itemType: ItemType = ItemType.Device;
   @Input() columns: string[] = [];
@@ -33,18 +32,24 @@ export class SmartTableComponent {
 
   selected: any[] = [];
   detail: any = {};
+  selectedItem : any = {};
+  expanded: boolean = false;
 
   onSelect(id: string) {
     console.log('Selected', id);
   }
 
-  userRowSelect = (selected: any) => {
-    if (this.onRowSelect) {
-      this.onRowSelect.emit(selected);
-    }
+  userRowSelect = (selectedItem: any) => {
+    this.expanded = true;
+    this.selectedItem = selectedItem;
   }
 
   toID(name: string) {
     return toCamelCase(name);
+  }
+
+  back = () => {
+    this.expanded = false;
+    this.selectedItem = {};
   }
 }

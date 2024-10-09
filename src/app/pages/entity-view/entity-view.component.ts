@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 import { DeviceControllerService } from 'src/app/backend-api/identity-registry';
-import { ResourceType } from 'src/app/common/menuType';
+import { ItemType } from 'src/app/common/menuType';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { EntityFormComponent } from 'src/app/components/entity-form/entity-form.component';
@@ -18,7 +18,7 @@ import { EntityFormComponent } from 'src/app/components/entity-form/entity-form.
   styleUrl: './entity-view.component.css'
 })
 export class EntityViewComponent {
-  entityType: ResourceType = ResourceType.Device;
+  entityType: ItemType = ItemType.Device;
   orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
   id: string = "";
   entity: any = {};
@@ -42,12 +42,12 @@ export class EntityViewComponent {
   parseMyUrl = (): Promise<void> => {
     return firstValueFrom(this.route.url).then(url => {
       this.id = decodeURIComponent(url.pop()?.path || "");
-      this.entityType = url.pop()?.path as ResourceType;
+      this.entityType = url.pop()?.path as ItemType;
     });
   }
   
-  fetchContent = (entityType: ResourceType, id: string) => {
-    if (entityType === ResourceType.Device) {
+  fetchContent = (entityType: ItemType, id: string) => {
+    if (entityType === ItemType.Device) {
       this.deviceControllerService.getDevice(this.orgMrn, id).subscribe(device => {
         this.entity = device;
       });

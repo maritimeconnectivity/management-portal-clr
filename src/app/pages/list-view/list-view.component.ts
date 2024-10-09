@@ -1,21 +1,21 @@
 import { Component, Input } from '@angular/core';
-import { SmartTableComponent } from "../../components/smart-table/smart-table.component";
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DeviceControllerService } from 'src/app/backend-api/identity-registry';
-import { ResourceType } from 'src/app/common/menuType';
+import { ItemType } from 'src/app/common/menuType';
 import { Router } from '@angular/router';
+import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
 
 @Component({
   selector: 'app-list-view',
   standalone: true,
   imports: [
     ComponentsModule,
-    SmartTableComponent],
+    SmartExpandableTableComponent],
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.css'
 })
 export class ListViewComponent {
-  @Input() resourceType: ResourceType = ResourceType.Device;
+  @Input() resourceType: ItemType = ItemType.Device;
   isLoading: boolean = false;
   orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
 

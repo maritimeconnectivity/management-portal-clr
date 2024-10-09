@@ -3,11 +3,14 @@ import { SharedModule } from '../../common/shared/shared.module';
 import { ClrForm, ClrFormsModule } from '@clr/angular';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
-import { ResourceType } from 'src/app/common/menuType';
+import { ItemType } from 'src/app/common/menuType';
 import { filterUndefinedAttributes } from 'src/app/common/filterObject';
 import { JsonPipe } from '@angular/common';
 import { mrnRegex } from 'src/app/common/mrnRegex';
 import { CertTableComponent } from "../cert-table/cert-table.component";
+import { EntityViewComponent } from "../../pages/entity-view/entity-view.component";
+import { ItemViewComponent } from '../item-view/item-view.component';
+import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 
 @Component({
   selector: 'app-entity-form',
@@ -18,7 +21,8 @@ import { CertTableComponent } from "../cert-table/cert-table.component";
     FormsModule,
     ReactiveFormsModule,
     JsonPipe,
-    CertTableComponent
+    CertTableComponent,
+    ItemViewComponent
 ],
   templateUrl: './entity-form.component.html',
   styleUrl: './entity-form.component.css'
@@ -27,7 +31,7 @@ export class EntityFormComponent {
   /**
    * menu type of an active page
    */
-  @Input() menuType: ResourceType = ResourceType.Device;
+  @Input() itemType: ItemType = ItemType.Device;
   /**
    * a boolean indicating its use for creating entity
    */
@@ -61,11 +65,6 @@ export class EntityFormComponent {
     this.setForm();
     this.entityForm.patchValue(this.entity);
     this.shortId = "Hello";
-  }
-
-  ngOnChanges(simpleChange: any) {
-    this.entity = simpleChange.entity.currentValue && simpleChange.entity.currentValue;
-    this.entityForm.patchValue(this.entity);
   }
 
   submit = () => {
@@ -110,7 +109,7 @@ export class EntityFormComponent {
    */
   setForm = () => {
     let formElements: {[key: string]: any} = {};
-    Object.entries(ColumnForResource[this.menuType.toString()]).map(([key, value]) => {
+    Object.entries(ColumnForResource[this.itemType.toString()]).map(([key, value]) => {
       if (!value.visibleFrom)
         return;
       if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
@@ -152,7 +151,7 @@ export class EntityFormComponent {
   }
 
   sortColumnForMenu = (a: any, b: any) => {
-    return a.order > b.order ? -1 : 1;
+    return sortColumnForMenu(a, b);
   }
 
   private updateEntity(values: any) {
