@@ -1,9 +1,13 @@
 @if (expanded) {
     <div class="clr-row">
-        <button class="btn btn-primary" (click)="back()">Back</button>
+        <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+            <button class="btn btn-primary" (click)="back()">Back</button>
+        </div>
     </div>
     <div class="clr-row">
-        <app-item-view [itemType]="itemType" [item]="selectedItem"></app-item-view>
+        <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+            <app-item-view [itemType]="itemType" [item]="selectedItem"></app-item-view>
+        </div>
     </div>
     
 } @else {
@@ -36,12 +40,12 @@
         }
     
         <clr-dg-placeholder class="datagrid-empty">{{placeholder}}</clr-dg-placeholder>
-        <clr-dg-row *clrDgItems="let datum of source" [clrDgItem]="datum">
+        <clr-dg-row *clrDgItems="let datum of data" [clrDgItem]="datum">
             @for (itemName of columns; track itemName){
                 <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[toID(itemName)] }}</clr-dg-cell>
             }
         </clr-dg-row>
-        @if (itemType !== 'certificate') {
+        @if (detailView) {
             <clr-dg-detail *clrIfDetail="let detail">
                 <clr-dg-detail-header>{{detail.mrn}}</clr-dg-detail-header>
                 <clr-dg-detail-body>

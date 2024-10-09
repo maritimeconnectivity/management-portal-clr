@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { ClarityModule, ClrDatagridModule } from '@clr/angular';
 import { ClarityIcons, downloadIcon, plusIcon, timesIcon } from '@cds/core/icon';
 import { toCamelCase } from 'src/app/common/stringUtils';
@@ -17,7 +17,7 @@ import { ItemViewComponent } from "../item-view/item-view.component";
   styleUrl: './smart-expandable-table.component.css'
 })
 export class SmartExpandableTableComponent {
-  @Input() source: any[] = [];
+  @Input() data: any[] = [];
   @Input() itemType: ItemType = ItemType.Device;
   @Input() columns: string[] = [];
   @Input() placeholder: string = 'We couldn\'t find any data!';
@@ -34,7 +34,21 @@ export class SmartExpandableTableComponent {
   detail: any = {};
   selectedItem : any = {};
   expanded: boolean = false;
+  isLoading: boolean = false;
+  detailView: boolean = false;
 
+  constructor() {
+    this.isLoading = true;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    if (changes['data'].currentValue.length > 0) {
+      this.isLoading = false;
+    }
+  }
+  
   onSelect(id: string) {
     console.log('Selected', id);
   }

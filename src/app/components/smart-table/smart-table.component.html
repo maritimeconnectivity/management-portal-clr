@@ -1,47 +1,53 @@
-
-<clr-datagrid [(clrDgSelected)]="selected">
-    @if (onAdd || onDelete || onDownload) {
-        <clr-dg-action-bar>
-            @if (onAdd !== undefined) {
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-secondary" (click)="onAdd()"><cds-icon shape="plus"></cds-icon>
-                        {{ addText }}
-                    </button>
-                </div>
-            }
-            @if (onDelete !== undefined && onDownload !== undefined) {
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
-                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDownload(selected)" ><cds-icon shape="download"></cds-icon> {{downloadText}}</button>
-                </div>
-            }
-            @else if (onDelete !== undefined) {
-                <div class="btn-group">
-                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
-                </div>
-            }
-            
-        </clr-dg-action-bar>
-    }
-    @for (column of columns; track column) {
-        <clr-dg-column>{{column}}</clr-dg-column>
-    }
-
-    <clr-dg-placeholder class="datagrid-empty">{{placeholder}}</clr-dg-placeholder>
-    <clr-dg-row *clrDgItems="let datum of source" [clrDgItem]="datum">
-        @for (itemName of columns; track itemName){
-            <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[toID(itemName)] }}</clr-dg-cell>
+@if (isLoading) {
+    <clr-spinner>Loading</clr-spinner>
+} @else {
+    <clr-datagrid [(clrDgSelected)]="selected">
+        @if (onAdd || onDelete || onDownload) {
+            <clr-dg-action-bar>
+                @if (onAdd !== undefined) {
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="onAdd()"><cds-icon shape="plus"></cds-icon>
+                            {{ addText }}
+                        </button>
+                    </div>
+                }
+                @if (onDelete !== undefined && onDownload !== undefined) {
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="onDownload(selected)" ><cds-icon shape="download"></cds-icon> {{downloadText}}</button>
+                    </div>
+                }
+                @else if (onDelete !== undefined) {
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
+                    </div>
+                }
+                
+            </clr-dg-action-bar>
         }
-    </clr-dg-row>
+        @for (column of columns; track column) {
+            <clr-dg-column>{{column}}</clr-dg-column>
+        }
     
-    <clr-dg-footer>
-        <clr-dg-pagination #pagination [clrDgPageSize]="10">
-            <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]"> items per page</clr-dg-page-size>
-            {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of
-            {{ pagination.totalItems }} users
-          </clr-dg-pagination>
-    </clr-dg-footer>
-</clr-datagrid>
+        <clr-dg-placeholder class="datagrid-empty">{{placeholder}}</clr-dg-placeholder>
+        <clr-dg-row *clrDgItems="let datum of data" [clrDgItem]="datum">
+            @for (itemName of columns; track itemName){
+                <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[toID(itemName)] }}</clr-dg-cell>
+            }
+        </clr-dg-row>
+        
+        <clr-dg-footer>
+            <clr-dg-pagination #pagination [clrDgPageSize]="10">
+                <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]"> items per page</clr-dg-page-size>
+                {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of
+                {{ pagination.totalItems }} users
+              </clr-dg-pagination>
+        </clr-dg-footer>
+    </clr-datagrid>
+}
+
+
+
 
 
   

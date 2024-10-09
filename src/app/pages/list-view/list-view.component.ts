@@ -4,11 +4,13 @@ import { DeviceControllerService } from 'src/app/backend-api/identity-registry';
 import { ItemType } from 'src/app/common/menuType';
 import { Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
+import { ClarityModule } from '@clr/angular';
 
 @Component({
   selector: 'app-list-view',
   standalone: true,
   imports: [
+    ClarityModule,
     ComponentsModule,
     SmartExpandableTableComponent],
   templateUrl: './list-view.component.html',
@@ -21,7 +23,6 @@ export class ListViewComponent {
 
   columns = ["MRN", "Name", "Updated At"];
   data: { mrn: string; name: string; updatedAt: Date | undefined; }[] = [];
-  
 
   constructor(
     private router: Router,
