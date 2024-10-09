@@ -48,7 +48,6 @@ export class SmartExpandableTableComponent {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
     if (changes['data'].currentValue.length > 0) {
-      console.log(this.labels);
       this.labelKeys = Object.keys(this.labels);
       this.labelTitles = Object.values(this.labels).map((label: any) => label.title);
       this.isLoading = false;
@@ -62,6 +61,7 @@ export class SmartExpandableTableComponent {
   userRowSelect = (selectedItem: any) => {
     this.expanded = true;
     this.selectedItem = selectedItem;
+    this.onRowSelect.emit(selectedItem);
   }
 
   back = () => {
