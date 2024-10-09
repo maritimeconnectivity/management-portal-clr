@@ -2,8 +2,9 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { ClarityModule, ClrDatagridModule } from '@clr/angular';
 import { ClarityIcons, downloadIcon, plusIcon, timesIcon } from '@cds/core/icon';
 import { toCamelCase } from 'src/app/common/stringUtils';
-import { ItemType } from 'src/app/common/menuType';
+import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { ItemViewComponent } from "../item-view/item-view.component";
+import { convertTime } from 'src/app/common/timeConverter';
 
 @Component({
   selector: 'app-smart-expandable-table',
@@ -19,7 +20,7 @@ import { ItemViewComponent } from "../item-view/item-view.component";
 export class SmartExpandableTableComponent {
   @Input() data: any[] = [];
   @Input() itemType: ItemType = ItemType.Device;
-  @Input() columns: string[] = [];
+  @Input() labels: {[key: string]: any} = {};
   @Input() placeholder: string = 'We couldn\'t find any data!';
   @Input() onDownload: ((selected: any[]) => void) | undefined;
   @Input() onDelete: ((selected: any[]) => void) | undefined;
@@ -36,6 +37,8 @@ export class SmartExpandableTableComponent {
   expanded: boolean = false;
   isLoading: boolean = false;
   detailView: boolean = false;
+  labelKeys: string[] = [];
+  labelTitles: string[] = [];
 
   constructor() {
     this.isLoading = true;
@@ -45,6 +48,9 @@ export class SmartExpandableTableComponent {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
     if (changes['data'].currentValue.length > 0) {
+      console.log(this.labels);
+      this.labelKeys = Object.keys(this.labels);
+      this.labelTitles = Object.values(this.labels).map((label: any) => label.title);
       this.isLoading = false;
     }
   }
@@ -58,12 +64,16 @@ export class SmartExpandableTableComponent {
     this.selectedItem = selectedItem;
   }
 
-  toID(name: string) {
-    return toCamelCase(name);
-  }
-
   back = () => {
     this.expanded = false;
     this.selectedItem = {};
+  }
+
+  isTimestampFormat(key: string): boolean {
+    return timestampKeys.includes(key);
+  }
+
+  convertTimeString = (time: string): string => {
+    return convertTime(time);
   }
 }

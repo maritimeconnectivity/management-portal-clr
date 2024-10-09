@@ -41,6 +41,8 @@ export enum ItemType {
 export const MIRItemType: string[] = [ ItemType.Device, ItemType.Vessel, ItemType.User,
   ItemType.Service, ItemType.Role, ItemType.Agent ];
 
+export const timestampKeys: string[] = ['start', 'end', 'revokeInfo', 'createdAt', 'updatedAt'];
+
 /**
  * enum of MCP entity types. Entity is a subset of resource.
  */

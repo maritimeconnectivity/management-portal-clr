@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ItemType } from 'src/app/common/menuType';
+import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { mrnRegex } from 'src/app/common/mrnRegex';
@@ -7,6 +7,7 @@ import { Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
+import { convertTime } from 'src/app/common/timeConverter';
 
 @Component({
   selector: 'app-item-view',
@@ -26,6 +27,8 @@ export class ItemViewComponent {
   viewContext = 'detail';
   columnForMenu: {[key: string]: any} = {};
   itemId = "";
+  activeCertificates: any[] = [];
+  revokedCertificates: any[] = [];
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -38,25 +41,26 @@ export class ItemViewComponent {
     if (Object.keys(this.item).length > 0) {
       this.itemId = this.item.mrn;
       this.setForm();
+      console.log(this.item);
+      if (this.item.certificates) {
+        this.assignCertificatesByStatus(this.item.certificates);
+      }
     }
   }
 
   setForm = () => {
-    let formElements: {[key: string]: any} = {};
     Object.entries(ColumnForResource[this.itemType.toString()]).map(([key, value]) => {
       if (!value.visibleFrom)
         return;
       if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
         return;
-      if (key === 'mrn') {
-        const mrnReg: RegExp = new RegExp(mrnRegex());
-        formElements[key] = ['', [Validators.required, Validators.pattern(mrnReg)]];
-      } else {
-        formElements[key] = ['', value.required ? Validators.required : undefined];
-      }
       this.columnForMenu[key] = value;
-      
     });
+  }
+
+  assignCertificatesByStatus = (certificates: any[]) => {
+    certificates.map((cert: any) => {
+      cert.revoked ? this.revokedCertificates.push(cert) : this.activeCertificates.push(cert)});
   }
 
   sortColumnForMenu = (a: any, b: any) => {
@@ -65,6 +69,14 @@ export class ItemViewComponent {
 
   edit = () => {
     console.log('Edit');
+  }
+  
+  isTimestampFormat(key: string): boolean {
+    return timestampKeys.includes(key);
+  }
+
+  convertTimeString = (time: string): string => {
+    return convertTime(time);
   }
   
 }

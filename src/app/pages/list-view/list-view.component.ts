@@ -5,6 +5,7 @@ import { ItemType } from 'src/app/common/menuType';
 import { Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
 import { ClarityModule } from '@clr/angular';
+import { ColumnForResource } from 'src/app/common/columnForMenu';
 
 @Component({
   selector: 'app-list-view',
@@ -17,12 +18,12 @@ import { ClarityModule } from '@clr/angular';
   styleUrl: './list-view.component.css'
 })
 export class ListViewComponent {
-  @Input() resourceType: ItemType = ItemType.Device;
+  @Input() itemType: ItemType = ItemType.Device;
   isLoading: boolean = false;
   orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
-
-  columns = ["MRN", "Name", "Updated At"];
-  data: { mrn: string; name: string; updatedAt: Date | undefined; }[] = [];
+  data: any[] = [];
+  labels: {[key: string]: any} = {};
+  viewContext = 'list';
 
   constructor(
     private router: Router,
@@ -33,18 +34,24 @@ export class ListViewComponent {
   ngOnInit() {
     this.deviceService.getOrganizationDevices(this.orgMrn).subscribe(devicesPage => {
       if (devicesPage.content?.length) {
-        const devices = devicesPage.content;
-        const data = devices.map(device => {
-          return {
-            mrn: device.mrn,
-            name: device.name,
-            updatedAt: device.updatedAt
-          }
-        });
-        this.data = data;
+        this.data = devicesPage.content;
+        this.setLabel();
         this.isLoading = false;
       }
     });
+  }
+
+  filterVisibleFromDetail = (device: {[key: string]: any}) => {
+    return Object.keys(device)
+      .filter(key => device[key]?.visibleFrom?.includes('list'))
+      .reduce((result, key) => {
+        result[key] = device[key];
+        return result;
+      }, {} as {[key: string]: any});
+  };
+
+  setLabel = () => {
+    this.labels = this.filterVisibleFromDetail(ColumnForResource[this.itemType.toString()]);
   }
   
   onDelete = (selected: any[]) => {

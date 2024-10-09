@@ -3,7 +3,9 @@ import { ClarityModule, ClrDatagridModule } from '@clr/angular';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { ClarityIcons, downloadIcon, plusIcon, timesIcon } from '@cds/core/icon';
 import { toCamelCase } from 'src/app/common/stringUtils';
-import { ItemType } from 'src/app/common/menuType';
+import { ItemType, timestampKeys } from 'src/app/common/menuType';
+import { timestamp } from 'rxjs';
+import { convertTime } from 'src/app/common/timeConverter';
 
 ClarityIcons.addIcons(downloadIcon, timesIcon, plusIcon);
 
@@ -20,7 +22,7 @@ ClarityIcons.addIcons(downloadIcon, timesIcon, plusIcon);
 export class SmartTableComponent {
   @Input() data: any[] = [];
   @Input() itemType: ItemType = ItemType.Device;
-  @Input() columns: string[] = [];
+  @Input() labels: {[key: string]: any} = {};
   @Input() placeholder: string = 'We couldn\'t find any data!';
   @Input() onDownload: ((selected: any[]) => void) | undefined;
   @Input() onDelete: ((selected: any[]) => void) | undefined;
@@ -34,6 +36,8 @@ export class SmartTableComponent {
   selected: any[] = [];
   detail: any = {};
   isLoading: boolean = false;
+  labelKeys: string[] = [];
+  labelTitles: string[] = [];
 
   constructor() {
     this.isLoading = true;
@@ -43,8 +47,10 @@ export class SmartTableComponent {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
     if (changes['data'].currentValue.length > 0) {
-      this.isLoading = false;
+      this.labelKeys = Object.keys(this.labels);
+      this.labelTitles = Object.values(this.labels).map((label: any) => label.title);
     }
+    this.isLoading = false;
   }
 
   onSelect(id: string) {
@@ -57,7 +63,11 @@ export class SmartTableComponent {
     }
   }
 
-  toID(name: string) {
-    return toCamelCase(name);
+  isTimestampFormat(key: string): boolean {
+    return timestampKeys.includes(key);
+  }
+
+  convertTimeString = (time: string): string => {
+    return convertTime(time);
   }
 }

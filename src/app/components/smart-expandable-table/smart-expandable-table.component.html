@@ -1,8 +1,6 @@
 @if (expanded) {
-    <div class="clr-row">
-        <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-            <button class="btn btn-primary" (click)="back()">Back</button>
-        </div>
+    <div>
+        <button class="btn btn-sm btn-secondary" (click)="back()">Back</button>
     </div>
     <div class="clr-row">
         <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
@@ -35,14 +33,18 @@
                 
             </clr-dg-action-bar>
         }
-        @for (column of columns; track column) {
+        @for (column of labelTitles; track column) {
             <clr-dg-column>{{column}}</clr-dg-column>
         }
     
         <clr-dg-placeholder class="datagrid-empty">{{placeholder}}</clr-dg-placeholder>
         <clr-dg-row *clrDgItems="let datum of data" [clrDgItem]="datum">
-            @for (itemName of columns; track itemName){
-                <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[toID(itemName)] }}</clr-dg-cell>
+            @for (itemName of labelKeys; track itemName){
+                @if (isTimestampFormat(itemName)) {
+                    <clr-dg-cell (click)="userRowSelect(datum)">{{ convertTimeString(datum[itemName]) }}</clr-dg-cell>
+                } @else {
+                    <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[itemName] }}</clr-dg-cell>
+                }
             }
         </clr-dg-row>
         @if (detailView) {

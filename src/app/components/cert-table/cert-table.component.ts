@@ -12,6 +12,8 @@ import { ItemType } from 'src/app/common/menuType';
 })
 export class CertTableComponent {
   @Input() context: string = 'active';
+  @Input() data: any[] = [];
+
   itemType: ItemType = ItemType.Certificate;
   onRevoke = (selected: any[]) => {
     console.log(selected);
@@ -29,36 +31,4 @@ export class CertTableComponent {
   columnsForActive = ActiveCertificatesColumn;
   columnsForRevoked = RevokedCertificatesColumn;
   
-  data = [
-    {
-      id: 1,
-      name: 'John',
-      email: '',
-      age: 30
-    },
-    {
-      id: 2,
-      name: 'Doe',
-      email: '',
-      age: 25
-    },
-    {
-      id: 3,
-      name: 'Jane',
-      email: '',
-      age: 28
-    },
-    {
-      id: 4,
-      name: 'Alice',
-      email: '',
-      age: 24
-    },
-    {
-      id: 5,
-      name: 'Bob',
-      email: '',
-      age: 23
-    }
-  ];
 }

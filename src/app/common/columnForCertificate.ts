@@ -19,8 +19,36 @@ import { convertTime } from './timeConverter';
 /**
  * a json format for active certificates articulating how the corresponding interface should work
  */
-export const ActiveCertificatesColumn = [ 'ID', 'Valid from', 'Valid until' ];
+export const ActiveCertificatesColumn = {
+    start: {
+      title: 'Valid from',
+      type: 'string',
+      valuePrepareFunction: (timestamp: any) => {
+        return convertTime(timestamp);
+      },
+    },
+    end: {
+      title: 'Valid until',
+      type: 'string',
+      valuePrepareFunction: (timestamp: any) => {
+        return convertTime(timestamp);
+      },
+    },
+};
+
 /**
  * a json format for revoked certificates articulating how the corresponding interface should work
  */
-export const RevokedCertificatesColumn = [ 'Revoked from', 'Reason' ];
+export const RevokedCertificatesColumn = {
+  revokeInfo: {
+    title: 'Revoked from',
+    type: 'string',
+    valuePrepareFunction: (timestamp: any) => {
+      return convertTime(timestamp);
+    },
+  },
+  revokeReasonText: {
+    title: 'Reason',
+    type: 'string',
+  },
+};

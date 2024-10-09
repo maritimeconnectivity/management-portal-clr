@@ -27,7 +27,7 @@ export class ItemFormComponent {
 /**
    * menu type of an active page
    */
-@Input() menuType: ItemType = ItemType.Device;
+@Input() itemType: ItemType = ItemType.Device;
 /**
  * a boolean indicating its use for creating entity
  */
@@ -109,7 +109,7 @@ onMrnChange(value: string) {
  */
 setForm = () => {
   let formElements: {[key: string]: any} = {};
-  Object.entries(ColumnForResource[this.menuType.toString()]).map(([key, value]) => {
+  Object.entries(ColumnForResource[this.itemType.toString()]).map(([key, value]) => {
     if (!value.visibleFrom)
       return;
     if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
