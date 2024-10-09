@@ -1,13 +1,23 @@
 @if (expanded) {
-    <div>
-        <button class="btn btn-sm btn-secondary" (click)="back()">Back</button>
-    </div>
-    <div class="clr-row">
-        <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-            <app-item-view [itemType]="itemType" [item]="selectedItem"></app-item-view>
+    @if (isEditing) {
+        <div>
+            <button class="btn btn-sm btn-secondary" (click)="back()">Back</button>
         </div>
-    </div>
-    
+        <div class="clr-row">
+            <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+                <app-item-form [itemType]="itemType" [item]="selectedItem" (onCancel)="back()"></app-item-form>
+            </div>
+        </div>
+    } @else {
+        <div>
+            <button class="btn btn-sm btn-secondary" (click)="back()">Back</button>
+        </div>
+        <div class="clr-row">
+            <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+                <app-item-view [itemType]="itemType" [item]="selectedItem" (onEdit)="edit(selectedItem)"></app-item-view>
+            </div>
+        </div>
+    }
 } @else {
     <clr-datagrid [(clrDgSelected)]="selected">
         @if (onAdd || onDelete || onDownload) {

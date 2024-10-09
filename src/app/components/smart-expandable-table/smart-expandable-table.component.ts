@@ -5,6 +5,7 @@ import { toCamelCase } from 'src/app/common/stringUtils';
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { ItemViewComponent } from "../item-view/item-view.component";
 import { convertTime } from 'src/app/common/timeConverter';
+import { ItemFormComponent } from "../item-form/item-form.component";
 
 @Component({
   selector: 'app-smart-expandable-table',
@@ -12,8 +13,9 @@ import { convertTime } from 'src/app/common/timeConverter';
   imports: [
     ClarityModule,
     ClrDatagridModule,
-    ItemViewComponent
-  ],
+    ItemViewComponent,
+    ItemFormComponent
+],
   templateUrl: './smart-expandable-table.component.html',
   styleUrl: './smart-expandable-table.component.css'
 })
@@ -39,6 +41,7 @@ export class SmartExpandableTableComponent {
   detailView: boolean = false;
   labelKeys: string[] = [];
   labelTitles: string[] = [];
+  isEditing: boolean = false;
 
   constructor() {
     this.isLoading = true;
@@ -67,6 +70,13 @@ export class SmartExpandableTableComponent {
   back = () => {
     this.expanded = false;
     this.selectedItem = {};
+    this.isEditing = false;
+  }
+
+  edit = (selectedItem: any) => {
+    this.expanded = true;
+    this.isEditing = true;
+    this.selectedItem = selectedItem;
   }
 
   isTimestampFormat(key: string): boolean {

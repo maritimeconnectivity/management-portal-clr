@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
@@ -23,6 +23,7 @@ import { convertTime } from 'src/app/common/timeConverter';
 export class ItemViewComponent {
   @Input() itemType: ItemType = ItemType.Device;
   @Input() item: any = {};
+  @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
 
   viewContext = 'detail';
   columnForMenu: {[key: string]: any} = {};
@@ -67,7 +68,7 @@ export class ItemViewComponent {
   }
 
   edit = () => {
-    console.log('Edit');
+    this.onEdit.emit(this.item);
   }
   
   isTimestampFormat(key: string): boolean {

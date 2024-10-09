@@ -6,8 +6,8 @@
         </div>
         <div class="card-block">
           <div class="card-text">
-            <form clrForm [formGroup]="entityForm" class="ng-untouched">
-              <clr-input-container ngClass="clr-form-control-disabled" *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
+            <form clrForm [formGroup]="itemForm" class="ng-untouched">
+              <clr-input-container *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
                 <label>{{menu.value.title}}</label>
                 @if (menu.key === 'mrn'){
                   <input clrInput [type]="menu.value.type"
