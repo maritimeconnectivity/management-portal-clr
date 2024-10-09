@@ -1,7 +1,6 @@
 @if (isLoading) {
     <clr-spinner>Loading</clr-spinner>
 } @else {
-    <app-smart-expandable-table [labels]="labels" [data]="data" [onDelete]="onDelete" [onAdd]="onAdd"
-    (onRowSelect)="onRowSelect($event)"
+    <app-smart-expandable-table [itemType]="itemType" [labels]="labels" [data]="data" [onDelete]="onDelete" [onAdd]="onAdd"
     placeholder="There is no data."></app-smart-expandable-table>
 }

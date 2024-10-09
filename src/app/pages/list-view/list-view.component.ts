@@ -1,11 +1,12 @@
 import { Component, Input } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { DeviceControllerService } from 'src/app/backend-api/identity-registry';
+import { DeviceControllerService, OrganizationControllerService, ServiceControllerService, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { ItemType } from 'src/app/common/menuType';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
 import { ClarityModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-list-view',
@@ -26,22 +27,51 @@ export class ListViewComponent {
   viewContext = 'list';
 
   constructor(
-    private router: Router,
-    private deviceService: DeviceControllerService) {
+    private route: ActivatedRoute,
+    private deviceService: DeviceControllerService,
+    private organizationService: OrganizationControllerService,
+    private serviceService: ServiceControllerService,
+    private userService: UserControllerService,
+    private vesselService: VesselControllerService,
+) {
     this.isLoading = true;
   }
 
-  ngOnInit() {
-    this.deviceService.getOrganizationDevices(this.orgMrn).subscribe(devicesPage => {
-      if (devicesPage.content?.length) {
-        this.data = devicesPage.content;
-        this.setLabel();
-        this.isLoading = false;
-      }
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.parseMyUrl().then(() => {
+      this.fetchContent(this.itemType);
     });
   }
 
-  filterVisibleFromDetail = (device: {[key: string]: any}) => {
+  parseMyUrl = (): Promise<void> => {
+    return firstValueFrom(this.route.url).then(url => {
+      this.itemType = url.pop()?.path as ItemType;
+    });
+  }
+
+  fetchContent = (entityType: ItemType) => {
+    if (entityType === ItemType.Device) {
+      this.deviceService.getOrganizationDevices(this.orgMrn).subscribe(devicesPage => {
+        if (devicesPage.content?.length) {
+          this.data = devicesPage.content;
+          this.setLabel();
+          this.isLoading = false;
+        }
+      });
+    } else if(entityType === ItemType.Organization) {
+      this.organizationService.getOrganization().subscribe(organizationsPage => {
+        if (organizationsPage.content?.length) {
+          this.data = organizationsPage.content;
+          this.setLabel();
+          this.isLoading = false;
+        }
+      });
+    }
+  }
+
+  filterVisibleForList = (device: {[key: string]: any}) => {
     return Object.keys(device)
       .filter(key => device[key]?.visibleFrom?.includes('list'))
       .reduce((result, key) => {
@@ -51,7 +81,7 @@ export class ListViewComponent {
   };
 
   setLabel = () => {
-    this.labels = this.filterVisibleFromDetail(ColumnForResource[this.itemType.toString()]);
+    this.labels = this.filterVisibleForList(ColumnForResource[this.itemType.toString()]);
   }
   
   onDelete = (selected: any[]) => {
@@ -60,11 +90,5 @@ export class ListViewComponent {
 
   onAdd = () => {
     console.log("Add");
-  }
-
-  onRowSelect = (selected: any) => {
-    const id = selected.mrn;// this.menuType === ResourceType.Instance ? event.data.id : event.data.mrn;
-    this.router.navigate(['pages/ir/device',
-      encodeURIComponent(id)]);
   }
 }
