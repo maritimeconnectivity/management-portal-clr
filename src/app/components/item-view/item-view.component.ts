@@ -41,7 +41,6 @@ export class ItemViewComponent {
     if (Object.keys(this.item).length > 0) {
       this.itemId = this.item.mrn;
       this.setForm();
-      console.log(this.item);
       if (this.item.certificates) {
         this.assignCertificatesByStatus(this.item.certificates);
       }
