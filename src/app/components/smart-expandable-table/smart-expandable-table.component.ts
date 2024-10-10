@@ -6,6 +6,7 @@ import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { ItemViewComponent } from "../item-view/item-view.component";
 import { convertTime } from 'src/app/common/timeConverter';
 import { ItemFormComponent } from "../item-form/item-form.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-smart-expandable-table',
@@ -41,9 +42,8 @@ export class SmartExpandableTableComponent {
   detailView: boolean = false;
   labelKeys: string[] = [];
   labelTitles: string[] = [];
-  isEditing: boolean = false;
 
-  constructor() {
+  constructor(private router: Router) {
     this.isLoading = true;
   }
 
@@ -70,13 +70,12 @@ export class SmartExpandableTableComponent {
   back = () => {
     this.expanded = false;
     this.selectedItem = {};
-    this.isEditing = false;
   }
 
   edit = (selectedItem: any) => {
     this.expanded = true;
-    this.isEditing = true;
     this.selectedItem = selectedItem;
+    this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
   }
 
   isTimestampFormat(key: string): boolean {

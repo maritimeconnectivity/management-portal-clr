@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClarityModule } from '@clr/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'gramli-angular-notifier';
@@ -36,6 +36,7 @@ export class DetailViewComponent {
   @ViewChild('customNotification', { static: true }) customNotificationTmpl: any;
 
   constructor(private route: ActivatedRoute,
+    private router: Router,
     private deviceControllerService: DeviceControllerService,
     private organizationControllerService: OrganizationControllerService,
     private userControllerService: UserControllerService,
@@ -175,5 +176,9 @@ export class DetailViewComponent {
       return this.instanceControllerService.deleteInstance(this.numberId);
     }
     return new Observable();
+  }
+
+  back = () => {
+    this.router.navigateByUrl('/pages/ir/'+this.itemType);
   }
 }

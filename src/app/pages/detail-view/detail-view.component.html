@@ -1,4 +1,7 @@
 <div class="parent">
+    <div>
+        <button class="btn btn-sm btn-secondary" (click)="back()">Back</button>
+    </div>
     @if (isEditing) {
     <app-item-form [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()" />
     } @else {
