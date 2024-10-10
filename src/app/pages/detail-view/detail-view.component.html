@@ -1,5 +1,4 @@
-<div class="container">
-
+<div class="parent">
     @if (isEditing) {
     <app-item-form [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()" />
     } @else {
