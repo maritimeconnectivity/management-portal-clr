@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ClrForm, ClrFormsModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
-import { filterUndefinedAttributes } from 'src/app/common/filterObject';
+import { appendUpdatedAttributes, filterUndefinedAttributes } from 'src/app/common/filterObject';
 import { ItemType } from 'src/app/common/menuType';
 import { mrnRegex } from 'src/app/common/mrnRegex';
 import { SharedModule } from 'src/app/common/shared/shared.module';
@@ -42,6 +42,8 @@ export class ItemFormComponent {
 
   @Output() onCancel: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
+
   @ViewChild(ClrForm, { static: true }) clrForm: ClrForm | undefined;
 
   viewContext = 'edit';
@@ -72,7 +74,10 @@ export class ItemFormComponent {
       this.itemForm.markAllAsTouched();
       this.clrForm?.markAsTouched();
     }
-    const filteredAttributes = filterUndefinedAttributes(this.item);
+    
+    const filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
+    const updated = appendUpdatedAttributes(this.item, filteredAttributes);
+    this.onSubmit.emit(updated);
   }
   resetForm = () => {
     this.setForm();

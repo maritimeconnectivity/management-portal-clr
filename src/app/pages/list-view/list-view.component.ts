@@ -41,7 +41,7 @@ export class ListViewComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.parseMyUrl().then(() => {
-      this.fetchContent(this.itemType);
+      this.fetchData(this.itemType);
     });
   }
 
@@ -51,7 +51,7 @@ export class ListViewComponent {
     });
   }
 
-  fetchContent = (entityType: ItemType) => {
+  fetchData = (entityType: ItemType) => {
     if (entityType === ItemType.Device) {
       this.deviceService.getOrganizationDevices(this.orgMrn).subscribe(devicesPage => {
         if (devicesPage.content?.length) {

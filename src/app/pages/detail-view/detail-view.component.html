@@ -1,2 +1,6 @@
-<div>Register New</div>
-<app-item-form [itemType]="itemType" [item]="item"/>
+@if (isEditing) {
+    <div>Register New</div>
+    <app-item-form [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
+} @else {
+    <app-item-view [itemType]="itemType" [item]="item" (onEdit)="edit(item)"></app-item-view>
+}
