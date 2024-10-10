@@ -32,6 +32,7 @@
     "@clr/ui": "^17.3.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
+    "gramli-angular-notifier": "^16.0.2",
     "keycloak-angular": "^16.0.1",
     "keycloak-js": "^25.0.5",
     "rxjs": "~7.8.0",

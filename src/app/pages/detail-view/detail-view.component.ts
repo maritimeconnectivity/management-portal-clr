@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ClarityModule } from '@clr/angular';
+import { TranslateService } from '@ngx-translate/core';
+import { NotifierService } from 'gramli-angular-notifier';
 import { firstValueFrom, Observable } from 'rxjs';
 import { Device, DeviceControllerService, MMS, MmsControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
@@ -11,7 +15,9 @@ import { ComponentsModule } from 'src/app/components/components.module';
   selector: 'app-detail-view',
   standalone: true,
   imports: [
+    NgIf,
     ComponentsModule,
+    ClarityModule
   ],
   templateUrl: './detail-view.component.html',
   styleUrl: './detail-view.component.css'
@@ -23,8 +29,11 @@ export class DetailViewComponent {
   numberId = -1;
   instanceVersion = "";
   isEditing = true;
+  isLoading = false;
   isForNew = false;
   item: any = {};
+  private readonly notifier: NotifierService;
+  @ViewChild('customNotification', { static: true }) customNotificationTmpl: any;
 
   constructor(private route: ActivatedRoute,
     private deviceControllerService: DeviceControllerService,
@@ -35,7 +44,12 @@ export class DetailViewComponent {
     private serviceControllerService: ServiceControllerService,
     private roleControllerService: RoleControllerService,
     private instanceControllerService: InstanceControllerService,
-  ) { }
+    private notifierService: NotifierService,
+    private translate: TranslateService
+  ) { 
+    this.notifier = notifierService;
+    translate.use('en-GB');
+  }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -73,54 +87,30 @@ export class DetailViewComponent {
   }
 
   submitDataToBackend(body: object, id?: string) {
+    this.isLoading = true;
     if (!id) {
       this.registerData(this.itemType, body, this.orgMrn).subscribe(
         res => {
-          /*
-          this.notifierService.notify('success', 'New ' + this.itemType +
-            this.translate.instant('success.resource.create'));
-          this.settle(true);
-          this.moveToListPage();
-          */
+          this.notifier.notify('success', this.translate.instant('success.resource.create'));
+          this.isLoading = false;
         },
         err => {
-          /*
           this.notifierService.notify('error',
             this.translate.instant('error.resource.creationFailed') + err.error.message);
-          this.settle(true);
-          */
+          this.isLoading = false;
         }
       );
     } else {
-      // editing
-      this.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).subscribe({
-        next(res) {
-          console.log(res);
-        },
-        error(msg) {
-          console.log(msg);
-        }
-      });
-      /*
+      this.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).subscribe(
         res => {
-          console.log(res);
-          
-          this.notifierService.notify('success', this.menuType
-            + this.translate.instant('success.resource.update'));
-          if (this.editableForm) {
-            this.editableForm.invertIsEditing();
-            this.refreshData();
-          }
-          this.settle(true);
+          this.notifier.notify('success', 'success.resource.update');
+          this.isLoading = false;
         },
         err => {
-          this.notifierService.notify('error', 
-            this.translate.instant('error.resource.updateFailed') + err.error.message);
-          this.settle(true);
-          
-        }
-      );
-      */
+          this.notifierService.notify('error',
+            this.translate.instant('error.resource.creationFailed') + err.error.message);
+            this.isLoading = false;
+        });
     }
   }
 

@@ -1,6 +1,13 @@
-@if (isEditing) {
-    <div>Register New</div>
-    <app-item-form [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
-} @else {
+<div class="container">
+
+    @if (isEditing) {
+    <app-item-form [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()" />
+    } @else {
     <app-item-view [itemType]="itemType" [item]="item" (onEdit)="edit(item)"></app-item-view>
-}
+    }
+    @if (isLoading) {
+    <div class="spinner-view">
+        <clr-spinner *ngIf="isLoading">Loading</clr-spinner>
+    </div>
+    }
+</div>
