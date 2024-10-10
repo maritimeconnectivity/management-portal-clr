@@ -79,4 +79,5 @@ export class ItemViewComponent {
     return convertTime(time);
   }
   
+  capitalize = (s: string): string => s[0].toUpperCase() + s.slice(1);
 }

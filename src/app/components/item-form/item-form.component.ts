@@ -154,7 +154,6 @@ export class ItemFormComponent {
     return a.order > b.order ? -1 : 1;
   }
 
-  private updateEntity(values: any) {
-    Object.assign(this.item, values);
-  }
+  capitalize = (s: string): string => s[0].toUpperCase() + s.slice(1);
+  
 }
