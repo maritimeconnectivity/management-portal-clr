@@ -66,10 +66,22 @@
             <h3 class="modal-title">I have a nice title</h3>
         </div>
         <div class="modal-body">
-            <p>But not much to say...</p>
+            <clr-radio-container clrInline>
+                <label>Full radio</label>
+                <clr-radio-wrapper>
+                  <input type="radio" clrRadio name="options" required value="option1"/>
+                  <label>Issue a cert locally with manual keystore setup</label>
+                </clr-radio-wrapper>
+                <clr-radio-wrapper>
+                  <input type="radio" clrRadio name="options" required value="option2"/>
+                  <label>Issue a cert locally from browser</label>
+                </clr-radio-wrapper>
+                <clr-control-helper>Helper text</clr-control-helper>
+                <clr-control-error>This field is required!</clr-control-error>
+            </clr-radio-container>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-outline" type="button">Cancel</button>
-            <button class="btn btn-primary" type="button">Ok</button>
+            <button class="btn btn-outline" type="button" (click)="locallyWManualKeystore()"></button>
+            <button class="btn btn-primary" type="button" (click)="locallyFromBrowser()"></button>
         </div>
 </clr-modal>

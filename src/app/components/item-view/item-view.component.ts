@@ -8,7 +8,9 @@ import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { convertTime } from 'src/app/common/timeConverter';
-import { ClrModal, ClrModalModule } from '@clr/angular';
+import { ClrModal, ClrModalModule, ClrRadioModule } from '@clr/angular';
+import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
+import { CertificateService } from 'src/app/common/shared/certificate.service';
 
 @Component({
   selector: 'app-item-view',
@@ -16,6 +18,7 @@ import { ClrModal, ClrModalModule } from '@clr/angular';
   imports: [
     SharedModule,
     ClrModalModule,
+    ClrRadioModule,
     CertTableComponent,
     JsonPipe,
   ],
@@ -25,6 +28,8 @@ import { ClrModal, ClrModalModule } from '@clr/angular';
 export class ItemViewComponent {
   @Input() itemType: ItemType = ItemType.Device;
   @Input() item: any = {};
+  @Input() orgMrn: string = '';
+  @Input() instanceVersion: string | undefined = undefined;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onIssueCert: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRevokeCert: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -37,6 +42,12 @@ export class ItemViewComponent {
   activeCertificates: any[] = [];
   revokedCertificates: any[] = [];
   certModalOpened = false;
+  options = [];
+  certificateService: CertificateService | undefined;
+
+  constructor(certificateServiceInject: CertificateService) {
+    this.certificateService = certificateServiceInject;
+  }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -89,6 +100,14 @@ export class ItemViewComponent {
   openCertModal = () => {
     this.certModal?.open();
     this.certModalOpened = true;
+  }
+
+  locallyWManualKeystore(): void {
+    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, false, this.instanceVersion);
+  }
+
+  locallyFromBrowser(): void {
+    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, true, this.instanceVersion);
   }
 
   downloadCerts = (certs: any[]) => {
