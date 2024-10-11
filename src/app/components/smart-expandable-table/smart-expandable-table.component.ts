@@ -28,11 +28,13 @@ export class SmartExpandableTableComponent {
   @Input() onDownload: ((selected: any[]) => void) | undefined;
   @Input() onDelete: ((selected: any[]) => void) | undefined;
   @Input() onAdd: (() => void) | undefined;
-  @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
   @Input() deleteText: string = 'Delete';
   @Input() downloadText: string = 'Download';
   @Input() addText: string = 'Add';
-  @Output() onUpdate: EventEmitter<any> = new EventEmitter();
+  @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onIssueCert: EventEmitter<any> = new EventEmitter();
+  @Output() onRevokeCerts: EventEmitter<any[]> = new EventEmitter();
+  @Output() onDownloadCerts: EventEmitter<any[]> = new EventEmitter();
 
   selected: any[] = [];
   detail: any = {};
@@ -50,7 +52,7 @@ export class SmartExpandableTableComponent {
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
-    if (changes['data'].currentValue.length > 0) {
+    if (changes['data'] && changes['data'].currentValue.length > 0) {
       this.labelKeys = Object.keys(this.labels);
       this.labelTitles = Object.values(this.labels).map((label: any) => label.title);
       this.isLoading = false;
@@ -84,5 +86,17 @@ export class SmartExpandableTableComponent {
 
   convertTimeString = (time: string): string => {
     return convertTime(time);
+  }
+
+  issueCert = () => {
+    this.onIssueCert.emit(this.selectedItem);
+  }
+
+  revokeCerts = (certs: any[]) => {
+    this.onRevokeCerts.emit(certs);
+  }
+
+  downloadCerts = (certs: any[]) => {
+    this.onDownloadCerts.emit(certs);
   }
 }

@@ -5,7 +5,7 @@
     @if (isEditing) {
     <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()" />
     } @else {
-    <app-item-view [itemType]="itemType" [item]="item" (onEdit)="edit(item)"></app-item-view>
+    <app-item-view [itemType]="itemType" [item]="item" (onEdit)="edit(item)" (onIssueCert)="issueCert()" (onDownloadCert)="downloadCerts($event)" (onRevokeCert)="revokeCerts($event)" />
     }
     @if (isLoading) {
     <div class="spinner-view">

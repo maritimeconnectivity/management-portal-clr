@@ -1,5 +1,5 @@
 @if (context === 'active') {
-    <app-smart-table [labels]="columnsForActive" [data]="data" [onDelete]="onRevoke" deleteText="Revoke" [onDownload]="onDownload" [onAdd]="onAdd"
+    <app-smart-table [labels]="columnsForActive" [data]="data" [onDelete]="revoke" deleteText="Revoke" [onDownload]="download" [onAdd]="add"
         placeholder="There is no issued certificate."
         [itemType]="itemType"></app-smart-table>
 } @else if (context === 'revoked') {

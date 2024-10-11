@@ -1,6 +1,10 @@
-@if (isLoading) {
-    <clr-spinner>Loading</clr-spinner>
-} @else {
+<div class="parent">
     <app-smart-expandable-table [itemType]="itemType" [labels]="labels" [data]="data" [onDelete]="onDelete" [onAdd]="onAdd"
+        (onIssueCert)="issueCert()" (onDownloadCerts)="downloadCerts($event)" (onRevokeCerts)="revokeCerts($event)"
     placeholder="There is no data."></app-smart-expandable-table>
-}
+    @if (isLoading) {
+    <div class="spinner-view">
+        <clr-spinner>Loading</clr-spinner>
+    </div>
+    }
+</div>

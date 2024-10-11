@@ -27,11 +27,10 @@ export class SmartTableComponent {
   @Input() onDownload: ((selected: any[]) => void) | undefined;
   @Input() onDelete: ((selected: any[]) => void) | undefined;
   @Input() onAdd: (() => void) | undefined;
-  @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
   @Input() deleteText: string = 'Delete';
   @Input() downloadText: string = 'Download';
   @Input() addText: string = 'Add';
-  @Output() onUpdate: EventEmitter<any> = new EventEmitter();
+  @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
 
   selected: any[] = [];
   detail: any = {};

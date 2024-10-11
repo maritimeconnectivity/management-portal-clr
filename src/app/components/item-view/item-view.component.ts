@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
@@ -8,12 +8,14 @@ import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { convertTime } from 'src/app/common/timeConverter';
+import { ClrModal, ClrModalModule } from '@clr/angular';
 
 @Component({
   selector: 'app-item-view',
   standalone: true,
   imports: [
     SharedModule,
+    ClrModalModule,
     CertTableComponent,
     JsonPipe,
   ],
@@ -24,12 +26,17 @@ export class ItemViewComponent {
   @Input() itemType: ItemType = ItemType.Device;
   @Input() item: any = {};
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onIssueCert: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onRevokeCert: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() onDownloadCert: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
 
   viewContext = 'detail';
   columnForMenu: {[key: string]: any} = {};
   itemId = "";
   activeCertificates: any[] = [];
   revokedCertificates: any[] = [];
+  certModalOpened = false;
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -77,6 +84,19 @@ export class ItemViewComponent {
 
   convertTimeString = (time: string): string => {
     return convertTime(time);
+  }
+
+  openCertModal = () => {
+    this.certModal?.open();
+    this.certModalOpened = true;
+  }
+
+  downloadCerts = (certs: any[]) => {
+    this.onDownloadCert.emit(certs);
+  }
+
+  revokeCerts = (certs: any[]) => {
+    this.onRevokeCert.emit(certs);
   }
   
   capitalize = (s: string): string => s[0].toUpperCase() + s.slice(1);

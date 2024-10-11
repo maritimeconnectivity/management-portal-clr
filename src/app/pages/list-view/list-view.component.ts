@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DeviceControllerService, OrganizationControllerService, ServiceControllerService, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { ItemType } from 'src/app/common/menuType';
@@ -7,6 +7,7 @@ import { SmartExpandableTableComponent } from 'src/app/components/smart-expandab
 import { ClarityModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { firstValueFrom } from 'rxjs';
+import { NotifierService } from 'gramli-angular-notifier';
 
 @Component({
   selector: 'app-list-view',
@@ -25,6 +26,7 @@ export class ListViewComponent {
   data: any[] = [];
   labels: {[key: string]: any} = {};
   viewContext = 'list';
+  private readonly notifier: NotifierService;
 
   constructor(
     private route: ActivatedRoute,
@@ -34,8 +36,10 @@ export class ListViewComponent {
     private serviceService: ServiceControllerService,
     private userService: UserControllerService,
     private vesselService: VesselControllerService,
+    private notifierService: NotifierService
 ) {
     this.isLoading = true;
+    this.notifier = notifierService;
   }
 
   ngOnInit(): void {
@@ -86,10 +90,34 @@ export class ListViewComponent {
   }
   
   onDelete = (selected: any[]) => {
-    console.log(selected);
+    if (selected.length === 0) {
+      this.notifier.notify('error', 'success.resource.delete');
+    } else {
+      this.notifier.notify('success', 'success.resource.delete');
+    }
   }
 
   onAdd = () => {
     this.router.navigateByUrl('/pages/ir/'+this.itemType+'/new');
+  }
+
+  issueCert = () => {
+    this.notifier.notify('success', 'success.resource.issueCert');
+  }
+
+  revokeCerts = (certs: any[]) => {
+    if (certs.length === 0) {
+      this.notifier.notify('error', 'success.resource.revokeCerts');
+    } else {
+      this.notifier.notify('success', 'success.resource.revokeCerts');
+    }
+  }
+
+  downloadCerts = (selected: any[]) => {
+    if (selected.length === 0) {
+      this.notifier.notify('error', 'success.resource.downloadCerts');
+    } else {
+      this.notifier.notify('success', 'success.resource.downloadCerts');
+    }
   }
 }

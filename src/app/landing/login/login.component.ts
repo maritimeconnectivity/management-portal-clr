@@ -88,14 +88,10 @@ export class LoginComponent {
     //this.dialogService.open(ProcessDialogComponent);
   }
   openRegInfoModal() {
-    this.size = 'lg';
-
     this.regInfoModal?.open();
   }
 
   openRegInputModal() {
-    this.size = 'lg';
-
     this.regInputModal?.open();
   }
 }

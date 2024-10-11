@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SmartTableComponent } from "../smart-table/smart-table.component";
 import { ActiveCertificatesColumn, RevokedCertificatesColumn } from 'src/app/common/columnForCertificate';
 import { ItemType } from 'src/app/common/menuType';
@@ -13,18 +13,22 @@ import { ItemType } from 'src/app/common/menuType';
 export class CertTableComponent {
   @Input() context: string = 'active';
   @Input() data: any[] = [];
+  @Output() onAdd:EventEmitter<any> = new EventEmitter<any>();
+  @Output() onDownload:EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() onRevoke:EventEmitter<any[]> = new EventEmitter<any[]>();
 
   itemType: ItemType = ItemType.Certificate;
-  onRevoke = (selected: any[]) => {
-    console.log(selected);
+
+  download = (selected: any[]) => {
+    this.onDownload.emit(selected);
   }
 
-  onDownload = (selected: any[]) => {
-    console.log(selected);
+  add = () => {
+    this.onAdd.emit();
   }
 
-  onAdd = () => {
-    console.log('Add');
+  revoke = (selected: any[]) => {
+    this.onRevoke.emit(selected);
   }
   empty = [];
 

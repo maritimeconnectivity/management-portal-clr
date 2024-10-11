@@ -33,7 +33,6 @@ export class DetailViewComponent {
   isForNew = false;
   item: any = {};
   private readonly notifier: NotifierService;
-  @ViewChild('customNotification', { static: true }) customNotificationTmpl: any;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -184,6 +183,26 @@ export class DetailViewComponent {
       return this.instanceControllerService.deleteInstance(this.numberId);
     }
     return new Observable();
+  }
+
+  issueCert = () => {
+    this.notifier.notify('success', 'success.resource.issueCert');
+  }
+
+  revokeCerts = (certs: any[]) => {
+    if (certs.length === 0) {
+      this.notifier.notify('error', 'success.resource.revokeCerts');
+    } else {
+      this.notifier.notify('success', 'success.resource.revokeCerts');
+    }
+  }
+
+  downloadCerts = (selected: any[]) => {
+    if (selected.length === 0) {
+      this.notifier.notify('error', 'success.resource.downloadCerts');
+    } else {
+      this.notifier.notify('success', 'success.resource.downloadCerts');
+    }
   }
 
   back = () => {
