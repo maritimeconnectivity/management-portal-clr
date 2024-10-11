@@ -28,6 +28,7 @@ export class ListViewComponent {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private deviceService: DeviceControllerService,
     private organizationService: OrganizationControllerService,
     private serviceService: ServiceControllerService,
@@ -89,6 +90,6 @@ export class ListViewComponent {
   }
 
   onAdd = () => {
-    console.log("Add");
+    this.router.navigateByUrl('/pages/ir/'+this.itemType+'/new');
   }
 }

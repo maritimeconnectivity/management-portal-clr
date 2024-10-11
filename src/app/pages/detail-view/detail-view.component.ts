@@ -56,7 +56,12 @@ export class DetailViewComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.parseMyUrl().then(() => {
-      this.fetchData(this.itemType, this.id);
+      if (this.isForNew) {
+        this.isEditing = true;
+        this.item = {};
+      } else {
+        this.fetchData(this.itemType, this.id);
+      }
     });
   }
 
@@ -64,6 +69,9 @@ export class DetailViewComponent {
     return firstValueFrom(this.route.url).then(url => {
       this.id = decodeURIComponent(url.pop()?.path || "");
       this.itemType = url.pop()?.path as ItemType;
+      if (this.id === "new") {
+        this.isForNew = true;
+      }
     });
   }
   
