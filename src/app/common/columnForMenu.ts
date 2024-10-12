@@ -128,14 +128,14 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'e-mail',
       type: 'string',
       description: 'Contact e-mail',
-      visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
+      visibleFrom: ['detail', 'edit', 'edit-new'],
       required: true,
     },
     url: {
       title: 'URL',
       type: 'string',
       description: 'URL of organization',
-      visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
+      visibleFrom: ['detail', 'edit', 'edit-new'],
       required: true,
     },
     address: {
