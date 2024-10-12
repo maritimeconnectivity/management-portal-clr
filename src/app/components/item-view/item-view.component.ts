@@ -42,7 +42,7 @@ export class ItemViewComponent {
   activeCertificates: any[] = [];
   revokedCertificates: any[] = [];
   certModalOpened = false;
-  options = [];
+  fromBrowser = false;
   certificateService: CertificateService | undefined;
 
   constructor(certificateServiceInject: CertificateService) {
@@ -102,12 +102,13 @@ export class ItemViewComponent {
     this.certModalOpened = true;
   }
 
-  locallyWManualKeystore(): void {
-    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, false, this.instanceVersion);
+  issue = () => {
+    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser, this.instanceVersion);
   }
 
-  locallyFromBrowser(): void {
-    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, true, this.instanceVersion);
+  cancel = () => {
+    this.certModal?.close();
+    this.certModalOpened = false;
   }
 
   downloadCerts = (certs: any[]) => {
@@ -116,6 +117,14 @@ export class ItemViewComponent {
 
   revokeCerts = (certs: any[]) => {
     this.onRevokeCert.emit(certs);
+  }
+
+  issueFromBrowser = () => {
+    this.fromBrowser = true;
+  }
+
+  issueManualKeystore = () => {
+    this.fromBrowser = false;
   }
   
   capitalize = (s: string): string => s[0].toUpperCase() + s.slice(1);

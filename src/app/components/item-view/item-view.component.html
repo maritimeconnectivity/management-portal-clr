@@ -63,25 +63,46 @@
     <div class="modal-title">
             <button aria-label="Close" class="close" type="button">
             </button>
-            <h3 class="modal-title">I have a nice title</h3>
+            <h3 class="modal-title">Issue a new certificate</h3>
         </div>
         <div class="modal-body">
-            <clr-radio-container clrInline>
-                <label>Full radio</label>
-                <clr-radio-wrapper>
-                  <input type="radio" clrRadio name="options" required value="option1"/>
-                  <label>Issue a cert locally with manual keystore setup</label>
-                </clr-radio-wrapper>
-                <clr-radio-wrapper>
-                  <input type="radio" clrRadio name="options" required value="option2"/>
-                  <label>Issue a cert locally from browser</label>
-                </clr-radio-wrapper>
-                <clr-control-helper>Helper text</clr-control-helper>
-                <clr-control-error>This field is required!</clr-control-error>
-            </clr-radio-container>
+            <div class="clr-col-sm-12 clr-col-md-12">
+                <clr-radio-container clrInline>
+                    <label>Choose method</label>
+                    <clr-radio-wrapper>
+                      <input type="radio" clrRadio name="options" required (click)="issueManualKeystore()" checked/>
+                      <label>Issue a cert locally with manual keystore setup</label>
+                    </clr-radio-wrapper>
+                    <clr-radio-wrapper>
+                      <input type="radio" clrRadio name="options" required (click)="issueFromBrowser()"/>
+                      <label>Issue a cert locally from browser</label>
+                    </clr-radio-wrapper>
+                    <clr-control-error>This field is required!</clr-control-error>
+                </clr-radio-container>
+            </div>
+            <div class="clr-col-sm-12 clr-col-md-12">
+                @if (!fromBrowser) {
+                    <p>Many operating systems and browsers require that certificates are
+                        imported as a password protected PKCS#12 keystore.
+                        If you want to manually generate the keystore, which is the recommended approach, click the corresponding button below and download the resulting zip file, unzip it and then use OpenSSL
+                        to generate the keystore using the following command:
+                        <br><br><pre>openssl pkcs12 -export -out keystore.p12 -in Certificate_NAME.pem -inkey PrivateKey_NAME.pem</pre>
+                      This will prompt you for a passphrase to protect the keystore. If successful the command will
+                      result in a PKCS#12 keystore file called 'keystore.p12'.
+                      <br>If you don't want to generate a keystore at all you can just skip executing the OpenSSL command.
+                      </p>
+                } @else {
+                    <p>
+                        Many operating systems and browsers require that certificates are
+                        imported as a password protected PKCS#12 keystore. You can let your browser generate a keystore for you. NOTE that this action will take a little while and the resulting keystore will
+                        NOT be compatible with most major operating systems and browsers.
+                    </p>
+                }
+            </div>
+            <span></span>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-outline" type="button" (click)="locallyWManualKeystore()"></button>
-            <button class="btn btn-primary" type="button" (click)="locallyFromBrowser()"></button>
+            <button class="btn btn-primary" type="button" (click)="issue()">Issue</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
         </div>
 </clr-modal>
