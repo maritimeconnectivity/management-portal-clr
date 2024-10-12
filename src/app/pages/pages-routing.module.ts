@@ -53,6 +53,30 @@ const routes: Routes = [
       component: DetailViewComponent,
     },
     {
+      path: 'ir/user',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/user/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/vessel',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/vessel/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/role',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/role/:id',
+      component: DetailViewComponent,
+    },
+    {
       path: 'ir/guide',
       component: ListViewComponent,
     },

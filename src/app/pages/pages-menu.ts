@@ -24,12 +24,43 @@ export const MENU_ITEMS: any[] = [
     icon: 'lock',
     children: [
       {
-        title: 'menu.ir.organizations',
-        link: '/pages/ir/organization',
+        title: 'My company',
       },
       {
-        title: 'menu.ir.guide',
-        link: '/pages/ir/guide',
+        title: 'menu.ir.org.devices',
+        link: '/pages/ir/device',
+        group: 'myorg',
+      },
+      {
+        title: 'menu.ir.org.services',
+        link: '/pages/ir/service',
+        group: 'myorg',
+      },
+      {
+        title: 'menu.ir.org.users',
+        link: '/pages/ir/user',
+        group: 'myorg',
+      },
+      {
+        title: 'menu.ir.org.vessels',
+        link: '/pages/ir/vessel',
+        group: 'myorg',
+      },
+      {
+        title: 'menu.ir.org.roles',
+        link: '/pages/ir/role',
+        group: 'myorg',
+      },
+      {
+        title: 'separator',
+      },
+      {
+        title: 'My IR',
+      },
+      {
+        title: 'menu.ir.organizations',
+        link: '/pages/ir/organization',
+        group: 'ir',
       },
     ],
   },
@@ -38,30 +69,39 @@ export const MENU_ITEMS: any[] = [
     icon: 'layers',
     children: [
       {
-        title: 'menu.sr.instances',
-        link: '/pages/sr/instance',
+        title: 'My Company',
+      },
+      {
+        title: 'menu.sr.org.services',
+        link: '/pages/sr/instanceorg',
+        group: 'myorg',
+      },
+      {
+        title: 'separator',
+      },
+      {
+        title: 'My SR',
       },
       {
         title: 'menu.sr.search',
         link: '/pages/sr/search',
+        group: 'mysr'
       },
       {
-        title: 'menu.sr.guide',
-        link: '/pages/sr/guide',
+        title: 'menu.sr.instances',
+        link: '/pages/sr/instance',
+        group: 'mysr'
       },
-    ],
-  },
-  {
-    title: 'menu.ledger',
-    icon: 'network-globe',
-    children: [
+      {
+        title: 'separator',
+      },
+      {
+        title: 'Global Search',
+      },
       {
         title: 'menu.ledger.search',
         link: '/pages/ledger/search',
-      },
-      {
-        title: 'menu.ledger.guide',
-        link: '/pages/ledger/guide',
+        group: 'global'
       },
     ],
   },

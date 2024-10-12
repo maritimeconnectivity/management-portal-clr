@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { DeviceControllerService, OrganizationControllerService, ServiceControllerService, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
+import { DeviceControllerService, OrganizationControllerService, RoleControllerService, ServiceControllerService, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { ItemType } from 'src/app/common/menuType';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
@@ -36,6 +36,7 @@ export class ListViewComponent {
     private serviceService: ServiceControllerService,
     private userService: UserControllerService,
     private vesselService: VesselControllerService,
+    private roleService: RoleControllerService,
     private notifierService: NotifierService
 ) {
     this.isLoading = true;
@@ -58,17 +59,49 @@ export class ListViewComponent {
 
   fetchData = (entityType: ItemType) => {
     if (entityType === ItemType.Device) {
-      this.deviceService.getOrganizationDevices(this.orgMrn).subscribe(devicesPage => {
-        if (devicesPage.content?.length) {
-          this.data = devicesPage.content;
+      this.deviceService.getOrganizationDevices(this.orgMrn).subscribe(page => {
+        if (page.content?.length) {
+          this.data = page.content;
           this.setLabel();
           this.isLoading = false;
         }
       });
     } else if(entityType === ItemType.Organization) {
-      this.organizationService.getOrganization().subscribe(organizationsPage => {
-        if (organizationsPage.content?.length) {
-          this.data = organizationsPage.content;
+      this.organizationService.getOrganization().subscribe(page => {
+        if (page.content?.length) {
+          this.data = page.content;
+          this.setLabel();
+          this.isLoading = false;
+        }
+      });
+    } else if(entityType === ItemType.Service) {
+      this.serviceService.getOrganizationServices(this.orgMrn).subscribe(page => {
+        if (page.content?.length) {
+          this.data = page.content;
+          this.setLabel();
+          this.isLoading = false;
+        }
+      });
+    } else if(entityType === ItemType.User) {
+      this.userService.getOrganizationUsers(this.orgMrn).subscribe(page => {
+        if (page.content?.length) {
+          this.data = page.content;
+          this.setLabel();
+          this.isLoading = false;
+        }
+      });
+    } else if(entityType === ItemType.Vessel) {
+      this.vesselService.getOrganizationVessels(this.orgMrn).subscribe(page => {
+        if (page.content?.length) {
+          this.data = page.content;
+          this.setLabel();
+          this.isLoading = false;
+        }
+      });
+    } else if(entityType === ItemType.Role) {
+      this.roleService.getRoles(this.orgMrn).subscribe(page => {
+        if (page.length) {
+          this.data = page;
           this.setLabel();
           this.isLoading = false;
         }

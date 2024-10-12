@@ -22,4 +22,12 @@ export class AuthService {
   public isAuthenticated(): Promise<boolean> {
     return Promise.resolve(this.keycloakService.isLoggedIn());
   }
+
+  public async getToken(): Promise<string> {
+    return this.keycloakService.getToken();
+  }
+
+  public async getOrgMrn(): Promise<string> {
+    return this.keycloakService.getKeycloakInstance().tokenParsed!["org"];
+  }
 }
