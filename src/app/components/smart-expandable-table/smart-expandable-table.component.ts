@@ -45,7 +45,7 @@ export class SmartExpandableTableComponent {
   isLoading: boolean = false;
 
   constructor(private router: Router) {
-    
+    this.isLoading = true;
   }
 
   ngOnInit(): void {
@@ -60,7 +60,7 @@ export class SmartExpandableTableComponent {
   async refresh(state: ClrDatagridStateInterface) {
     if (!this.data) {
       this.data = await this.getData(this.itemType) || [];
-      
+      this.isLoading = false;
     }
     /*
     if(this.labels) {
