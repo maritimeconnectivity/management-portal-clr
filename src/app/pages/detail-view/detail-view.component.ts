@@ -5,10 +5,12 @@ import { ClarityModule } from '@clr/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'gramli-angular-notifier';
 import { firstValueFrom, Observable } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
 import { Device, DeviceControllerService, MMS, MmsControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
 import { formatVesselToUpload } from 'src/app/common/dataformatter';
 import { ItemType } from 'src/app/common/menuType';
+import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @Component({
@@ -28,6 +30,7 @@ export class DetailViewComponent {
   id: string = "";
   numberId = -1;
   instanceVersion = "";
+  mrnPrefix = "urn:mrn:";
   isEditing = true;
   isLoading = false;
   isForNew = false;
@@ -44,7 +47,8 @@ export class DetailViewComponent {
     private roleService: RoleControllerService,
     private instanceService: InstanceControllerService,
     private notifierService: NotifierService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService,
   ) { 
     this.notifier = notifierService;
     translate.use('en-GB');
@@ -55,8 +59,13 @@ export class DetailViewComponent {
     //Add 'implements OnInit' to the class.
     this.parseMyUrl().then(async () => {
       if (this.isForNew) {
-        this.isEditing = true;
-        this.item = {};
+        this.authService.getOrgMrn().then(orgMrn => {
+          this.mrnPrefix = getMrnPrefixFromOrgMrn(orgMrn, this.itemType);
+          this.isEditing = true;
+          this.item = {mrn: this.mrnPrefix};
+        }
+        );
+        
       } else {
         this.item = await this.fetchData(this.itemType, this.id);
       }

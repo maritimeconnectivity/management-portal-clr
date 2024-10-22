@@ -3,12 +3,7 @@
         <button class="btn btn-sm btn-secondary" (click)="back()">Back</button>
     </div>
     @if (isEditing) {
-        @if (item) {
-            <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()" />
-        } @else {
-            <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()" />
-        }
-    
+        <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
     } @else {
     <app-item-view [itemType]="itemType" [item]="item" (onEdit)="edit(item)" (onIssueCert)="issueCert()" (onDownloadCert)="downloadCerts($event)" (onRevokeCert)="revokeCerts($event)" />
     }
