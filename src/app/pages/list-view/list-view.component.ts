@@ -8,6 +8,7 @@ import { ClarityModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { firstValueFrom } from 'rxjs';
 import { NotifierService } from 'gramli-angular-notifier';
+import { InstanceControllerService } from 'src/app/backend-api/service-registry';
 
 @Component({
   selector: 'app-list-view',
@@ -21,8 +22,7 @@ import { NotifierService } from 'gramli-angular-notifier';
 })
 
 export class ListViewComponent {
-  @Input() itemType: ItemType = ItemType.Device;
-  isLoading: boolean = false;
+  @Input() itemType: ItemType = ItemType.None;
   orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
   data: any[] = [];
   labels: {[key: string]: any} = {};
@@ -38,18 +38,17 @@ export class ListViewComponent {
     private userService: UserControllerService,
     private vesselService: VesselControllerService,
     private roleService: RoleControllerService,
+    private instanceService: InstanceControllerService,
     private notifierService: NotifierService
 ) {
-    this.isLoading = true;
     this.notifier = notifierService;
   }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.setLabel();
     this.parseMyUrl().then(() => {
-      this.fetchData(this.itemType);
+      this.setLabel();
     });
   }
 
@@ -66,7 +65,6 @@ export class ListViewComponent {
   }
 
   fetchData = async (entityType: ItemType): Promise<any[] | undefined> => {
-    this.isLoading = true;
     try {
       let page;
       if (entityType === ItemType.Device) {
@@ -82,13 +80,10 @@ export class ListViewComponent {
       } else if(entityType === ItemType.Role) {
         page = await firstValueFrom(this.roleService.getRoles(this.orgMrn));
       } else {
-        this.isLoading = false;
         return [];
       }
-      this.isLoading = false;
       return Array.isArray(page) ? page : page.content;
     } catch (error) {
-      this.isLoading = false;
       console.error('Error fetching data:', error);
       return [];
     }

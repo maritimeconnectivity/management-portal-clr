@@ -27,7 +27,7 @@ export class ItemFormComponent {
   /**
      * menu type of an active page
      */
-  @Input() itemType: ItemType = ItemType.Device;
+  @Input() itemType: ItemType = ItemType.None;
   /**
    * a boolean indicating its use for creating entity
    */
@@ -51,21 +51,18 @@ export class ItemFormComponent {
   itemForm: FormGroup = new FormGroup({});
   columnForMenu: { [key: string]: any } = {};
   isEditing = false;
-  shortId = '';
   id = '';
 
   constructor(private formBuilder: FormBuilder) {
   }
 
-  ngOnInit(): void {
-    this.setForm();
-    this.itemForm.patchValue(this.item);
-    this.shortId = "Hello";
-  }
-
   ngOnChanges(simpleChange: any) {
-    this.setForm();
-    this.itemForm.patchValue(this.item);
+    if (this.itemType !== ItemType.None) {
+      this.setForm();
+      if (this.item) {
+        this.itemForm.patchValue(this.item);
+      }
+    }
   }
 
   submit = () => {

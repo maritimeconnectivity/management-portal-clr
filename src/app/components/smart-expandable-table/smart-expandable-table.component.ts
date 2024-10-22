@@ -1,7 +1,5 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ClarityModule, ClrDatagridModule, ClrDatagridStateInterface } from '@clr/angular';
-import { ClarityIcons, downloadIcon, plusIcon, timesIcon } from '@cds/core/icon';
-import { toCamelCase } from 'src/app/common/stringUtils';
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { ItemViewComponent } from "../item-view/item-view.component";
 import { convertTime } from 'src/app/common/timeConverter';
@@ -30,14 +28,13 @@ export class SmartExpandableTableComponent {
   @Input() deleteText: string = 'Delete';
   @Input() downloadText: string = 'Download';
   @Input() addText: string = 'Add';
-  @Input() isLoading: boolean = false;
   @Input() getData: ((itemType: ItemType) => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
   @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output() onIssueCert: EventEmitter<any> = new EventEmitter();
   @Output() onRevokeCerts: EventEmitter<any[]> = new EventEmitter();
   @Output() onDownloadCerts: EventEmitter<any[]> = new EventEmitter();
 
-  data: any[] = [];
+  data: any[] | undefined = undefined;
   selected: any[] = [];
   detail: any = {};
   selectedItem : any = {};
@@ -45,6 +42,7 @@ export class SmartExpandableTableComponent {
   detailView: boolean = false;
   labelKeys: string[] = [];
   labelTitles: string[] = [];
+  isLoading: boolean = false;
 
   constructor(private router: Router) {
   }
@@ -59,7 +57,9 @@ export class SmartExpandableTableComponent {
   }
 
   async refresh(state: ClrDatagridStateInterface) {
-    this.data = await this.getData(this.itemType) || [];
+    if (!this.data) {
+      this.data = await this.getData(this.itemType) || [];
+    }
     /*
     if(this.labels) {
       console.log(state);

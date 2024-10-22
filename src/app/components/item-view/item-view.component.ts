@@ -26,7 +26,7 @@ import { CertificateService } from 'src/app/common/shared/certificate.service';
   styleUrl: './item-view.component.css'
 })
 export class ItemViewComponent {
-  @Input() itemType: ItemType = ItemType.Device;
+  @Input() itemType: ItemType = ItemType.None;
   @Input() item: any = {};
   @Input() orgMrn: string = '';
   @Input() instanceVersion: string | undefined = undefined;
@@ -56,8 +56,10 @@ export class ItemViewComponent {
   }
 
   ngOnChanges(simpleChange: any) {
+    if (!simpleChange.item || !simpleChange.item.currentValue)
+      return;
     this.item = simpleChange.item.currentValue && simpleChange.item.currentValue;
-    if (Object.keys(this.item).length > 0) {
+    if (this.item && this.item.mrn) {
       this.itemId = this.item.mrn;
       this.setForm();
       if (this.item.certificates) {

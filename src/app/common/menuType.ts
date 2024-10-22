@@ -18,6 +18,7 @@
  * enum for menu types being used for routing
  */
 export enum ItemType {
+  None = 'none',
   Device = 'device',
   Organization = 'organization',
   Service = 'service',

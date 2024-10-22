@@ -37,18 +37,20 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="clr-form-horizontal clr-form-control clr-row">
-                            <label class="clr-control-label">Active certificates</label>
-                            <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-                                <app-cert-table context="active" [data]="activeCertificates" (onAdd)="openCertModal()" (onDownload)="downloadCerts($event)" (onRevoke)="revokeCerts($event)" />
+                        @if (itemType !== 'role') {
+                            <div class="clr-form-horizontal clr-form-control clr-row">
+                                <label class="clr-control-label">Active certificates</label>
+                                <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+                                    <app-cert-table context="active" [data]="activeCertificates" (onAdd)="openCertModal()" (onDownload)="downloadCerts($event)" (onRevoke)="revokeCerts($event)" />
+                                </div>
                             </div>
-                        </div>
-                        <div class="clr-form-horizontal clr-form-control clr-row">
-                            <label class="clr-control-label">Revoked certificates</label>
-                            <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-                                <app-cert-table context="revoked" [data]="revokedCertificates" />
+                            <div class="clr-form-horizontal clr-form-control clr-row">
+                                <label class="clr-control-label">Revoked certificates</label>
+                                <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+                                    <app-cert-table context="revoked" [data]="revokedCertificates" />
+                                </div>
                             </div>
-                        </div>
+                        }
                     </form>
                 </div>
             </div>

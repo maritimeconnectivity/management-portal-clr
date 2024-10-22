@@ -23,7 +23,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
   styleUrl: './detail-view.component.css'
 })
 export class DetailViewComponent {
-  itemType: ItemType = ItemType.Device;
+  itemType: ItemType = ItemType.None;
   orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
   id: string = "";
   numberId = -1;
@@ -36,14 +36,13 @@ export class DetailViewComponent {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private deviceControllerService: DeviceControllerService,
-    private organizationControllerService: OrganizationControllerService,
-    private userControllerService: UserControllerService,
-    private vesselControllerService: VesselControllerService,
-    private mmsControllerService: MmsControllerService,
-    private serviceControllerService: ServiceControllerService,
-    private roleControllerService: RoleControllerService,
-    private instanceControllerService: InstanceControllerService,
+    private deviceService: DeviceControllerService,
+    private organizationService: OrganizationControllerService,
+    private userService: UserControllerService,
+    private vesselService: VesselControllerService,
+    private serviceService: ServiceControllerService,
+    private roleService: RoleControllerService,
+    private instanceService: InstanceControllerService,
     private notifierService: NotifierService,
     private translate: TranslateService
   ) { 
@@ -54,12 +53,12 @@ export class DetailViewComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.parseMyUrl().then(() => {
+    this.parseMyUrl().then(async () => {
       if (this.isForNew) {
         this.isEditing = true;
         this.item = {};
       } else {
-        this.fetchData(this.itemType, this.id);
+        this.item = await this.fetchData(this.itemType, this.id);
       }
     });
   }
@@ -74,11 +73,28 @@ export class DetailViewComponent {
     });
   }
   
-  fetchData = (entityType: ItemType, id: string) => {
-    if (entityType === ItemType.Device) {
-      this.deviceControllerService.getDevice(this.orgMrn, id).subscribe(device => {
-        this.item = device;
-      });
+  fetchData = async (entityType: ItemType, id: string): Promise<any | undefined> => {
+    try {
+      let item;
+      if (entityType === ItemType.Device) {
+        item = await firstValueFrom(this.deviceService.getDevice(this.orgMrn, id));
+      } else if (entityType === ItemType.Organization) {
+        item = await firstValueFrom(this.organizationService.getOrganization1(id));
+      } else if (entityType === ItemType.User) {
+        item = await firstValueFrom(this.userService.getUser(this.orgMrn, id));
+      } else if (entityType === ItemType.Service) {
+        item = await firstValueFrom(this.serviceService.getService(this.orgMrn, id));
+      } else if (entityType === ItemType.Vessel) {
+        item = await firstValueFrom(this.vesselService.getVessel(this.orgMrn, id));
+      } else if (entityType === ItemType.Role) {
+        item = await firstValueFrom(this.roleService.getRole(this.orgMrn, parseInt(id)));
+      } else {
+        return {};
+      }
+      return item;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return {};
     }
   }
 
@@ -124,63 +140,57 @@ export class DetailViewComponent {
 
   registerData = (context: ItemType, body: object, orgMrn: string): Observable<any> => {
     if (context === ItemType.User) {
-      return this.userControllerService.createUser(body as User, orgMrn);
+      return this.userService.createUser(body as User, orgMrn);
     } else if (context === ItemType.Device) {
-      return this.deviceControllerService.createDevice(body as Device, orgMrn);
+      return this.deviceService.createDevice(body as Device, orgMrn);
     } else if (context === ItemType.Vessel) {
-      return this.vesselControllerService.createVessel(formatVesselToUpload(body) as Vessel, orgMrn);
-    } else if (context === ItemType.MMS) {
-      return this.mmsControllerService.createMMS(body as MMS, orgMrn);
+      return this.vesselService.createVessel(formatVesselToUpload(body) as Vessel, orgMrn);
     } else if (context === ItemType.Service) {
-      return this.serviceControllerService.createService(body as Service, orgMrn);
+      return this.serviceService.createService(body as Service, orgMrn);
     } else if (context === ItemType.Organization) {
-      return this.organizationControllerService.applyOrganization(body as Organization);
+      return this.organizationService.applyOrganization(body as Organization);
     } else if (context === ItemType.Role) {
-      return this.roleControllerService.createRole(body as Role, orgMrn);
+      return this.roleService.createRole(body as Role, orgMrn);
     } else if (context === ItemType.Instance) {
-      return this.instanceControllerService.createInstance(body as InstanceDto);
+      return this.instanceService.createInstance(body as InstanceDto);
     }
     return new Observable();
   }
 
   updateData = (context: ItemType, body: object, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<any> => {
     if (context === ItemType.User) {
-      return this.userControllerService.updateUser(body as User, orgMrn, entityMrn);
+      return this.userService.updateUser(body as User, orgMrn, entityMrn);
     } else if (context === ItemType.Device) {
-      return this.deviceControllerService.updateDevice(body as Device, orgMrn, entityMrn);
+      return this.deviceService.updateDevice(body as Device, orgMrn, entityMrn);
     } else if (context === ItemType.Vessel) {
-      return this.vesselControllerService.updateVessel(formatVesselToUpload(body) as Vessel, orgMrn, entityMrn);
-    } else if (context === ItemType.MMS) {
-      return this.mmsControllerService.updateMMS(body as MMS, orgMrn, entityMrn);
+      return this.vesselService.updateVessel(formatVesselToUpload(body) as Vessel, orgMrn, entityMrn);
     } else if (context === ItemType.Service && version) {
-      return this.serviceControllerService.updateService(body as Service, orgMrn, entityMrn, version);
+      return this.serviceService.updateService(body as Service, orgMrn, entityMrn, version);
     } else if (context === ItemType.Organization || context === ItemType.OrgCandidate) {
-      return this.organizationControllerService.updateOrganization(body as Organization, entityMrn);
+      return this.organizationService.updateOrganization(body as Organization, entityMrn);
     } else if (context === ItemType.Role) {
-      return this.roleControllerService.updateRole(body as Role, orgMrn, this.numberId);
+      return this.roleService.updateRole(body as Role, orgMrn, this.numberId);
     } else if (context === ItemType.Instance && instanceId) {
-      return this.instanceControllerService.updateInstance(Object.assign({}, body, {id: instanceId}) as InstanceDto, instanceId);
+      return this.instanceService.updateInstance(Object.assign({}, body, {id: instanceId}) as InstanceDto, instanceId);
     }
     return new Observable();
   }
 
   deleteData = (context: ItemType, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<any> => {
     if (context === ItemType.User) {
-      return this.userControllerService.deleteUser(orgMrn, entityMrn);
+      return this.userService.deleteUser(orgMrn, entityMrn);
     } else if (context === ItemType.Device) {
-      return this.deviceControllerService.deleteDevice(orgMrn, entityMrn);
+      return this.deviceService.deleteDevice(orgMrn, entityMrn);
     } else if (context === ItemType.Vessel) {
-      return this.vesselControllerService.deleteVessel(orgMrn, entityMrn);
-    } else if (context === ItemType.MMS) {
-      return this.mmsControllerService.deleteMMS(orgMrn, entityMrn);
+      return this.vesselService.deleteVessel(orgMrn, entityMrn);
     } else if (context === ItemType.Service && version) {
-      return this.serviceControllerService.deleteService(orgMrn, entityMrn, version);
+      return this.serviceService.deleteService(orgMrn, entityMrn, version);
     } else if (context === ItemType.Organization || context === ItemType.OrgCandidate) {
-      return this.organizationControllerService.deleteOrg(entityMrn);
+      return this.organizationService.deleteOrg(entityMrn);
     } else if (context === ItemType.Role) {
-      return this.roleControllerService.deleteRole(orgMrn, this.numberId);
+      return this.roleService.deleteRole(orgMrn, this.numberId);
     } else if (context === ItemType.Instance) {
-      return this.instanceControllerService.deleteInstance(this.numberId);
+      return this.instanceService.deleteInstance(this.numberId);
     }
     return new Observable();
   }
