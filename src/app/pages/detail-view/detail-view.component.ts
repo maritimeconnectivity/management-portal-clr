@@ -65,6 +65,9 @@ export class DetailViewComponent {
 
   parseMyUrl = (): Promise<void> => {
     return firstValueFrom(this.route.url).then(url => {
+      if (url.length === 4) {
+        this.instanceVersion = decodeURIComponent(url.pop()?.path || "");
+      }
       this.id = decodeURIComponent(url.pop()?.path || "");
       this.itemType = url.pop()?.path as ItemType;
       if (this.id === "new") {
@@ -83,7 +86,7 @@ export class DetailViewComponent {
       } else if (entityType === ItemType.User) {
         item = await firstValueFrom(this.userService.getUser(this.orgMrn, id));
       } else if (entityType === ItemType.Service) {
-        item = await firstValueFrom(this.serviceService.getService(this.orgMrn, id));
+        item = await firstValueFrom(this.serviceService.getServiceVersion(this.orgMrn, id, this.instanceVersion));
       } else if (entityType === ItemType.Vessel) {
         item = await firstValueFrom(this.vesselService.getVessel(this.orgMrn, id));
       } else if (entityType === ItemType.Role) {

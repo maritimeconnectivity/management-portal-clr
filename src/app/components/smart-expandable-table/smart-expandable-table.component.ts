@@ -45,6 +45,7 @@ export class SmartExpandableTableComponent {
   isLoading: boolean = false;
 
   constructor(private router: Router) {
+    
   }
 
   ngOnInit(): void {
@@ -59,6 +60,7 @@ export class SmartExpandableTableComponent {
   async refresh(state: ClrDatagridStateInterface) {
     if (!this.data) {
       this.data = await this.getData(this.itemType) || [];
+      
     }
     /*
     if(this.labels) {
@@ -106,10 +108,11 @@ export class SmartExpandableTableComponent {
     this.selectedItem = selectedItem;
     if (this.itemType === ItemType.Role) {
       this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.id);
+    } else if (this.itemType === ItemType.Service) {
+      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion);
     } else {
       this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
     }
-    
   }
 
   isTimestampFormat(key: string): boolean {

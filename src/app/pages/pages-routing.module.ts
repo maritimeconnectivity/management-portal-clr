@@ -55,7 +55,7 @@ const routes: Routes = [
       component: ListViewComponent,
     },
     {
-      path: 'ir/service/:id',
+      path: 'ir/service/:id/:instanceVersion',
       component: DetailViewComponent,
     },
     {
