@@ -89,10 +89,6 @@ export class SmartExpandableTableComponent {
       });
       */
   }
-  
-  onSelect(id: string) {
-    console.log('Selected', id);
-  }
 
   userRowSelect = (selectedItem: any) => {
     this.expanded = true;
@@ -108,7 +104,12 @@ export class SmartExpandableTableComponent {
   edit = (selectedItem: any) => {
     this.expanded = true;
     this.selectedItem = selectedItem;
-    this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
+    if (this.itemType === ItemType.Role) {
+      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.id);
+    } else {
+      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
+    }
+    
   }
 
   isTimestampFormat(key: string): boolean {

@@ -49,17 +49,14 @@ export class ItemViewComponent {
     this.certificateService = certificateServiceInject;
   }
 
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    
-  }
-
   ngOnChanges(simpleChange: any) {
     if (!simpleChange.item || !simpleChange.item.currentValue)
       return;
     this.item = simpleChange.item.currentValue && simpleChange.item.currentValue;
-    if (this.item && this.item.mrn) {
+    if (this.item && this.item.id) {
+      this.itemId = this.item.id;
+      this.setForm();
+    } else if (this.item && this.item.mrn) {
       this.itemId = this.item.mrn;
       this.setForm();
       if (this.item.certificates) {
