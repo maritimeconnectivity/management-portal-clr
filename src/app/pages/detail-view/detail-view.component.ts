@@ -124,11 +124,12 @@ export class DetailViewComponent {
 
   submitDataToBackend(body: object, id?: string) {
     this.isLoading = true;
-    if (!id) {
+    if (id === "new") {
       this.registerData(this.itemType, body, this.orgMrn).subscribe(
         res => {
-          this.notifier.notify('success', this.translate.instant('success.resource.create'));
+          this.notifier.notify('success', "A new " + this.itemType + " " + this.translate.instant('success.resource.create'));
           this.isLoading = false;
+          this.router.navigateByUrl('/pages/ir/'+this.itemType);
         },
         err => {
           this.notifierService.notify('error',
@@ -136,7 +137,7 @@ export class DetailViewComponent {
           this.isLoading = false;
         }
       );
-    } else {
+    } else if (id) {
       this.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).subscribe(
         res => {
           this.notifier.notify('success', 'success.resource.update');

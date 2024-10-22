@@ -65,4 +65,5 @@ export class SmartTableComponent {
   convertTimeString = (time: string): string => {
     return convertTime(time);
   }
+
 }

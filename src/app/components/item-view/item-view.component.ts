@@ -31,6 +31,7 @@ export class ItemViewComponent {
   @Input() orgMrn: string = '';
   @Input() instanceVersion: string | undefined = undefined;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
   @Output() onIssueCert: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRevokeCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() onDownloadCert: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -86,6 +87,10 @@ export class ItemViewComponent {
 
   edit = () => {
     this.onEdit.emit(this.item);
+  }
+
+  deleteItem = () => {
+    this.onDelete.emit(this.item);
   }
   
   isTimestampFormat(key: string): boolean {

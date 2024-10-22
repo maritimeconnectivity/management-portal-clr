@@ -1,4 +1,4 @@
-export const filterUndefinedAttributes = (entity: {}) => Object.fromEntries(Object.entries(entity).filter(([key, value]) => value !== undefined))
+export const filterUndefinedAttributes = (entity: {}) => Object.fromEntries(Object.entries(entity).filter(([key, value]) => value !== undefined && value!.toString().length > 0))
 
 export const appendUpdatedAttributes = (original: any, updates: any): any => {
     const updatedItem = { ...original };

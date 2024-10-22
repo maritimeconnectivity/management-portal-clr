@@ -57,10 +57,14 @@ export class SmartExpandableTableComponent {
     }
   }
 
+  async loadData() {
+    this.data = await this.getData(this.itemType) || [];
+    this.isLoading = false;
+  }
+
   async refresh(state: ClrDatagridStateInterface) {
     if (!this.data) {
-      this.data = await this.getData(this.itemType) || [];
-      this.isLoading = false;
+      this.loadData();  
     }
     /*
     if(this.labels) {
@@ -113,6 +117,10 @@ export class SmartExpandableTableComponent {
     } else {
       this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
     }
+  }
+
+  deleteItem = (selectedItem: any) => {
+    this.onDelete?.call(this, [selectedItem]);
   }
 
   isTimestampFormat(key: string): boolean {

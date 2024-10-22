@@ -22,6 +22,7 @@ import { InstanceControllerService } from 'src/app/backend-api/service-registry'
 })
 
 export class ListViewComponent {
+  @ViewChild(SmartExpandableTableComponent) exTable!: SmartExpandableTableComponent;
   @Input() itemType: ItemType = ItemType.None;
   orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
   data: any[] = [];
@@ -97,12 +98,44 @@ export class ListViewComponent {
         return result;
       }, {} as {[key: string]: any});
   };
+
+  deleteData = async (itemType: ItemType, item: any): Promise<any> => {
+    try {
+      const id = item.mrn;
+      if (itemType === ItemType.Device) {
+        await firstValueFrom(this.deviceService.deleteDevice(this.orgMrn, id));
+      } else if (itemType === ItemType.Organization) {
+        await firstValueFrom(this.organizationService.deleteOrg(id));
+      } else if (itemType === ItemType.User) {
+        await firstValueFrom(this.userService.deleteUser(this.orgMrn, id));
+      } else if (itemType === ItemType.Service) {
+        await firstValueFrom(this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion));
+      } else if (itemType === ItemType.Vessel) {
+        await firstValueFrom(this.vesselService.deleteVessel(this.orgMrn, id));
+      } else if (itemType === ItemType.Role) {
+        await firstValueFrom(this.roleService.deleteRole(this.orgMrn, parseInt(item.id)));
+      }
+    } catch(error) {
+      this.notifier.notify('error', 'success.resource.delete');
+    }
+  }
   
-  onDelete = (selected: any[]) => {
+  onDelete = async (selected: any[]) => {
     if (selected.length === 0) {
       this.notifier.notify('error', 'success.resource.delete');
     } else {
-      this.notifier.notify('success', 'success.resource.delete');
+      await selected.forEach(async (item) => {
+        await this.deleteData(this.itemType, item);
+        this.notifier.notify('success', 'success.resource.delete');
+        if (this.exTable?.expanded) {
+          // when delete has done in item view
+          this.exTable?.loadData();
+          this.exTable?.back();
+        } else {
+          this.exTable?.loadData();
+        }
+        
+      });
     }
   }
 

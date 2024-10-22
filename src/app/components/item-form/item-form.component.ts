@@ -73,11 +73,21 @@ export class ItemFormComponent {
     }
     
     const filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
-    const updated = appendUpdatedAttributes(this.item, filteredAttributes);
-    this.onSubmit.emit(updated);
+    if (this.isForNew) {
+      this.onSubmit.emit(filteredAttributes);
+    } else {
+      const updated = appendUpdatedAttributes(this.item, filteredAttributes);
+      this.onSubmit.emit(updated);
+    }
   }
   resetForm = () => {
     this.setForm();
+    if (!this.isForNew) {
+      this.itemForm.patchValue(this.item);
+    } else if (this.itemType !== ItemType.Role) {
+      this.item = {mrn: this.mrnPrefix};
+      this.itemForm.patchValue(this.item);
+    }
   }
 
   cancel = () => {
