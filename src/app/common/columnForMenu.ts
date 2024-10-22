@@ -35,7 +35,7 @@ export const ColumnForResource: {[key: string]: object} = {
       immutable: true,
       required: true,
       shortIdType: 'device',
-      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<org_id>:<unique_id>'",
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>:<unique_id>'",
     },
     name: {
       title: 'Name',
@@ -105,6 +105,7 @@ export const ColumnForResource: {[key: string]: object} = {
       immutable: true,
       required: true,
       shortIdType: 'organization',
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>'",
     },
     name: {
       title: 'Name',
@@ -198,6 +199,7 @@ export const ColumnForResource: {[key: string]: object} = {
       immutable: true,
       required: true,
       shortIdType: 'service',
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>:<unique_id>'",
     },
     name: {
       title: 'Name',
@@ -331,6 +333,7 @@ export const ColumnForResource: {[key: string]: object} = {
       immutable: true,
       required: true,
       shortIdType: 'user',
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>:<unique_id>'",
     },
     firstName: {
       title: 'First name',
@@ -413,6 +416,7 @@ export const ColumnForResource: {[key: string]: object} = {
       immutable: true,
       required: true,
       shortIdType: 'vessel',
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>:<unique_id>'",
     },
     name: {
       title: 'Name',
@@ -597,6 +601,7 @@ export const ColumnForResource: {[key: string]: object} = {
       shortIdType: 'organization',
       immutable: true,
       required: true,
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>'",
     },
     name: {
       title: 'Name',
