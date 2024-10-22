@@ -19,6 +19,7 @@ import { NotifierService } from 'gramli-angular-notifier';
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.css'
 })
+
 export class ListViewComponent {
   @Input() itemType: ItemType = ItemType.Device;
   isLoading: boolean = false;
@@ -46,66 +47,50 @@ export class ListViewComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    this.setLabel();
     this.parseMyUrl().then(() => {
       this.fetchData(this.itemType);
     });
   }
 
+  setLabel = () => {
+    this.labels = this.filterVisibleForList(ColumnForResource[this.itemType.toString()]);
+  }
+
   parseMyUrl = (): Promise<void> => {
     return firstValueFrom(this.route.url).then(url => {
       this.itemType = url.pop()?.path as ItemType;
+    }).catch((err) => {
+      this.router.navigateByUrl('/pages/not-found');
     });
   }
 
-  fetchData = (entityType: ItemType) => {
-    if (entityType === ItemType.Device) {
-      this.deviceService.getOrganizationDevices(this.orgMrn).subscribe(page => {
-        if (page.content?.length) {
-          this.data = page.content;
-          this.setLabel();
-          this.isLoading = false;
-        }
-      });
-    } else if(entityType === ItemType.Organization) {
-      this.organizationService.getOrganization().subscribe(page => {
-        if (page.content?.length) {
-          this.data = page.content;
-          this.setLabel();
-          this.isLoading = false;
-        }
-      });
-    } else if(entityType === ItemType.Service) {
-      this.serviceService.getOrganizationServices(this.orgMrn).subscribe(page => {
-        if (page.content?.length) {
-          this.data = page.content;
-          this.setLabel();
-          this.isLoading = false;
-        }
-      });
-    } else if(entityType === ItemType.User) {
-      this.userService.getOrganizationUsers(this.orgMrn).subscribe(page => {
-        if (page.content?.length) {
-          this.data = page.content;
-          this.setLabel();
-          this.isLoading = false;
-        }
-      });
-    } else if(entityType === ItemType.Vessel) {
-      this.vesselService.getOrganizationVessels(this.orgMrn).subscribe(page => {
-        if (page.content?.length) {
-          this.data = page.content;
-          this.setLabel();
-          this.isLoading = false;
-        }
-      });
-    } else if(entityType === ItemType.Role) {
-      this.roleService.getRoles(this.orgMrn).subscribe(page => {
-        if (page.length) {
-          this.data = page;
-          this.setLabel();
-          this.isLoading = false;
-        }
-      });
+  fetchData = async (entityType: ItemType): Promise<any[] | undefined> => {
+    this.isLoading = true;
+    try {
+      let page;
+      if (entityType === ItemType.Device) {
+        page = await firstValueFrom(this.deviceService.getOrganizationDevices(this.orgMrn));
+      } else if(entityType === ItemType.Organization) {
+        page = await firstValueFrom(this.organizationService.getOrganization());
+      } else if(entityType === ItemType.User) {
+        page = await firstValueFrom(this.userService.getOrganizationUsers(this.orgMrn));
+      } else if(entityType === ItemType.Service) {
+        page = await firstValueFrom(this.serviceService.getOrganizationServices(this.orgMrn));
+      } else if(entityType === ItemType.Vessel) {
+        page = await firstValueFrom(this.vesselService.getOrganizationVessels(this.orgMrn));
+      } else if(entityType === ItemType.Role) {
+        page = await firstValueFrom(this.roleService.getRoles(this.orgMrn));
+      } else {
+        this.isLoading = false;
+        return [];
+      }
+      this.isLoading = false;
+      return Array.isArray(page) ? page : page.content;
+    } catch (error) {
+      this.isLoading = false;
+      console.error('Error fetching data:', error);
+      return [];
     }
   }
 
@@ -117,10 +102,6 @@ export class ListViewComponent {
         return result;
       }, {} as {[key: string]: any});
   };
-
-  setLabel = () => {
-    this.labels = this.filterVisibleForList(ColumnForResource[this.itemType.toString()]);
-  }
   
   onDelete = (selected: any[]) => {
     if (selected.length === 0) {
