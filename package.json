@@ -33,7 +33,9 @@
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
     "asn1js": "^3.0.5",
+    "file-saver": "^2.0.5",
     "gramli-angular-notifier": "^16.0.2",
+    "jszip": "^3.10.1",
     "keycloak-angular": "^16.0.1",
     "keycloak-js": "^25.0.5",
     "pkijs": "^3.2.4",
@@ -46,6 +48,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.3",
     "@angular/cli": "^18.2.3",
+    "@types/file-saver": "^2.0.7",
     "@types/jasmine": "~4.3.0",
     "angular-eslint": "18.3.1",
     "eslint": "^9.9.1",

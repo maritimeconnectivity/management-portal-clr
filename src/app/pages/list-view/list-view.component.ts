@@ -134,7 +134,6 @@ export class ListViewComponent {
         } else {
           this.exTable?.loadData();
         }
-        
       });
     }
   }
@@ -145,6 +144,10 @@ export class ListViewComponent {
 
   issueCert = () => {
     this.notifier.notify('success', 'success.resource.issueCert');
+  }
+
+  refreshData = () => {
+    this.exTable?.loadData();
   }
 
   revokeCerts = (certs: any[]) => {

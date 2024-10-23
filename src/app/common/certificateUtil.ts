@@ -7,81 +7,80 @@ import { CertificateService } from "./shared/certificate.service";
 import { CertificateBundle } from "./certificateBundle";
 import {stringToArrayBuffer} from 'pvutils';
 
-export const issueNewWithLocalKeys = (certificateService: CertificateService, itemType: ItemType, mrn: string, orgMrn: string, generatePkcs12: boolean, instanceVersion?: string): Observable<any> => {
-    const ecKeyGenParams = {name: 'ECDSA', namedCurve: 'P-384', typedCurve: ''};
-    const keyResult = crypto.subtle.generateKey(ecKeyGenParams, true, ['sign', 'verify']);
-    keyResult.then(keyPair => {
-      const csr = new CertificationRequest();
-      csr.subject.typesAndValues.push(new AttributeTypeAndValue({
-        type: '2.5.4.3', // Common name
-        value: new PrintableString({value: 'Test'}),
-      }));
-      csr.subjectPublicKeyInfo.importKey(keyPair.publicKey).then(() => {
-        csr.sign(keyPair.privateKey, 'SHA-384').then(() => {
-          const csrBytes = csr.toSchema().toBER(false);
-          const pemCsr = toPem(csrBytes, 'CERTIFICATE REQUEST');
-          certificateService.issueNewCertificate(pemCsr, itemType, mrn,
-            orgMrn, instanceVersion)
-            .subscribe((certificate) => {
-              },
-              err => {
-                // successful response but failed due to PEM fitting to json format
-                if (err.status === 201) {
-                  {
-                    const certificate = err.error.text;
-                    return crypto.subtle.exportKey('pkcs8', keyPair.privateKey).then(rawPrivateKey => {
-                        return crypto.subtle.exportKey('spki', keyPair.publicKey).then(rawPublicKey => {
-                        const privateKey = new PrivateKeyInfo({schema: fromBER(rawPrivateKey).result});
 
-                        if (generatePkcs12) {
-                          const rawCerts = convertCertChain(certificate);
-                          const certs = rawCerts.map(cert =>
-                            new Certificate({schema: fromBER(cert).result}));
-                          const password = generatePassword();
-
-                          return generatePKCS12(privateKey, certs, password).then(result => {
-                            return of({
-                              certificate: certificate,
-                              publicKey: toPem(rawPublicKey, 'PUBLIC KEY'),
-                              privateKey: toPem(rawPrivateKey, 'PRIVATE KEY'),
-                              pkcs12Keystore: result,
-                              keystorePassword: password,
-                            } as CertificateBundle);
-                          }, err => {
-                            err.error.message = 'PKCS#12 keystore could not be generated - ' + err.error.message
-                            return of(null);
-                          });
-                        } else {
-                          return of({
-                            certificate: certificate,
-                            publicKey: toPem(rawPublicKey, 'PUBLIC KEY'),
-                            privateKey: toPem(rawPrivateKey, 'PRIVATE KEY'),
-                          } as CertificateBundle);
-                        }
-                      }, err => {
-                        // pass to error message to the call
-                        err.error.message = 'Public key could not be exported - ' + err.error.message
-                        return of(null);
-                      });
-                    }, err => {
-                        err.error.message = 'Private key could not be exported - ' + err.error.message
-                        return of(null);
-                    });
-                  }
-                } else {
-                    err.error.message = 'Error when trying to issue new certificate - ' + err.error.message
-                    return of(null);
-                }
-              }
-            );
-        });
-      });
-    }, err => {
-        err.error.message = 'Error when trying to issue new certificate - ' + err.error.message
+export const issueNewWithLocalKeys = async (
+  certificateService: CertificateService,
+  itemType: ItemType,
+  mrn: string,
+  orgMrn: string,
+  generatePkcs12: boolean,
+  instanceVersion?: string
+): Promise<CertificateBundle | undefined> => {
+  try {
+    const ecKeyGenParams = { name: 'ECDSA', namedCurve: 'P-384', typedCurve: '' };
+    const keyPair = await crypto.subtle.generateKey(ecKeyGenParams, true, ['sign', 'verify']);
+    
+    const csr = new CertificationRequest();
+    csr.subject.typesAndValues.push(new AttributeTypeAndValue({
+      type: '2.5.4.3', // Common name
+      value: new PrintableString({ value: 'Test' }),
+    }));
+    
+    await csr.subjectPublicKeyInfo.importKey(keyPair.publicKey);
+    await csr.sign(keyPair.privateKey, 'SHA-384');
+    
+    const csrBytes = csr.toSchema().toBER(false);
+    const pemCsr = toPem(csrBytes, 'CERTIFICATE REQUEST');
+    
+    const certificateText: string = await new Promise((resolve, reject) => {
+      certificateService.issueNewCertificate(pemCsr, itemType, mrn, orgMrn, instanceVersion)
+        .subscribe(
+          (cert) => {
+            // Handle successful response, e.g., process the certificate if needed
+            
+          },
+          err => {
+            // Successful response but failure in PEM fitting to JSON format
+            if (err.status === 201) {
+              resolve(err.error.text); // Return the certificate text on 201 status
+            } else {
+              console.error('Error when trying to issue new certificate:', err.message);
+              reject(err); // Reject the promise in case of error
+            }
+          }
+        );
     });
-    return of(null);
-  }
+    const rawPrivateKey = await crypto.subtle.exportKey('pkcs8', keyPair.privateKey);
+    const rawPublicKey = await crypto.subtle.exportKey('spki', keyPair.publicKey);
 
+    const privateKey = new PrivateKeyInfo({ schema: fromBER(rawPrivateKey).result });
+
+    if (generatePkcs12) {
+      const rawCerts = convertCertChain(certificateText);
+      const certs = rawCerts.map(cert => new Certificate({ schema: fromBER(cert).result }));
+      const password = generatePassword();
+      
+      const pkcs12Keystore = await generatePKCS12(privateKey, certs, password);
+      
+      return {
+        certificate: certificateText,
+        publicKey: toPem(rawPublicKey, 'PUBLIC KEY'),
+        privateKey: toPem(rawPrivateKey, 'PRIVATE KEY'),
+        pkcs12Keystore,
+        keystorePassword: password,
+      };
+    } else {
+      return {
+        certificate: certificateText,
+        publicKey: toPem(rawPublicKey, 'PUBLIC KEY'),
+        privateKey: toPem(rawPrivateKey, 'PRIVATE KEY'),
+      };
+    }
+  } catch (err) {
+    console.error('Error while issuing new certificate:', err);
+    return undefined;
+  }
+}
   const toPem = (arrayBuffer: ArrayBuffer, type: string): string => {
     let b64 = Convert.ToBase64(arrayBuffer);
     let finalString = '';

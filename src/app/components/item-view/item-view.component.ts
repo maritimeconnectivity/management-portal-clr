@@ -11,6 +11,11 @@ import { convertTime } from 'src/app/common/timeConverter';
 import { ClrModal, ClrModalModule, ClrRadioModule } from '@clr/angular';
 import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
 import { CertificateService } from 'src/app/common/shared/certificate.service';
+import { AuthService } from 'src/app/auth/auth.service';
+import { CertificateBundle } from 'src/app/common/certificateBundle';
+import { NotifierService } from 'gramli-angular-notifier';
+import { TranslateService } from '@ngx-translate/core';
+import { FileHelperService } from 'src/app/common/shared/file-helper.service';
 
 @Component({
   selector: 'app-item-view',
@@ -44,21 +49,31 @@ export class ItemViewComponent {
   revokedCertificates: any[] = [];
   certModalOpened = false;
   fromBrowser = false;
-  certificateService: CertificateService | undefined;
+  certificateBundle: CertificateBundle | undefined = undefined;
 
-  constructor(certificateServiceInject: CertificateService) {
-    this.certificateService = certificateServiceInject;
+  constructor(private certificateService: CertificateService,
+    private translate: TranslateService,
+    private notifier: NotifierService,
+    private fileHelper: FileHelperService,
+    authService: AuthService
+  ) {
+    authService.getOrgMrn().then((orgMrn) => {
+      this.orgMrn = orgMrn;
+    });
   }
 
   ngOnChanges(simpleChange: any) {
     if (!simpleChange.item || !simpleChange.item.currentValue)
       return;
     this.item = simpleChange.item.currentValue && simpleChange.item.currentValue;
-    if (this.item && this.item.id) {
+    if (this.item && this.itemType === ItemType.Role) {
       this.itemId = this.item.id;
       this.setForm();
     } else if (this.item && this.item.mrn) {
       this.itemId = this.item.mrn;
+      if (this.item.instanceVersion) {
+        this.instanceVersion = this.item.instanceVersion;
+      }
       this.setForm();
       if (this.item.certificates) {
         this.assignCertificatesByStatus(this.item.certificates);
@@ -107,12 +122,23 @@ export class ItemViewComponent {
   }
 
   issue = () => {
-    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser, this.instanceVersion);
+    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser, this.instanceVersion).then((cert: CertificateBundle | undefined) => {
+      this.certificateBundle = cert;
+      this.notifier.notify('success', "A new " + this.itemType + " " + this.translate.instant('success.resource.create'));
+    });
   }
 
   cancel = () => {
     this.certModal?.close();
     this.certModalOpened = false;
+    console.log("Modal closed");
+  }
+
+  public download() {
+    if (this.certificateBundle) {
+      this.fileHelper.downloadPemCertificate(this.certificateBundle, this.itemId, this.notifier);
+      this.notifier.notify('success', 'Chosen certificate has downloaded');
+    }
   }
 
   downloadCerts = (certs: any[]) => {
