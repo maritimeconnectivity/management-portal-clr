@@ -28,7 +28,9 @@ export class SmartExpandableTableComponent {
   @Input() deleteText: string = 'Delete';
   @Input() downloadText: string = 'Download';
   @Input() addText: string = 'Add';
-  @Input() getData: ((itemType: ItemType) => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
+  @Input() totalPages: number = 0;
+  @Input() totalElements: number = 0;
+  @Input() getData: ((itemType: ItemType, pageNumber: number, elementsPerPage: number) => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
   @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRevokeCerts: EventEmitter<any[]> = new EventEmitter();
   @Output() onDownloadCerts: EventEmitter<any[]> = new EventEmitter();
@@ -43,6 +45,9 @@ export class SmartExpandableTableComponent {
   labelKeys: string[] = [];
   labelTitles: string[] = [];
   isLoading: boolean = false;
+  pageNumbers: number[] = [];
+  currentPageNumber = 0;
+  elementsPerPage = 10;
 
   constructor(private router: Router) {
     this.isLoading = true;
@@ -57,8 +62,22 @@ export class SmartExpandableTableComponent {
     }
   }
 
-  async loadData() {
-    this.data = await this.getData(this.itemType) || [];
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+
+    // apply updates of total pages for pagination
+    if (changes['totalPages']) {
+      this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i);
+    }
+    
+  }
+
+  async loadData(pageNumber: number = this.currentPageNumber) {
+    this.data = await this.getData(this.itemType, pageNumber, this.elementsPerPage) || [];
+    if (pageNumber !== this.currentPageNumber) {
+      this.currentPageNumber = pageNumber;
+    }
     this.isLoading = false;
   }
 
@@ -67,34 +86,6 @@ export class SmartExpandableTableComponent {
     if (!this.data) {
       this.loadData();  
     }
-    /*
-    if(this.labels) {
-      console.log(state);
-      this.labelKeys = Object.keys(this.labels!);
-      this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
-    }
-
-    
-    const filters: { [prop: string]: any[] } = {};
-    if (state.filters) {
-      for (const filter of state.filters) {
-        const { property, value } = <{ property: string; value: string }>filter;
-        filters[property] = [value];
-      }
-    }
-
-    const pageSize = state.page?.size || 10;
-    const currentPage = state.page?.current || 1;
-
-    this.inventory
-      .filter(filters)
-      .sort(<{ by: string; reverse: boolean }>state.sort)
-      .fetch(pageSize * (currentPage - 1), pageSize)
-      .then((result: FetchResult) => {
-        this.users = result.users;
-        this.isLoading = false;
-      });
-      */
   }
 
   userRowSelect = (selectedItem: any) => {

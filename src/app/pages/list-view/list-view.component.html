@@ -1,7 +1,10 @@
 <div class="parent">
     @if (itemType !== 'none') {
-        <app-smart-expandable-table #exTable [itemType]="itemType" [labels]="labels" [getData]="fetchData" [onDelete]="onDelete" [onAdd]="onAdd"
-        (onRefresh)="refreshData()" (onDownloadCerts)="downloadCerts($event)" (onRevokeCerts)="revokeCerts($event)"
+        <app-smart-expandable-table #exTable
+            [itemType]="itemType" [labels]="labels" [getData]="fetchData"
+            [totalPages]="totalPages" [totalElements]="totalElements"
+            [onDelete]="onDelete" [onAdd]="onAdd"
+            (onRefresh)="refreshData()" (onDownloadCerts)="downloadCerts($event)" (onRevokeCerts)="revokeCerts($event)"
     placeholder="There is no data."></app-smart-expandable-table>
     }
 </div>

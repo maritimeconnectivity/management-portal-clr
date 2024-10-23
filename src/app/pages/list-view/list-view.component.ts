@@ -28,6 +28,8 @@ export class ListViewComponent {
   data: any[] = [];
   labels: {[key: string]: any} = {};
   viewContext = 'list';
+  totalPages = 0;
+  totalElements = 0;
   private readonly notifier: NotifierService;
 
   constructor(
@@ -65,19 +67,29 @@ export class ListViewComponent {
     });
   }
 
-  fetchData = async (entityType: ItemType): Promise<any[] | undefined> => {
+  fetchData = async (entityType: ItemType, pageNumber: number, elementsPerPage: number): Promise<any[] | undefined> => {
     try {
       let page;
       if (entityType === ItemType.Device) {
-        page = await firstValueFrom(this.deviceService.getOrganizationDevices(this.orgMrn));
+        page = await firstValueFrom(this.deviceService.getOrganizationDevices(this.orgMrn, pageNumber, elementsPerPage));
+        this.totalPages = page.totalPages!;
+        this.totalElements = page.totalElements!;
       } else if(entityType === ItemType.Organization) {
-        page = await firstValueFrom(this.organizationService.getOrganization());
+        page = await firstValueFrom(this.organizationService.getOrganization(pageNumber, elementsPerPage));
+        this.totalPages = page.totalPages!;
+        this.totalElements = page.totalElements!;
       } else if(entityType === ItemType.User) {
-        page = await firstValueFrom(this.userService.getOrganizationUsers(this.orgMrn));
+        page = await firstValueFrom(this.userService.getOrganizationUsers(this.orgMrn, pageNumber, elementsPerPage));
+        this.totalPages = page.totalPages!;
+        this.totalElements = page.totalElements!;
       } else if(entityType === ItemType.Service) {
-        page = await firstValueFrom(this.serviceService.getOrganizationServices(this.orgMrn));
+        page = await firstValueFrom(this.serviceService.getOrganizationServices(this.orgMrn, pageNumber, elementsPerPage));
+        this.totalPages = page.totalPages!;
+        this.totalElements = page.totalElements!;
       } else if(entityType === ItemType.Vessel) {
-        page = await firstValueFrom(this.vesselService.getOrganizationVessels(this.orgMrn));
+        page = await firstValueFrom(this.vesselService.getOrganizationVessels(this.orgMrn, pageNumber, elementsPerPage));
+        this.totalPages = page.totalPages!;
+        this.totalElements = page.totalElements!;
       } else if(entityType === ItemType.Role) {
         page = await firstValueFrom(this.roleService.getRoles(this.orgMrn));
       } else {
