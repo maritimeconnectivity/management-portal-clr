@@ -120,3 +120,72 @@
             
         </div>
 </clr-modal>
+
+<clr-modal #revokeModal class="modal" [(clrModalOpen)]="revokeModalOpened" clrModalSize="lg">
+    <div class="modal-title">
+            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            </button>
+            @if (selectedActiveCerts.length > 1) {
+                <h3 class="modal-title">Revoke {{selectedActiveCerts.length}} certificates</h3>
+            } @else {
+                <h3 class="modal-title">Revoke {{selectedActiveCerts.length}} certificate</h3>
+            }
+        </div>
+        <div class="modal-body">
+            <div class="clr-col-sm-12 clr-col-md-12">
+                <div class="clr-row">
+                    <span><b>Warning: chosen certificates will no longer be valid when they are revoked!</b></span>
+                </div>
+                <div class="clr-row">
+                    <div class="clr-col-4">
+                        <div><h5>Reason name</h5></div>
+                        <div>
+                            @for (reason of revokeReasons ; track reason) {
+                                <clr-radio-wrapper>
+                                    <input type="radio" clrRadio name="options" required (click)="revokeReason = reason"/>
+                                    <label>{{reason.title}}</label>
+                                </clr-radio-wrapper>
+                            }
+                        </div>
+                    </div>
+                    <div class="clr-col-8">
+                        <div><h5>Explanation</h5></div>
+                        <div>
+                            @if (revokeReason) {
+                                <div>
+                                    <span>{{revokeReason.description}}</span>
+                                </div>
+                                <div>
+                                    <a [href]="revokeReason.reference" target="_blank">More info</a>
+                                </div>
+                            } @else {
+                                <div>
+                                    <span>Select reason name</span>
+                                </div>
+                            }      
+                        </div>
+                                          
+                    </div>
+                </div>
+                <div class="clr-row">
+                    <div class="clr-col-4">
+                        <div><h5>Revoke at</h5></div>
+                    </div>
+                    <div class="clr-col-8">
+                        <clr-date-container>
+                            <input type="date" autocomplete="off" clrDate name="demo" [(ngModel)]="revokeAt" />
+                        </clr-date-container>
+                    </div>
+                </div> 
+                <div class="clr-row">
+                    <div>
+                        <p>Choose revocation reason and date to proceed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" (click)="revoke(selectedActiveCerts)">Revoke</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+        </div>
+</clr-modal>

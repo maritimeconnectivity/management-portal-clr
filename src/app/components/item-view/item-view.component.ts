@@ -3,12 +3,12 @@ import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { mrnRegex } from 'src/app/common/mrnRegex';
-import { Validators } from '@angular/forms';
+import { FormsModule, Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { convertTime } from 'src/app/common/timeConverter';
-import { ClrModal, ClrModalModule, ClrRadioModule } from '@clr/angular';
+import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule } from '@clr/angular';
 import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
 import { CertificateService } from 'src/app/common/shared/certificate.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -16,6 +16,8 @@ import { CertificateBundle } from 'src/app/common/certificateBundle';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
 import { FileHelperService } from 'src/app/common/shared/file-helper.service';
+import { CertificateRevocation } from 'src/app/backend-api/identity-registry';
+import { getReasonOptionFromRevocationReason, ReasonOption } from 'src/app/common/certRevokeInfo';
 
 @Component({
   selector: 'app-item-view',
@@ -24,7 +26,9 @@ import { FileHelperService } from 'src/app/common/shared/file-helper.service';
     SharedModule,
     ClrModalModule,
     ClrRadioModule,
+    ClrDatepickerModule,
     CertTableComponent,
+    FormsModule,
     JsonPipe,
   ],
   templateUrl: './item-view.component.html',
@@ -41,14 +45,21 @@ export class ItemViewComponent {
   @Output() onRevokeCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() onDownloadCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
+  @ViewChild('revokeModal', { static: true }) revokeModal: ClrModal | undefined;
 
   viewContext = 'detail';
   columnForMenu: {[key: string]: any} = {};
   itemId = "";
   activeCertificates: any[] = [];
   revokedCertificates: any[] = [];
+  revokeModalOpened = false;
   certModalOpened = false;
   fromBrowser = false;
+  revokeReason: ReasonOption | undefined = undefined;
+  revokeReasons: ReasonOption[] = [];
+  selectedActiveCerts: any[] = [];
+  revokeAt : Date | undefined = undefined;
+  reasonTitle = "";
   certificateBundle: CertificateBundle | undefined = undefined;
 
   constructor(private certificateService: CertificateService,
@@ -57,6 +68,10 @@ export class ItemViewComponent {
     private fileHelper: FileHelperService,
     authService: AuthService
   ) {
+    for (const reason in CertificateRevocation.RevocationReasonEnum) {
+      this.revokeReasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as CertificateRevocation.RevocationReasonEnum));
+    }
+    this.revokeReasons.sort((a, b) => a.value.localeCompare(b.value));
     authService.getOrgMrn().then((orgMrn) => {
       this.orgMrn = orgMrn;
     });
@@ -65,7 +80,7 @@ export class ItemViewComponent {
   ngOnChanges(simpleChange: any) {
     if (!simpleChange.item || !simpleChange.item.currentValue)
       return;
-    
+
     this.item = simpleChange.item.currentValue && simpleChange.item.currentValue;
     if (this.item && this.itemType === ItemType.Role) {
       this.itemId = this.item.id;
@@ -95,6 +110,7 @@ export class ItemViewComponent {
   assignCertificatesByStatus = (certificates: any[]) => {
     this.activeCertificates = [];
     this.revokedCertificates = [];
+    certificates.sort((a, b) => a.start < b.start ? 1 : -1);
     certificates.map((cert: any) => {
       cert.revoked ? this.revokedCertificates.push(cert) : this.activeCertificates.push(cert)});
   }
@@ -131,10 +147,33 @@ export class ItemViewComponent {
     });
   }
 
+  revoke = (selected: any[]) => {
+    // conversion to date object
+    this.revokeAt = new Date(Date.parse(this.revokeAt!.toLocaleString()));
+    const certificateRevocation: CertificateRevocation = {
+      revokedAt: this.revokeAt,
+      revocationReason: this.revokeReason?.value!,
+    };
+    
+    selected.forEach((cert) => {
+      this.certificateService.revokeCertificate(this.itemType, this.item.mrn, this.orgMrn, cert.id, certificateRevocation, this.instanceVersion)
+      .subscribe((res) => {
+        this.notifier.notify('success',
+          'Certificate has been successfully revoked');
+        this.cancel();
+    }, (err) => {
+      this.notifier.notify('error', 'success.resource.delete');
+    })
+    });
+  }
+
   cancel = () => {
     this.certModal?.close();
     this.certModalOpened = false;
+    this.revokeModal?.close();
+    this.revokeModalOpened = false;
     this.onRefresh.emit();
+    this.certificateBundle = undefined;
   }
 
   public download() {
@@ -153,7 +192,8 @@ export class ItemViewComponent {
   }
 
   revokeCerts = (certs: any[]) => {
-    this.onRevokeCert.emit(certs);
+    this.revokeModalOpened = true;
+    this.selectedActiveCerts = certs;
   }
 
   issueFromBrowser = () => {
