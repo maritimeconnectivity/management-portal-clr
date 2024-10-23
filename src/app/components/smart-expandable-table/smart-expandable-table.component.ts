@@ -136,12 +136,4 @@ export class SmartExpandableTableComponent {
       }
     });
   }
-
-  revokeCerts = (certs: any[]) => {
-    this.onRevokeCerts.emit(certs);
-  }
-
-  downloadCerts = (certs: any[]) => {
-    this.onDownloadCerts.emit(certs);
-  }
 }

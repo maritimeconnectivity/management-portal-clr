@@ -41,7 +41,7 @@
                             <div class="clr-form-horizontal clr-form-control clr-row">
                                 <label class="clr-control-label">Active certificates</label>
                                 <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-                                    <app-cert-table context="active" [data]="activeCertificates" (onAdd)="openCertModal()" (onDownload)="downloadCerts($event)" (onRevoke)="revokeCerts($event)" />
+                                    <app-cert-table context="active" [data]="activeCertificates" (onAdd)="openCertModal()" (onDownload)="clickDownloadBtn($event)" (onRevoke)="clickRevokeBtn($event)" />
                                 </div>
                             </div>
                             <div class="clr-form-horizontal clr-form-control clr-row">
@@ -185,7 +185,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" (click)="revoke(selectedActiveCerts)">Revoke</button>
+            <button class="btn btn-primary" type="button" (click)="revokeCerts(selectedActiveCerts)">Revoke</button>
             <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
         </div>
 </clr-modal>

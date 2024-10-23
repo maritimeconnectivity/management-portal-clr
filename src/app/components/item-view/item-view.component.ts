@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild } from '@angular/core';
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { mrnRegex } from 'src/app/common/mrnRegex';
 import { FormsModule, Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
-import { JsonPipe } from '@angular/common';
+import { formatDate, JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { convertTime } from 'src/app/common/timeConverter';
 import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule } from '@clr/angular';
@@ -42,7 +42,6 @@ export class ItemViewComponent {
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRefresh: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onRevokeCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() onDownloadCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
   @ViewChild('revokeModal', { static: true }) revokeModal: ClrModal | undefined;
@@ -66,7 +65,8 @@ export class ItemViewComponent {
     private translate: TranslateService,
     private notifier: NotifierService,
     private fileHelper: FileHelperService,
-    authService: AuthService
+    authService: AuthService,
+    @Inject(LOCALE_ID) public locale: string,
   ) {
     for (const reason in CertificateRevocation.RevocationReasonEnum) {
       this.revokeReasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as CertificateRevocation.RevocationReasonEnum));
@@ -147,7 +147,7 @@ export class ItemViewComponent {
     });
   }
 
-  revoke = (selected: any[]) => {
+  revokeCerts = (selected: any[]) => {
     // conversion to date object
     this.revokeAt = new Date(Date.parse(this.revokeAt!.toLocaleString()));
     const certificateRevocation: CertificateRevocation = {
@@ -165,6 +165,27 @@ export class ItemViewComponent {
       this.notifier.notify('error', 'success.resource.delete');
     })
     });
+  }
+
+  clickDownloadBtn = (selected: any[]) => {
+    if (selected.length === 0) {
+      this.notifier.notify('warning', 'success.resource.delete');
+      return;
+    }
+    selected.forEach((certificate) => {
+      const endText = formatDate(certificate.end, 'yyyy-MM-ddTHH-mm-ss', this.locale);
+      this.fileHelper.downloadPemCertificate({certificate: certificate.certificate},
+        this.item.mrn + '_exp_' + endText, this.notifier);
+    });
+  }
+
+  clickRevokeBtn = (selected: any[]) => {
+    if (selected.length === 0) {
+      this.notifier.notify('warning', 'success.resource.delete');
+      return;
+    }
+    this.revokeModalOpened = true;
+    this.selectedActiveCerts = selected;
   }
 
   cancel = () => {
@@ -185,15 +206,6 @@ export class ItemViewComponent {
 
   refreshData = () => {
     this.onRefresh.emit();
-  }
-
-  downloadCerts = (certs: any[]) => {
-    this.onDownloadCert.emit(certs);
-  }
-
-  revokeCerts = (certs: any[]) => {
-    this.revokeModalOpened = true;
-    this.selectedActiveCerts = certs;
   }
 
   issueFromBrowser = () => {
