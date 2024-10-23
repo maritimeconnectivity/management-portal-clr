@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { ClarityModule, ClrDatagridModule, ClrDatagridStateInterface } from '@clr/angular';
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { ItemViewComponent } from "../item-view/item-view.component";
@@ -30,9 +30,9 @@ export class SmartExpandableTableComponent {
   @Input() addText: string = 'Add';
   @Input() getData: ((itemType: ItemType) => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
   @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onIssueCert: EventEmitter<any> = new EventEmitter();
   @Output() onRevokeCerts: EventEmitter<any[]> = new EventEmitter();
   @Output() onDownloadCerts: EventEmitter<any[]> = new EventEmitter();
+  @Output() onRefresh: EventEmitter<any> = new EventEmitter();
 
   data: any[] | undefined = undefined;
   selected: any[] = [];
@@ -62,6 +62,7 @@ export class SmartExpandableTableComponent {
     this.isLoading = false;
   }
 
+  // this function is for background loading of data
   async refresh(state: ClrDatagridStateInterface) {
     if (!this.data) {
       this.loadData();  
@@ -131,8 +132,18 @@ export class SmartExpandableTableComponent {
     return convertTime(time);
   }
 
-  issueCert = () => {
-    this.onIssueCert.emit(this.selectedItem);
+  refreshData = () => {
+    this.loadData().then(() => {
+      if (this.selectedItem && this.selectedItem.mrn) {
+        const updatedItem = this.data?.find(item => 
+          this.itemType === ItemType.Service ? item.mrn === this.selectedItem.mrn && item.instanceVersion === this.selectedItem.instanceVersion :
+            this.itemType === ItemType.Role ? item.id === this.selectedItem.id :
+              item.mrn === this.selectedItem.mrn);
+        if (updatedItem) {
+          this.selectedItem = updatedItem;
+        }
+      }
+    });
   }
 
   revokeCerts = (certs: any[]) => {

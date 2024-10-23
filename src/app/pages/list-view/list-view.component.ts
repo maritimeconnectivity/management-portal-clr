@@ -129,10 +129,10 @@ export class ListViewComponent {
         this.notifier.notify('success', 'success.resource.delete');
         if (this.exTable?.expanded) {
           // when delete has done in item view
-          this.exTable?.loadData();
+          this.refreshData();
           this.exTable?.back();
         } else {
-          this.exTable?.loadData();
+          this.refreshData();
         }
       });
     }
@@ -140,10 +140,6 @@ export class ListViewComponent {
 
   onAdd = () => {
     this.router.navigateByUrl('/pages/ir/'+this.itemType+'/new');
-  }
-
-  issueCert = () => {
-    this.notifier.notify('success', 'success.resource.issueCert');
   }
 
   refreshData = () => {

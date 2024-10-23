@@ -62,9 +62,9 @@
     </div>
 </div>
 
-<clr-modal #certModal class="modal" [(clrModalOpen)]="certModalOpened" clrModalSize="lg" [clrModalStaticBackdrop]="false">
+<clr-modal #certModal class="modal" [(clrModalOpen)]="certModalOpened" clrModalSize="lg">
     <div class="modal-title">
-            <button aria-label="Close" class="close" type="button">
+            <button aria-label="Close" class="close" type="button" (click)="cancel()">
             </button>
             <h3 class="modal-title">Issue a new certificate</h3>
         </div>
@@ -112,6 +112,7 @@
         <div class="modal-footer">
             @if (certificateBundle) {
                 <button class="btn btn-primary" type="button" (click)="download()">Download certificate</button>
+                <button class="btn btn-outline" type="button" (click)="cancel()">Close</button>
             } @else {
                 <button class="btn btn-primary" type="button" (click)="issue()">Issue</button>
             <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>

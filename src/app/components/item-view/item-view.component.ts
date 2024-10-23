@@ -37,7 +37,7 @@ export class ItemViewComponent {
   @Input() instanceVersion: string | undefined = undefined;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onIssueCert: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onRefresh: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRevokeCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() onDownloadCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
@@ -65,6 +65,7 @@ export class ItemViewComponent {
   ngOnChanges(simpleChange: any) {
     if (!simpleChange.item || !simpleChange.item.currentValue)
       return;
+    
     this.item = simpleChange.item.currentValue && simpleChange.item.currentValue;
     if (this.item && this.itemType === ItemType.Role) {
       this.itemId = this.item.id;
@@ -92,6 +93,8 @@ export class ItemViewComponent {
   }
 
   assignCertificatesByStatus = (certificates: any[]) => {
+    this.activeCertificates = [];
+    this.revokedCertificates = [];
     certificates.map((cert: any) => {
       cert.revoked ? this.revokedCertificates.push(cert) : this.activeCertificates.push(cert)});
   }
@@ -131,7 +134,7 @@ export class ItemViewComponent {
   cancel = () => {
     this.certModal?.close();
     this.certModalOpened = false;
-    console.log("Modal closed");
+    this.onRefresh.emit();
   }
 
   public download() {
@@ -139,6 +142,10 @@ export class ItemViewComponent {
       this.fileHelper.downloadPemCertificate(this.certificateBundle, this.itemId, this.notifier);
       this.notifier.notify('success', 'Chosen certificate has downloaded');
     }
+  }
+
+  refreshData = () => {
+    this.onRefresh.emit();
   }
 
   downloadCerts = (certs: any[]) => {

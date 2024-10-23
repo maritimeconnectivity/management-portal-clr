@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClarityModule } from '@clr/angular';
 import { TranslateService } from '@ngx-translate/core';
@@ -25,13 +25,13 @@ import { ComponentsModule } from 'src/app/components/components.module';
   styleUrl: './detail-view.component.css'
 })
 export class DetailViewComponent {
+  @Input() isEditing: boolean = true;
   itemType: ItemType = ItemType.None;
   orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
   id: string = "";
   numberId = -1;
   instanceVersion = "";
   mrnPrefix = "urn:mrn:";
-  isEditing = true;
   isLoading = false;
   isForNew = false;
   item: any = {};
@@ -67,7 +67,7 @@ export class DetailViewComponent {
         );
         
       } else {
-        this.item = await this.fetchData(this.itemType, this.id);
+        this.loadItem();
       }
     });
   }
@@ -108,6 +108,10 @@ export class DetailViewComponent {
       console.error('Error fetching data:', error);
       return {};
     }
+  }
+
+  loadItem = async () => {
+    this.item = await this.fetchData(this.itemType, this.id);
   }
 
   edit = (item: any) => {

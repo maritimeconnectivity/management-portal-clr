@@ -6,7 +6,8 @@
         <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
             [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
     } @else {
-    <app-item-view [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" (onEdit)="edit(item)" (onIssueCert)="issueCert()" (onDownloadCert)="downloadCerts($event)" (onRevokeCert)="revokeCerts($event)" />
+    <app-item-view [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" (onEdit)="edit(item)" (onIssueCert)="issueCert()"
+        (onRefresh)="loadItem()" (onDownloadCert)="downloadCerts($event)" (onRevokeCert)="revokeCerts($event)" />
     }
     @if (isLoading) {
     <div class="spinner-view">
