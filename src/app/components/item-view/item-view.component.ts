@@ -117,6 +117,11 @@ export class ItemViewComponent {
     certificates.sort((a, b) => a.start < b.start ? 1 : -1);
     certificates.map((cert: any) => {
       cert.revoked ? this.revokedCertificates.push(cert) : this.activeCertificates.push(cert)});
+    this.revokedCertificates = this.updateRevokeReason(this.revokedCertificates);
+  }
+
+  updateRevokeReason = (revokedCerts: any[]): any[] => {
+    return revokedCerts.map((cert) => ({ ...cert, revokeReason: this.revokeReasons.filter((reason) => reason.value === cert.revokeReason)[0].title }));
   }
 
   sortColumnForMenu = (a: any, b: any) => {
