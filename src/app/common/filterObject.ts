@@ -9,3 +9,7 @@ export const appendUpdatedAttributes = (original: any, updates: any): any => {
     }
     return updatedItem;
   }
+
+export const migrateVesselAttributes = (item: any) => {
+  return { ...item, ...item.attributes.reduce((acc: any, attr: any) => ({ ...acc, [attr.attributeName.replace(/-([a-z])/g, function (g: any) { return g[1].toUpperCase(); })]: attr.attributeValue }), {})};
+}

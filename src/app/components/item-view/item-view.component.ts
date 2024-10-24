@@ -18,6 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FileHelperService } from 'src/app/common/shared/file-helper.service';
 import { CertificateRevocation } from 'src/app/backend-api/identity-registry';
 import { getReasonOptionFromRevocationReason, ReasonOption } from 'src/app/common/certRevokeInfo';
+import { migrateVesselAttributes } from 'src/app/common/filterObject';
 
 @Component({
   selector: 'app-item-view',
@@ -93,6 +94,9 @@ export class ItemViewComponent {
       this.itemId = this.item.mrn;
       if (this.item.instanceVersion) {
         this.instanceVersion = this.item.instanceVersion;
+      }
+      if (this.itemType === ItemType.Vessel) {
+        this.item = migrateVesselAttributes(this.item);
       }
       this.setForm();
       if (this.item.certificates) {

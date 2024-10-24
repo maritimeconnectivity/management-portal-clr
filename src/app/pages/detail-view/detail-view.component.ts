@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Device, DeviceControllerService, MMS, MmsControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
 import { formatVesselToUpload } from 'src/app/common/dataformatter';
+import { migrateVesselAttributes } from 'src/app/common/filterObject';
 import { ItemType } from 'src/app/common/menuType';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ComponentsModule } from 'src/app/components/components.module';
@@ -102,6 +103,7 @@ export class DetailViewComponent {
         }
       } else if (entityType === ItemType.Vessel) {
         item = await firstValueFrom(this.vesselService.getVessel(this.orgMrn, id));
+        item = migrateVesselAttributes(item);
       } else if (entityType === ItemType.Role) {
         item = await firstValueFrom(this.roleService.getRole(this.orgMrn, parseInt(id)));
       } else {
