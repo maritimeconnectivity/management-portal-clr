@@ -96,7 +96,11 @@ export class CertificateService {
         return this.devicesService.revokeDeviceCert(certificateRevocation, orgMrn, entityMrn, certificateId);
       }
       case ItemType.Service: {
-        return this.servicesService.revokeServiceCert(certificateRevocation, orgMrn, entityMrn, version!, certificateId);
+        if (version) {
+          return this.servicesService.revokeServiceCert(certificateRevocation, orgMrn, entityMrn, version!, certificateId);
+        } else {
+          return this.servicesService.revokeServiceCert1(certificateRevocation, orgMrn, entityMrn, certificateId);
+        }
       }
       case ItemType.User: {
         return this.usersService.revokeUserCert(certificateRevocation, orgMrn, entityMrn, certificateId);
