@@ -34,6 +34,7 @@ export class SmartExpandableTableComponent {
   @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRevokeCerts: EventEmitter<any[]> = new EventEmitter();
   @Output() onDownloadCerts: EventEmitter<any[]> = new EventEmitter();
+  @Output() onEdit: EventEmitter<any> = new EventEmitter();
   @Output() onRefresh: EventEmitter<any> = new EventEmitter();
 
   data: any[] | undefined = undefined;
@@ -102,13 +103,7 @@ export class SmartExpandableTableComponent {
   edit = (selectedItem: any) => {
     this.expanded = true;
     this.selectedItem = selectedItem;
-    if (this.itemType === ItemType.Role) {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.id);
-    } else if (this.itemType === ItemType.Service) {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion);
-    } else {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
-    }
+    this.onEdit.emit(selectedItem);
   }
 
   deleteItem = (selectedItem: any) => {

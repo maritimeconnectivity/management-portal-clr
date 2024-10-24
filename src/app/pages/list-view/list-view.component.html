@@ -5,6 +5,7 @@
             [totalPages]="totalPages" [totalElements]="totalElements"
             [onDelete]="onDelete" [onAdd]="onAdd"
             (onRefresh)="refreshData()"
+            (onEdit)="edit($event)"
         placeholder="There is no data." />
     }
 </div>

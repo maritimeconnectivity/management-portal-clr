@@ -158,19 +158,17 @@ export class ListViewComponent {
     this.exTable?.loadData();
   }
 
-  revokeCerts = (certs: any[]) => {
-    if (certs.length === 0) {
-      this.notifier.notify('error', 'success.resource.revokeCerts');
+  edit = (selectedItem: any) => {
+    if (this.itemType === ItemType.Role) {
+      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.id);
+    } else if (this.itemType === ItemType.Service) {
+      if (selectedItem.instanceVersion) {
+        this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion); //backward compatibility
+      } else {
+        this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
+      }
     } else {
-      this.notifier.notify('success', 'success.resource.revokeCerts');
-    }
-  }
-
-  downloadCerts = (selected: any[]) => {
-    if (selected.length === 0) {
-      this.notifier.notify('error', 'success.resource.downloadCerts');
-    } else {
-      this.notifier.notify('success', 'success.resource.downloadCerts');
+      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
     }
   }
 }
