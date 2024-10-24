@@ -172,7 +172,6 @@ export class ItemViewComponent {
       revokedAt: this.revokeAt,
       revocationReason: this.revokeReason?.value!,
     };
-    console.log(certificateRevocation);
     
     selected.forEach((cert) => {
       this.certificateService.revokeCertificate(this.itemType, this.item.mrn, this.orgMrn, cert.serialNumber, certificateRevocation, this.instanceVersion)

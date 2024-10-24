@@ -70,6 +70,7 @@ export class ItemFormComponent {
     if (!this.itemForm.valid) {
       this.itemForm.markAllAsTouched();
       this.clrForm?.markAsTouched();
+      return ;
     }
     
     const filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
@@ -80,6 +81,7 @@ export class ItemFormComponent {
       this.onSubmit.emit(updated);
     }
   }
+  
   resetForm = () => {
     this.setForm();
     if (!this.isForNew) {
