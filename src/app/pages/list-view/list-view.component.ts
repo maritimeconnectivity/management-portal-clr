@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { DeviceControllerService, OrganizationControllerService, RoleControllerService, ServiceControllerService, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
+import { DeviceControllerService, OrganizationControllerService, RoleControllerService, ServiceControllerService, ServicePatch, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { ItemType } from 'src/app/common/menuType';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
@@ -121,7 +121,11 @@ export class ListViewComponent {
       } else if (itemType === ItemType.User) {
         await firstValueFrom(this.userService.deleteUser(this.orgMrn, id));
       } else if (itemType === ItemType.Service) {
-        await firstValueFrom(this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion));
+        if (item.instanceVersion) {
+          await firstValueFrom(this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion));
+        } else {
+          await firstValueFrom(this.serviceService.deleteService1(this.orgMrn, id));
+        }
       } else if (itemType === ItemType.Vessel) {
         await firstValueFrom(this.vesselService.deleteVessel(this.orgMrn, id));
       } else if (itemType === ItemType.Role) {
@@ -170,5 +174,17 @@ export class ListViewComponent {
     } else {
       this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
     }
+  }
+
+  migrate = (service: any) => {
+    this.serviceService.migrateServiceMrn({mrn: service.newServiceMrn} as ServicePatch, this.orgMrn, service.mrn, service.instanceVersion).subscribe(
+      (res) => {
+        // Handle successful response, e.g., process the certificate if needed
+        this.notifier.notify('success', 'success.resource.migrate');
+        this.refreshData();
+      },
+      err => {
+        this.notifier.notify('error', 'success.resource.migrate');
+      });
   }
 }

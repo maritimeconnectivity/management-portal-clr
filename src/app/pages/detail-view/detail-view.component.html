@@ -7,7 +7,7 @@
             [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
     } @else {
     <app-item-view [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" (onEdit)="edit(item)" (onIssueCert)="issueCert()"
-        (onRefresh)="loadItem()" />
+        (onRefresh)="loadItem()" (onMigrate)="migrate($event)" (onDelete)="deleteItem()" />
     }
     @if (isLoading) {
     <div class="spinner-view">

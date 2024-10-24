@@ -128,13 +128,6 @@ export class ItemFormComponent {
         formElements[key] = ['', value.required ? Validators.required : undefined];
       }
       this.columnForMenu[key] = value;
-
-      /*
-      if (Array.isArray((value as any)['visibleFrom']) && // array type checking with type assertion
-        (value as any)['visibleFrom'].includes(this.contextForAttributes) && // context filtering, either detail or list
-        (!this.isEditing || (this.isForNew && (value as any)['notShowOnEdit'] !== true)))
-        this.columnForMenu[key] = value;
-        */
     });
     this.itemForm = this.formBuilder.group(formElements);
   }

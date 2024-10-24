@@ -4,7 +4,7 @@
             [itemType]="itemType" [labels]="labels" [getData]="fetchData"
             [totalPages]="totalPages" [totalElements]="totalElements"
             [onDelete]="onDelete" [onAdd]="onAdd"
-            (onRefresh)="refreshData()"
+            (onRefresh)="refreshData()" (onMigrate)="migrate($event)"
             (onEdit)="edit($event)"
         placeholder="There is no data." />
     }

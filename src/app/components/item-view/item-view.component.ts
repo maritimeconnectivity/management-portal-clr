@@ -40,11 +40,13 @@ export class ItemViewComponent {
   @Input() orgMrn: string = '';
   @Input() instanceVersion: string | undefined = undefined;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRefresh: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDownloadCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
   @ViewChild('revokeModal', { static: true }) revokeModal: ClrModal | undefined;
+  @ViewChild('migrateModal', { static: true }) migrateModal: ClrModal | undefined;
 
   viewContext = 'detail';
   columnForMenu: {[key: string]: any} = {};
@@ -60,6 +62,8 @@ export class ItemViewComponent {
   revokeAt : Date | undefined = undefined;
   reasonTitle = "";
   certificateBundle: CertificateBundle | undefined = undefined;
+  migrateModalOpened = false;
+  newServiceMrn = "";
 
   constructor(private certificateService: CertificateService,
     private translate: TranslateService,
@@ -123,6 +127,10 @@ export class ItemViewComponent {
     this.onEdit.emit(this.item);
   }
 
+  migrate = () => {
+    this.onMigrate.emit(this.newServiceMrn);
+  }
+
   deleteItem = () => {
     this.onDelete.emit(this.item);
   }
@@ -136,6 +144,10 @@ export class ItemViewComponent {
   }
 
   openCertModal = () => {
+    if (this.itemType === ItemType.Service && this.instanceVersion) {
+      this.notifier.notify('error', 'You need to migrate the service first.');
+      return ;
+    }
     this.certModal?.open();
     this.certModalOpened = true;
     this.issue();
@@ -155,6 +167,7 @@ export class ItemViewComponent {
       revokedAt: this.revokeAt,
       revocationReason: this.revokeReason?.value!,
     };
+    console.log(certificateRevocation);
     
     selected.forEach((cert) => {
       this.certificateService.revokeCertificate(this.itemType, this.item.mrn, this.orgMrn, cert.serialNumber, certificateRevocation, this.instanceVersion)
@@ -181,6 +194,10 @@ export class ItemViewComponent {
   }
 
   clickRevokeBtn = (selected: any[]) => {
+    if (this.itemType === ItemType.Service && this.instanceVersion) {
+      this.notifier.notify('error', 'You need to migrate the service first.');
+      return ;
+    }
     if (selected.length === 0) {
       this.notifier.notify('warning', 'success.resource.delete');
       return;
@@ -189,12 +206,21 @@ export class ItemViewComponent {
     this.selectedActiveCerts = selected;
   }
 
+  clickMigrateBtn = () => {
+    this.migrateModal?.open();
+    this.migrateModalOpened = true;
+    this.newServiceMrn = this.item.mrn + ":" + this.instanceVersion;
+  }
+
   cancel = () => {
     this.certModal?.close();
     this.certModalOpened = false;
     this.revokeModal?.close();
     this.revokeModalOpened = false;
+    this.migrateModal?.close();
+    this.migrateModalOpened = false;
     this.onRefresh.emit();
+    this.newServiceMrn = "";
     this.certificateBundle = undefined;
   }
 

@@ -35,6 +35,7 @@ export class SmartExpandableTableComponent {
   @Output() onRevokeCerts: EventEmitter<any[]> = new EventEmitter();
   @Output() onDownloadCerts: EventEmitter<any[]> = new EventEmitter();
   @Output() onEdit: EventEmitter<any> = new EventEmitter();
+  @Output() onMigrate: EventEmitter<any> = new EventEmitter();
   @Output() onRefresh: EventEmitter<any> = new EventEmitter();
 
   data: any[] | undefined = undefined;
@@ -104,6 +105,10 @@ export class SmartExpandableTableComponent {
     this.expanded = true;
     this.selectedItem = selectedItem;
     this.onEdit.emit(selectedItem);
+  }
+
+  migrate = (newServiceMrn: string) => {
+    this.onMigrate.emit({... this.selectedItem, newServiceMrn: newServiceMrn});
   }
 
   deleteItem = (selectedItem: any) => {

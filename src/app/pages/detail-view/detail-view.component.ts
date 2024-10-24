@@ -95,7 +95,11 @@ export class DetailViewComponent {
       } else if (entityType === ItemType.User) {
         item = await firstValueFrom(this.userService.getUser(this.orgMrn, id));
       } else if (entityType === ItemType.Service) {
-        item = await firstValueFrom(this.serviceService.getServiceVersion(this.orgMrn, id, this.instanceVersion));
+        if (this.instanceVersion.length > 0) {
+          item = await firstValueFrom(this.serviceService.getServiceVersion(this.orgMrn, id, this.instanceVersion));
+        } else {
+          item = await firstValueFrom(this.serviceService.getService(this.orgMrn, id));
+        }
       } else if (entityType === ItemType.Vessel) {
         item = await firstValueFrom(this.vesselService.getVessel(this.orgMrn, id));
       } else if (entityType === ItemType.Role) {
@@ -146,6 +150,8 @@ export class DetailViewComponent {
         res => {
           this.notifier.notify('success', 'success.resource.update');
           this.isLoading = false;
+          this.loadItem();
+          this.isEditing = false;
         },
         err => {
           this.notifierService.notify('error',
@@ -181,8 +187,12 @@ export class DetailViewComponent {
       return this.deviceService.updateDevice(body as Device, orgMrn, entityMrn);
     } else if (context === ItemType.Vessel) {
       return this.vesselService.updateVessel(formatVesselToUpload(body) as Vessel, orgMrn, entityMrn);
-    } else if (context === ItemType.Service && version) {
-      return this.serviceService.updateService(body as Service, orgMrn, entityMrn, version);
+    } else if (context === ItemType.Service) {
+      if (version) {
+        return this.serviceService.updateService(body as Service, orgMrn, entityMrn, version);
+      } else {
+        return this.serviceService.updateService1(body as Service, orgMrn, entityMrn);
+      }
     } else if (context === ItemType.Organization || context === ItemType.OrgCandidate) {
       return this.organizationService.updateOrganization(body as Organization, entityMrn);
     } else if (context === ItemType.Role) {
@@ -200,8 +210,12 @@ export class DetailViewComponent {
       return this.deviceService.deleteDevice(orgMrn, entityMrn);
     } else if (context === ItemType.Vessel) {
       return this.vesselService.deleteVessel(orgMrn, entityMrn);
-    } else if (context === ItemType.Service && version) {
-      return this.serviceService.deleteService(orgMrn, entityMrn, version);
+    } else if (context === ItemType.Service) {
+      if (version) {
+        return this.serviceService.deleteService(orgMrn, entityMrn, version);
+      } else {
+        return this.serviceService.deleteService1(orgMrn, entityMrn);
+      }
     } else if (context === ItemType.Organization || context === ItemType.OrgCandidate) {
       return this.organizationService.deleteOrg(entityMrn);
     } else if (context === ItemType.Role) {
@@ -234,5 +248,21 @@ export class DetailViewComponent {
 
   back = () => {
     this.router.navigateByUrl('/pages/ir/'+this.itemType);
+  }
+
+  migrate = (newServiceMrn: string) => {
+    console.log(newServiceMrn);
+  }
+
+  deleteItem = () => {
+    this.deleteData(this.itemType, this.orgMrn, this.id, this.instanceVersion, this.numberId).subscribe(
+      res => {
+        this.notifier.notify('success', 'success.resource.delete');
+        this.router.navigateByUrl('/pages/ir/'+this.itemType);
+      },
+      err => {
+        this.notifier.notify('error', 'success.resource.delete');
+      }
+    );
   }
 }

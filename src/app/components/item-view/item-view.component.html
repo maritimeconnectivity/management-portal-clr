@@ -55,7 +55,11 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button class="btn btn-primary" (click)="edit()">Edit</button>
+                @if (itemType === 'service' && instanceVersion) {
+                    <button class="btn btn-primary" (click)="clickMigrateBtn()">Migrate</button>
+                } @else {
+                    <button class="btn btn-primary" (click)="edit()">Edit</button>
+                }
                 <button class="btn btn-danger" (click)="deleteItem()">Delete</button>
             </div>
         </div>
@@ -195,3 +199,37 @@
             <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
         </div>
 </clr-modal>
+
+<clr-modal #migrateModal class="modal" [(clrModalOpen)]="migrateModalOpened" clrModalSize="lg">
+    <div class="modal-title">
+            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            </button>
+            Migrate service
+        </div>
+        <div class="modal-body">
+            <div class="clr-col-sm-12 clr-col-md-12">
+                <div class="clr-row">
+                    <span>This migration allows you to remove the version from an existing service's MRN by assigning a new MRN that includes the version. It simplifies version management and future updates, making it easier for users to maintain and update services. The MRN below is given as an example, but you can edit it as you want.</span>
+                </div>
+                <div class="clr-row">
+                    <form class="clr-form">
+                        <div class="clr-form-control">
+                          <label for="basic" class="clr-control-label">New MRN for service</label>
+                          <div class="clr-control-container">
+                            <div class="clr-input-wrapper">
+                              <input type="text" id="basic" placeholder="Enter value here" class="clr-input" [style.width.px]=400 [value]="newServiceMrn" />
+                              <cds-icon class="clr-validate-icon" shape="exclamation-circle"></cds-icon>
+                            </div>
+                            <span class="clr-subtext">New MRN can have the version of service inside.</span>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" (click)="migrate()">Migrate</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+        </div>
+</clr-modal>
+
