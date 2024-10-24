@@ -156,7 +156,7 @@ export class ItemViewComponent {
     };
     
     selected.forEach((cert) => {
-      this.certificateService.revokeCertificate(this.itemType, this.item.mrn, this.orgMrn, cert.id, certificateRevocation, this.instanceVersion)
+      this.certificateService.revokeCertificate(this.itemType, this.item.mrn, this.orgMrn, cert.serialNumber, certificateRevocation, this.instanceVersion)
       .subscribe((res) => {
         this.notifier.notify('success',
           'Certificate has been successfully revoked');

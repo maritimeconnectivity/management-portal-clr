@@ -20,6 +20,10 @@ import { convertTime } from './timeConverter';
  * a json format for active certificates articulating how the corresponding interface should work
  */
 export const ActiveCertificatesColumn = {
+  serialNumber: {
+    title: 'Serial number',
+    type: 'string',
+  },
     start: {
       title: 'Valid from',
       type: 'string',
@@ -40,6 +44,10 @@ export const ActiveCertificatesColumn = {
  * a json format for revoked certificates articulating how the corresponding interface should work
  */
 export const RevokedCertificatesColumn = {
+  serialNumber: {
+    title: 'Serial number',
+    type: 'string',
+  },
   revokedAt: {
     title: 'Revoked from',
     type: 'string',
