@@ -33,7 +33,7 @@ export const issueNewWithLocalKeys = async (
     const pemCsr = toPem(csrBytes, 'CERTIFICATE REQUEST');
     
     const certificateText: string = await new Promise((resolve, reject) => {
-      certificateService.issueNewCertificate(pemCsr, itemType, mrn, orgMrn, instanceVersion)
+      certificateService.issueNewCertificate(pemCsr, itemType, mrn, orgMrn)
         .subscribe(
           (cert) => {
             // Handle successful response, e.g., process the certificate if needed

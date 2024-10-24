@@ -52,7 +52,7 @@ export class CertificateService {
     };
   }
 
-	public issueNewCertificate(csr: string, itemType: ItemType, entityMrn: string, orgMrn: string, version?: string)
+	public issueNewCertificate(csr: string, itemType: ItemType, entityMrn: string, orgMrn: string)
             : Observable<string> {
 		if (itemType == null || !entityMrn) { // We lost our state data somehow???
 			throw new Error('Internal state lost');
@@ -65,7 +65,7 @@ export class CertificateService {
         return this.devicesService.newDeviceCertFromCsr(csr, orgMrn, entityMrn);
       }
       case ItemType.Service: {
-        return this.servicesService.newServiceCertFromCsr(csr, orgMrn, entityMrn, version!);
+        return this.servicesService.newServiceCertFromCsr1(csr, orgMrn, entityMrn);
       }
       case ItemType.User: {
         return this.usersService.newUserCertFromCsr(csr, orgMrn, entityMrn);
