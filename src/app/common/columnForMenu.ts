@@ -231,7 +231,6 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Version of service instance',
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       immutable: true,
-      required: true,
     },
     certDomainName: {
       title: 'Certificate domain name',
