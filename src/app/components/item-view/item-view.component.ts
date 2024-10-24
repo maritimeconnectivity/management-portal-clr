@@ -53,7 +53,7 @@ export class ItemViewComponent {
   revokedCertificates: any[] = [];
   revokeModalOpened = false;
   certModalOpened = false;
-  fromBrowser = false;
+  fromBrowser = true;
   revokeReason: ReasonOption | undefined = undefined;
   revokeReasons: ReasonOption[] = [];
   selectedActiveCerts: any[] = [];
@@ -138,6 +138,7 @@ export class ItemViewComponent {
   openCertModal = () => {
     this.certModal?.open();
     this.certModalOpened = true;
+    this.issue();
   }
 
   issue = () => {

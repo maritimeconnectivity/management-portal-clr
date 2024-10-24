@@ -73,7 +73,8 @@
                 <div class="clr-col-sm-12 clr-col-md-12">
                     <p>Here is your certificate bundle. You can download it by clicking the button below.</p>
                 </div>
-            } @else {
+            } 
+            <!--@else {
                 <div class="clr-col-sm-12 clr-col-md-12">
                     <clr-radio-container clrInline>
                         <label>Choose method</label>
@@ -108,8 +109,13 @@
                     }
                 </div>
             }
+                -->
         </div>
+        
         <div class="modal-footer">
+            <button class="btn btn-primary" type="button" (click)="download()">Download certificate</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Close</button>
+            <!--
             @if (certificateBundle) {
                 <button class="btn btn-primary" type="button" (click)="download()">Download certificate</button>
                 <button class="btn btn-outline" type="button" (click)="cancel()">Close</button>
@@ -117,7 +123,7 @@
                 <button class="btn btn-primary" type="button" (click)="issue()">Issue</button>
             <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
             }
-            
+            -->
         </div>
 </clr-modal>
 
