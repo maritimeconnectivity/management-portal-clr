@@ -5,6 +5,8 @@ import { ItemViewComponent } from "../item-view/item-view.component";
 import { convertTime } from 'src/app/common/timeConverter';
 import { ItemFormComponent } from "../item-form/item-form.component";
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
+import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
 
 @Component({
   selector: 'app-smart-expandable-table',
@@ -50,8 +52,12 @@ export class SmartExpandableTableComponent {
   pageNumbers: number[] = [];
   currentPageNumber = 0;
   elementsPerPage = 10;
+  roles: Role[] = [];
 
-  constructor(private router: Router) {
+  constructor(private router: Router,
+    private authService: AuthService,
+    private roleService: RoleControllerService
+  ) {
     this.isLoading = true;
   }
 
@@ -62,6 +68,12 @@ export class SmartExpandableTableComponent {
       this.labelKeys = Object.keys(this.labels!);
       this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
     }
+
+    this.authService.getOrgMrn().then((orgMrn) => {
+      this.roleService.getRoles(orgMrn).subscribe((roles) => {
+        this.roles = roles;
+      });
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -86,7 +98,7 @@ export class SmartExpandableTableComponent {
   // this function is for background loading of data
   async refresh(state: ClrDatagridStateInterface) {
     if (!this.data) {
-      this.loadData();  
+      this.loadData();
     }
   }
 

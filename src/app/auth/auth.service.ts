@@ -38,4 +38,8 @@ export class AuthService {
   public async getUserMrn(): Promise<string> {
     return this.keycloakService.getKeycloakInstance().tokenParsed!["mrn"];
   }
+
+  public async getUserRoles(): Promise<string[]> {
+    return this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
+  }
 }

@@ -23,11 +23,6 @@ export class SidebarComponent {
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en-GB');
     this.authService = authService;
-  }
-
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    this.authService.getOrgMrn().then(orgMrn => console.log(orgMrn));
+    this.authService.getUserRoles().then(token => console.log(token));
   }
 }

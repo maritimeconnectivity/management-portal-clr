@@ -112,37 +112,37 @@ export class ListViewComponent {
   };
 
   deleteData = async (itemType: ItemType, item: any): Promise<any> => {
-    try {
-      const id = item.mrn;
-      if (itemType === ItemType.Device) {
-        await firstValueFrom(this.deviceService.deleteDevice(this.orgMrn, id));
-      } else if (itemType === ItemType.Organization) {
-        await firstValueFrom(this.organizationService.deleteOrg(id));
-      } else if (itemType === ItemType.User) {
-        await firstValueFrom(this.userService.deleteUser(this.orgMrn, id));
-      } else if (itemType === ItemType.Service) {
-        if (item.instanceVersion) {
-          await firstValueFrom(this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion));
-        } else {
-          await firstValueFrom(this.serviceService.deleteService1(this.orgMrn, id));
-        }
-      } else if (itemType === ItemType.Vessel) {
-        await firstValueFrom(this.vesselService.deleteVessel(this.orgMrn, id));
-      } else if (itemType === ItemType.Role) {
-        await firstValueFrom(this.roleService.deleteRole(this.orgMrn, parseInt(item.id)));
+    const id = item.mrn;
+    if (itemType === ItemType.Device) {
+      await firstValueFrom(this.deviceService.deleteDevice(this.orgMrn, id));
+    } else if (itemType === ItemType.Organization) {
+      await firstValueFrom(this.organizationService.deleteOrg(id));
+    } else if (itemType === ItemType.User) {
+      await firstValueFrom(this.userService.deleteUser(this.orgMrn, id));
+    } else if (itemType === ItemType.Service) {
+      if (item.instanceVersion) {
+        await firstValueFrom(this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion));
+      } else {
+        await firstValueFrom(this.serviceService.deleteService1(this.orgMrn, id));
       }
-    } catch(error) {
-      this.notifier.notify('error', 'success.resource.delete');
+    } else if (itemType === ItemType.Vessel) {
+      await firstValueFrom(this.vesselService.deleteVessel(this.orgMrn, id));
+    } else if (itemType === ItemType.Role) {
+      await firstValueFrom(this.roleService.deleteRole(this.orgMrn, parseInt(item.id)));
     }
   }
   
   onDelete = async (selected: any[]) => {
     if (selected.length === 0) {
-      this.notifier.notify('error', 'success.resource.delete');
+      this.notifier.notify('error', 'success.resource.delete.done');
     } else {
       await selected.forEach(async (item) => {
-        await this.deleteData(this.itemType, item);
-        this.notifier.notify('success', 'success.resource.delete');
+        await this.deleteData(this.itemType, item).then(() => {
+          this.notifier.notify('success', 'success.resource.delete.done');
+        }).catch((err) => {
+          this.notifier.notify('error', 'success.resource.delete');
+        });
+        
         if (this.exTable?.expanded) {
           // when delete has done in item view
           this.refreshData();

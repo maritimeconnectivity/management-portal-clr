@@ -8,6 +8,8 @@ import { ItemType } from 'src/app/common/menuType';
 import { mrnRegex } from 'src/app/common/mrnRegex';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { CertTableComponent } from '../cert-table/cert-table.component';
+import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-item-form',
@@ -51,9 +53,23 @@ export class ItemFormComponent {
   itemForm: FormGroup = new FormGroup({});
   columnForMenu: { [key: string]: any } = {};
   isEditing = false;
+  roles: Role[] = [];
   id = '';
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+    private roleService: RoleControllerService,
+    private authService: AuthService,
+  ) {
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.authService.getOrgMrn().then((orgMrn) => {
+      this.roleService.getRoles(orgMrn).subscribe((roles) => {
+        this.roles = roles;
+      });
+    });
   }
 
   ngOnChanges(simpleChange: any) {

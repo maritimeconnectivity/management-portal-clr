@@ -28,8 +28,21 @@
               } @else if (menu.key === 'roleName'){
                 <clr-select-container>
                   <label>{{menu.value.title}} {{menu.key}}</label>                  
-                    <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true">
+                    <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
                       <option *ngFor="let option of menu.value.options" [value]="option.value">{{ option.title }}</option>
+                    </select>
+                    <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                    @if (menu.value.error){
+                    <clr-control-error>{{menu.value.error}}</clr-control-error>
+                    } @else {
+                    <clr-control-error>Please enter a value</clr-control-error>
+                    }
+                </clr-select-container>
+              } @else if (menu.key === 'permissions'){
+                <clr-select-container>
+                  <label>{{menu.value.title}} {{menu.key}}</label>                  
+                    <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
+                      <option *ngFor="let role of roles" [value]="role.permission">{{ role.permission }}</option>
                     </select>
                     <clr-control-helper>{{menu.value.description}}</clr-control-helper>
                     @if (menu.value.error){
