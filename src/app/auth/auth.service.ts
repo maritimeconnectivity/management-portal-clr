@@ -30,4 +30,12 @@ export class AuthService {
   public async getOrgMrn(): Promise<string> {
     return this.keycloakService.getKeycloakInstance().tokenParsed!["org"];
   }
+
+  public async getUserName(): Promise<string> {
+    return this.keycloakService.getKeycloakInstance().tokenParsed!["name"];
+  }
+
+  public async getUserMrn(): Promise<string> {
+    return this.keycloakService.getKeycloakInstance().tokenParsed!["mrn"];
+  }
 }

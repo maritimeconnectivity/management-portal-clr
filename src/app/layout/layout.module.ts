@@ -7,6 +7,7 @@ import { MainComponent } from './main/main.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import {RouterLink, RouterLinkActive} from "@angular/router";
 import { SharedModule } from '../common/shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { SharedModule } from '../common/shared/shared.module';
   imports: [
     SharedModule,
     ClarityModule,
+    FormsModule,
     RouterLink,
     RouterLinkActive,
   ],

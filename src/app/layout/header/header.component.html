@@ -1,22 +1,26 @@
 <clr-header [role]="role" [clr-nav-level]="1">
     <div class="branding">
-        <a href="javascript://" class="nav-link">
+        <a (click)="goHome()" class="nav-link">
             <cds-icon shape="crown"></cds-icon>
         <span class="title">Management Portal</span>
         </a>
     </div>
     <div class="header-nav" [clr-nav-level]="2">
-        <a href="javascript://" class="nav-link nav-text">Home</a>
-        <a href="javascript://" class="nav-link nav-text">Dashboard</a>
+      <div cds-layout="p-l@md:sm"></div>
+      <cds-icon shape="sun" />
+      <clr-checkbox-wrapper style="margin-right: 0px;margin-left: 5px;">
+        <input #themeToggle type="checkbox" clrToggle (click)="toggleTheme()" [(ngModel)]="test" />
+      </clr-checkbox-wrapper>
+      <cds-icon shape="moon"/>
     </div>
     <div class="header-actions">
         <clr-dropdown>
           <button class="nav-text" clrDropdownTrigger aria-label="open user profile">
-            john.doevmware.com
+            {{userName}}
             <cds-icon shape="angle" direction="down"></cds-icon>
           </button>
           <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-            <a href="..." clrDropdownItem>Preferences</a>
+            <button (click)="goMyPage()">personal page</button>
             <button (click)="logOut()">log out</button>
           </clr-dropdown-menu>
         </clr-dropdown>
