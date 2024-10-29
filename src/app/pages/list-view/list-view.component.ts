@@ -9,6 +9,7 @@ import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { firstValueFrom } from 'rxjs';
 import { NotifierService } from 'gramli-angular-notifier';
 import { InstanceControllerService } from 'src/app/backend-api/service-registry';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-list-view',
@@ -24,12 +25,13 @@ import { InstanceControllerService } from 'src/app/backend-api/service-registry'
 export class ListViewComponent {
   @ViewChild(SmartExpandableTableComponent) exTable!: SmartExpandableTableComponent;
   @Input() itemType: ItemType = ItemType.None;
-  orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
+  orgMrn: string = "";
   data: any[] = [];
   labels: {[key: string]: any} = {};
   viewContext = 'list';
   totalPages = 0;
   totalElements = 0;
+  hasAdminPermission = false;
   private readonly notifier: NotifierService;
 
   constructor(
@@ -42,7 +44,8 @@ export class ListViewComponent {
     private vesselService: VesselControllerService,
     private roleService: RoleControllerService,
     private instanceService: InstanceControllerService,
-    private notifierService: NotifierService
+    private notifierService: NotifierService,
+    private authService: AuthService
 ) {
     this.notifier = notifierService;
   }
@@ -51,7 +54,13 @@ export class ListViewComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.parseMyUrl().then(() => {
-      this.setLabel();
+      this.authService.getOrgMrn().then((orgMrn) => {
+        this.orgMrn = orgMrn;
+        this.setLabel();
+        this.authService.hasPermission(this.itemType).then((hasPermission) => {
+          this.hasAdminPermission = hasPermission;
+        });
+      });
     });
   }
 

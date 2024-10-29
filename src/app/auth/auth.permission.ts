@@ -38,10 +38,10 @@ export enum AuthPermissionForMSR {
   MSRAdmin = 1 << 3,
 }
 
-export const rolesToPermission = (roles: string[]): AuthPermission => {
+export const rolesToPermission = (roles: RoleNameEnum[]): AuthPermission => {
     let permission = AuthPermission.User;
     for (const roleString of roles) {
-      switch (roleString as Role.RoleNameEnum) {
+      switch (roleString as RoleNameEnum) {
         case RoleNameEnum.ORGADMIN: {
           permission = permission | AuthPermission.OrgAdmin;
           break;
@@ -150,3 +150,28 @@ export class PermissionResolver {
       return roles && roles.length > 0 && roles.includes('service_admin');
     }
   }
+
+  export const hasAdminPermissionInMIR = (myPermission: AuthPermission, permissionRole: AuthPermission): boolean => {
+    switch (permissionRole) {
+      case AuthPermission.User:
+        return true;
+      case AuthPermission.SiteAdmin:
+        return PermissionResolver.isSiteAdmin(myPermission);
+      case AuthPermission.OrgAdmin:
+        return PermissionResolver.isOrgAdmin(myPermission);
+      case AuthPermission.ApproveOrg:
+        return PermissionResolver.canApproveOrg(myPermission);
+      case AuthPermission.EntityAdmin:
+        return PermissionResolver.isEntityAdmin(myPermission);
+      case AuthPermission.ServiceAdmin:
+        return PermissionResolver.isServiceAdmin(myPermission);
+      case AuthPermission.DeviceAdmin:
+        return PermissionResolver.isDeviceAdmin(myPermission);
+      case AuthPermission.VesselAdmin:
+        return PermissionResolver.isVesselAdmin(myPermission);
+      case AuthPermission.UserAdmin:
+        return PermissionResolver.isUserAdmin(myPermission);
+      default:
+        return false;
+          }
+  };

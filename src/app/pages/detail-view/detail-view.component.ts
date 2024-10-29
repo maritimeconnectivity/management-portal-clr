@@ -28,7 +28,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
 export class DetailViewComponent {
   @Input() isEditing: boolean = true;
   itemType: ItemType = ItemType.None;
-  orgMrn: string = "urn:mrn:mcp:org:mcc-test:horde";
+  orgMrn: string = "";
   id: string = "";
   numberId = -1;
   instanceVersion = "";
@@ -36,6 +36,7 @@ export class DetailViewComponent {
   isLoading = false;
   isForNew = false;
   item: any = {};
+  hasAdminPermission = false;
   private readonly notifier: NotifierService;
 
   constructor(private route: ActivatedRoute,
@@ -59,17 +60,21 @@ export class DetailViewComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.parseMyUrl().then(async () => {
-      if (this.isForNew) {
-        this.authService.getOrgMrn().then(orgMrn => {
+      this.authService.getOrgMrn().then(orgMrn => {
+        this.orgMrn = orgMrn;
+        if (this.isForNew) {
           this.mrnPrefix = getMrnPrefixFromOrgMrn(orgMrn, this.itemType);
           this.isEditing = true;
-          this.item = {mrn: this.mrnPrefix};
+          this.item = {mrn: this.mrnPrefix};        
+        } else {
+          this.loadItem(this.orgMrn);
         }
-        );
-        
-      } else {
-        this.loadItem();
       }
+      );
+    });
+
+    this.authService.hasPermission(this.itemType).then((hasPermission) => {
+      this.hasAdminPermission = hasPermission;
     });
   }
 
@@ -89,26 +94,26 @@ export class DetailViewComponent {
     });
   }
   
-  fetchData = async (entityType: ItemType, id: string): Promise<any | undefined> => {
+  fetchData = async (entityType: ItemType, orgMrn:string, id: string): Promise<any | undefined> => {
     try {
       let item;
       if (entityType === ItemType.Device) {
-        item = await firstValueFrom(this.deviceService.getDevice(this.orgMrn, id));
+        item = await firstValueFrom(this.deviceService.getDevice(orgMrn, id));
       } else if (entityType === ItemType.Organization) {
         item = await firstValueFrom(this.organizationService.getOrganization1(id));
       } else if (entityType === ItemType.User) {
-        item = await firstValueFrom(this.userService.getUser(this.orgMrn, id));
+        item = await firstValueFrom(this.userService.getUser(orgMrn, id));
       } else if (entityType === ItemType.Service) {
         if (this.instanceVersion.length > 0) {
-          item = await firstValueFrom(this.serviceService.getServiceVersion(this.orgMrn, id, this.instanceVersion));
+          item = await firstValueFrom(this.serviceService.getServiceVersion(orgMrn, id, this.instanceVersion));
         } else {
-          item = await firstValueFrom(this.serviceService.getService(this.orgMrn, id));
+          item = await firstValueFrom(this.serviceService.getService(orgMrn, id));
         }
       } else if (entityType === ItemType.Vessel) {
-        item = await firstValueFrom(this.vesselService.getVessel(this.orgMrn, id));
+        item = await firstValueFrom(this.vesselService.getVessel(orgMrn, id));
         item = migrateVesselAttributes(item);
       } else if (entityType === ItemType.Role) {
-        item = await firstValueFrom(this.roleService.getRole(this.orgMrn, parseInt(id)));
+        item = await firstValueFrom(this.roleService.getRole(orgMrn, parseInt(id)));
       } else {
         return {};
       }
@@ -119,8 +124,8 @@ export class DetailViewComponent {
     }
   }
 
-  loadItem = async () => {
-    this.item = await this.fetchData(this.itemType, this.id);
+  loadItem = async (orgMrn: string) => {
+    this.item = await this.fetchData(this.itemType, orgMrn, this.id);
   }
 
   edit = (item: any) => {
@@ -155,7 +160,7 @@ export class DetailViewComponent {
         res => {
           this.notifier.notify('success', 'success.resource.update');
           this.isLoading = false;
-          this.loadItem();
+          this.loadItem(this.orgMrn);
           this.isEditing = false;
         },
         err => {

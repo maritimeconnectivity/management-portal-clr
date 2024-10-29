@@ -3,11 +3,18 @@
         <button class="btn btn-sm btn-secondary" (click)="back()">To list</button>
     </div>
     @if (isEditing) {
+        @if (!hasAdminPermission) {
+            <clr-alert [clrAlertType]="'warning'">
+                <clr-alert-item>
+                  <span class="alert-text">You don't have a permission to edit.</span>
+                </clr-alert-item>
+              </clr-alert>
+        }
         <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
             [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
     } @else {
     <app-item-view [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" (onEdit)="edit(item)" (onIssueCert)="issueCert()"
-        (onRefresh)="loadItem()" (onMigrate)="migrate($event)" (onDelete)="deleteItem()" />
+        (onRefresh)="loadItem(orgMrn)" (onMigrate)="migrate($event)" (onDelete)="deleteItem()" />
     }
     @if (isLoading) {
     <div class="spinner-view">

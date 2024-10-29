@@ -23,6 +23,5 @@ export class SidebarComponent {
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en-GB');
     this.authService = authService;
-    this.authService.getUserRoles().then(token => console.log(token));
   }
 }
