@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-export const convertTime = (s: string, timeZone = 'UTC'): string => {
-  if (s) {
-    const dtFormat = new Intl.DateTimeFormat('en-GB', {
-      timeZone: timeZone,
-    });
-    return new Date(s).toISOString().slice(0, 19).replace('T', ' ');
-  }
-  return '';
+export const convertTime = (s: string): string => {
+    return new Date(s).toLocaleString();
 }
