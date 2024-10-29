@@ -2,12 +2,12 @@ import { Component, Injectable, ViewChild } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from 'src/app/auth/auth.service';
 import {NgIf} from "@angular/common";
-import { ClrModal, ClrModalModule, ClrSelectModule } from '@clr/angular';
+import { ClrDropdownModule, ClrModal, ClrModalModule, ClrSelectModule } from '@clr/angular';
 import { AppConfig } from 'src/app/app.config';
 import { FormsModule } from '@angular/forms';
 import { languages } from 'src/app/common/languages';
 import { TranslateService } from '@ngx-translate/core';
-import { addLangs, changeLang, loadLang } from 'src/app/common/translateHelper';
+import { addLangs, changeLang, getLang, loadLang } from 'src/app/common/translateHelper';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 
 @Component({
@@ -18,7 +18,8 @@ import { SharedModule } from 'src/app/common/shared/shared.module';
         ClrSelectModule,
         FormsModule,
         SharedModule,
-        ClrModalModule
+        ClrModalModule,
+        ClrDropdownModule,
     ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -34,6 +35,7 @@ export class LoginComponent {
   environmentName = AppConfig.ENVIRONMENT_NAME.toUpperCase();
   serviceProviderName = AppConfig.MP_NAME;
   currentLang = "en-GB";
+  currentLangName = "English";
   loggedIn = false;
   version = AppConfig.MP_VERSION;
   logo_img = AppConfig.LOGO_IMG;
@@ -46,7 +48,7 @@ export class LoginComponent {
     public translate: TranslateService,
   ) {
     addLangs(translate);
-    this.currentLang = loadLang(translate);
+    this.loadLang();
   }
   
   ngOnInit(): void {
@@ -69,9 +71,14 @@ export class LoginComponent {
     this.updateLoggedIn();
   }
 
+  async loadLang() {
+    this.currentLang = loadLang(this.translate);
+    this.currentLangName = getLang(this.currentLang);
+  }
+
   async changeLang(lang: string) {
-    console.log(`Changing language to ${lang}`);
     changeLang(this.translate, lang);
+    this.loadLang();
   }
 
   /**

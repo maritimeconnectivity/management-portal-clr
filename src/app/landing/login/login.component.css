@@ -42,3 +42,18 @@
 .text-white {
     color: white;
 }
+
+.top-logo {
+    height: 40px;
+    width: 100%;
+}
+
+.login-wrapper {
+    display: flex;
+    height: 100%;
+    background: url("/assets/images/sea_anim.svg");
+    background-size: 100%;
+    background-position: calc(580*(1rem/var(--cds-global-base))) 800;
+    background-repeat: no-repeat;
+    background-size: cover;
+}

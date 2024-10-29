@@ -15,7 +15,7 @@
  */
 
 import { TranslateService } from "@ngx-translate/core";
-import { langs } from "./languages";
+import { langs, languages } from "./languages";
 
 /*
 export const applyTranslateToMenu = (translate: TranslateService, menu: object[]) => {
@@ -57,3 +57,7 @@ export const changeLang = (translate: TranslateService, language: string) => {
     translate.setDefaultLang(language);
     localStorage.setItem('locale', language);
 };
+
+export const getLang = (code: string ): string => {
+    return languages.find(lang => lang.code === code)?.name || 'English';
+}
