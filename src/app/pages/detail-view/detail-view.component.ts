@@ -83,6 +83,9 @@ export class DetailViewComponent {
       if (this.id === "new") {
         this.isForNew = true;
       }
+      if (this.itemType === ItemType.Role) {
+        this.numberId = parseInt(this.id);
+      }
     });
   }
   
