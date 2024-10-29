@@ -6,22 +6,29 @@
         </a>
     </div>
     <div class="header-nav" [clr-nav-level]="2">
-      <div cds-layout="p-l@md:sm"></div>
-      <cds-icon shape="sun" />
-      <clr-checkbox-wrapper style="margin-right: 0px;margin-left: 5px;">
-        <input #themeToggle type="checkbox" clrToggle (click)="toggleTheme()" [(ngModel)]="test" />
-      </clr-checkbox-wrapper>
-      <cds-icon shape="moon"/>
+      
     </div>
     <div class="header-actions">
+      <clr-dropdown>
+        <button class="nav-text" clrDropdownTrigger aria-label="open user profile">
+          {{currentLangName}}
+          <cds-icon shape="angle" direction="down"></cds-icon>
+        </button>
+        <clr-dropdown-menu>
+            @for (option of langs; track option.code) {
+                <div aria-label="option.code" clrDropdownItem (click)="changeLang(option.code)">{{ option.name }}</div>
+            }
+        </clr-dropdown-menu>
+      </clr-dropdown>
         <clr-dropdown>
           <button class="nav-text" clrDropdownTrigger aria-label="open user profile">
             {{userName}}
             <cds-icon shape="angle" direction="down"></cds-icon>
           </button>
           <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
-            <button (click)="goMyPage()">personal page</button>
-            <button (click)="logOut()">log out</button>
+            <button class="btn btn-link" (click)="toggleTheme()">switch to {{counterTheme}}</button>
+            <button class="btn btn-link" (click)="goMyPage()">personal page</button>
+            <button class="btn btn-link" (click)="logOut()">log out</button>
           </clr-dropdown-menu>
         </clr-dropdown>
     </div>
