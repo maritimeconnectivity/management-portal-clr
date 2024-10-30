@@ -10,6 +10,7 @@ import { SharedModule } from 'src/app/common/shared/shared.module';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
 import { AuthService } from 'src/app/auth/auth.service';
+import { NotifierService } from 'gramli-angular-notifier';
 
 @Component({
   selector: 'app-item-form',
@@ -59,6 +60,7 @@ export class ItemFormComponent {
   constructor(private formBuilder: FormBuilder,
     private roleService: RoleControllerService,
     private authService: AuthService,
+    private notifierService: NotifierService,
   ) {
   }
 
@@ -86,6 +88,11 @@ export class ItemFormComponent {
     if (!this.itemForm.valid) {
       this.itemForm.markAllAsTouched();
       this.clrForm?.markAsTouched();
+      this.notifierService.notify('error', 'Please fill in all required fields');
+      return ;
+    }
+    if (this.itemForm.value.mrn === this.mrnPrefix) {
+      this.notifierService.notify('error', 'Please enter a valid MRN');
       return ;
     }
     const filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
