@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
 import { ClarityModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom, throwError } from 'rxjs';
 import { NotifierService } from 'gramli-angular-notifier';
 import { InstanceControllerService } from 'src/app/backend-api/service-registry';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -134,21 +134,28 @@ export class ListViewComponent {
   deleteData = async (itemType: ItemType, item: any): Promise<any> => {
     const id = item.mrn;
     if (itemType === ItemType.Device) {
-      await firstValueFrom(this.deviceService.deleteDevice(this.orgMrn, id));
-    } else if (itemType === ItemType.Organization) {
-      await firstValueFrom(this.organizationService.deleteOrg(id));
+      return this.deviceService.deleteDevice(this.orgMrn, id).pipe(
+        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
+    } else if (itemType === ItemType.Organization || itemType === ItemType.OrgCandidate) {
+      return this.organizationService.deleteOrg(id).pipe(
+        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
     } else if (itemType === ItemType.User) {
-      await firstValueFrom(this.userService.deleteUser(this.orgMrn, id));
+      return this.userService.deleteUser(this.orgMrn, id).pipe(
+        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
     } else if (itemType === ItemType.Service) {
       if (item.instanceVersion) {
-        await firstValueFrom(this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion));
+        return this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion).pipe(
+          catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
       } else {
-        await firstValueFrom(this.serviceService.deleteService1(this.orgMrn, id));
+        return this.serviceService.deleteService1(this.orgMrn, id).pipe(
+          catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
       }
     } else if (itemType === ItemType.Vessel) {
-      await firstValueFrom(this.vesselService.deleteVessel(this.orgMrn, id));
+      return this.vesselService.deleteVessel(this.orgMrn, id).pipe(
+        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
     } else if (itemType === ItemType.Role) {
-      await firstValueFrom(this.roleService.deleteRole(this.orgMrn, parseInt(item.id)));
+      return this.roleService.deleteRole(this.orgMrn, parseInt(item.id)).pipe(
+        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
     }
   }
   
@@ -161,8 +168,6 @@ export class ListViewComponent {
       await selected.forEach(async (item) => {
         await this.deleteData(this.itemType, item).then(() => {
           this.notifier.notify('success', 'success.resource.delete.done');
-        }).catch((err) => {
-          this.notifier.notify('error', 'success.resource.delete');
         });
         
         if (this.exTable?.expanded) {
