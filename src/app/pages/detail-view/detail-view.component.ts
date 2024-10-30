@@ -69,12 +69,11 @@ export class DetailViewComponent {
         } else {
           this.loadItem(this.orgMrn);
         }
+        this.authService.hasPermission(this.itemType).then((hasPermission) => {
+          this.hasAdminPermission = hasPermission;
+        });
       }
       );
-    });
-
-    this.authService.hasPermission(this.itemType).then((hasPermission) => {
-      this.hasAdminPermission = hasPermission;
     });
   }
 
