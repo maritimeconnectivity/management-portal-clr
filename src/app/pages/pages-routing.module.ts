@@ -43,6 +43,10 @@ const routes: Routes = [
       component: DetailViewComponent,
     },
     {
+      path: 'ir/orgcandidate',
+      component: ListViewComponent,
+    },
+    {
       path: 'ir/device',
       component: ListViewComponent,
     },

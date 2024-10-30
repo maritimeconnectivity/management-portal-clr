@@ -44,6 +44,7 @@ export class ItemViewComponent {
   @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRefresh: EventEmitter<any> = new EventEmitter<any>();
+  @Output() onApprove: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDownloadCert: EventEmitter<any[]> = new EventEmitter<any[]>();
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
   @ViewChild('revokeModal', { static: true }) revokeModal: ClrModal | undefined;
@@ -138,6 +139,10 @@ export class ItemViewComponent {
 
   migrate = () => {
     this.onMigrate.emit(this.newServiceMrn);
+  }
+
+  approve = () => {
+    this.onApprove.emit(this.item);
   }
 
   deleteItem = () => {

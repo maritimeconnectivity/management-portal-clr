@@ -20,7 +20,6 @@
       </div>
       <div class="login-body">
         <section class="title">
-          <div class="welcome">Welcome to</div>
           {{ 'landing.title.serviceName' | translate }}
           <div class="hint">{{environmentName}} {{ 'landing.title.environmentName' | translate }}</div>
         </section>
@@ -102,12 +101,22 @@
         @if(!agreed) {
             <p>You need to agree the terms of use.</p>
         } @else if(agreed && !submitted) {
+            @if (submissionFailed) {
+                <clr-alert [clrAlertType]="'danger'">
+                    <clr-alert-item>
+                      <span class="alert-text">Something went wrong. If you have this message consistently please contact to {{adminEmail}}.</span>
+                    </clr-alert-item>
+                    <clr-alert-item>
+                        <span class="alert-text">ERROR: {{errMessage}}</span>
+                    </clr-alert-item>
+                </clr-alert>
+            }
             <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
             [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)"/>
         } @else {
             <clr-alert [clrAlertType]="'success'">
                 <clr-alert-item>
-                  <span class="alert-text">Data successfully submitted.</span>
+                    <span class="alert-text">Data successfully submitted.</span>
                 </clr-alert-item>
             </clr-alert>
         }

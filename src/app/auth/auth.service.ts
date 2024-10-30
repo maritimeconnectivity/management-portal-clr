@@ -57,7 +57,6 @@ export class AuthService {
       if (!this.keycloakService.isLoggedIn())
         resolve(false);
       this.getUserPermission().then((permission) => {
-        console.log(hasAdminPermissionInMIR(permission, AuthPermission.OrgAdmin));
         if (hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin)) { // super admin
           resolve(true);
         } else if (context === ItemType.User) {

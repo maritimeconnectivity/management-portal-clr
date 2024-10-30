@@ -1,28 +1,36 @@
 <clr-vertical-nav [clrVerticalNavCollapsible]="false">
-    <ng-container *ngFor="let group of navGroups">
-        <clr-vertical-nav-group *ngIf="group.children; else singleLink" routerLinkActive="active">
-          <cds-icon [attr.shape]="group.icon" clrVerticalNavIcon></cds-icon>
-          {{ group.title | translate }}
-          <clr-vertical-nav-group-children>
-            @for (item of group.children; track item) {
-              @if (item.title === 'separator') {
-                <div class="nav-divider"></div>
-              } @else if (item.link) {
-                <a clrVerticalNavLink [routerLink]="item.link" routerLinkActive="active">
-                    {{ item.title | translate }}
-                </a>
-              } @else {
-                <div class="nav-header">{{item.title}}</div>
-              }
+  <ng-container *ngFor="let group of navGroups">
+    <clr-vertical-nav-group *ngIf="group.children; else singleLink" routerLinkActive="active">
+      <cds-icon [attr.shape]="group.icon" clrVerticalNavIcon></cds-icon>
+      {{ group.title | translate }}
+      <clr-vertical-nav-group-children>
+        @for (item of group.children; track item) {
+        @if (item.title === 'separator') {
+        <div class="nav-divider"></div>
+        } @else if (item.link) {
+          @if (item.forSiteAdmin) {
+            @if (isSiteAdmin) {
+              <a clrVerticalNavLink [routerLink]="item.link" routerLinkActive="active">
+                {{ item.title | translate }}
+              </a>
             }
-            <div class="nav-divider"></div>
-          </clr-vertical-nav-group-children>
-        </clr-vertical-nav-group>
-        <ng-template #singleLink>
-          <a clrVerticalNavLink [routerLink]="group.link" routerLinkActive="active">
-            <cds-icon [attr.shape]="group.icon" clrVerticalNavIcon></cds-icon>
-            {{ group.title | translate }}
-          </a>
-        </ng-template>
-      </ng-container>
-  </clr-vertical-nav>
+          } @else {
+            <a clrVerticalNavLink [routerLink]="item.link" routerLinkActive="active">
+              {{ item.title | translate }}
+            </a>
+          }          
+        } @else {
+        <div class="nav-header">{{item.title}}</div>
+        }
+        }
+        <div class="nav-divider"></div>
+      </clr-vertical-nav-group-children>
+    </clr-vertical-nav-group>
+    <ng-template #singleLink>
+      <a clrVerticalNavLink [routerLink]="group.link" routerLinkActive="active">
+        <cds-icon [attr.shape]="group.icon" clrVerticalNavIcon></cds-icon>
+        {{ group.title | translate }}
+      </a>
+    </ng-template>
+  </ng-container>
+</clr-vertical-nav>

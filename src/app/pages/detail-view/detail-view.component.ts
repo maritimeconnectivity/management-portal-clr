@@ -83,7 +83,14 @@ export class DetailViewComponent {
         this.instanceVersion = decodeURIComponent(url.pop()?.path || "");
       }
       this.id = decodeURIComponent(url.pop()?.path || "");
-      this.itemType = url.pop()?.path as ItemType;
+
+      const itemTypePath = url.pop()?.path;
+      if (itemTypePath && Object.values(ItemType).includes(itemTypePath as ItemType)) {
+        this.itemType = itemTypePath as ItemType;
+      } else {
+        throw new Error('Invalid ItemType conversion');
+      }
+
       if (this.id === "new") {
         this.isForNew = true;
       }

@@ -62,6 +62,12 @@ export const MENU_ITEMS: any[] = [
         link: '/pages/ir/organization',
         group: 'ir',
       },
+      {
+        title: 'menu.ir.admin',
+        link: '/pages/ir/orgcandidate',
+        group: 'ir',
+        forSiteAdmin: true
+      },
     ],
   },
   {
@@ -111,38 +117,6 @@ export const MENU_ITEMS: any[] = [
     link: '/pages/about',
   },
 ];
-
-export const MIR_MENU_FOR_ADMIN = {
-  title: 'menu.ir.admin',
-  link: '/pages/ir/orgcandidate',
-};
-
-export const MIR_MENU_FOR_ORG = {
-  title: 'menu.ir.org',
-  home: true,
-  children: [
-    {
-      title: 'menu.ir.org.devices',
-      link: '/pages/ir/device',
-    },
-    {
-      title: 'menu.ir.org.services',
-      link: '/pages/ir/service',
-    },
-    {
-      title: 'menu.ir.org.users',
-      link: '/pages/ir/user',
-    },
-    {
-      title: 'menu.ir.org.vessels',
-      link: '/pages/ir/vessel',
-    },
-    {
-      title: 'menu.ir.org.roles',
-      link: '/pages/ir/role',
-    },
-  ],
-};
 
 export const MSR_MENU_FOR_ORG = {
   title: 'menu.sr.org',

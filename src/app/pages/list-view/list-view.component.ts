@@ -70,7 +70,14 @@ export class ListViewComponent {
 
   parseMyUrl = (): Promise<void> => {
     return firstValueFrom(this.route.url).then(url => {
-      this.itemType = url.pop()?.path as ItemType;
+
+      const itemTypePath = url.pop()?.path;
+      if (itemTypePath && Object.values(ItemType).includes(itemTypePath as ItemType)) {
+        this.itemType = itemTypePath as ItemType;
+      } else {
+        throw new Error('Invalid ItemType conversion');
+      }
+
     }).catch((err) => {
       this.router.navigateByUrl('/pages/not-found');
     });
@@ -101,6 +108,10 @@ export class ListViewComponent {
         this.totalElements = page.totalElements!;
       } else if(entityType === ItemType.Role) {
         page = await firstValueFrom(this.roleService.getRoles(this.orgMrn));
+      } else if(entityType === ItemType.OrgCandidate) {
+        page = await firstValueFrom(this.organizationService.getUnapprovedOrganizations(pageNumber, elementsPerPage));
+        this.totalPages = page.totalPages!;
+        this.totalElements = page.totalElements!;
       } else {
         return [];
       }
@@ -111,11 +122,11 @@ export class ListViewComponent {
     }
   }
 
-  filterVisibleForList = (device: {[key: string]: any}) => {
-    return Object.keys(device)
-      .filter(key => device[key]?.visibleFrom?.includes('list'))
+  filterVisibleForList = (item: {[key: string]: any}) => {
+    return Object.keys(item)
+      .filter(key => item[key]?.visibleFrom?.includes('list'))
       .reduce((result, key) => {
-        result[key] = device[key];
+        result[key] = item[key];
         return result;
       }, {} as {[key: string]: any});
   };
@@ -219,6 +230,17 @@ export class ListViewComponent {
       },
       err => {
         this.notifier.notify('error', 'success.resource.migrate');
+      });
+  }
+
+  approve = (selectedItem: any) => {
+    this.organizationService.approveOrganization(selectedItem.mrn).subscribe(
+      (res) => {
+        this.notifier.notify('success', 'success.resource.approve');
+        this.router.navigateByUrl('/pages/ir/organization');
+      },
+      err => {
+        this.notifier.notify('error', 'success.resource.approve');
       });
   }
 }

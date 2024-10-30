@@ -11,6 +11,8 @@ import { addLangs, changeLang, getLang, loadLang } from 'src/app/common/translat
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { ItemType } from 'src/app/common/menuType';
+import { Organization, OrganizationControllerService } from 'src/app/backend-api/identity-registry';
+import { catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -50,18 +52,23 @@ export class LoginComponent {
   regInputOpened = false;
   agreed = false;
   submitted = false;
+  submissionFailed = false;
   nextText = "Agree";
   isForNew = true;
   itemType = ItemType.OrgCandidate;
-  item: { email?: string } = {};
   mrnPrefix = 'urn:mrn:mcp:org:'+AppConfig.IDP_NAMESPACE+':';
+  item: Organization = {name: "", email: "", address: "", country: "", mrn: "", url: ""};
   contactEmail = "";
+  adminEmail = AppConfig.MP_CONTACT;
+  errMessage = "";
   
   constructor(private authService: AuthService,
     public translate: TranslateService,
+    private organizationService: OrganizationControllerService,
   ) {
     addLangs(translate);
     this.loadLang();
+    this.item.mrn = this.mrnPrefix;
   }
   
   ngOnInit(): void {
@@ -116,17 +123,30 @@ export class LoginComponent {
     this.wizard?.open();
     this.agreed = false;
     this.submitted = false;
-    this.item = {};
+    this.item = {name: "", email: "", address: "", country: "", mrn: this.mrnPrefix, url: ""};
   }
 
   agree(){
     this.agreed = true;
   }
 
-  submit(item: { email?: string }) {
+  submit(item: Organization) {
     console.log(item);
-    this.contactEmail = item["email"] || "";
-    this.submitted = true;
+    this.organizationService.applyOrganization(item).pipe(
+      catchError(err => {
+        return throwError(err);
+      })
+    ).subscribe(
+      res => {
+        this.contactEmail = item.email || "";
+        this.submitted = true;
+      },
+      err => {
+        this.submissionFailed = true;
+        this.errMessage = err.error.message;
+        console.log(err);
+      }
+    );    
   }
 
   doCustomClick(buttonType: string): void {

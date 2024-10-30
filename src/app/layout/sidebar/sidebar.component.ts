@@ -13,6 +13,7 @@ ClarityIcons.addIcons(helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon);
 export class SidebarComponent {
   navGroups = MENU_ITEMS;
   authService: AuthService;
+  isSiteAdmin = false;
   constructor(
     translate: TranslateService,
     authService: AuthService
@@ -23,5 +24,14 @@ export class SidebarComponent {
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en-GB');
     this.authService = authService;
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.authService.getUserRoles().then((roles) => {
+      console.log(roles);
+      this.isSiteAdmin = roles.includes('ROLE_SITE_ADMIN');
+    });
   }
 }
