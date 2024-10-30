@@ -16,6 +16,9 @@ export class ItemtypeOverviewComponent {
   @Input() itemType: string = '';
   items: any[] = [];
   certificates: any[] = [];
+  numberOfRevoked: number = 0;
+  numberOfExpired: number = 0;
+  numberOfActive: number = 0;
   constructor(
     private deviceService: DeviceControllerService,
     private userService: UserControllerService,
@@ -35,12 +38,17 @@ export class ItemtypeOverviewComponent {
     this.items = [];
     this.certificates = [];
 
+    const revokedCertFilter = (cert: any) => cert.revoked === true;
+    const outdatedCertFilter = (cert: any) => cert.revoked === false && cert.end < new Date().getTime();
     if (this.itemType === ItemType.Device) {
       this.deviceService.getOrganizationDevices(this.orgMrn).subscribe((page) => {
         page.content!.forEach(element => {
           this.items = this.items.concat(element);
-          if (element.certificates) {
-            this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false));
+          if (element.certificates) {;
+            this.certificates = this.certificates.concat(element.certificates.filter((cert:any) => cert.revoked === false).map((cert: any) => ({...cert, mrn: element.mrn})));
+            this.numberOfRevoked = this.certificates.filter(revokedCertFilter).length;
+            this.numberOfExpired = this.certificates.filter(outdatedCertFilter).length;
+            this.numberOfActive = this.certificates.length - this.numberOfRevoked - this.numberOfExpired;
           }
         });
       });
@@ -49,7 +57,10 @@ export class ItemtypeOverviewComponent {
         page.content!.forEach(element => {
           this.items = this.items.concat(element);
           if (element.certificates) {
-            this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false));
+            this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false).map((cert: any) => ({...cert, mrn: element.mrn})));
+            this.numberOfRevoked = this.certificates.filter(revokedCertFilter).length;
+            this.numberOfExpired = this.certificates.filter(outdatedCertFilter).length;
+            this.numberOfActive = this.certificates.length - this.numberOfRevoked - this.numberOfExpired;
           }
         });
       });
@@ -58,7 +69,10 @@ export class ItemtypeOverviewComponent {
         page.content!.forEach(element => {
           this.items = this.items.concat(element);
           if (element.certificates) {
-            this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false));
+            this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false).map((cert: any) => ({...cert, mrn: element.mrn})));
+            this.numberOfRevoked = this.certificates.filter(revokedCertFilter).length;
+            this.numberOfExpired = this.certificates.filter(outdatedCertFilter).length;
+            this.numberOfActive = this.certificates.length - this.numberOfRevoked - this.numberOfExpired;
           }
         });
       });
@@ -67,7 +81,10 @@ export class ItemtypeOverviewComponent {
         page.content!.forEach(element => {
           this.items = this.items.concat(element);
           if (element.certificates) {
-            this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false));
+            this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false).map((cert: any) => ({...cert, mrn: element.mrn})));
+            this.numberOfRevoked = this.certificates.filter(revokedCertFilter).length;
+            this.numberOfExpired = this.certificates.filter(outdatedCertFilter).length;
+            this.numberOfActive = this.certificates.length - this.numberOfRevoked - this.numberOfExpired;
           }
         });
       });
