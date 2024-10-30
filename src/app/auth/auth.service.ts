@@ -52,11 +52,12 @@ export class AuthService {
     });
   }
 
-  public async hasPermission(context: ItemType): Promise<boolean> {
+  public async hasPermission(context: ItemType, forMyOrg: boolean = false): Promise<boolean> {
     return new Promise<boolean>(async (resolve, reject) => {
       if (!this.keycloakService.isLoggedIn())
         resolve(false);
       this.getUserPermission().then((permission) => {
+        console.log(hasAdminPermissionInMIR(permission, AuthPermission.OrgAdmin));
         if (hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin)) { // super admin
           resolve(true);
         } else if (context === ItemType.User) {
@@ -69,8 +70,11 @@ export class AuthService {
           resolve(hasAdminPermissionInMIR(permission, AuthPermission.MMSAdmin));
         } else if (context === ItemType.Service) {
           resolve(hasAdminPermissionInMIR(permission, AuthPermission.ServiceAdmin));
-        } else if (context === ItemType.Organization || context === ItemType.Role) {
+        } else if (forMyOrg && context === ItemType.Organization || context === ItemType.Role) {
+          // for my own organization management
           resolve(hasAdminPermissionInMIR(permission, AuthPermission.OrgAdmin));
+        } else if (context === ItemType.Organization) {
+          resolve(hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin));
         } else {
           resolve(false);
         }

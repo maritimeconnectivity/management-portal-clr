@@ -178,10 +178,25 @@ export class ListViewComponent {
   }
 
   edit = (selectedItem: any) => {
+    // user can edit for their own organization
+    if (this.itemType === ItemType.Organization && selectedItem.mrn === this.orgMrn) {
+      this.authService.hasPermission(this.itemType, true).then((hasPermission) => {
+        if (!hasPermission) {
+          this.notifier.notify('error', 'success.resource.no.permission');
+          return ;
+        }
+        this.moveToEditPage(selectedItem);
+      });
+      return ;
+    }
     if (!this.hasAdminPermission) {
       this.notifier.notify('error', 'success.resource.no.permission');
       return ;
     } 
+    this.moveToEditPage(selectedItem);
+  }
+
+  moveToEditPage = (selectedItem: any) => {
     if (this.itemType === ItemType.Role) {
       this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.id);
     } else if (this.itemType === ItemType.Service) {
