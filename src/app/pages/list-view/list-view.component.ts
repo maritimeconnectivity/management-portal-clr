@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
 import { ClarityModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
-import { catchError, firstValueFrom, throwError } from 'rxjs';
+import { catchError, firstValueFrom, Observable, throwError } from 'rxjs';
 import { NotifierService } from 'gramli-angular-notifier';
 import { InstanceControllerService } from 'src/app/backend-api/service-registry';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -58,7 +58,7 @@ export class ListViewComponent {
         this.orgMrn = orgMrn;
         this.setLabel();
         this.authService.hasPermission(this.itemType).then((hasPermission) => {
-          this.hasAdminPermission = hasPermission;
+          this.hasAdminPermission = true;
         });
       });
     });
@@ -131,52 +131,58 @@ export class ListViewComponent {
       }, {} as {[key: string]: any});
   };
 
-  deleteData = async (itemType: ItemType, item: any): Promise<any> => {
+  deleteData = (itemType: ItemType, item: any): Observable<any> => {
     const id = item.mrn;
+
     if (itemType === ItemType.Device) {
-      return this.deviceService.deleteDevice(this.orgMrn, id).pipe(
-        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
+      return this.deviceService.deleteDevice(this.orgMrn, id);
     } else if (itemType === ItemType.Organization || itemType === ItemType.OrgCandidate) {
-      return this.organizationService.deleteOrg(id).pipe(
-        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
+      return this.organizationService.deleteOrg(id);
     } else if (itemType === ItemType.User) {
-      return this.userService.deleteUser(this.orgMrn, id).pipe(
-        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
+      return this.userService.deleteUser(this.orgMrn, id);
     } else if (itemType === ItemType.Service) {
       if (item.instanceVersion) {
-        return this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion).pipe(
-          catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
+        return this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion);
       } else {
-        return this.serviceService.deleteService1(this.orgMrn, id).pipe(
-          catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
+        return this.serviceService.deleteService1(this.orgMrn, id);
       }
     } else if (itemType === ItemType.Vessel) {
-      return this.vesselService.deleteVessel(this.orgMrn, id).pipe(
-        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
+      return this.vesselService.deleteVessel(this.orgMrn, id);
     } else if (itemType === ItemType.Role) {
-      return this.roleService.deleteRole(this.orgMrn, parseInt(item.id)).pipe(
-        catchError(err => throwError(err))).subscribe(res=> true, err => this.notifier.notify('error', 'success.resource.delete' + err.error.message));
+      return this.roleService.deleteRole(this.orgMrn, parseInt(item.id));
     }
+    return throwError('Invalid item type');
   }
   
   onDelete = async (selected: any[]) => {
+
+    const handleError = (err: any) => {
+      if (err.status === 403) {
+        this.notifier.notify('error', 'You do not have permission to delete this resource.');
+      } else {
+        this.notifier.notify('error', 'Failed to delete resource: ' + (err.error?.message || err.message));
+      }
+      throw err;
+    };
+
     if (selected.length === 0) {
       this.notifier.notify('error', 'success.resource.delete.no.selected');
     } else if (!this.hasAdminPermission) {
       this.notifier.notify('error', 'success.resource.no.permission');
     } else {
       await selected.forEach(async (item) => {
-        await this.deleteData(this.itemType, item).then(() => {
-          this.notifier.notify('success', 'success.resource.delete.done');
-        });
-        
-        if (this.exTable?.expanded) {
-          // when delete has done in item view
-          this.refreshData();
-          this.exTable?.back();
-        } else {
-          this.refreshData();
-        }
+        await this.deleteData(this.itemType, item).pipe(
+          catchError(err => {
+            handleError(err);
+            return throwError(err);
+          })).subscribe(res=> {
+            this.notifier.notify('success', 'success.resource.delete.done');
+            this.refreshData();
+            if (this.exTable?.expanded) {
+              // when delete has done in item view
+              this.exTable?.back();
+            }
+          });
       });
     }
   }

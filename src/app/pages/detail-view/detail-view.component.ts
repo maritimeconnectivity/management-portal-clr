@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'gramli-angular-notifier';
 import { catchError, firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Device, DeviceControllerService, MMS, MmsControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
+import { Device, DeviceControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, ServicePatch, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
 import { formatVesselToUpload } from 'src/app/common/dataformatter';
 import { migrateVesselAttributes } from 'src/app/common/filterObject';
@@ -155,7 +155,6 @@ export class DetailViewComponent {
   }
 
   submitDataToBackend(body: object, id?: string) {
-    console.log(body);
     this.isLoading = true;
     if (id === "new") {
       this.registerData(this.itemType, body, this.orgMrn).pipe(
@@ -170,7 +169,7 @@ export class DetailViewComponent {
         },
         err => {
           this.notifierService.notify('error',
-            this.translate.instant('error.resource.creationFailed') + err.message);
+            this.translate.instant('error.resource.creationFailed') + err.error.message);
           this.isLoading = false;
         },
         () => this.isLoading = false
@@ -189,7 +188,7 @@ export class DetailViewComponent {
         },
         err => {
           this.notifierService.notify('error',
-            this.translate.instant('error.resource.creationFailed') + err.message);
+            this.translate.instant('error.resource.creationFailed') + err.error.message);
           this.isLoading = false;
         }
       );
@@ -286,7 +285,15 @@ export class DetailViewComponent {
   }
 
   migrate = (newServiceMrn: string) => {
-    console.log(newServiceMrn);
+    this.serviceService.migrateServiceMrn({mrn: newServiceMrn} as ServicePatch, this.orgMrn, this.id, this.instanceVersion).subscribe(
+      (res) => {
+        // Handle successful response, e.g., process the certificate if needed
+        this.notifier.notify('success', 'success.resource.migrate');
+        this.loadItem(this.orgMrn);
+      },
+      err => {
+        this.notifier.notify('error', 'success.resource.migrate');
+      });
   }
 
   deleteItem = () => {
@@ -305,7 +312,7 @@ export class DetailViewComponent {
       },
       err => {
         this.notifierService.notify('error',
-          this.translate.instant('error.resource.deletionFailed') + err.message);
+          this.translate.instant('error.resource.deletionFailed') + err.error.message);
       }
     );
   }

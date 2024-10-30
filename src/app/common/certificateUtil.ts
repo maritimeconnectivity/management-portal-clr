@@ -44,7 +44,7 @@ export const issueNewWithLocalKeys = async (
             if (err.status === 201) {
               resolve(err.error.text); // Return the certificate text on 201 status
             } else {
-              console.error('Error when trying to issue new certificate:', err.message);
+              console.error('Error when trying to issue new certificate:', err.error.message);
               reject(err); // Reject the promise in case of error
             }
           }
