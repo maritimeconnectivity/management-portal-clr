@@ -222,7 +222,8 @@
             "approveOrganization": {
                 "userCreation": "The organization was approved, but user creation failed. You can go to organizations and try to create the user again later",
                 "roleCreation": "The organization was approved, but role creation failed",
-                "reject": "The organization is not approved"
+                "reject": "The organization is not approved",
+                "general": "There was an error in approving the organization"
             },
             "noUser": "No user data",
             "fetchOrgInfo": "Error in fetching organization information",
