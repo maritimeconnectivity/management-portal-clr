@@ -128,6 +128,10 @@ export class DetailViewComponent {
   }
 
   edit = (item: any) => {
+    if (!this.hasAdminPermission) {
+      this.notifier.notify('error', 'success.resource.no.permission');
+      return ;
+    }
     this.isEditing = true;
   }
 
@@ -136,6 +140,10 @@ export class DetailViewComponent {
   }
 
   submit = (item: any) => {
+    if (!this.hasAdminPermission) {
+      this.notifier.notify('error', 'success.resource.no.permission');
+      return ;
+    }
     this.submitDataToBackend(item, this.id);
   }
 
@@ -264,6 +272,10 @@ export class DetailViewComponent {
   }
 
   deleteItem = () => {
+    if (!this.hasAdminPermission) {
+      this.notifier.notify('error', 'success.resource.no.permission');
+      return ;
+    } 
     this.deleteData(this.itemType, this.orgMrn, this.id, this.instanceVersion, this.numberId).subscribe(
       res => {
         this.notifier.notify('success', 'success.resource.delete');

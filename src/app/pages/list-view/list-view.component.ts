@@ -143,7 +143,9 @@ export class ListViewComponent {
   
   onDelete = async (selected: any[]) => {
     if (selected.length === 0) {
-      this.notifier.notify('error', 'success.resource.delete.done');
+      this.notifier.notify('error', 'success.resource.delete.no.selected');
+    } else if (!this.hasAdminPermission) {
+      this.notifier.notify('error', 'success.resource.no.permission');
     } else {
       await selected.forEach(async (item) => {
         await this.deleteData(this.itemType, item).then(() => {
@@ -164,7 +166,11 @@ export class ListViewComponent {
   }
 
   onAdd = () => {
-    this.router.navigateByUrl('/pages/ir/'+this.itemType+'/new');
+    if (!this.hasAdminPermission) {
+      this.notifier.notify('error', 'success.resource.no.permission');
+    } else {
+      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/new');
+    }
   }
 
   refreshData = () => {
@@ -172,6 +178,10 @@ export class ListViewComponent {
   }
 
   edit = (selectedItem: any) => {
+    if (!this.hasAdminPermission) {
+      this.notifier.notify('error', 'success.resource.no.permission');
+      return ;
+    } 
     if (this.itemType === ItemType.Role) {
       this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.id);
     } else if (this.itemType === ItemType.Service) {

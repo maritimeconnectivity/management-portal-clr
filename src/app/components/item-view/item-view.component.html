@@ -56,6 +56,7 @@
             </div>
             <div class="card-footer">
                 @if (itemType === 'service' && instanceVersion) {
+                    
                     <button class="btn btn-primary" (click)="clickMigrateBtn()">Migrate</button>
                 } @else {
                     <button class="btn btn-primary" (click)="edit()">Edit</button>
@@ -214,7 +215,7 @@
                 <div class="clr-row">
                     <form class="clr-form">
                         <div class="clr-form-control">
-                          <label for="basic" class="clr-control-label">New MRN for service</label>
+                          <label for="basic" class="clr-control-label">Recommended new MRN for your service</label>
                           <div class="clr-control-container">
                             <div class="clr-input-wrapper">
                               <input type="text" id="basic" placeholder="Enter value here" class="clr-input" [style.width.px]=400 [value]="newServiceMrn" />
