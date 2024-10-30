@@ -40,7 +40,7 @@
                 </clr-select-container>
               } @else if (menu.key === 'permissions'){
                 <clr-select-container>
-                  <label>{{menu.value.title}} {{menu.key}}</label>                  
+                  <label>{{menu.value.title}}</label>                  
                     <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
                       <option *ngFor="let role of roles" [value]="role.permission">{{ role.permission }}</option>
                     </select>
