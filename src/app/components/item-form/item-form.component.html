@@ -113,7 +113,9 @@
       <div class="card-footer">
         <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
         <button class="btn btn-warning" (click)="resetForm()">Reset</button>
-        <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+        @if (!isForNew){
+          <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+        }        
       </div>
     </div>
   </div>

@@ -26,7 +26,7 @@
         </section>
         <div class="login-group">
           <button class="btn btn-primary" (click)="logIn()">{{ 'landing.button.login' | translate }}</button>
-          <button class="btn btn-warning-outline" (click)="openRegInputModal()">{{ 'landing.button.register' | translate }}</button>
+          <button class="btn btn-warning-outline" (click)="openWizard()">{{ 'landing.button.register' | translate }}</button>
           <a href="javascript://" class="signup" (click)="openRegInfoModal()">{{ 'landing.button.registerInfo' | translate }}</a>
         </div>
       </div>
@@ -84,16 +84,45 @@
     
   </clr-modal>
 
-  <clr-modal #regInputModal [(clrModalOpen)]="regInputOpened" [clrModalSize]="size">
-    <div class="modal-title">
-        {{ 'register.title' | translate }}{{environmentName}}
-    </div>
-    <div class="modal-body">
-        dfef
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline" (click)="regInputOpened = false">Cancel</button>
-      <button type="button" class="btn btn-primary" (click)="regInputOpened = false">Ok</button>
-    </div>
-    
-  </clr-modal>
+  <clr-wizard #wizard [(clrWizardOpen)]="wizardOpen" clrWizardSize="xl">
+    <clr-wizard-title>{{ 'register.title' | translate }}{{environmentName}}</clr-wizard-title>
+  
+    <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+    <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+    <clr-wizard-button (click)="agree()" [type]="'next'">{{nextText}}</clr-wizard-button>
+    <clr-wizard-button [type]="'finish'">Finish</clr-wizard-button>
+  
+    <clr-wizard-page>
+      <ng-template clrPageTitle>{{ 'register.termsOfUse.title' | translate }}</ng-template>
+      <p>{{ termsOfUse }}</p>
+    </clr-wizard-page>
+  
+    <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
+        <ng-template clrPageTitle>{{ 'register.enterInfo.title' | translate }}</ng-template>
+        @if(!agreed) {
+            <p>You need to agree the terms of use.</p>
+        } @else if(agreed && !submitted) {
+            <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
+            [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)"/>
+        } @else {
+            <clr-alert [clrAlertType]="'success'">
+                <clr-alert-item>
+                  <span class="alert-text">Data successfully submitted.</span>
+                </clr-alert-item>
+            </clr-alert>
+        }
+        <ng-template clrPageButtons>
+            <clr-wizard-button [type]="'custom-previous'">Back</clr-wizard-button>
+            @if (submitted) {
+                <clr-wizard-button [type]="'custom-next'">Next</clr-wizard-button>
+            } @else {
+                <button class="btn btn-primary" disabled>Next</button>
+            }
+          </ng-template>
+    </clr-wizard-page>
+  
+    <clr-wizard-page>
+      <ng-template clrPageTitle>{{ 'register.summary.title' | translate }}</ng-template>
+      <p>{{ 'register.summary.content' | translate }}{{contactEmail}}.</p>
+    </clr-wizard-page>
+  </clr-wizard>

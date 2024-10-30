@@ -51,9 +51,12 @@
         "termsOfUse": {
             "title": "Terms of use"
         },
-        "submitted": {
-            "title": "Your information has been successfully submitted!",
-            "content": "MIR Administrator will process the information and be in contact with you."
+        "enterInfo" : {
+            "title": "Your organization information"
+        },
+        "summary": {
+            "title": "Submission completed",
+            "content": "Your information has been successfully submitted! Our MIR administrator will review your information and reach out to you at the provided email: "
         }
     },
     "ir": {

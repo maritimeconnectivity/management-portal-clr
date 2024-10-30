@@ -2,13 +2,15 @@ import { Component, Injectable, ViewChild } from '@angular/core';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthService } from 'src/app/auth/auth.service';
 import {NgIf} from "@angular/common";
-import { ClrDropdownModule, ClrModal, ClrModalModule, ClrSelectModule } from '@clr/angular';
+import { ClrAlert, ClrAlertModule, ClrDropdownModule, ClrModal, ClrModalModule, ClrSelectModule, ClrWizard, ClrWizardModule } from '@clr/angular';
 import { AppConfig } from 'src/app/app.config';
 import { FormsModule } from '@angular/forms';
 import { languages } from 'src/app/common/languages';
 import { TranslateService } from '@ngx-translate/core';
 import { addLangs, changeLang, getLang, loadLang } from 'src/app/common/translateHelper';
 import { SharedModule } from 'src/app/common/shared/shared.module';
+import { ComponentsModule } from 'src/app/components/components.module';
+import { ItemType } from 'src/app/common/menuType';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +22,9 @@ import { SharedModule } from 'src/app/common/shared/shared.module';
         SharedModule,
         ClrModalModule,
         ClrDropdownModule,
+        ComponentsModule,
+        ClrAlertModule,
+        ClrWizardModule
     ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -27,8 +32,7 @@ import { SharedModule } from 'src/app/common/shared/shared.module';
 
 export class LoginComponent {
   @ViewChild('regInfoModal', { static: true }) regInfoModal: ClrModal | undefined;
-  @ViewChild('regInputModal', { static: true }) regInputModal: ClrModal | undefined;
-  
+  @ViewChild('wizard', { static: true }) wizard: ClrWizard | undefined;
   langs = languages;
   footerLink = AppConfig.FOOTER_LINK;
   footerName = AppConfig.FOOTER_NAME;
@@ -39,10 +43,19 @@ export class LoginComponent {
   loggedIn = false;
   version = AppConfig.MP_VERSION;
   logo_img = AppConfig.LOGO_IMG;
-  
+  wizardOpen = false;
+  termsOfUse = AppConfig.TERMS_OF_USE;
   size = "lg";
   regInfoOpened = false;
   regInputOpened = false;
+  agreed = false;
+  submitted = false;
+  nextText = "Agree";
+  isForNew = true;
+  itemType = ItemType.OrgCandidate;
+  item: { email?: string } = {};
+  mrnPrefix = 'urn:mrn:mcp:org:'+AppConfig.IDP_NAMESPACE+':';
+  contactEmail = "";
   
   constructor(private authService: AuthService,
     public translate: TranslateService,
@@ -98,7 +111,31 @@ export class LoginComponent {
     this.regInfoModal?.open();
   }
 
-  openRegInputModal() {
-    this.regInputModal?.open();
+  openWizard(){
+    this.wizard?.reset();
+    this.wizard?.open();
+    this.agreed = false;
+    this.submitted = false;
+    this.item = {};
+  }
+
+  agree(){
+    this.agreed = true;
+  }
+
+  submit(item: { email?: string }) {
+    console.log(item);
+    this.contactEmail = item["email"] || "";
+    this.submitted = true;
+  }
+
+  doCustomClick(buttonType: string): void {
+    if ('custom-next' === buttonType) {
+      this.wizard?.next();
+    }
+
+    if ('custom-previous' === buttonType) {
+      this.wizard?.previous();
+    }
   }
 }
