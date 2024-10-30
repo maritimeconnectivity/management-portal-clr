@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ClarityModule } from '@clr/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'gramli-angular-notifier';
-import { firstValueFrom, Observable } from 'rxjs';
+import { catchError, firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Device, DeviceControllerService, MMS, MmsControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
@@ -51,7 +51,7 @@ export class DetailViewComponent {
     private notifierService: NotifierService,
     private translate: TranslateService,
     private authService: AuthService,
-  ) { 
+  ) {
     this.notifier = notifierService;
     translate.use('en-GB');
   }
@@ -65,7 +65,7 @@ export class DetailViewComponent {
         if (this.isForNew) {
           this.mrnPrefix = getMrnPrefixFromOrgMrn(orgMrn, this.itemType);
           this.isEditing = true;
-          this.item = {mrn: this.mrnPrefix};        
+          this.item = { mrn: this.mrnPrefix };
         } else {
           this.loadItem(this.orgMrn);
         }
@@ -92,8 +92,8 @@ export class DetailViewComponent {
       }
     });
   }
-  
-  fetchData = async (entityType: ItemType, orgMrn:string, id: string): Promise<any | undefined> => {
+
+  fetchData = async (entityType: ItemType, orgMrn: string, id: string): Promise<any | undefined> => {
     try {
       let item;
       if (entityType === ItemType.Device) {
@@ -130,7 +130,7 @@ export class DetailViewComponent {
   edit = (item: any) => {
     if (!this.hasAdminPermission) {
       this.notifier.notify('error', 'success.resource.no.permission');
-      return ;
+      return;
     }
     this.isEditing = true;
   }
@@ -142,28 +142,38 @@ export class DetailViewComponent {
   submit = (item: any) => {
     if (!this.hasAdminPermission) {
       this.notifier.notify('error', 'success.resource.no.permission');
-      return ;
+      return;
     }
     this.submitDataToBackend(item, this.id);
   }
 
   submitDataToBackend(body: object, id?: string) {
+    console.log(body);
     this.isLoading = true;
     if (id === "new") {
-      this.registerData(this.itemType, body, this.orgMrn).subscribe(
+      this.registerData(this.itemType, body, this.orgMrn).pipe(
+        catchError(err => {
+          return throwError(err);
+        })
+      ).subscribe(
         res => {
           this.notifier.notify('success', "A new " + this.itemType + " " + this.translate.instant('success.resource.create'));
           this.isLoading = false;
-          this.router.navigateByUrl('/pages/ir/'+this.itemType);
+          this.router.navigateByUrl('/pages/ir/' + this.itemType);
         },
         err => {
           this.notifierService.notify('error',
-            this.translate.instant('error.resource.creationFailed') + err.error.message);
+            this.translate.instant('error.resource.creationFailed') + err.message);
           this.isLoading = false;
-        }
+        },
+        () => this.isLoading = false
       );
     } else if (id) {
-      this.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).subscribe(
+      this.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).pipe(
+        catchError(err => {
+          return throwError(err);
+        })
+      ).subscribe(
         res => {
           this.notifier.notify('success', 'success.resource.update');
           this.isLoading = false;
@@ -172,9 +182,10 @@ export class DetailViewComponent {
         },
         err => {
           this.notifierService.notify('error',
-            this.translate.instant('error.resource.creationFailed') + err.error.message);
-            this.isLoading = false;
-        });
+            this.translate.instant('error.resource.creationFailed') + err.message);
+          this.isLoading = false;
+        }
+      );
     }
   }
 
@@ -215,7 +226,7 @@ export class DetailViewComponent {
     } else if (context === ItemType.Role) {
       return this.roleService.updateRole(body as Role, orgMrn, this.numberId);
     } else if (context === ItemType.Instance && instanceId) {
-      return this.instanceService.updateInstance(Object.assign({}, body, {id: instanceId}) as InstanceDto, instanceId);
+      return this.instanceService.updateInstance(Object.assign({}, body, { id: instanceId }) as InstanceDto, instanceId);
     }
     return new Observable();
   }
@@ -264,7 +275,7 @@ export class DetailViewComponent {
   }
 
   back = () => {
-    this.router.navigateByUrl('/pages/ir/'+this.itemType);
+    this.router.navigateByUrl('/pages/ir/' + this.itemType);
   }
 
   migrate = (newServiceMrn: string) => {
@@ -274,15 +285,20 @@ export class DetailViewComponent {
   deleteItem = () => {
     if (!this.hasAdminPermission) {
       this.notifier.notify('error', 'success.resource.no.permission');
-      return ;
-    } 
-    this.deleteData(this.itemType, this.orgMrn, this.id, this.instanceVersion, this.numberId).subscribe(
+      return;
+    }
+    this.deleteData(this.itemType, this.orgMrn, this.id, this.instanceVersion, this.numberId).pipe(
+      catchError(err => {
+        return throwError(err);
+      })
+    ).subscribe(
       res => {
         this.notifier.notify('success', 'success.resource.delete');
-        this.router.navigateByUrl('/pages/ir/'+this.itemType);
+        this.router.navigateByUrl('/pages/ir/' + this.itemType);
       },
       err => {
-        this.notifier.notify('error', 'success.resource.delete');
+        this.notifierService.notify('error',
+          this.translate.instant('error.resource.deletionFailed') + err.message);
       }
     );
   }
