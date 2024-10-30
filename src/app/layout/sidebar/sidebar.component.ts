@@ -3,6 +3,7 @@ import { MENU_ITEMS } from 'src/app/pages/pages-menu';
 import { TranslateService } from '@ngx-translate/core';
 import { ClarityIcons, helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon } from '@cds/core/icon';
 import { AuthService } from 'src/app/auth/auth.service';
+import { AppConfig } from 'src/app/app.config';
 ClarityIcons.addIcons(helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon);
 
 @Component({
@@ -14,6 +15,7 @@ export class SidebarComponent {
   navGroups = MENU_ITEMS;
   authService: AuthService;
   isSiteAdmin = false;
+  hasServiceRegistry = AppConfig.HAS_SERVICE_REGISTRY;
   constructor(
     translate: TranslateService,
     authService: AuthService
@@ -24,6 +26,10 @@ export class SidebarComponent {
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     translate.use('en-GB');
     this.authService = authService;
+    if (!this.hasServiceRegistry)
+    {
+      this.navGroups = this.navGroups.filter((group) => group.title !== 'menu.sr');
+    }
   }
 
   ngOnInit(): void {
