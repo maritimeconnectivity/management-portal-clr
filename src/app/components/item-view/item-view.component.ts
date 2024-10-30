@@ -159,7 +159,7 @@ export class ItemViewComponent {
 
   openCertModal = () => {
     if (this.itemType === ItemType.Service && this.instanceVersion) {
-      this.notifier.notify('error', 'You need to migrate the service first.');
+      this.notifier.notify('error', this.translate.instant('error.form.requiremigrate'));
       return ;
     }
     this.certModal?.open();
@@ -170,7 +170,7 @@ export class ItemViewComponent {
   issue = () => {
     issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser, this.instanceVersion).then((cert: CertificateBundle | undefined) => {
       this.certificateBundle = cert;
-      this.notifier.notify('success', "A new " + this.itemType + " " + this.translate.instant('success.resource.create'));
+      this.notifier.notify('success', this.translate.instant('success.resource.create'));
     });
   }
 
@@ -185,18 +185,17 @@ export class ItemViewComponent {
     selected.forEach((cert) => {
       this.certificateService.revokeCertificate(this.itemType, this.item.mrn, this.orgMrn, cert.serialNumber, certificateRevocation, this.instanceVersion)
       .subscribe((res) => {
-        this.notifier.notify('success',
-          'Certificate has been successfully revoked');
+        this.notifier.notify('success', this.translate.instant('success.certificate.revoke'));
         this.cancel();
     }, (err) => {
-      this.notifier.notify('error', 'success.resource.delete');
+      this.notifier.notify('error', this.translate.instant('error.certificate.revoke'));
     })
     });
   }
 
   clickDownloadBtn = (selected: any[]) => {
     if (selected.length === 0) {
-      this.notifier.notify('warning', 'success.resource.delete');
+      this.notifier.notify('warning', this.translate.instant('error.selection.noSelection'));
       return;
     }
     selected.forEach((certificate) => {
@@ -208,11 +207,11 @@ export class ItemViewComponent {
 
   clickRevokeBtn = (selected: any[]) => {
     if (this.itemType === ItemType.Service && this.instanceVersion) {
-      this.notifier.notify('error', 'You need to migrate the service first.');
+      this.notifier.notify('error', this.translate.instant('error.form.requiremigrate'));
       return ;
     }
     if (selected.length === 0) {
-      this.notifier.notify('warning', 'success.resource.delete');
+      this.notifier.notify('warning', this.translate.instant('error.selection.noSelection'));
       return;
     }
     this.revokeModalOpened = true;
@@ -240,7 +239,7 @@ export class ItemViewComponent {
   public download() {
     if (this.certificateBundle) {
       this.fileHelper.downloadPemCertificate(this.certificateBundle, this.itemId, this.notifier);
-      this.notifier.notify('success', 'Chosen certificate has downloaded');
+      this.notifier.notify('success', this.translate.instant('success.certificate.chosen'));
     }
   }
 

@@ -21,12 +21,13 @@ import * as JSZip from 'jszip';
 import { CertificateBundle } from '../certificateBundle';
 import { DocDto, XmlDto } from 'src/app/backend-api/service-registry';
 import { NotifierService } from 'gramli-angular-notifier';
+import { TranslateService } from '@ngx-translate/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FileHelperService {
-  constructor() {
+  constructor(private translate: TranslateService) {
 
   }
 
@@ -53,13 +54,13 @@ export class FileHelperService {
         fileSaver.saveAs(content, "Certificate_" + nameNoSpaces + ".zip");
       });
     } catch (error) {
-      notifierService.notify('error', 'Error when trying to download file - ' + error);
+      notifierService.notify('error', this.translate.instant('error.file.downloadcert') + error);
     }
   }
 
   public downloadXml(xmlFile: XmlDto, notifierService: NotifierService): void {
     if (!xmlFile) {
-      notifierService.notify('error', 'No file to download');
+      notifierService.notify('error', this.translate.instant('error.file.empty'));
       return;
     }
     let fileContent = xmlFile.content;
@@ -71,12 +72,12 @@ export class FileHelperService {
 
   public downloadDoc(docFile: DocDto, notifierService: NotifierService): void {
     if (!docFile) {
-      notifierService.notify('error', 'No file to download');
+      notifierService.notify('error', this.translate.instant('error.file.empty'));
       return;
     }
     // TODO: I belive it is wrong that "content" is an array of strings. Please be wary of this may change in the future
     if (docFile.filecontent.length > 1 && docFile.filecontent.length < 10) {
-      notifierService.notify('error', 'File from Service Registry is in the wrong format. ' + docFile.name);
+      notifierService.notify('error', this.translate.instant('error.file.wrongformat') + docFile.name);
       return;
     }
     let fileContent = docFile.filecontent.toString();
@@ -93,7 +94,7 @@ export class FileHelperService {
       let blob = new Blob([byteArray], {type: fileType});
       fileSaver.saveAs(blob, fileName);
     } catch (error) {
-      notifierService.notify('error', 'Error when trying to download file - ' + error);
+      notifierService.notify('error', this.translate.instant('error.file.downloaderror') + error);
     }
   }
 
@@ -102,7 +103,7 @@ export class FileHelperService {
       let blob = new Blob([content], {type: fileType});
       fileSaver.saveAs(blob, fileName);
     } catch (error) {
-      notifierService.notify('error', 'Error when trying to download file - ' + error);
+      notifierService.notify('error', this.translate.instant('error.file.downloaderror') + error);
     }
   }
 

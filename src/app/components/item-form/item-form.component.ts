@@ -11,6 +11,7 @@ import { CertTableComponent } from '../cert-table/cert-table.component';
 import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
 import { AuthService } from 'src/app/auth/auth.service';
 import { NotifierService } from 'gramli-angular-notifier';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-item-form',
@@ -61,6 +62,7 @@ export class ItemFormComponent {
     private roleService: RoleControllerService,
     private authService: AuthService,
     private notifierService: NotifierService,
+    private translate: TranslateService,
   ) {
   }
 
@@ -93,11 +95,11 @@ export class ItemFormComponent {
     if (!this.itemForm.valid) {
       this.itemForm.markAllAsTouched();
       this.clrForm?.markAsTouched();
-      this.notifierService.notify('error', 'Please fill in all required fields');
+      this.notifierService.notify('error', this.translate.instant('error.form.invalid'));
       return ;
     }
     if (this.itemForm.value.mrn === this.mrnPrefix) {
-      this.notifierService.notify('error', 'Please enter a valid MRN');
+      this.notifierService.notify('error', this.translate.instant('error.form.invalidmrn'));
       return ;
     }
     const filteredAttributes = filterUndefinedAttributes(this.itemForm.value);

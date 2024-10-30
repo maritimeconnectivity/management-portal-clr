@@ -10,6 +10,7 @@ import { catchError, firstValueFrom, Observable, throwError } from 'rxjs';
 import { NotifierService } from 'gramli-angular-notifier';
 import { InstanceControllerService } from 'src/app/backend-api/service-registry';
 import { AuthService } from 'src/app/auth/auth.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-list-view',
@@ -45,7 +46,8 @@ export class ListViewComponent {
     private roleService: RoleControllerService,
     private instanceService: InstanceControllerService,
     private notifierService: NotifierService,
-    private authService: AuthService
+    private authService: AuthService,
+    private translate: TranslateService
 ) {
     this.notifier = notifierService;
   }
@@ -158,17 +160,17 @@ export class ListViewComponent {
 
     const handleError = (err: any) => {
       if (err.status === 403) {
-        this.notifier.notify('error', 'You do not have permission to delete this resource.');
+        this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       } else {
-        this.notifier.notify('error', 'Failed to delete resource: ' + (err.error?.message || err.message));
+        this.notifier.notify('error', this.translate.instant('error.resource.deletionFailed') + (err.error?.message || err.message));
       }
       throw err;
     };
 
     if (selected.length === 0) {
-      this.notifier.notify('error', 'success.resource.delete.no.selected');
+      this.notifier.notify('error', this.translate.instant('error.selection.noSelection'));
     } else if (!this.hasAdminPermission) {
-      this.notifier.notify('error', 'success.resource.no.permission');
+      this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
       await selected.forEach(async (item) => {
         await this.deleteData(this.itemType, item).pipe(
@@ -176,7 +178,7 @@ export class ListViewComponent {
             handleError(err);
             return throwError(err);
           })).subscribe(res=> {
-            this.notifier.notify('success', 'success.resource.delete.done');
+            this.notifier.notify('success', this.translate.instant('success.resource.delete'));
             this.refreshData();
             if (this.exTable?.expanded) {
               // when delete has done in item view
@@ -189,7 +191,7 @@ export class ListViewComponent {
 
   onAdd = () => {
     if (!this.hasAdminPermission) {
-      this.notifier.notify('error', 'success.resource.no.permission');
+      this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
       this.router.navigateByUrl('/pages/ir/'+this.itemType+'/new');
     }
@@ -204,7 +206,7 @@ export class ListViewComponent {
     if (this.itemType === ItemType.Organization && selectedItem.mrn === this.orgMrn) {
       this.authService.hasPermission(this.itemType, true).then((hasPermission) => {
         if (!hasPermission) {
-          this.notifier.notify('error', 'success.resource.no.permission');
+          this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
           return ;
         }
         this.moveToEditPage(selectedItem);
@@ -212,7 +214,7 @@ export class ListViewComponent {
       return ;
     }
     if (!this.hasAdminPermission) {
-      this.notifier.notify('error', 'success.resource.no.permission');
+      this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return ;
     } 
     this.moveToEditPage(selectedItem);
@@ -236,22 +238,22 @@ export class ListViewComponent {
     this.serviceService.migrateServiceMrn({mrn: service.newServiceMrn} as ServicePatch, this.orgMrn, service.mrn, service.instanceVersion).subscribe(
       (res) => {
         // Handle successful response, e.g., process the certificate if needed
-        this.notifier.notify('success', 'success.resource.migrate');
+        this.notifier.notify('success', this.translate.instant('success.resource.migrate'));
         this.refreshData();
       },
       err => {
-        this.notifier.notify('error', 'success.resource.migrate');
+        this.notifier.notify('error', this.translate.instant('error.resource.migrate'));
       });
   }
 
   approve = (selectedItem: any) => {
     this.organizationService.approveOrganization(selectedItem.mrn).subscribe(
       (res) => {
-        this.notifier.notify('success', 'success.resource.approve');
+        this.notifier.notify('success', this.translate.instant('success.resource.approveOrganization'));
         this.router.navigateByUrl('/pages/ir/organization');
       },
       err => {
-        this.notifier.notify('error', 'success.resource.approve');
+        this.notifier.notify('error', this.translate.instant('success.resource.approveOrganization.general'));
       });
   }
 }

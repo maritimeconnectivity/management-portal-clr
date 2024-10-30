@@ -178,11 +178,17 @@
     },
     "success": {
         "resource": {
-            "delete": " has been successfully deleted",
-            "update": " has been updated",
-            "create": " has been created",
+            "delete": "Delete success",
+            "update": "Update success",
+            "create": "Registration success",
             "approveOrganization": "Organization approved",
-            "uploadImage": "Uploaded image has been successfully deleted"
+            "uploadImage": "Uploaded image has been successfully deleted",
+            "migrate": "Service has been successfully migrated"
+        },
+        "certificate": {
+            "issue": "Certificates have been successfully issued",
+            "revoke": "Certificates have been successfully revoked",
+            "chosen": "Chosen certificates have downloaded"
         }
     },
     "warning": {
@@ -192,21 +198,39 @@
         }
     },
     "error": {
+        "selection": {
+            "noSelection": "You need to select at least one item"
+        },
+        "form": {
+            "invalid": "Please fill in all required fields",
+            "invalidmrn": "Please enter a valid MRN",
+            "requiremigrate" :"You need to migrate the service first"
+        },
+        "certificate": {
+            "revoke": "There was an error in revoking the certificate"
+        },
+        "file": {
+            "downloadcert": "There was an error in downloading the certificate",
+            "empty": "There is no file to download",
+            "wrongformat": "File from Service Registry is in the wrong format",
+            "downloaderror": "Error when trying to download file"
+        },
         "resource": {
-            "noDataService": "There's no such DataService - ",
-            "permissionError": "You don't have right permission",
+            "noDataService": "There's no such DataService",
+            "permissionError": "You don't have permission to proceed",
             "missingInformation": "There is missing information",
             "approveOrganization": {
-                "userCreation": "The organization was approved, but user creation failed. You can go to organizations and try to create the user again later - ",
-                "roleCreation": "The organization was approved, but role creation failed - ",
-                "reject": "The organization is not approved - "
+                "userCreation": "The organization was approved, but user creation failed. You can go to organizations and try to create the user again later",
+                "roleCreation": "The organization was approved, but role creation failed",
+                "reject": "The organization is not approved"
             },
             "noUser": "No user data",
             "fetchOrgInfo": "Error in fetching organization information",
-            "creationFailed" : "Creation has failed - ",
-            "updateFailed" : "Update has failed - ",
-            "errorInDeletion": "Deletion has failed - ",
-            "updateImageFailed": "There was error in updating image - "
+            "creationFailed" : "Creation has failed",
+            "deletionFailed" : "Deletion has failed",
+            "updateFailed" : "Update has failed",
+            "updateImageFailed": "There was error in updating image",
+            "migrate": "Service migration failed"
         }
     },
     "header": {

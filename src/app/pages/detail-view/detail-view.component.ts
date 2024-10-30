@@ -136,7 +136,7 @@ export class DetailViewComponent {
 
   edit = (item: any) => {
     if (!this.hasAdminPermission) {
-      this.notifier.notify('error', 'success.resource.no.permission');
+      this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return;
     }
     this.isEditing = true;
@@ -148,7 +148,7 @@ export class DetailViewComponent {
 
   submit = (item: any) => {
     if (!this.hasAdminPermission) {
-      this.notifier.notify('error', 'success.resource.no.permission');
+      this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return;
     }
     this.submitDataToBackend(item, this.id);
@@ -163,7 +163,7 @@ export class DetailViewComponent {
         })
       ).subscribe(
         res => {
-          this.notifier.notify('success', "A new " + this.itemType + " " + this.translate.instant('success.resource.create'));
+          this.notifier.notify('success', this.translate.instant('success.resource.create'));
           this.isLoading = false;
           this.router.navigateByUrl('/pages/ir/' + this.itemType);
         },
@@ -188,7 +188,7 @@ export class DetailViewComponent {
         },
         err => {
           this.notifierService.notify('error',
-            this.translate.instant('error.resource.creationFailed') + err.error.message);
+            this.translate.instant('error.resource.updateFailed') + err.error.message);
           this.isLoading = false;
         }
       );
@@ -261,22 +261,22 @@ export class DetailViewComponent {
   }
 
   issueCert = () => {
-    this.notifier.notify('success', 'success.resource.issueCert');
+    this.notifier.notify('success', this.translate.instant('success.certificate.issue'));
   }
 
   revokeCerts = (certs: any[]) => {
     if (certs.length === 0) {
-      this.notifier.notify('error', 'success.resource.revokeCerts');
+      this.notifier.notify('error', this.translate.instant('error.selection.noSelection'));
     } else {
-      this.notifier.notify('success', 'success.resource.revokeCerts');
+      this.notifier.notify('success', this.translate.instant('success.certificate.revoke'));
     }
   }
 
   downloadCerts = (selected: any[]) => {
     if (selected.length === 0) {
-      this.notifier.notify('error', 'success.resource.downloadCerts');
+      this.notifier.notify('error', this.translate.instant('error.selection.noSelection'));
     } else {
-      this.notifier.notify('success', 'success.resource.downloadCerts');
+      this.notifier.notify('success', this.translate.instant('success.certificate.chosen'));
     }
   }
 
@@ -288,17 +288,17 @@ export class DetailViewComponent {
     this.serviceService.migrateServiceMrn({mrn: newServiceMrn} as ServicePatch, this.orgMrn, this.id, this.instanceVersion).subscribe(
       (res) => {
         // Handle successful response, e.g., process the certificate if needed
-        this.notifier.notify('success', 'success.resource.migrate');
+        this.notifier.notify('success', this.translate.instant('success.resource.migrate'));
         this.loadItem(this.orgMrn);
       },
       err => {
-        this.notifier.notify('error', 'success.resource.migrate');
+        this.notifier.notify('error', this.translate.instant('error.resource.migrate'));
       });
   }
 
   deleteItem = () => {
     if (!this.hasAdminPermission) {
-      this.notifier.notify('error', 'success.resource.no.permission');
+      this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return;
     }
     this.deleteData(this.itemType, this.orgMrn, this.id, this.instanceVersion, this.numberId).pipe(
@@ -307,7 +307,7 @@ export class DetailViewComponent {
       })
     ).subscribe(
       res => {
-        this.notifier.notify('success', 'success.resource.delete');
+        this.notifier.notify('success', this.translate.instant('success.resource.delete'));
         this.router.navigateByUrl('/pages/ir/' + this.itemType);
       },
       err => {
