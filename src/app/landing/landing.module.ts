@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './login/login.component';
-import { ProcessDialogComponent } from './process-dialog/process-dialog.component';
-import { RegisterDialogComponent } from './register-dialog/register-dialog.component';
 import { RouterModule } from '@angular/router';
 import { LandingComponent } from './landing.component';
 import { LandingRoutingModule } from './landing-routing.module';
@@ -17,9 +15,7 @@ import { SharedModule } from '../common/shared/shared.module';
     SharedModule,
     RouterModule,
     LandingRoutingModule,
-    LoginComponent,
-    ProcessDialogComponent,
-    RegisterDialogComponent
+    LoginComponent
   ],
   providers: [
   ]
