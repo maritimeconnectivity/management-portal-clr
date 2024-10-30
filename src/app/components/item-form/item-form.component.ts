@@ -67,14 +67,19 @@ export class ItemFormComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.authService.getOrgMrn().then((orgMrn) => {
-      this.roleService.getRoles(orgMrn).subscribe((roles) => {
-        this.roles = roles;
+    if (this.itemType !== ItemType.OrgCandidate) {
+      this.authService.getOrgMrn().then((orgMrn) => {
+        this.roleService.getRoles(orgMrn).subscribe((roles) => {
+          this.roles = roles;
+        });
       });
-    });
+    }
   }
 
   ngOnChanges(simpleChange: any) {
+    if (this.isForNew) {
+      this.viewContext = 'edit-new';
+    }
     if (this.itemType !== ItemType.None) {
       this.setForm();
       if (this.item) {

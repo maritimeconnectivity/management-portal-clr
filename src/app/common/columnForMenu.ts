@@ -612,7 +612,7 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'Subsidiary MRN',
       type: 'string',
       description: 'Additional MRN assigned to entity',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: ['detail', 'edit'],
     },
     homeMMSUrl: {
       title: 'Home MMS URL',
