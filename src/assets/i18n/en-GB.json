@@ -6,7 +6,7 @@
         },
         "button": {
             "login": "Log in",
-            "register": "Register",
+            "register": "Request to join",
             "registerInfo": "I want to know more about registration"
         },
         "footer": {
