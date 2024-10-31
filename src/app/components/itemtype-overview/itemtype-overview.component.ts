@@ -38,6 +38,9 @@ export class ItemtypeOverviewComponent {
     this.items = [];
     this.certificates = [];
 
+    this.numberOfActive = 0;
+    this.numberOfRevoked = 0;
+    this.numberOfExpired = 0;
     const revokedCertFilter = (cert: any) => cert.revoked === true;
     const outdatedCertFilter = (cert: any) => cert.revoked === false && cert.end < new Date().getTime();
     if (this.itemType === ItemType.Device) {
@@ -46,10 +49,10 @@ export class ItemtypeOverviewComponent {
           this.items = this.items.concat(element);
           if (element.certificates) {;
             this.certificates = this.certificates.concat(element.certificates.filter((cert:any) => cert.revoked === false).map((cert: any) => ({...cert, mrn: element.mrn})));
-            this.numberOfRevoked = this.certificates.filter(revokedCertFilter).length;
-            this.numberOfExpired = this.certificates.filter(outdatedCertFilter).length;
-            this.numberOfActive = this.certificates.length - this.numberOfRevoked - this.numberOfExpired;
+            this.numberOfRevoked += element.certificates.filter(revokedCertFilter).length;
+            this.numberOfExpired += element.certificates.filter(outdatedCertFilter).length;
           }
+          this.numberOfActive = this.certificates.length - this.numberOfExpired;
         });
       });
     } else if (this.itemType === ItemType.User) {
@@ -58,10 +61,10 @@ export class ItemtypeOverviewComponent {
           this.items = this.items.concat(element);
           if (element.certificates) {
             this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false).map((cert: any) => ({...cert, mrn: element.mrn})));
-            this.numberOfRevoked = this.certificates.filter(revokedCertFilter).length;
-            this.numberOfExpired = this.certificates.filter(outdatedCertFilter).length;
-            this.numberOfActive = this.certificates.length - this.numberOfRevoked - this.numberOfExpired;
+            this.numberOfRevoked += element.certificates.filter(revokedCertFilter).length;
+            this.numberOfExpired += element.certificates.filter(outdatedCertFilter).length;
           }
+          this.numberOfActive = this.certificates.length - this.numberOfExpired;
         });
       });
     } else if (this.itemType === ItemType.Vessel) {
@@ -70,10 +73,10 @@ export class ItemtypeOverviewComponent {
           this.items = this.items.concat(element);
           if (element.certificates) {
             this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false).map((cert: any) => ({...cert, mrn: element.mrn})));
-            this.numberOfRevoked = this.certificates.filter(revokedCertFilter).length;
-            this.numberOfExpired = this.certificates.filter(outdatedCertFilter).length;
-            this.numberOfActive = this.certificates.length - this.numberOfRevoked - this.numberOfExpired;
+            this.numberOfRevoked += element.certificates.filter(revokedCertFilter).length;
+            this.numberOfExpired += element.certificates.filter(outdatedCertFilter).length;
           }
+          this.numberOfActive = this.certificates.length - this.numberOfExpired;
         });
       });
     } else if (this.itemType === ItemType.Service) {
@@ -82,10 +85,10 @@ export class ItemtypeOverviewComponent {
           this.items = this.items.concat(element);
           if (element.certificates) {
             this.certificates = this.certificates.concat(element.certificates.filter( (cert:any) => cert.revoked === false).map((cert: any) => ({...cert, mrn: element.mrn})));
-            this.numberOfRevoked = this.certificates.filter(revokedCertFilter).length;
-            this.numberOfExpired = this.certificates.filter(outdatedCertFilter).length;
-            this.numberOfActive = this.certificates.length - this.numberOfRevoked - this.numberOfExpired;
+            this.numberOfRevoked += element.certificates.filter(revokedCertFilter).length;
+            this.numberOfExpired += element.certificates.filter(outdatedCertFilter).length;
           }
+          this.numberOfActive = this.certificates.length - this.numberOfExpired;
         });
       });
     }
