@@ -12,8 +12,9 @@ export class AuthService {
   constructor(private keycloakService: KeycloakService, private router: Router) {}
 
   public async login() {
+    const url = window.location;
     await this.keycloakService.login({
-        redirectUri:'http://localhost:4200/pages'
+        redirectUri: url.protocol + '//' + url.host + '/pages'
     });
   }
 
