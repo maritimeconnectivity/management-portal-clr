@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProcessDialogComponent } from './process-dialog.component';
+import { ItemtypeChartComponent } from './itemtype-chart.component';
 
-describe('ProcessDialogComponent', () => {
-  let component: ProcessDialogComponent;
-  let fixture: ComponentFixture<ProcessDialogComponent>;
+describe('ItemtypeChartComponent', () => {
+  let component: ItemtypeChartComponent;
+  let fixture: ComponentFixture<ItemtypeChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ProcessDialogComponent]
+      imports: [ItemtypeChartComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ProcessDialogComponent);
+    fixture = TestBed.createComponent(ItemtypeChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

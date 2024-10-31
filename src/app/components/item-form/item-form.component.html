@@ -1,0 +1,122 @@
+<div class="clr-row">
+  <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+    <div class="card">
+      <div class="card-header">
+        @if (isForNew) {
+        New {{capitalize(itemType)}}
+        } @else {
+        {{capitalize(itemType)}} edit - {{item.mrn}}
+        }
+      </div>
+      <div class="card-block">
+        <div class="card-text">
+          <form clrForm [formGroup]="itemForm" class="ng-untouched">
+            <div *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
+              @if (menu.key === 'mrn'){
+              <clr-input-container>
+                <label>{{menu.value.title}}</label>
+                <input clrInput [type]="menu.value.type" [formControlName]="menu.key"
+                  [required]="menu.value.required === true" [placeholder]="mrnPrefix"
+                  (ngModelChange)="onMrnChange($event)" (keydown)="onMrnKeyDown($event)" [style.width.px]=400 />
+                  <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                  @if (menu.value.error){
+                  <clr-control-error>{{menu.value.error}}</clr-control-error>
+                  } @else {
+                  <clr-control-error>Please enter a value</clr-control-error>
+                  }
+                </clr-input-container>
+              } @else if (menu.key === 'roleName'){
+                <clr-select-container>
+                  <label>{{menu.value.title}} {{menu.key}}</label>                  
+                    <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
+                      <option *ngFor="let option of menu.value.options" [value]="option.value">{{ option.title }}</option>
+                    </select>
+                    <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                    @if (menu.value.error){
+                    <clr-control-error>{{menu.value.error}}</clr-control-error>
+                    } @else {
+                    <clr-control-error>Please enter a value</clr-control-error>
+                    }
+                </clr-select-container>
+              } @else if (menu.key === 'permissions'){
+                <clr-select-container>
+                  <label>{{menu.value.title}}</label>                  
+                    <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
+                      <option *ngFor="let role of roles" [value]="role.permission">{{ role.permission }}</option>
+                    </select>
+                    <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                    @if (menu.value.error){
+                    <clr-control-error>{{menu.value.error}}</clr-control-error>
+                    } @else {
+                    <clr-control-error>Please enter a value</clr-control-error>
+                    }
+                </clr-select-container>
+              } @else {
+                <clr-input-container>
+                  <label>{{menu.value.title}}</label>
+                <input clrInput [type]="menu.value.type" [formControlName]="menu.key"
+                [required]="menu.value.required === true" [style.width.px]=400 />
+                <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                  @if (menu.value.error){
+                  <clr-control-error>{{menu.value.error}}</clr-control-error>
+                  } @else {
+                  <clr-control-error>Please enter a value</clr-control-error>
+                  }
+                </clr-input-container>
+              }
+            </div>
+
+
+              <!--
+                <div class="form-group row" *ngIf="!isEditing || (isEditing && isFieldVisible(menu.key))">
+                  <div for="input{{menu.key}}" class="label col-sm-3 col-form-label" nbPopover="{{menu.value.description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{menu.value.title}}</div>
+                  <div class="col-sm-9 my-auto">
+                    <ngx-input-button-list *ngIf="menu.value.type === 'stringArray'" [items]="loadedData[menu.key]" [isEditing]="isEditing"
+                      [options]="menu.value.options" [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"></ngx-input-button-list>
+                    <ngx-input-image *ngIf="!isForNew && menu.value.type === 'image'" [isEditing]="isEditing" [orgMrn]="orgMrn" [entityMrn]="entityMrn"
+                      [menuType]="menuType" [allowedExtensions]="menu.value.allowedExtensions"></ngx-input-image>
+                    <ngx-input-mcp-entity *ngIf="menu.value.type === 'vessel'" [entity]="loadedData[menu.key]" [isEditing]="isEditing" [orgMrn]="orgMrn"
+                    [menuType]="'vessel'" [required]="menu.value.required" (onUpdate)="onLinkChanged($event)"></ngx-input-mcp-entity>
+                    <ngx-input-file-list *ngIf="menu.value.type === 'fileArray'" [fieldName]="menu.key" [docIds]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
+                      [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
+                      (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
+                    <ngx-input-file-list *ngIf="menu.value.type === 'file'" [fieldName]="menu.key" [file]="loadedData[menu.key]" [isEditing]="isEditing" [instanceId]="numberId"
+                      [fieldName]="menu.key" [placeholder]="menu.value.placeholder" [required]="menu.value.required" (onUpdate)="onDataChanged($event)"
+                      (onDelete)="onFileDeleted($event)"></ngx-input-file-list>
+                    <span *ngIf="!isEditing && menu.value.type === 'string' && menuType !== 'instance' && isForTime(menu.key)" id="keyword.name">{{ convertTimeString(formGroup.get(menu.key).value) }}</span>
+                    <span *ngIf="!isEditing && menu.value.type === 'string' && !isForTime(menu.key)" innerHtml="{{ formGroup.get(menu.key).value | textFormatter }}"></span>
+                    <button type='button' class="m-0" fullWidth nbButton (click)="openXmlDialog(loadedData[menu.key], isEditing)" *ngIf="!isEditing && menu.value.type === 'xml'">Read XML</button>
+                    <div *ngIf="isEditing" >
+                      <input *ngIf="menu.value.type === 'string' && !menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
+                      status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
+                      formControlName="{{menu.key}}"
+                      placeholder="{{menu.value.placeholder !== undefined ? menu.value.placeholder : ''}}"
+                      required="{{menu.value.required === true}}">
+                      <input *ngIf="menu.value.type === 'string' && menu.value.options" type="text" nbInput fullWidth id="input_{{menu.key}}" class="form-control"
+                      status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
+                      formControlName="{{menu.key}}" hidden
+                      required="{{menu.value.required === true}}"> 
+                      <nb-select *ngIf="menu.value.type === 'string' && menu.value.options" type="string" (selectedChange)="onMenuItemSelected({key: menu.key, value: $event, type: menu.value.type})"
+                      [(selected)]="formGroup.get(menu.key).value"
+                      status="{{formGroup.get(menu.key).value ? formGroup.get(menu.key).valid ? 'success' : 'danger' : menu.value.required? 'danger' : ''}}"
+                      fullWidth required="menu.value.required === true">
+                        <nb-option *ngFor="let option of menu.value.options" value="{{option.value}}">{{option.title}}</nb-option>
+                      </nb-select>
+                      <button type='button' nbButton class="m-0" fullWidth (click)="openXmlDialog(formGroup.get(menu.key).value, isEditing)" *ngIf="menu.value.type === 'xml'">Edit XML</button>
+                    </div>
+                  </div>
+                </div>
+                -->
+          </form>
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
+        <button class="btn btn-warning" (click)="resetForm()">Reset</button>
+        @if (!isForNew){
+          <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+        }        
+      </div>
+    </div>
+  </div>
+</div>

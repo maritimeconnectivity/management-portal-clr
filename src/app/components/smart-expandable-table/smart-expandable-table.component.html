@@ -1,0 +1,76 @@
+@if (expanded) {
+    <div>
+        <button class="btn btn-sm btn-secondary" (click)="back()">Back</button>
+    </div>
+    <div class="clr-row">
+        <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+            <app-item-view [itemType]="itemType" [item]="selectedItem" (onEdit)="edit(selectedItem)" (onDelete)="deleteItem(selectedItem)"
+                (onRefresh)="refreshData()" (onMigrate)="migrate($event)" (onApprove)="approve(selectedItem)"/>
+        </div>
+    </div>
+} @else {
+
+<clr-datagrid [(clrDgSelected)]="selected" (clrDgRefresh)="refresh($event)" [clrDgLoading]="isLoading">
+    @if (onAdd || onDelete || onDownload) {
+        <clr-dg-action-bar>
+            @if (onAdd !== undefined) {
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onAdd()"><cds-icon shape="plus"></cds-icon>
+                        {{ addText }}
+                    </button>
+                </div>
+            }
+            @if (onDelete !== undefined && onDownload !== undefined) {
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDownload(selected)" ><cds-icon shape="download"></cds-icon> {{downloadText}}</button>
+                </div>
+            }
+            @else if (onDelete !== undefined) {
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
+                </div>
+            }
+            
+        </clr-dg-action-bar>
+    }
+    @for (column of labelTitles; track column) {
+        <clr-dg-column>{{column}}</clr-dg-column>
+    }
+
+    <clr-dg-placeholder class="datagrid-empty">{{placeholder}}</clr-dg-placeholder>
+    <clr-dg-row *clrDgItems="let datum of data!" [clrDgItem]="datum">
+        @for (itemName of labelKeys; track itemName){
+            @if (isTimestampFormat(itemName)) {
+                <clr-dg-cell (click)="userRowSelect(datum)">{{ convertTimeString(datum[itemName]) }}</clr-dg-cell>
+            } @else {
+                <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[itemName] }}</clr-dg-cell>
+            }
+        }
+    </clr-dg-row>
+    @if (detailView) {
+        <clr-dg-detail *clrIfDetail="let detail">
+            <clr-dg-detail-header>{{detail.mrn}}</clr-dg-detail-header>
+            <clr-dg-detail-body>
+                <app-item-view [itemType]="itemType" [item]="detail"></app-item-view>
+            </clr-dg-detail-body>
+        </clr-dg-detail>
+    }
+    
+    <clr-dg-footer>
+        @if (totalPages > 1) {
+            <div class="clr-row clr-justify-content-center">
+                <div class="btn-group btn-outline-primary btn-sm">
+                    @for (i of pageNumbers; track i) {
+                        <button class="btn" [disabled]="i==currentPageNumber" (click)="loadData(i)">{{i+1}}</button>
+                    }
+                </div>
+            </div>
+        }
+    </clr-dg-footer>
+</clr-datagrid>
+}
+
+
+
+  

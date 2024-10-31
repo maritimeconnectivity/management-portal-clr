@@ -1,68 +1,137 @@
-<div>
-    <div class="image-container">
-        <div>
-            @if (loggedIn) {
-                The user is logged in
-            } @else {
-                The user is not logged in
+<div class="login-wrapper">
+    <form class="login">
+      <div class="login-header">
+        <div class="top-logo">
+            <img height="100%" src ="{{ logo_img }}" alt="Logo" />
+        </div>
+        <div class="actions">
+          <clr-dropdown>
+            <button class="btn btn-link btn-sm" clrDropdownTrigger>
+              Lang: {{currentLangName}}
+              <cds-icon shape="angle" direction="down"></cds-icon>
+            </button>
+            <clr-dropdown-menu>
+                @for (option of langs; track option.code) {
+                    <div aria-label="option.code" clrDropdownItem (click)="changeLang(option.code)">{{ option.name }}</div>
+                }
+            </clr-dropdown-menu>
+          </clr-dropdown>
+        </div>
+      </div>
+      <div class="login-body">
+        <section class="title">
+          {{ 'landing.title.serviceName' | translate }}
+          <div class="hint">{{environmentName}} {{ 'landing.title.environmentName' | translate }}</div>
+        </section>
+        <div class="login-group">
+          <button class="btn btn-primary" (click)="logIn()">{{ 'landing.button.login' | translate }}</button>
+          <button class="btn btn-warning-outline" (click)="openWizard()">{{ 'landing.button.register' | translate }}</button>
+          <a href="javascript://" class="signup" (click)="openRegInfoModal()">{{ 'landing.button.registerInfo' | translate }}</a>
+        </div>
+      </div>
+      <div class="login-footer">
+        <span class="copyright">2024 {{ serviceProviderName }}</span>
+        <a class="text-white" href="{{footerLink}}" target="_blank">{{ footerName }}</a>
+      </div>
+    </form>
+  </div>
+
+<clr-modal #regInfoModal [(clrModalOpen)]="regInfoOpened" [clrModalSize]="size">
+    <div class="modal-title">
+        {{ 'registrationProcess.title' | translate }}
+    </div>
+    <div class="modal-body">
+        <ul class="clr-timeline">
+            <li class="clr-timeline-step">
+              <div class="clr-timeline-step-header">Step 1</div>
+              <cds-icon role="img" shape="circle" aria-label="Not started"></cds-icon>
+              <div class="clr-timeline-step-body">
+                <span class="clr-timeline-step-title">{{ 'registrationProcess.step1.title' | translate }}</span>
+                <span class="clr-timeline-step-description">{{ 'registrationProcess.step1.content' | translate }}</span>
+              </div>
+            </li>
+            <li class="clr-timeline-step">
+                <div class="clr-timeline-step-header">Step 2</div>
+                <cds-icon role="img" shape="circle" aria-label="Not started"></cds-icon>
+                <div class="clr-timeline-step-body">
+                  <span class="clr-timeline-step-title">{{ 'registrationProcess.step2.title' | translate }}</span>
+                  <span class="clr-timeline-step-description">{{ 'registrationProcess.step2.content' | translate }}</span>
+                </div>
+              </li>
+              <li class="clr-timeline-step">
+                <div class="clr-timeline-step-header">Step 3</div>
+                <cds-icon role="img" shape="circle" aria-label="Not started"></cds-icon>
+                <div class="clr-timeline-step-body">
+                  <span class="clr-timeline-step-title">{{ 'registrationProcess.step3.title' | translate }}</span>
+                  <span class="clr-timeline-step-description">{{ 'registrationProcess.step3.content' | translate }}</span>
+                </div>
+              </li>
+              <li class="clr-timeline-step">
+                <div class="clr-timeline-step-header">Step 4</div>
+                <cds-icon role="img" shape="circle" aria-label="Not started"></cds-icon>
+                <div class="clr-timeline-step-body">
+                  <span class="clr-timeline-step-title">{{ 'registrationProcess.step4.title' | translate }}</span>
+                  <span class="clr-timeline-step-description">{{ 'registrationProcess.step4.content' | translate }}</span>
+                </div>
+              </li>
+          </ul>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline" (click)="regInfoOpened = false">Cancel</button>
+      <button type="button" class="btn btn-primary" (click)="regInfoOpened = false">Ok</button>
+    </div>
+    
+  </clr-modal>
+
+  <clr-wizard #wizard [(clrWizardOpen)]="wizardOpen" clrWizardSize="xl">
+    <clr-wizard-title>{{ 'register.title' | translate }}{{environmentName}}</clr-wizard-title>
+  
+    <clr-wizard-button [type]="'cancel'">Cancel</clr-wizard-button>
+    <clr-wizard-button [type]="'previous'">Back</clr-wizard-button>
+    <clr-wizard-button (click)="agree()" [type]="'next'">{{nextText}}</clr-wizard-button>
+    <clr-wizard-button [type]="'finish'">Finish</clr-wizard-button>
+  
+    <clr-wizard-page>
+      <ng-template clrPageTitle>{{ 'register.termsOfUse.title' | translate }}</ng-template>
+      <p>{{ termsOfUse }}</p>
+    </clr-wizard-page>
+  
+    <clr-wizard-page (clrWizardPageCustomButton)="doCustomClick($event)">
+        <ng-template clrPageTitle>{{ 'register.enterInfo.title' | translate }}</ng-template>
+        @if(!agreed) {
+            <p>You need to agree the terms of use.</p>
+        } @else if(agreed && !submitted) {
+            @if (submissionFailed) {
+                <clr-alert [clrAlertType]="'danger'">
+                    <clr-alert-item>
+                      <span class="alert-text">Something went wrong. If you have this message consistently please contact to {{adminEmail}}.</span>
+                    </clr-alert-item>
+                    <clr-alert-item>
+                        <span class="alert-text">ERROR: {{errMessage}}</span>
+                    </clr-alert-item>
+                </clr-alert>
             }
-        </div>
-        <button *ngIf="!loggedIn" (click)="logIn()">login</button>
-        <button *ngIf="loggedIn" (click)="logOut()">log out</button>
-        <!--
-        <div class="p-2">
-            <a class="text-white" href="{{footerLink}}" target="_blank">{{ footerName }}</a>
-        </div>
-        <div class="ml-auto p-2">
-            <span class="text-white">Language: </span>
-            <select [selected]="currentLang" (selectedChange)="changeLang($event)" status="primary">
-                <option *ngFor="let lang of langs" [value]="lang.code"> {{ lang.name }}</nb-option>
-            </select>
-        </div>
-        -->
-    </div>
-    <div class="image-container">
-        <!--
-        <div class="trans-background">
-            <div class="trans-background flex justify-content-center">
-                <div class="row">
-                    <div class="col text-center w-100">
-                        <img class="mcp-logo p-4" src = "{{ logo_img }}" alt="Logo"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col text-center w-100">
-                        <p class="title-font text-white p-3 w-100">{{ serviceProviderName }}</p>
-                        <p class="subtitle-font text-white w-100">{{ 'landing.title.serviceName' | translate }}</p>
-                        <h5 class="description-font p-1 text-white w-100">{{environmentName}} {{ 'landing.title.environmentName' | translate }}</h5>
-                    </div>
-                </div>
-                <div class="row justify-content-center p-4">
-                    <div class="buttons-row">
-                        <button status="primary" nbButton type="button" (click)="logIn()">{{ 'landing.button.login' | translate }}</button>
-                        <button status="success" nbButton type="button" (click)="createRegisterDialog()">{{ 'landing.button.register' | translate }}</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col text-center p-2">
-                        <button class="text-white" nbButton type="button" (click)="createProcessDialog()" size="small" outline>{{ 'landing.button.registerInfo' | translate }}</button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col text-center p-4">
-                        <p class="description-font font-weight-bold text-white">{{ 'landing.footer.shortIntro' | translate }}
-                            <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MIR" target="_blank">{{ 'landing.footer.mirName' | translate }}</a>{{ 'landing.footer.namesConnector' | translate }}
-                            <a class="text-white" href="https://maritimeconnectivity.net/mcp-documents/#MSR" target="_blank">{{ 'landing.footer.msrName' | translate }}</a></p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col text-center p-4">
-                        <p class="description-font text-white">
-                            {{ 'landing.footer.disclamer' | translate }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        -->
-    </div>
-</div>
+            <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
+            [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)"/>
+        } @else {
+            <clr-alert [clrAlertType]="'success'">
+                <clr-alert-item>
+                    <span class="alert-text">Data successfully submitted.</span>
+                </clr-alert-item>
+            </clr-alert>
+        }
+        <ng-template clrPageButtons>
+            <clr-wizard-button [type]="'custom-previous'">Back</clr-wizard-button>
+            @if (submitted) {
+                <clr-wizard-button [type]="'custom-next'">Next</clr-wizard-button>
+            } @else {
+                <button class="btn btn-primary" disabled>Next</button>
+            }
+          </ng-template>
+    </clr-wizard-page>
+  
+    <clr-wizard-page>
+      <ng-template clrPageTitle>{{ 'register.summary.title' | translate }}</ng-template>
+      <p>{{ 'register.summary.content' | translate }}{{contactEmail}}.</p>
+    </clr-wizard-page>
+  </clr-wizard>

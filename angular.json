@@ -47,7 +47,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -57,7 +57,7 @@
               ],
               "outputHashing": "all"
             },
-            "development": {
+            "test": {
               "buildOptimizer": false,
               "optimization": false,
               "vendorChunk": true,
@@ -74,11 +74,11 @@
             "production": {
               "buildTarget": "management-portal-clr:build:production"
             },
-            "development": {
-              "buildTarget": "management-portal-clr:build:development"
+            "test": {
+              "buildTarget": "management-portal-clr:build:test"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "test"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -111,6 +111,12 @@
               "src/**/*.ts",
               "src/**/*.html"
             ]
+          }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "cname": "test-management.maritimeconnectivity.net"
           }
         }
       }

@@ -1,2 +1,28 @@
 <h1>{{title}}</h1>
-<app-label-value-table [isLoading]="isLoading" [labelValues]="labelValues"></app-label-value-table>
+
+<clr-tabs>
+    <clr-tab>
+      <button clrTabLink>Device</button>
+      <clr-tab-content *clrIfActive>
+        <app-itemtype-overview [orgMrn]="orgMrn" itemType="device"></app-itemtype-overview>
+      </clr-tab-content>
+    </clr-tab>
+    <clr-tab>
+      <button clrTabLink>User</button>
+      <clr-tab-content *clrIfActive>
+        <app-itemtype-overview [orgMrn]="orgMrn" itemType="user"></app-itemtype-overview>
+      </clr-tab-content>
+    </clr-tab>
+    <clr-tab>
+      <button clrTabLink>Vessel</button>
+      <clr-tab-content *clrIfActive>
+        <app-itemtype-overview [orgMrn]="orgMrn" itemType="vessel"></app-itemtype-overview>
+      </clr-tab-content>
+    </clr-tab>
+    <clr-tab>
+        <button clrTabLink>Service</button>
+        <clr-tab-content *clrIfActive>
+          <app-itemtype-overview [orgMrn]="orgMrn" itemType="service"></app-itemtype-overview>
+        </clr-tab-content>
+      </clr-tab>
+</clr-tabs>

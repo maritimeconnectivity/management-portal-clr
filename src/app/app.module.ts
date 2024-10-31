@@ -9,7 +9,15 @@ import {ApiModule as MSRApiModule} from './backend-api/service-registry';
 import {ApiModule as SECOMApiModule} from './backend-api/secom';
 import {initializeKeycloak} from './auth/auth.init';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
-import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {HttpClient, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NotifierModule } from 'gramli-angular-notifier';
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+}
 
 @NgModule({
     declarations: [
@@ -19,11 +27,19 @@ import {provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
         BrowserModule,
         BrowserAnimationsModule,
         AppRoutingModule,
+        NotifierModule,
         ClarityModule,
         MIRApiModule,
         MSRApiModule,
         SECOMApiModule,
-        KeycloakAngularModule
+        KeycloakAngularModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
     ],
     providers: [
         {

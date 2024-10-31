@@ -28,6 +28,10 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
+## GitHub deployment
+
+Run `ng deploy --repo=%REPO_TO_DEPLOY% --cname=%URL --dir="dist/management-portal-clr"` for GitHub Pages deployment
+
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.

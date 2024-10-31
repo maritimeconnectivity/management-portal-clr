@@ -15,19 +15,108 @@ import { AboutComponent } from './about/about.component';
 import { authGuard } from '../auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
+import { IrGuideComponent } from './ir-guide/ir-guide.component';
+import { AboutComponent } from './about/about.component';
+import { SrSearchComponent } from './sr-search/sr-search.component';
+import { SrGuideComponent } from './sr-guide/sr-guide.component';
+import { ListViewComponent } from './list-view/list-view.component';
+import { DetailViewComponent } from './detail-view/detail-view.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { ItemType } from '../common/menuType';
 
 const routes: Routes = [
   {
   path: '',
   component: PagesComponent,
-  //canActivate: [authGuard],
+  canActivate: [authGuard],
   children: [
     {
       path: '',
       component: DashboardComponent,
     },
+    {
+      path: 'ir/organization',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/organization/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/orgcandidate',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/device',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/device/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/service',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/service/:id/:instanceVersion',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/service/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/user',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/user/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/vessel',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/vessel/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/role',
+      component: ListViewComponent,
+    },
+    {
+      path: 'ir/role/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'ir/guide',
+      component: ListViewComponent,
+    },
+    {
+      path: 'about',
+      component: AboutComponent,
+    },
+    {
+      path: 'sr/instance',
+      component: ListViewComponent,
+    },
+    {
+      path: 'sr/search',
+      component: SrSearchComponent,
+    },
+    {
+      path: 'sr/guide',
+      component: SrGuideComponent,
+    },
     { path: '', redirectTo: '', pathMatch: 'full' },
-    { path: '**', redirectTo: '' },
+    {
+      path: '**',
+      component: NotFoundComponent,
+    },
+    
+
     /*
     
     // identity registry
@@ -81,10 +170,7 @@ const routes: Routes = [
       loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
-    {
-      path: 'ir/guide',
-      component: IrGuideComponent,
-    },
+    
     // service registry
     {
       path: 'sr/instances',
@@ -101,14 +187,7 @@ const routes: Routes = [
       loadChildren: () => import('../shared/list-view/list-view.module')
         .then(m => m.ListViewModule),
     },
-    {
-      path: 'sr/search',
-      component: SrSearchComponent,
-    },
-    {
-      path: 'sr/guide',
-      component: SrGuideComponent,
-    },
+    
     {
       path: 'ledger/search',
       component: MsrLedgerSearchComponent,
@@ -117,10 +196,7 @@ const routes: Routes = [
       path: 'ledger/guide',
       component: LedgerGuideComponent,
     },
-    {
-      path: 'about',
-      component: AboutComponent,
-    },
+    
     {
       path: '',
       redirectTo: 'ir/guide',

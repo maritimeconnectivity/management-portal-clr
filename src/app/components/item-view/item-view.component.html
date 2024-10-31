@@ -1,0 +1,237 @@
+<div class="clr-row">
+    <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+        <div class="card">
+            <div class="card-header">
+                {{capitalize(itemType)}} details
+            </div>
+            <div class="card-block">
+                <div class="card-text">
+                    <form clrForm>
+                        <div class="clr-form-horizontal clr-form-control clr-row"
+                            *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
+                            <label class="clr-control-label">{{menu.value.title}}</label>
+                            <div class="clr-control-container clr-col-md-10 clr-col-12"
+                                ng-reflect-ng-class="clr-col-md-10 clr-col-12">
+                                <div class="clr-input-wrapper">
+                                    @if (item[menu.key]) {
+                                        @if (isTimestampFormat(menu.key)) {
+                                            <input clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
+                                                [value]="convertTimeString(item[menu.key])" id="clr-form-control-1"
+                                                class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
+                                                required="" aria-describedby="clr-form-control-1-helper"
+                                                [style.width.px]=400>
+                                        } @else {
+                                            <input clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
+                                                [value]="item[menu.key]" id="clr-form-control-1"
+                                                class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
+                                                required="" aria-describedby="clr-form-control-1-helper"
+                                                [style.width.px]=400>
+                                        }
+                                    } @else {
+                                    <input clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
+                                        [value]="" id="clr-form-control-1"
+                                        class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
+                                        required="" aria-describedby="clr-form-control-1-helper"
+                                        [style.width.px]=400>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        @if (itemType !== 'role') {
+                            <div class="clr-form-horizontal clr-form-control clr-row">
+                                <label class="clr-control-label">Active certificates</label>
+                                <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+                                    <app-cert-table context="active" [data]="activeCertificates" (onAdd)="openCertModal()" (onDownload)="clickDownloadBtn($event)" (onRevoke)="clickRevokeBtn($event)" />
+                                </div>
+                            </div>
+                            <div class="clr-form-horizontal clr-form-control clr-row">
+                                <label class="clr-control-label">Revoked certificates</label>
+                                <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+                                    <app-cert-table context="revoked" [data]="revokedCertificates" />
+                                </div>
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div>
+            <div class="card-footer">
+                @if (itemType === 'service' && instanceVersion) {
+                    <button class="btn btn-primary" (click)="clickMigrateBtn()">Migrate</button>
+                } @else if(itemType === 'orgcandidate') {
+                    <button class="btn btn-success" (click)="approve()">Approve</button>
+                } @else {
+                    <button class="btn btn-primary" (click)="edit()">Edit</button>
+                }
+                <button class="btn btn-danger" (click)="deleteItem()">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<clr-modal #certModal class="modal" [(clrModalOpen)]="certModalOpened" clrModalSize="lg">
+    <div class="modal-title">
+            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            </button>
+            <h3 class="modal-title">Issue a new certificate</h3>
+        </div>
+        <div class="modal-body">
+            @if (certificateBundle) {
+                <div class="clr-col-sm-12 clr-col-md-12">
+                    <p>Here is your certificate bundle. You can download it by clicking the button below.</p>
+                </div>
+            } 
+            <!--@else {
+                <div class="clr-col-sm-12 clr-col-md-12">
+                    <clr-radio-container clrInline>
+                        <label>Choose method</label>
+                        <clr-radio-wrapper>
+                          <input type="radio" clrRadio name="options" required (click)="issueManualKeystore()" checked/>
+                          <label>Issue a cert locally with manual keystore setup</label>
+                        </clr-radio-wrapper>
+                        <clr-radio-wrapper>
+                          <input type="radio" clrRadio name="options" required (click)="issueFromBrowser()"/>
+                          <label>Issue a cert locally from browser</label>
+                        </clr-radio-wrapper>
+                        <clr-control-error>This field is required!</clr-control-error>
+                    </clr-radio-container>
+                </div>
+                <div class="clr-col-sm-12 clr-col-md-12">
+                    @if (!fromBrowser) {
+                        <p>Many operating systems and browsers require that certificates are
+                            imported as a password protected PKCS#12 keystore.
+                            If you want to manually generate the keystore, which is the recommended approach, click the corresponding button below and download the resulting zip file, unzip it and then use OpenSSL
+                            to generate the keystore using the following command:
+                            <br><br><pre>openssl pkcs12 -export -out keystore.p12 -in Certificate_NAME.pem -inkey PrivateKey_NAME.pem</pre>
+                          This will prompt you for a passphrase to protect the keystore. If successful the command will
+                          result in a PKCS#12 keystore file called 'keystore.p12'.
+                          <br>If you don't want to generate a keystore at all you can just skip executing the OpenSSL command.
+                          </p>
+                    } @else {
+                        <p>
+                            Many operating systems and browsers require that certificates are
+                            imported as a password protected PKCS#12 keystore. You can let your browser generate a keystore for you. NOTE that this action will take a little while and the resulting keystore will
+                            NOT be compatible with most major operating systems and browsers.
+                        </p>
+                    }
+                </div>
+            }
+                -->
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" (click)="download()">Download certificate</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Close</button>
+            <!--
+            @if (certificateBundle) {
+                <button class="btn btn-primary" type="button" (click)="download()">Download certificate</button>
+                <button class="btn btn-outline" type="button" (click)="cancel()">Close</button>
+            } @else {
+                <button class="btn btn-primary" type="button" (click)="issue()">Issue</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+            }
+            -->
+        </div>
+</clr-modal>
+
+<clr-modal #revokeModal class="modal" [(clrModalOpen)]="revokeModalOpened" clrModalSize="lg">
+    <div class="modal-title">
+            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            </button>
+            @if (selectedActiveCerts.length > 1) {
+                <h3 class="modal-title">Revoke {{selectedActiveCerts.length}} certificates</h3>
+            } @else {
+                <h3 class="modal-title">Revoke {{selectedActiveCerts.length}} certificate</h3>
+            }
+        </div>
+        <div class="modal-body">
+            <div class="clr-col-sm-12 clr-col-md-12">
+                <div class="clr-row">
+                    <span><b>Warning: chosen certificates will no longer be valid when they are revoked!</b></span>
+                </div>
+                <div class="clr-row">
+                    <div class="clr-col-4">
+                        <div><h5>Reason name</h5></div>
+                        <div>
+                            @for (reason of revokeReasons ; track reason) {
+                                <clr-radio-wrapper>
+                                    <input type="radio" clrRadio name="options" required (click)="revokeReason = reason"/>
+                                    <label>{{reason.title}}</label>
+                                </clr-radio-wrapper>
+                            }
+                        </div>
+                    </div>
+                    <div class="clr-col-8">
+                        <div><h5>Explanation</h5></div>
+                        <div>
+                            @if (revokeReason) {
+                                <div>
+                                    <span>{{revokeReason.description}}</span>
+                                </div>
+                                <div>
+                                    <a [href]="revokeReason.reference" target="_blank">More info</a>
+                                </div>
+                            } @else {
+                                <div>
+                                    <span>Select reason name</span>
+                                </div>
+                            }      
+                        </div>
+                                          
+                    </div>
+                </div>
+                <div class="clr-row">
+                    <div class="clr-col-4">
+                        <div><h5>Revoke at</h5></div>
+                    </div>
+                    <div class="clr-col-8">
+                        <clr-date-container>
+                            <input type="date" autocomplete="off" clrDate name="demo" [(ngModel)]="revokeAt" />
+                        </clr-date-container>
+                    </div>
+                </div> 
+                <div class="clr-row">
+                    <div>
+                        <p>Choose revocation reason and date to proceed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" (click)="revokeCerts(selectedActiveCerts)">Revoke</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+        </div>
+</clr-modal>
+
+<clr-modal #migrateModal class="modal" [(clrModalOpen)]="migrateModalOpened" clrModalSize="lg">
+    <div class="modal-title">
+            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            </button>
+            Migrate service
+        </div>
+        <div class="modal-body">
+            <div class="clr-col-sm-12 clr-col-md-12">
+                <div class="clr-row">
+                    <span>This migration allows you to remove the version from an existing service's MRN by assigning a new MRN that includes the version. It simplifies version management and future updates, making it easier for users to maintain and update services. The MRN below is given as an example, but you can edit it as you want.</span>
+                </div>
+                <div class="clr-row">
+                    <form class="clr-form">
+                        <div class="clr-form-control">
+                          <label for="basic" class="clr-control-label">Recommended new MRN for your service</label>
+                          <div class="clr-control-container">
+                            <div class="clr-input-wrapper">
+                              <input type="text" id="basic" placeholder="Enter value here" class="clr-input" [style.width.px]=400 [value]="newServiceMrn" />
+                              <cds-icon class="clr-validate-icon" shape="exclamation-circle"></cds-icon>
+                            </div>
+                            <span class="clr-subtext">New MRN can have the version of service inside.</span>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" (click)="migrate()">Migrate</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+        </div>
+</clr-modal>
+
