@@ -155,6 +155,11 @@ export class ItemFormComponent {
       if (key === 'mrn') {
         const mrnReg: RegExp = new RegExp(mrnRegex());
         formElements[key] = ['', [Validators.required, Validators.pattern(mrnReg)]];
+      } else if (key === 'email') {
+        formElements[key] = ['', [Validators.required, Validators.email]];
+      } else if (key === 'url') {
+        const urlReg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+        formElements[key] = ['', [Validators.required, Validators.pattern(urlReg)]];
       } else {
         formElements[key] = ['', value.required ? Validators.required : undefined];
       }

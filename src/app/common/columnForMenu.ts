@@ -131,6 +131,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Contact e-mail',
       visibleFrom: ['detail', 'edit', 'edit-new'],
       required: true,
+      error: "Please enter a valid email address",
     },
     url: {
       title: 'URL',
@@ -138,6 +139,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'URL of organization',
       visibleFrom: ['detail', 'edit', 'edit-new'],
       required: true,
+      error: "Please enter a valid URL",
     },
     address: {
       title: 'Address',
@@ -352,6 +354,7 @@ export const ColumnForResource: {[key: string]: object} = {
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       immutable: true,
       required: true,
+      error: "Please enter a valid email address",
     },
     permissions: {
       title: 'Permissions',
@@ -625,6 +628,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Contact e-mail',
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       required: true,
+      error: "Please enter a valid email address",
     },
     url: {
       title: 'URL',
@@ -632,6 +636,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'URL of organization',
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       required: true,
+      error: "Please enter a valid URL",
     },
     address: {
       title: 'Address',
