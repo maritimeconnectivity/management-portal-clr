@@ -15,7 +15,6 @@ import { AboutComponent } from './about/about.component';
 import { authGuard } from '../auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
-import { IrGuideComponent } from './ir-guide/ir-guide.component';
 import { AboutComponent } from './about/about.component';
 import { SrSearchComponent } from './sr-search/sr-search.component';
 import { SrGuideComponent } from './sr-guide/sr-guide.component';
@@ -101,6 +100,14 @@ const routes: Routes = [
     {
       path: 'sr/instance',
       component: ListViewComponent,
+    },
+    {
+      path: 'sr/instance/:id',
+      component: DetailViewComponent,
+    },
+    {
+      path: 'sr/instance/:id/:instanceVersion',
+      component: DetailViewComponent,
     },
     {
       path: 'sr/search',

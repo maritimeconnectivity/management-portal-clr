@@ -712,12 +712,6 @@ export const ColumnForResource: {[key: string]: object} = {
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       required: true,
     },
-    comment: {
-      title: 'Comment',
-      type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
-      required: true,
-    },
     serviceType: {
       title: 'Service type',
       type: 'stringArray',
@@ -943,7 +937,7 @@ export const ColumnForResource: {[key: string]: object} = {
     endpointType: {
       title: 'Endpoint type',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     organizationId: {
       title: 'Organization ID',
@@ -970,6 +964,12 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'edit', 'edit-new'],
     },
+    comment: {
+      title: 'Comment',
+      type: 'string',
+      visibleFrom: ['detail', 'edit', 'edit-new'],
+      required: true,
+    },
     geometryContentType: {
       title: 'Geometry content type',
       type: 'string',
@@ -984,21 +984,21 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'Unlocode',
       type: 'stringArray',
       placeholder: 'Please enter UN/LOCODE',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     mmsi: {
       title: 'MMSI',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     imo: {
       title: 'IMO number',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     instanceAsXml: {
       title: 'Instance as XML',
-      type: 'xml',
+      type: 'file',
       notShowOnEdit: true,
       visibleFrom: ['detail', 'edit', 'edit-new'],
     },
@@ -1052,13 +1052,13 @@ export const ColumnForResource: {[key: string]: object} = {
           value: 'REJECTED',
         },
       ],
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     docIds: {
       title: 'Related documents',
       type: 'fileArray',
       filter: false,
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     publishedAt: {
       title: 'Created at',
@@ -1067,7 +1067,7 @@ export const ColumnForResource: {[key: string]: object} = {
       filter: false,
       immutable: true,
       notShowOnEdit: true,
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     lastUpdatedAt: {
       title: 'Updated at',

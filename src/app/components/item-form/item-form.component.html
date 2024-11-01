@@ -27,7 +27,7 @@
                 </clr-input-container>
               } @else if (menu.value.options){
                 <clr-select-container>
-                  <label>{{menu.value.title}} {{menu.key}}</label>                  
+                  <label>{{menu.value.title}}</label>                  
                     <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
                       <option *ngFor="let option of menu.value.options" [value]="option.value">{{ option.title }}</option>
                     </select>

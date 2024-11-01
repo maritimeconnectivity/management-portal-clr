@@ -91,6 +91,10 @@ export class ItemViewComponent {
     if (this.item && this.itemType === ItemType.Role) {
       this.itemId = this.item.id;
       this.setForm();
+    } else if (this.item && this.itemType === ItemType.Instance) {
+      this.itemId = this.item.instanceId;
+      this.instanceVersion = this.item.instanceVersion;
+      this.setForm();
     } else if (this.item && this.item.mrn) {
       this.itemId = this.item.mrn;
       if (this.item.instanceVersion) {

@@ -71,6 +71,9 @@ export class SmartExpandableTableComponent {
     }
 
     this.authService.getOrgMrn().then((orgMrn) => {
+      if (this.itemType === ItemType.Instance) {
+        return;
+      }
       this.roleService.getRoles(orgMrn).subscribe((roles) => {
         this.roles = roles;
       });

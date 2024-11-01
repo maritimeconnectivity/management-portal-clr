@@ -33,6 +33,7 @@ export class ListViewComponent {
   totalPages = 0;
   totalElements = 0;
   hasAdminPermission = false;
+  apiBase = 'ir';
   private readonly notifier: NotifierService;
 
   constructor(
@@ -62,6 +63,9 @@ export class ListViewComponent {
         this.authService.hasPermission(this.itemType).then((hasPermission) => {
           this.hasAdminPermission = true;
         });
+        if (this.itemType === ItemType.Instance) {
+          this.apiBase = 'sr';
+        }
       });
     });
   }
@@ -114,6 +118,9 @@ export class ListViewComponent {
         page = await firstValueFrom(this.organizationService.getUnapprovedOrganizations(pageNumber, elementsPerPage));
         this.totalPages = page.totalPages!;
         this.totalElements = page.totalElements!;
+      } else if(entityType === ItemType.Instance) {
+        page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage));
+        console.log(page);
       } else {
         return [];
       }
@@ -193,7 +200,7 @@ export class ListViewComponent {
     if (!this.hasAdminPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/new');
+      this.router.navigateByUrl('/pages/' + this.apiBase + '/'+this.itemType+'/new');
     }
   }
 
@@ -222,15 +229,15 @@ export class ListViewComponent {
 
   moveToEditPage = (selectedItem: any) => {
     if (this.itemType === ItemType.Role) {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.id);
+      this.router.navigateByUrl('/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.id);
     } else if (this.itemType === ItemType.Service) {
       if (selectedItem.instanceVersion) {
-        this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion); //backward compatibility
+        this.router.navigateByUrl('/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion); //backward compatibility
       } else {
-        this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
+        this.router.navigateByUrl('/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.mrn);
       }
     } else {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
+      this.router.navigateByUrl('/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.mrn);
     }
   }
 
@@ -250,7 +257,7 @@ export class ListViewComponent {
     this.organizationService.approveOrganization(selectedItem.mrn).subscribe(
       (res) => {
         this.notifier.notify('success', this.translate.instant('success.resource.approveOrganization'));
-        this.router.navigateByUrl('/pages/ir/organization');
+        this.router.navigateByUrl('/pages/' + this.apiBase + '/organization');
       },
       err => {
         this.notifier.notify('error', this.translate.instant('success.resource.approveOrganization.general'));

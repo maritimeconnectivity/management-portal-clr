@@ -37,6 +37,7 @@ export class DetailViewComponent {
   isForNew = false;
   item: any = {};
   hasAdminPermission = false;
+  apiBase = 'ir';
   private readonly notifier: NotifierService;
 
   constructor(private route: ActivatedRoute,
@@ -72,6 +73,9 @@ export class DetailViewComponent {
         this.authService.hasPermission(this.itemType, orgMrn === this.id).then((hasPermission) => {
           this.hasAdminPermission = hasPermission;
         });
+        if (this.itemType === ItemType.Instance) {
+          this.apiBase = 'sr';
+        }
       }
       );
     });
@@ -120,6 +124,8 @@ export class DetailViewComponent {
         item = migrateVesselAttributes(item);
       } else if (entityType === ItemType.Role) {
         item = await firstValueFrom(this.roleService.getRole(orgMrn, parseInt(id)));
+      } else if (entityType === ItemType.Instance) {
+        item = await firstValueFrom(this.instanceService.getInstanceByMRNAndVersion(id, this.instanceVersion));
       } else {
         return {};
       }
@@ -165,7 +171,7 @@ export class DetailViewComponent {
         res => {
           this.notifier.notify('success', this.translate.instant('success.resource.create'));
           this.isLoading = false;
-          this.router.navigateByUrl('/pages/ir/' + this.itemType);
+          this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
         },
         err => {
           this.notifierService.notify('error',
@@ -281,7 +287,7 @@ export class DetailViewComponent {
   }
 
   back = () => {
-    this.router.navigateByUrl('/pages/ir/' + this.itemType);
+    this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
   }
 
   migrate = (newServiceMrn: string) => {
@@ -308,7 +314,7 @@ export class DetailViewComponent {
     ).subscribe(
       res => {
         this.notifier.notify('success', this.translate.instant('success.resource.delete'));
-        this.router.navigateByUrl('/pages/ir/' + this.itemType);
+        this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
       },
       err => {
         this.notifierService.notify('error',
