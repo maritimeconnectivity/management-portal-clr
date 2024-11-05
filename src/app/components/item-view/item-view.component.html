@@ -2,7 +2,11 @@
     <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
         <div class="card">
             <div class="card-header">
-                {{capitalize(itemType)}} details
+                @if (itemType === 'orgcandidate') {
+                    Organization details
+                } @else {
+                    {{capitalize(itemType)}} details
+                }
             </div>
             <div class="card-block">
                 <div class="card-text">
