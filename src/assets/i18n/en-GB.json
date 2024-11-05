@@ -182,6 +182,8 @@
             "update": "Update success",
             "create": "Registration success",
             "approveOrganization": "Organization approved",
+            "approveOrganization.role": "New role has been successfully created",
+            "approveOrganization.user": "New user has been successfully created",
             "uploadImage": "Uploaded image has been successfully deleted",
             "migrate": "Service has been successfully migrated"
         },

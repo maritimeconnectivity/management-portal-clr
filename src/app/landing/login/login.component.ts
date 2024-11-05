@@ -131,7 +131,6 @@ export class LoginComponent {
   }
 
   submit(item: Organization) {
-    console.log(item);
     this.organizationService.applyOrganization(item).pipe(
       catchError(err => {
         return throwError(err);
