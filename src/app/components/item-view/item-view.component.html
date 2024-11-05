@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if (itemType !== 'role') {
+                        @if (itemType !== 'role' && itemType !== 'orgcandidate') {
                             <div class="clr-form-horizontal clr-form-control clr-row">
                                 <label class="clr-control-label">Active certificates</label>
                                 <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
@@ -56,6 +56,10 @@
                             </div>
                         }
                     </form>
+                    @if (itemType === 'orgcandidate') {
+                        <app-item-form #newAdminUserForm title="New administrator user" [isForNew]="true" [itemType]="userItemType" [item]="adminUser"
+                        [mrnPrefix]="adminUserMrnPrefix" />
+                    }
                 </div>
             </div>
             <div class="card-footer">

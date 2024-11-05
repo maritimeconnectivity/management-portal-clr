@@ -44,6 +44,8 @@ export class ItemFormComponent {
    */
   @Input() mrnPrefix: string = 'urn:mrn:';
 
+  @Input() title: string = '';
+
   @Output() onCancel: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
@@ -57,6 +59,7 @@ export class ItemFormComponent {
   isEditing = false;
   roles: Role[] = [];
   id = '';
+  onSubmitIsGiven = true;
 
   constructor(private formBuilder: FormBuilder,
     private roleService: RoleControllerService,
@@ -88,27 +91,53 @@ export class ItemFormComponent {
         this.itemForm.patchValue(this.item);
       }
     }
+    if (this.title.length === 0 && this.itemType !== ItemType.None) {
+      if (this.isForNew) {
+        this.title = 'New ' + this.capitalize(this.itemType);
+      } else {
+        this.title = 'Edit ' + this.capitalize(this.itemType);
+      }
+    }
+    // Check if onSubmit is given
+    if (this.onSubmit.observers.length !== 0) {
+      this.onSubmitIsGiven = true;
+    } else {
+      this.onSubmitIsGiven = false;
+    }
   }
 
   submit = () => {
     // Filter attributes with undefined values
+    if (this.isValid()){
+      const filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
+      if (this.isForNew) {
+        this.onSubmit.emit(filteredAttributes);
+      } else {
+        const updated = appendUpdatedAttributes(this.item, filteredAttributes);
+        this.onSubmit.emit(updated);
+      }
+    }
+  }
+
+  isValid = (): boolean => {
     if (!this.itemForm.valid) {
       this.itemForm.markAllAsTouched();
       this.clrForm?.markAsTouched();
       this.notifierService.notify('error', this.translate.instant('error.form.invalid'));
-      return ;
+      return false;
     }
     if (this.itemForm.value.mrn === this.mrnPrefix) {
       this.notifierService.notify('error', this.translate.instant('error.form.invalidmrn'));
-      return ;
+      return false;
     }
-    const filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
-    if (this.isForNew) {
-      this.onSubmit.emit(filteredAttributes);
-    } else {
-      const updated = appendUpdatedAttributes(this.item, filteredAttributes);
-      this.onSubmit.emit(updated);
-    }
+    return true;
+  }
+
+  getFormValue = () => {
+    if (this.isValid()) {
+      return filterUndefinedAttributes(this.itemForm.value);
+    } else
+    return undefined;
   }
 
   resetForm = () => {

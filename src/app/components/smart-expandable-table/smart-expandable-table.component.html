@@ -5,7 +5,7 @@
     <div class="clr-row">
         <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
             <app-item-view [itemType]="itemType" [item]="selectedItem" (onEdit)="edit(selectedItem)" (onDelete)="deleteItem(selectedItem)"
-                (onRefresh)="refreshData()" (onMigrate)="migrate($event)" (onApprove)="approve(selectedItem)"/>
+                (onRefresh)="refreshData()" (onMigrate)="migrate($event)" (onApprove)="approve($event)"/>
         </div>
     </div>
 } @else {

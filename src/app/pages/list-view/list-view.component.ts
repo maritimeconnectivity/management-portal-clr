@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
-import { DeviceControllerService, OrganizationControllerService, RoleControllerService, ServiceControllerService, ServicePatch, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
+import { DeviceControllerService, OrganizationControllerService, Role, RoleControllerService, ServiceControllerService, ServicePatch, User, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { ItemType } from 'src/app/common/menuType';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
@@ -11,6 +11,7 @@ import { NotifierService } from 'gramli-angular-notifier';
 import { InstanceControllerService } from 'src/app/backend-api/service-registry';
 import { AuthService } from 'src/app/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 
 @Component({
   selector: 'app-list-view',
@@ -250,10 +251,46 @@ export class ListViewComponent {
     this.organizationService.approveOrganization(selectedItem.mrn).subscribe(
       (res) => {
         this.notifier.notify('success', this.translate.instant('success.resource.approveOrganization'));
-        this.router.navigateByUrl('/pages/ir/organization');
+        this.createAdminRole(selectedItem.mrn).subscribe(
+          (res) => {
+            this.notifier.notify('success', this.translate.instant('success.resource.approveOrganization.role') + ' - ' + ORG_ADMIN_AT_MIR);
+            this.createAdminUser(selectedItem.mrn, selectedItem.adminUser).subscribe(
+              (res) => {
+                this.notifier.notify('success', this.translate.instant('success.resource.approveOrganization.user') + ' - ' + selectedItem.adminUser.mrn);
+                this.router.navigateByUrl('/pages/ir/organization');
+              },
+              err => {
+                this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.userCreation') + err.error?.message);
+              }
+            );
+          },
+          err => {
+            this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.roleCreation') + err.error?.message);
+          });
+        
       },
       err => {
-        this.notifier.notify('error', this.translate.instant('success.resource.approveOrganization.general'));
+        this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.general') + err.error?.message);
       });
   }
+
+  createAdminRole(orgMrn: string) {
+    const role: Role = {
+      permission: ORG_ADMIN_AT_MIR, // TODO is this correct? Revise when creating the new role-functionality
+      roleName: Role.RoleNameEnum.ORGADMIN,
+    };
+    return this.roleService.createRole(role, orgMrn);
+  }
+
+  createAdminUser(orgMrn: string, user: User) {
+    if (!user) {
+      throw new Error(this.translate.instant('error.resource.noUser'));
+    }
+    if (!user.permissions || user.permissions.length === 0) {
+      user.permissions = ORG_ADMIN_AT_MIR;
+    } else if (user.permissions.length > 0 && user.permissions.indexOf(ORG_ADMIN_AT_MIR) < 0) {
+      user.permissions = ',' + ORG_ADMIN_AT_MIR;
+    }
+		return this.userService.createUser(user, orgMrn);
+	}
 }

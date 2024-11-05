@@ -2,11 +2,7 @@
   <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
     <div class="card">
       <div class="card-header">
-        @if (isForNew) {
-        New {{capitalize(itemType)}}
-        } @else {
-        {{capitalize(itemType)}} edit - {{item.mrn}}
-        }
+        {{title}}
       </div>
       <div class="card-block">
         <div class="card-text">
@@ -66,7 +62,6 @@
               }
             </div>
 
-
               <!--
                 <div class="form-group row" *ngIf="!isEditing || (isEditing && isFieldVisible(menu.key))">
                   <div for="input{{menu.key}}" class="label col-sm-3 col-form-label" nbPopover="{{menu.value.description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{menu.value.title}}</div>
@@ -110,13 +105,15 @@
           </form>
         </div>
       </div>
-      <div class="card-footer">
-        <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
-        <button class="btn btn-warning" (click)="resetForm()">Reset</button>
-        @if (!isForNew){
-          <button class="btn btn-danger" (click)="cancel()">Cancel</button>
-        }        
-      </div>
+      @if (onSubmitIsGiven){
+        <div class="card-footer">
+          <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
+          <button class="btn btn-warning" (click)="resetForm()">Reset</button>
+          @if (!isForNew){
+            <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+          }        
+        </div>
+      }
     </div>
   </div>
 </div>
