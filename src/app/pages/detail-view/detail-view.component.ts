@@ -63,7 +63,7 @@ export class DetailViewComponent {
       this.authService.getOrgMrn().then(orgMrn => {
         this.orgMrn = orgMrn;
         if (this.isForNew) {
-          this.mrnPrefix = getMrnPrefixFromOrgMrn(orgMrn, this.itemType);
+          this.mrnPrefix = getMrnPrefixFromOrgMrn(orgMrn);
           this.isEditing = true;
           this.item = { mrn: this.mrnPrefix };
         } else {
