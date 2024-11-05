@@ -1,4 +1,5 @@
 import { Component, Input, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import { Color, LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { Subject } from 'rxjs';
 import { DeviceControllerService, PageDevice } from 'src/app/backend-api/identity-registry';
@@ -18,7 +19,7 @@ class ChartData{
 })
 export class CertChartComponent {
   @Input() certificates: any[] = [];
-
+  @Input() itemType: string = ItemType.None.toString();
   single: any[] = [];
 
   // options
@@ -34,19 +35,21 @@ export class CertChartComponent {
   yAxisLabel: string = 'Certificates';
   showYAxisLabel: boolean = true;
   xAxisLabel = 'Valid days left';
+  backgroundColors: any[] = [];
 
   colorScheme: Color | string = {
     name: 'default',
     selectable: true,
-    group: ScaleType.Time,
-    domain: ['#E44D25', '#F0803C', '#D9E68B', '#5AA454']
+    group: ScaleType.Ordinal,
+    domain: this.backgroundColors,
   };
   schemeType: ScaleType = ScaleType.Linear;
 
-  constructor() {
+  constructor(private router: Router) {
   }
 
   onSelect(data: any): void {
+    //this.router.navigate(['/pages/ir/' + this.itemType + '/' + data.name.split(' | ')[0]]);
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
   }
 
@@ -87,7 +90,18 @@ export class CertChartComponent {
       if (daysLeft < 0) {
         return undefined;
       }
-      return ({ name: cert.mrn + "|" + cert.serialNumber, value: daysLeft })}).filter((cert) => cert !== undefined);
+      return ({ name: cert.mrn + " | " + cert.serialNumber, value: daysLeft, label: cert.mrn, type: this.itemType })}).filter((cert) => cert !== undefined);
     this.view = [600, 60 + this.single.length * 40];
+    this.single.forEach((cert) => {
+      if(cert.value < 60) {
+        this.backgroundColors.push('#A10A28');
+      } else if(cert.value < 120) {
+        this.backgroundColors.push('#E44D25');
+      } else if(cert.value < 240) {
+        this.backgroundColors.push('#5AA454');
+      } else {
+        this.backgroundColors.push('#0B6623');
+      }
+    });
   }
 }
