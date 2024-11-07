@@ -30,6 +30,7 @@ export class SmartTableComponent {
   @Input() deleteText: string = 'Delete';
   @Input() downloadText: string = 'Download';
   @Input() addText: string = 'Add';
+  @Input() selectedIds: any[] = [];
   @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
 
   selected: any[] = [];
@@ -50,9 +51,13 @@ export class SmartTableComponent {
       this.labelTitles = Object.values(this.labels).map((label: any) => label.title);
     }
     this.isLoading = false;
+    if (this.data.length > 0 && this.selectedIds.length > 0) {
+      this.selected = this.data.filter((item: any) => this.selectedIds[0] === item.serialNumber);
+    }
   }
 
   userRowSelect = (selected: any) => {
+    console.log(selected);
     if (this.onRowSelect) {
       this.onRowSelect.emit(selected);
     }

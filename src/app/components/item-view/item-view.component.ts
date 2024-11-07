@@ -44,6 +44,7 @@ export class ItemViewComponent {
   @Input() orgMrn: string = '';
   @Input() mrnPrefix: string = 'urn:mrn:';
   @Input() instanceVersion: string | undefined = undefined;
+  @Input() serial: string | undefined = undefined;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();

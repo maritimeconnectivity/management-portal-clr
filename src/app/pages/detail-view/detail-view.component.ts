@@ -37,6 +37,7 @@ export class DetailViewComponent {
   isForNew = false;
   item: any = {};
   hasAdminPermission = false;
+  serial = '';
   private readonly notifier: NotifierService;
 
   constructor(private route: ActivatedRoute,
@@ -62,6 +63,9 @@ export class DetailViewComponent {
     const queryParams = this.route.snapshot.queryParams;
     if (queryParams['edit'] === 'true') {
       this.isEditing = true;
+    }
+    if (queryParams['serial']) {
+      this.serial = queryParams['serial'];
     }
     this.parseMyUrl().then(async () => {
       this.authService.getOrgMrn().then(orgMrn => {

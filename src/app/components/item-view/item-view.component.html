@@ -45,7 +45,7 @@
                             <div class="clr-form-horizontal clr-form-control clr-row">
                                 <label class="clr-control-label">Active certificates</label>
                                 <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-                                    <app-cert-table context="active" [data]="activeCertificates" (onAdd)="openCertModal()" (onDownload)="clickDownloadBtn($event)" (onRevoke)="clickRevokeBtn($event)" />
+                                    <app-cert-table context="active" [data]="activeCertificates" [serial]="serial" (onAdd)="openCertModal()" (onDownload)="clickDownloadBtn($event)" (onRevoke)="clickRevokeBtn($event)" />
                                 </div>
                             </div>
                             <div class="clr-form-horizontal clr-form-control clr-row">
@@ -88,56 +88,11 @@
                     <p>Here is your certificate bundle. You can download it by clicking the button below.</p>
                 </div>
             } 
-            <!--@else {
-                <div class="clr-col-sm-12 clr-col-md-12">
-                    <clr-radio-container clrInline>
-                        <label>Choose method</label>
-                        <clr-radio-wrapper>
-                          <input type="radio" clrRadio name="options" required (click)="issueManualKeystore()" checked/>
-                          <label>Issue a cert locally with manual keystore setup</label>
-                        </clr-radio-wrapper>
-                        <clr-radio-wrapper>
-                          <input type="radio" clrRadio name="options" required (click)="issueFromBrowser()"/>
-                          <label>Issue a cert locally from browser</label>
-                        </clr-radio-wrapper>
-                        <clr-control-error>This field is required!</clr-control-error>
-                    </clr-radio-container>
-                </div>
-                <div class="clr-col-sm-12 clr-col-md-12">
-                    @if (!fromBrowser) {
-                        <p>Many operating systems and browsers require that certificates are
-                            imported as a password protected PKCS#12 keystore.
-                            If you want to manually generate the keystore, which is the recommended approach, click the corresponding button below and download the resulting zip file, unzip it and then use OpenSSL
-                            to generate the keystore using the following command:
-                            <br><br><pre>openssl pkcs12 -export -out keystore.p12 -in Certificate_NAME.pem -inkey PrivateKey_NAME.pem</pre>
-                          This will prompt you for a passphrase to protect the keystore. If successful the command will
-                          result in a PKCS#12 keystore file called 'keystore.p12'.
-                          <br>If you don't want to generate a keystore at all you can just skip executing the OpenSSL command.
-                          </p>
-                    } @else {
-                        <p>
-                            Many operating systems and browsers require that certificates are
-                            imported as a password protected PKCS#12 keystore. You can let your browser generate a keystore for you. NOTE that this action will take a little while and the resulting keystore will
-                            NOT be compatible with most major operating systems and browsers.
-                        </p>
-                    }
-                </div>
-            }
-                -->
         </div>
         
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" (click)="download()">Download certificate</button>
             <button class="btn btn-outline" type="button" (click)="cancel()">Close</button>
-            <!--
-            @if (certificateBundle) {
-                <button class="btn btn-primary" type="button" (click)="download()">Download certificate</button>
-                <button class="btn btn-outline" type="button" (click)="cancel()">Close</button>
-            } @else {
-                <button class="btn btn-primary" type="button" (click)="issue()">Issue</button>
-            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
-            }
-            -->
         </div>
 </clr-modal>
 

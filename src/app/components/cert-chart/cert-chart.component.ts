@@ -49,16 +49,10 @@ export class CertChartComponent {
   }
 
   onSelect(data: any): void {
-    this.router.navigate(['/pages/ir/' + this.itemType + '/' + data.name.split(' | ')[0]]);
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
-
-  onActivate(data: any): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
-
-  onDeactivate(data: any): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+    const urlTree = this.router.createUrlTree(['/pages/ir/' + this.itemType + '/' + data.name.split(' | ')[0]], {
+      queryParams: { serial: data.name.split(' | ')[1]}
+    });
+    this.router.navigateByUrl(urlTree);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -67,22 +61,6 @@ export class CertChartComponent {
     this.certificates = changes['certificates'].currentValue;
     
     const today = new Date();
-    /*
-    this.certificates.forEach((cert: any) => {
-      var found = this.multi.filter((data) => data.name === cert.mrn);
-      const endDate = new Date(cert.end);
-      const timeDiff = endDate.getTime() - today.getTime();
-      const daysLeft = Math.ceil(timeDiff / (1000 * 3600 * 24));
-      if (daysLeft < 0) {
-        return;
-      }
-      if (found.length === 0) {
-        this.multi = [...this.multi, { name: cert.mrn, series: [{ name: cert.serialNumber, value: daysLeft }] }];
-      } else {
-        found[0].series = [...found[0].series, { name: cert.serialNumber, value: daysLeft }];
-      }
-    });
-    */
    this.single = this.certificates.map((cert: any) => {
     const endDate = new Date(cert.end);
       const timeDiff = endDate.getTime() - today.getTime();
