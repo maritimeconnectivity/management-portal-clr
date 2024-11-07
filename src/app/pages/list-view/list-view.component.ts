@@ -222,17 +222,22 @@ export class ListViewComponent {
   }
 
   moveToEditPage = (selectedItem: any) => {
+    let url = '';
     if (this.itemType === ItemType.Role) {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.id);
+      url = '/pages/ir/'+this.itemType+'/'+selectedItem.id;
     } else if (this.itemType === ItemType.Service) {
       if (selectedItem.instanceVersion) {
-        this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion); //backward compatibility
+        url = '/pages/ir/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion; //backward compatibility
       } else {
-        this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
+        url = '/pages/ir/'+this.itemType+'/'+selectedItem.mrn;
       }
     } else {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/'+selectedItem.mrn);
+      url = '/pages/ir/'+this.itemType+'/'+selectedItem.mrn;
     }
+    const urlTree = this.router.createUrlTree([url], {
+      queryParams: { edit: true }
+    });
+    this.router.navigateByUrl(urlTree);
   }
 
   migrate = (service: any) => {

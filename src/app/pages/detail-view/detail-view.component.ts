@@ -26,7 +26,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
   styleUrl: './detail-view.component.css'
 })
 export class DetailViewComponent {
-  @Input() isEditing: boolean = true;
+  isEditing: boolean = false;
   itemType: ItemType = ItemType.None;
   orgMrn: string = "";
   id: string = "";
@@ -59,6 +59,10 @@ export class DetailViewComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+    const queryParams = this.route.snapshot.queryParams;
+    if (queryParams['edit'] === 'true') {
+      this.isEditing = true;
+    }
     this.parseMyUrl().then(async () => {
       this.authService.getOrgMrn().then(orgMrn => {
         this.orgMrn = orgMrn;

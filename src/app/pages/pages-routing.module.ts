@@ -15,14 +15,12 @@ import { AboutComponent } from './about/about.component';
 import { authGuard } from '../auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
-import { IrGuideComponent } from './ir-guide/ir-guide.component';
 import { AboutComponent } from './about/about.component';
 import { SrSearchComponent } from './sr-search/sr-search.component';
 import { SrGuideComponent } from './sr-guide/sr-guide.component';
 import { ListViewComponent } from './list-view/list-view.component';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { ItemType } from '../common/menuType';
 
 const routes: Routes = [
   {

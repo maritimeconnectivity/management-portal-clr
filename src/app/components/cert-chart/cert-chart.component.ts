@@ -49,7 +49,7 @@ export class CertChartComponent {
   }
 
   onSelect(data: any): void {
-    //this.router.navigate(['/pages/ir/' + this.itemType + '/' + data.name.split(' | ')[0]]);
+    this.router.navigate(['/pages/ir/' + this.itemType + '/' + data.name.split(' | ')[0]]);
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
   }
 
