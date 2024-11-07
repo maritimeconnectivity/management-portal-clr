@@ -13,6 +13,7 @@ import { ItemType } from 'src/app/common/menuType';
 export class CertTableComponent {
   @Input() context: string = 'active';
   @Input() data: any[] = [];
+  @Input() serial: string | undefined;
   @Output() onAdd:EventEmitter<any> = new EventEmitter<any>();
   @Output() onDownload:EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() onRevoke:EventEmitter<any[]> = new EventEmitter<any[]>();

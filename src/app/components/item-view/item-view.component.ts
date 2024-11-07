@@ -2,7 +2,6 @@ import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild } 
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
-import { mrnRegex } from 'src/app/common/mrnRegex';
 import { FormsModule, Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { formatDate, JsonPipe } from '@angular/common';
@@ -16,9 +15,12 @@ import { CertificateBundle } from 'src/app/common/certificateBundle';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
 import { FileHelperService } from 'src/app/common/shared/file-helper.service';
-import { CertificateRevocation } from 'src/app/backend-api/identity-registry';
+import { CertificateRevocation, Role } from 'src/app/backend-api/identity-registry';
 import { getReasonOptionFromRevocationReason, ReasonOption } from 'src/app/common/certRevokeInfo';
 import { migrateVesselAttributes } from 'src/app/common/filterObject';
+import { ItemFormComponent } from '../item-form/item-form.component';
+import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
+import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 
 @Component({
   selector: 'app-item-view',
@@ -28,6 +30,7 @@ import { migrateVesselAttributes } from 'src/app/common/filterObject';
     ClrModalModule,
     ClrRadioModule,
     ClrDatepickerModule,
+    ItemFormComponent,
     CertTableComponent,
     FormsModule,
     JsonPipe,
@@ -39,7 +42,9 @@ export class ItemViewComponent {
   @Input() itemType: ItemType = ItemType.None;
   @Input() item: any = {};
   @Input() orgMrn: string = '';
+  @Input() mrnPrefix: string = 'urn:mrn:';
   @Input() instanceVersion: string | undefined = undefined;
+  @Input() serial: string | undefined = undefined;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
@@ -49,6 +54,7 @@ export class ItemViewComponent {
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
   @ViewChild('revokeModal', { static: true }) revokeModal: ClrModal | undefined;
   @ViewChild('migrateModal', { static: true }) migrateModal: ClrModal | undefined;
+  @ViewChild(ItemFormComponent) newAdminUserForm: ItemFormComponent | undefined;
 
   viewContext = 'detail';
   columnForMenu: {[key: string]: any} = {};
@@ -66,6 +72,9 @@ export class ItemViewComponent {
   certificateBundle: CertificateBundle | undefined = undefined;
   migrateModalOpened = false;
   newServiceMrn = "";
+  userItemType = ItemType.User;
+  adminUser: any = {permissions: ORG_ADMIN_AT_MIR };
+  adminUserMrnPrefix = 'urn:mrn:mcp:';
 
   constructor(private certificateService: CertificateService,
     private translate: TranslateService,
@@ -108,6 +117,9 @@ export class ItemViewComponent {
         this.assignCertificatesByStatus(this.item.certificates);
       }
     }
+    if (this.itemType === ItemType.OrgCandidate) {
+      this.adminUserMrnPrefix = getMrnPrefixFromOrgMrn(this.item.mrn);
+    }
   }
 
   setForm = () => {
@@ -146,7 +158,10 @@ export class ItemViewComponent {
   }
 
   approve = () => {
-    this.onApprove.emit(this.item);
+    if (this.newAdminUserForm?.isValid()) {
+      this.adminUser = this.newAdminUserForm?.getFormValue();
+      this.onApprove.emit({...this.item, adminUser: this.adminUser});
+    }
   }
 
   deleteItem = () => {

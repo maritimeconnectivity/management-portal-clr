@@ -13,7 +13,8 @@
         <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
             [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
     } @else {
-    <app-item-view [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" (onEdit)="edit(item)" (onIssueCert)="issueCert()"
+    <app-item-view [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"
+        (onEdit)="edit(item)" (onIssueCert)="issueCert()"
         (onRefresh)="loadItem(orgMrn)" (onMigrate)="migrate($event)" (onDelete)="deleteItem()" />
     }
     @if (isLoading) {
