@@ -977,7 +977,7 @@ export const ColumnForResource: {[key: string]: object} = {
     },
     unlocode: {
       title: 'Unlocode',
-      type: 'stringArray',
+      type: 'string',
       placeholder: 'Please enter UN/LOCODE',
       visibleFrom: ['detail', 'edit', 'edit-new'],
     },
@@ -1114,7 +1114,7 @@ export const ColumnForResource: {[key: string]: object} = {
     },
     orgCountry: {
       title: 'Country of organization',
-      type: 'string',
+      type: 'stringArray',
       description: 'Country that organization belongs to',
       visibleFrom: ['detail', 'edit', 'edit-new'],
       options: countryOptions,
