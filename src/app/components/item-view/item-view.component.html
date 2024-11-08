@@ -23,6 +23,28 @@
                                                 class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
                                                 required="" aria-describedby="clr-form-control-1-helper"
                                                 [style.width.px]=400>{{convertTimeString(item[menu.key])}}</span>
+                                        } @else if(menu.key === 'serviceType'){
+                                            @if (item[menu.key].length > 0) {
+                                                @for (text of item[menu.key]; track text){
+                                                    <span class="label label-light-blue">{{text}}</span>
+                                                }
+                                            } @else {
+                                                <button class="btn btn-sm btn-outline" disabled>No service type assigned</button>
+                                            }
+                                            
+                                        } @else if(menu.key === 'dataProductType'){
+                                            @if (item[menu.key].length > 0) {
+                                                @for (text of item[menu.key]; track text){
+                                                    <span class="label label-blue">{{text}}</span>
+                                                }
+                                            } @else {
+                                                <button class="btn btn-sm btn-outline" disabled>No data product type assigned</button>
+                                            }
+                                            
+                                        } @else if(menu.key === 'instanceAsXml'){
+                                            <button class="btn btn-sm" (click)="openXmlDialog(item[menu.key])">View XML</button>
+                                        }  @else if(menu.key === 'instanceAsDoc'){
+                                            <button class="btn btn-sm" (click)="downloadDocFile(item[menu.key])">Download file</button>
                                         } @else {
                                             <span clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
                                                 class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
@@ -30,23 +52,29 @@
                                                 [style.width.px]=400>{{item[menu.key]}}</span>
                                         }
                                     } @else {
-                                    <span clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
-                                        class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
-                                        required="" aria-describedby="clr-form-control-1-helper"
-                                        [style.width.px]=400></span>
+                                        @if (menu.key === 'instanceAsXml'){
+                                            <button class="btn btn-sm btn-outline" disabled>No XML data available</button>
+                                        } @else if(menu.key === 'instanceAsDoc'){
+                                            <button class="btn btn-sm btn-outline" disabled>No document available</button>
+                                        } @else {
+                                            <span clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
+                                            class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
+                                            required="" aria-describedby="clr-form-control-1-helper"
+                                            [style.width.px]=400></span>
+                                        }
                                     }
                                 </div>
                             </div>
                         </div>
-                        @if (itemType !== 'role' && itemType !== 'orgcandidate') {
+                        @if (showCertTables) {
                             <div class="clr-form-horizontal clr-form-control clr-row">
-                                <label class="clr-control-label">Active certificates</label>
+                                <label class="clr-control-label clr-col-12 clr-col-md-2">Active certificates</label>
                                 <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
                                     <app-cert-table context="active" [data]="activeCertificates" [serial]="serial" (onAdd)="openCertModal()" (onDownload)="clickDownloadBtn($event)" (onRevoke)="clickRevokeBtn($event)" />
                                 </div>
                             </div>
                             <div class="clr-form-horizontal clr-form-control clr-row">
-                                <label class="clr-control-label">Revoked certificates</label>
+                                <label class="clr-control-label clr-col-12 clr-col-md-2">Revoked certificates</label>
                                 <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
                                     <app-cert-table context="revoked" [data]="revokedCertificates" />
                                 </div>
@@ -195,3 +223,29 @@
         </div>
 </clr-modal>
 
+<clr-modal #xmlModal class="modal" [(clrModalOpen)]="xmlModalOpened" clrModalSize="lg">
+    <div class="modal-title">
+            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            </button>
+            XML editor
+        </div>
+        <div class="modal-body">
+            <div class="clr-col-sm-12 clr-col-md-12">
+                <div class="clr-row">
+                    <div class="clr-control-container">
+                        <div class="clr-textarea-wrapper">
+                            <textarea clrTextarea cols="100" rows="40">{{xmlContent}}</textarea>
+                            <cds-icon class="clr-validate-icon" shape="exclamation-circle"></cds-icon>
+                        </div>
+                        <span class="clr-subtext">
+                            <a href="https://www.iala-aism.org/product/g1128-specification-of-e-nav-technical-service-fillable-annex-f-service-instance-description/" target="_blank">What is G1128?</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" (click)="migrate()">Migrate</button>
+            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+        </div>
+</clr-modal>

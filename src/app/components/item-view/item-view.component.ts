@@ -7,7 +7,7 @@ import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { formatDate, JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { convertTime } from 'src/app/common/timeConverter';
-import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule } from '@clr/angular';
+import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule, ClrTextareaModule } from '@clr/angular';
 import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
 import { CertificateService } from 'src/app/common/shared/certificate.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -34,6 +34,7 @@ import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
     CertTableComponent,
     FormsModule,
     JsonPipe,
+    ClrTextareaModule
   ],
   templateUrl: './item-view.component.html',
   styleUrl: './item-view.component.css'
@@ -54,6 +55,7 @@ export class ItemViewComponent {
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
   @ViewChild('revokeModal', { static: true }) revokeModal: ClrModal | undefined;
   @ViewChild('migrateModal', { static: true }) migrateModal: ClrModal | undefined;
+  @ViewChild('xmlModal', { static: true }) xmlModal: ClrModal | undefined;
   @ViewChild(ItemFormComponent) newAdminUserForm: ItemFormComponent | undefined;
 
   viewContext = 'detail';
@@ -75,6 +77,9 @@ export class ItemViewComponent {
   userItemType = ItemType.User;
   adminUser: any = {permissions: ORG_ADMIN_AT_MIR };
   adminUserMrnPrefix = 'urn:mrn:mcp:';
+  showCertTables = true;
+  xmlModalOpened = false;
+  xmlContent = "";
 
   constructor(private certificateService: CertificateService,
     private translate: TranslateService,
@@ -119,6 +124,16 @@ export class ItemViewComponent {
     }
     if (this.itemType === ItemType.OrgCandidate) {
       this.adminUserMrnPrefix = getMrnPrefixFromOrgMrn(this.item.mrn);
+    }
+    this.checkIfShowCertTables();
+    console.log(this.item);
+  }
+
+  checkIfShowCertTables = () => {
+    if (this.itemType === ItemType.Role || this.itemType === ItemType.OrgCandidate || this.itemType === ItemType.Instance) {
+      this.showCertTables = false;
+    } else {
+      this.showCertTables = true;
     }
   }
 
@@ -185,6 +200,47 @@ export class ItemViewComponent {
     this.certModalOpened = true;
     this.issue();
   }
+
+  openXmlDialog = (xml: any, isEditing: boolean = false) => {
+    this.xmlModalOpened = true;
+    this.xmlModal?.open();
+    this.xmlContent = xml.content;
+  }
+
+  downloadDocFile = (doc: any) => {
+    console.log(doc);
+    this.downloadFile(doc.name, doc.filecontentContentType, doc.filecontent);
+    /*
+    const fileName = `${doc.name}`;
+    const fileContent = doc.content;
+    const blob = new Blob([fileContent], { type: doc.filecontentContentType });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    window.URL.revokeObjectURL(url);
+    */
+  }
+
+  downloadFile(filename: string, type: string, data: string) {
+    // decode base64 string, remove space for IE compatibility
+    var binary = atob(data.replace(/\s/g, ''));
+    var len = binary.length;
+    var buffer = new ArrayBuffer(len);
+    var view = new Uint8Array(buffer);
+    for (var i = 0; i < len; i++) {
+        view[i] = binary.charCodeAt(i);
+    }
+
+    var blob = new Blob([view], {type: type});
+    var elem = window.document.createElement('a');
+    elem.href = window.URL.createObjectURL(blob);
+    elem.download = filename;
+    document.body.appendChild(elem);
+    elem.click();
+    document.body.removeChild(elem);
+}
 
   issue = () => {
     issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser, this.instanceVersion).then((cert: CertificateBundle | undefined) => {
