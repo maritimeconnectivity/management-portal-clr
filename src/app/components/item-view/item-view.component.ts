@@ -20,6 +20,7 @@ import { ItemFormComponent } from '../item-form/item-form.component';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 import { ItemTableComponent } from "../item-table/item-table.component";
+import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
 
 @Component({
   selector: 'app-item-view',
@@ -30,6 +31,7 @@ import { ItemTableComponent } from "../item-table/item-table.component";
     ClrRadioModule,
     ClrDatepickerModule,
     ItemFormComponent,
+    InputGeometryComponent,
     FormsModule,
     ClrTextareaModule,
     ItemTableComponent
