@@ -230,7 +230,7 @@ export class ListViewComponent {
 
   moveToEditPage = (selectedItem: any) => {
     let url = '';
-    if (this.itemType === ItemType.Role) {
+    if (this.itemType === ItemType.Role || this.itemType === ItemType.Instance) {
       url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.id;
     } else if (this.itemType === ItemType.Service) {
       if (selectedItem.instanceVersion) {

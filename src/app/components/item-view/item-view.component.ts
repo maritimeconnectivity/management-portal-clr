@@ -1,12 +1,10 @@
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild } from '@angular/core';
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
-import { CertTableComponent } from '../cert-table/cert-table.component';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { FormsModule, Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { formatDate, JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
-import { convertTime } from 'src/app/common/timeConverter';
 import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule, ClrTextareaModule } from '@clr/angular';
 import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
 import { CertificateService } from 'src/app/common/shared/certificate.service';
@@ -21,6 +19,7 @@ import { migrateVesselAttributes } from 'src/app/common/filterObject';
 import { ItemFormComponent } from '../item-form/item-form.component';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
+import { ItemTableComponent } from "../item-table/item-table.component";
 
 @Component({
   selector: 'app-item-view',
@@ -31,11 +30,10 @@ import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
     ClrRadioModule,
     ClrDatepickerModule,
     ItemFormComponent,
-    CertTableComponent,
     FormsModule,
-    JsonPipe,
-    ClrTextareaModule
-  ],
+    ClrTextareaModule,
+    ItemTableComponent
+],
   templateUrl: './item-view.component.html',
   styleUrl: './item-view.component.css'
 })
@@ -77,9 +75,9 @@ export class ItemViewComponent {
   userItemType = ItemType.User;
   adminUser: any = {permissions: ORG_ADMIN_AT_MIR };
   adminUserMrnPrefix = 'urn:mrn:mcp:';
-  showCertTables = true;
   xmlModalOpened = false;
   xmlContent = "";
+  showCertTables = false;
 
   constructor(private certificateService: CertificateService,
     private translate: TranslateService,
@@ -126,7 +124,6 @@ export class ItemViewComponent {
       this.adminUserMrnPrefix = getMrnPrefixFromOrgMrn(this.item.mrn);
     }
     this.checkIfShowCertTables();
-    console.log(this.item);
   }
 
   checkIfShowCertTables = () => {
@@ -160,10 +157,6 @@ export class ItemViewComponent {
     return revokedCerts.map((cert) => ({ ...cert, revokeReason: this.revokeReasons.filter((reason) => reason.value === cert.revokeReason)[0].title }));
   }
 
-  sortColumnForMenu = (a: any, b: any) => {
-    return sortColumnForMenu(a, b);
-  }
-
   edit = () => {
     this.onEdit.emit(this.item);
   }
@@ -181,14 +174,6 @@ export class ItemViewComponent {
 
   deleteItem = () => {
     this.onDelete.emit(this.item);
-  }
-  
-  isTimestampFormat(key: string): boolean {
-    return timestampKeys.includes(key);
-  }
-
-  convertTimeString = (time: string): string => {
-    return convertTime(time);
   }
 
   openCertModal = () => {

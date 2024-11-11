@@ -106,7 +106,7 @@ export class DetailViewComponent {
       if (this.id === "new") {
         this.isForNew = true;
       }
-      if (this.itemType === ItemType.Role) {
+      if (this.itemType === ItemType.Role || this.itemType === ItemType.Instance) {
         this.numberId = parseInt(this.id);
       }
     });
@@ -133,7 +133,7 @@ export class DetailViewComponent {
       } else if (entityType === ItemType.Role) {
         item = await firstValueFrom(this.roleService.getRole(orgMrn, parseInt(id)));
       } else if (entityType === ItemType.Instance) {
-        item = await firstValueFrom(this.instanceService.getInstanceByMRNAndVersion(id, this.instanceVersion));
+        item = await firstValueFrom(this.instanceService.getInstance(this.numberId));
       } else {
         return {};
       }
