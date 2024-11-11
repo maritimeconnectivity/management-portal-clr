@@ -43,7 +43,7 @@
                                             
                                         } @else if(menu.key === 'instanceAsXml'){
                                             <button class="btn btn-sm" (click)="openXmlDialog(item[menu.key])">View XML</button>
-                                        }  @else if(menu.key === 'instanceAsDoc'){
+                                        } @else if(menu.key === 'instanceAsDoc'){
                                             <button class="btn btn-sm" (click)="downloadDocFile(item[menu.key])">Download file</button>
                                         } @else {
                                             <span clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
@@ -225,10 +225,10 @@
 
 <clr-modal #xmlModal class="modal" [(clrModalOpen)]="xmlModalOpened" clrModalSize="lg">
     <div class="modal-title">
-            <button aria-label="Close" class="close" type="button" (click)="cancel()">
-            </button>
-            XML editor
-        </div>
+        <button aria-label="Close" class="close" type="button" (click)="cancel()">
+        </button>
+        XML editor
+    </div>
         <div class="modal-body">
             <div class="clr-col-sm-12 clr-col-md-12">
                 <div class="clr-row">

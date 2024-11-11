@@ -208,19 +208,7 @@ export class ItemViewComponent {
   }
 
   downloadDocFile = (doc: any) => {
-    console.log(doc);
     this.downloadFile(doc.name, doc.filecontentContentType, doc.filecontent);
-    /*
-    const fileName = `${doc.name}`;
-    const fileContent = doc.content;
-    const blob = new Blob([fileContent], { type: doc.filecontentContentType });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = fileName;
-    a.click();
-    window.URL.revokeObjectURL(url);
-    */
   }
 
   downloadFile(filename: string, type: string, data: string) {
