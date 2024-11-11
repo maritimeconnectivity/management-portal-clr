@@ -27,26 +27,32 @@ export class AuthService {
   }
 
   public async getToken(): Promise<string> {
+    this.protectFromEmptyToken();
     return this.keycloakService.getToken();
   }
 
   public async getOrgMrn(): Promise<string> {
+    this.protectFromEmptyToken();
     return this.keycloakService.getKeycloakInstance().tokenParsed!["org"];
   }
 
   public async getUserName(): Promise<string> {
+    this.protectFromEmptyToken();
     return this.keycloakService.getKeycloakInstance().tokenParsed!["name"];
   }
 
   public async getUserMrn(): Promise<string> {
+    this.protectFromEmptyToken();
     return this.keycloakService.getKeycloakInstance().tokenParsed!["mrn"];
   }
 
   public async getUserRoles(): Promise<string[]> {
+    this.protectFromEmptyToken();
     return this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
   }
 
   public async getUserPermission(): Promise<AuthPermission> {
+    this.protectFromEmptyToken();
     return new Promise<AuthPermission>(async (resolve, reject) => {
       const roles = await this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
       resolve(rolesToPermission(roles));
@@ -54,6 +60,7 @@ export class AuthService {
   }
 
   public async hasPermission(context: ItemType, forMyOrg: boolean = false): Promise<boolean> {
+    this.protectFromEmptyToken();
     return new Promise<boolean>(async (resolve, reject) => {
       if (!this.keycloakService.isLoggedIn())
         resolve(false);
@@ -80,5 +87,13 @@ export class AuthService {
         }
       });
     });
+  }
+
+  private protectFromEmptyToken = () => {
+    const tokenParsed = this.keycloakService.getKeycloakInstance().tokenParsed;
+    if (!tokenParsed) {
+      this.router.navigate(['/login']);
+      throw new Error('User is not authenticated');
+    }
   }
 }
