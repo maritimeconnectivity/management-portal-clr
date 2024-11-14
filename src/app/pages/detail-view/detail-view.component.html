@@ -13,13 +13,8 @@
         <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
             [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
     } @else {
-    <app-item-view [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"
+    <app-item-view [isLoading]="isLoading" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"
         (onEdit)="edit(item)" (onIssueCert)="issueCert()"
         (onRefresh)="loadItem(orgMrn)" (onMigrate)="migrate($event)" (onDelete)="deleteItem()" />
-    }
-    @if (isLoading) {
-    <div class="spinner-view">
-        <clr-spinner *ngIf="isLoading">Loading</clr-spinner>
-    </div>
     }
 </div>

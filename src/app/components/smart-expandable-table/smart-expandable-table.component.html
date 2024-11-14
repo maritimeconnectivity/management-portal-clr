@@ -5,7 +5,7 @@
     <div class="clr-row">
         <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
             <app-item-view [itemType]="itemType" [item]="selectedItem" (onEdit)="edit(selectedItem)" (onDelete)="deleteItem(selectedItem)"
-                (onRefresh)="refreshData()" (onMigrate)="migrate($event)" (onApprove)="approve($event)"/>
+                (onRefresh)="refreshData()" (onMigrate)="migrate($event)" (onApprove)="approve($event)" [isLoading]="false"/>
         </div>
     </div>
 } @else {
@@ -13,7 +13,7 @@
 <clr-datagrid [(clrDgSelected)]="selected" (clrDgRefresh)="refresh($event)" [clrDgLoading]="isLoading">
     @if (onAdd || onDelete || onDownload) {
         <clr-dg-action-bar>
-            @if (onAdd !== undefined) {
+            @if (onAdd !== undefined && itemType !== 'orgcandidate') {
                 <div class="btn-group">
                     <button type="button" class="btn btn-sm btn-secondary" (click)="onAdd()"><cds-icon shape="plus"></cds-icon>
                         {{ addText }}

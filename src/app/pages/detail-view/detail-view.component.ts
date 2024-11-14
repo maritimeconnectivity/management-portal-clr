@@ -33,7 +33,7 @@ export class DetailViewComponent {
   numberId = -1;
   instanceVersion = "";
   mrnPrefix = "urn:mrn:";
-  isLoading = false;
+  isLoading = true;
   isForNew = false;
   item: any = {};
   hasAdminPermission = false;
@@ -146,6 +146,8 @@ export class DetailViewComponent {
 
   loadItem = async (orgMrn: string) => {
     this.item = await this.fetchData(this.itemType, orgMrn, this.id);
+    console.log(this.item);
+    this.isLoading = false;
   }
 
   edit = (item: any) => {

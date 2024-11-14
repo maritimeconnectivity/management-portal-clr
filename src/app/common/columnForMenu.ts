@@ -973,7 +973,7 @@ export const ColumnForResource: {[key: string]: object} = {
     geometryContentType: {
       title: 'Geometry content type',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     geometry: {
       title: 'Geometry',

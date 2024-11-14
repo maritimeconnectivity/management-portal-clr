@@ -29,9 +29,12 @@ dependencies:
   '@angular/router':
     specifier: ^18.2.3
     version: 18.2.3(@angular/common@18.2.3)(@angular/core@18.2.3)(@angular/platform-browser@18.2.3)(rxjs@7.8.1)
-  '@asymmetrik/ngx-leaflet':
-    specifier: ^18.0.1
-    version: 18.0.1(@angular/common@18.2.3)(@angular/core@18.2.3)(leaflet@1.9.4)
+  '@bluehalo/ngx-leaflet':
+    specifier: ^18.0.2
+    version: 18.0.2(@angular/common@18.2.3)(@angular/core@18.2.3)(leaflet@1.9.4)
+  '@bluehalo/ngx-leaflet-draw':
+    specifier: ^18.0.4
+    version: 18.0.4(@angular/common@18.2.3)(@angular/core@18.2.3)(@bluehalo/ngx-leaflet@18.0.2)(leaflet-draw@1.0.4)(leaflet@1.9.4)
   '@cds/core':
     specifier: ^6.13.0
     version: 6.13.0
@@ -81,7 +84,7 @@ dependencies:
     specifier: ^1.9.4
     version: 1.9.4
   leaflet-draw:
-    specifier: ^1.0.4
+    specifier: ^1.0.2
     version: 1.0.4
   pkijs:
     specifier: ^3.2.4
@@ -130,6 +133,9 @@ devDependencies:
   '@types/leaflet':
     specifier: ^1.9.14
     version: 1.9.14
+  '@types/leaflet-draw':
+    specifier: ^1.0.11
+    version: 1.0.11
   angular-cli-ghpages:
     specifier: 2.0.3
     version: 2.0.3
@@ -709,19 +715,6 @@ packages:
       '@angular/core': 18.2.3(rxjs@7.8.1)(zone.js@0.14.10)
       '@angular/platform-browser': 18.2.3(@angular/animations@18.2.3)(@angular/common@18.2.3)(@angular/core@18.2.3)
       rxjs: 7.8.1
-      tslib: 2.7.0
-    dev: false
-
-  /@asymmetrik/ngx-leaflet@18.0.1(@angular/common@18.2.3)(@angular/core@18.2.3)(leaflet@1.9.4):
-    resolution: {integrity: sha512-x1KFH+qUCB4H6GWJik0r+8k10/WZXgWcqq2Iu7GpcpESxBFan+bHtiWJt6urqvMOroObEWfMKmVND83CB7AjlQ==}
-    peerDependencies:
-      '@angular/common': '18'
-      '@angular/core': '18'
-      leaflet: '1'
-    dependencies:
-      '@angular/common': 18.2.3(@angular/core@18.2.3)(rxjs@7.8.1)
-      '@angular/core': 18.2.3(rxjs@7.8.1)(zone.js@0.14.10)
-      leaflet: 1.9.4
       tslib: 2.7.0
     dev: false
 
@@ -1995,6 +1988,36 @@ packages:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
     dev: true
+
+  /@bluehalo/ngx-leaflet-draw@18.0.4(@angular/common@18.2.3)(@angular/core@18.2.3)(@bluehalo/ngx-leaflet@18.0.2)(leaflet-draw@1.0.4)(leaflet@1.9.4):
+    resolution: {integrity: sha512-Fl20OhIczUjPw6VHnBolFyZF31h9fWEVTSUGH97g1zFuaiVeNYW0JkeACPsF5JjOkMs1HAIEfAH+JL/+y/7qkA==}
+    peerDependencies:
+      '@angular/common': '18'
+      '@angular/core': '18'
+      '@bluehalo/ngx-leaflet': '18'
+      leaflet: '1'
+      leaflet-draw: '1'
+    dependencies:
+      '@angular/common': 18.2.3(@angular/core@18.2.3)(rxjs@7.8.1)
+      '@angular/core': 18.2.3(rxjs@7.8.1)(zone.js@0.14.10)
+      '@bluehalo/ngx-leaflet': 18.0.2(@angular/common@18.2.3)(@angular/core@18.2.3)(leaflet@1.9.4)
+      leaflet: 1.9.4
+      leaflet-draw: 1.0.4
+      tslib: 2.7.0
+    dev: false
+
+  /@bluehalo/ngx-leaflet@18.0.2(@angular/common@18.2.3)(@angular/core@18.2.3)(leaflet@1.9.4):
+    resolution: {integrity: sha512-kFohZET6iUUmmrTGrZ4EurtUEzbV3qJ8DdwlzV8NgyoPYDvQoC+JhfjrmeTzfgH94rM4p24eHOPeSW/XueuUKw==}
+    peerDependencies:
+      '@angular/common': '18'
+      '@angular/core': '18'
+      leaflet: '1'
+    dependencies:
+      '@angular/common': 18.2.3(@angular/core@18.2.3)(rxjs@7.8.1)
+      '@angular/core': 18.2.3(rxjs@7.8.1)(zone.js@0.14.10)
+      leaflet: 1.9.4
+      tslib: 2.7.0
+    dev: false
 
   /@cds/city@1.1.0:
     resolution: {integrity: sha512-S9K+Q39BGOghyLHmR0Wdcmu1i1noSUk8HcvMj+3IaohZw02WFd99aPTQDHJeseXrXZP3CNovaSlePI0R11NcFg==}
@@ -3551,6 +3574,12 @@ packages:
 
   /@types/json-schema@7.0.15:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
+    dev: true
+
+  /@types/leaflet-draw@1.0.11:
+    resolution: {integrity: sha512-dyedtNm3aSmnpi6FM6VSl28cQuvP+MD7pgpXyO3Q1ZOCvrJKmzaDq0P3YZTnnBs61fQCKSnNYmbvCkDgFT9FHQ==}
+    dependencies:
+      '@types/leaflet': 1.9.14
     dev: true
 
   /@types/leaflet@1.9.14:

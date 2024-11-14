@@ -1,5 +1,10 @@
-<div #map [style.height.px]="height"
+<div #map [style.height.px]="mapContainerHeight"
      leaflet 
+     leafletDraw
      [leafletOptions]="options"
-     [leafletLayersControl]="layersControl">
+     [leafletDrawOptions]="drawOptions"
+     [leafletFitBounds]="mapFitToBounds"
+     (leafletDrawCreated)="onDrawCreated($event)">
+	<div [leafletLayer]="drawnItems"></div>
+     <div [leafletLayer]="responseFeatureGroup"></div>
 </div>
