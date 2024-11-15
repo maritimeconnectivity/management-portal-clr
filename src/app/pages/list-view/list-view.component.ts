@@ -121,6 +121,11 @@ export class ListViewComponent {
         this.totalElements = page.totalElements!;
       } else if(entityType === ItemType.Instance) {
         page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage));
+        if (this.totalElements === 0) {
+          let elements = await firstValueFrom(this.instanceService.getInstances());
+          this.totalElements = elements.length;
+          this.totalPages = Math.ceil(this.totalElements / elementsPerPage);
+        }        
         console.log(page);
       } else {
         return [];
@@ -165,7 +170,6 @@ export class ListViewComponent {
   }
   
   onDelete = async (selected: any[]) => {
-
     const handleError = (err: any) => {
       if (err.status === 403) {
         this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
