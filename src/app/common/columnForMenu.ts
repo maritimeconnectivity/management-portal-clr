@@ -690,14 +690,6 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'ID',
       type: 'number',
     },
-    instanceId: {
-      title: 'Instance ID',
-      type: 'string',
-      description: 'MCP MRN as unique identifer',
-      placeholder: 'urn:mrn:',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
-      required: true,
-    },
     name: {
       title: 'Name',
       type: 'string',
@@ -943,13 +935,20 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'Organization ID',
       type: 'string',
       visibleFrom: ['detail', 'edit', 'edit-new'],
-      immutable: true,
+      required: true,
     },
     keywords: {
       title: 'Keywords',
       type: 'stringArray',
       placeholder: 'Please enter keyword',
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
+    },
+    instanceId: {
+      title: 'Instance ID',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      placeholder: 'urn:mrn:',
+      visibleFrom: ['detail', 'edit', 'edit-new'],
     },
     implementsServiceDesign: {
       title: 'Technical design ID',
@@ -968,7 +967,6 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'Comment',
       type: 'string',
       visibleFrom: ['detail', 'edit', 'edit-new'],
-      required: true,
     },
     geometryContentType: {
       title: 'Geometry content type',

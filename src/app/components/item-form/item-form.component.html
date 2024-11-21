@@ -21,6 +21,35 @@
                   <clr-control-error>Please enter a value</clr-control-error>
                   }
                 </clr-input-container>
+              } @else if (menu.value.type === 'stringArray'){
+                @if (item[menu.key].length > 0) {
+                  @for (text of item[menu.key]; track text){
+                      <span class="label label-light-blue">{{text}}</span>
+                  }
+                } @else {
+                    <button class="btn btn-sm btn-outline" disabled>No value assigned</button>
+                }
+                @if (menu.value.options) {
+                  <clr-select-container>
+                    <label>{{menu.value.title}}</label>          
+                      <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
+                        <option *ngFor="let option of menu.value.options" [value]="option.value">{{ option.title }}</option>
+                      </select>
+                      <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                      @if (menu.value.error){
+                      <clr-control-error>{{menu.value.error}}</clr-control-error>
+                      } @else {
+                      <clr-control-error>Please enter a value</clr-control-error>
+                      }
+                  </clr-select-container>
+                } @else {
+                  <clr-input-container>
+                    <label>{{menu.value.title}}</label>          
+                    <input clrInput [type]="menu.value.type" [formControlName]="menu.key"
+                  [required]="menu.value.required === true" [style.width.px]=400 />
+                  </clr-input-container>
+                  
+                }                
               } @else if (menu.value.options){
                 <clr-select-container>
                   <label>{{menu.value.title}}</label>                  
