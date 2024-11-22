@@ -65,10 +65,6 @@ export class SmartExpandableTableComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    if (this.labels) {
-      this.labelKeys = Object.keys(this.labels!);
-      this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
-    }
 
     this.authService.getOrgMrn().then((orgMrn) => {
       if (this.itemType === ItemType.Instance) {
@@ -83,7 +79,11 @@ export class SmartExpandableTableComponent {
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
-
+    if (changes['labels']) {
+      this.labelKeys = Object.keys(this.labels!);
+      this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
+    }
+    
     // apply updates of total pages for pagination
     if (changes['totalPages']) {
       this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i);
