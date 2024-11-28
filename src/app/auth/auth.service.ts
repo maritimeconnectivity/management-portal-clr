@@ -19,7 +19,8 @@ export class AuthService {
   }
 
   public async logout() {
-    await this.keycloakService.logout();
+    const url = window.location;
+    await this.keycloakService.logout(url.protocol + '//' + url.host + '/login');
   }
 
   public isAuthenticated(): Promise<boolean> {
