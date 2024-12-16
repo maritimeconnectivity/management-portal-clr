@@ -57,7 +57,6 @@ export class SmartTableComponent {
   }
 
   userRowSelect = (selected: any) => {
-    console.log(selected);
     if (this.onRowSelect) {
       this.onRowSelect.emit(selected);
     }
