@@ -61,9 +61,25 @@
         @if (totalPages > 1) {
             <div class="clr-row clr-justify-content-center">
                 <div class="btn-group btn-outline-primary btn-sm">
-                    @for (i of pageNumbers; track i) {
+                    <!-- Left Arrow -->
+                        <button 
+                        class="btn" 
+                        [disabled]="currentPageRange === 0" 
+                        (click)="changePageRange(-1)">
+                        &laquo; <!-- Unicode for left double arrow -->
+                    </button>
+
+                    <!-- Page Numbers -->
+                    @for (i of visiblePageNumbers; track i) {
                         <button class="btn" [disabled]="i==currentPageNumber" (click)="loadData(i)">{{i+1}}</button>
                     }
+                    <!-- Right Arrow -->
+                    <button 
+                        class="btn" 
+                        [disabled]="(currentPageRange + 1) * elementsPerPage >= totalPages" 
+                        (click)="changePageRange(1)">
+                        &raquo; <!-- Unicode for right double arrow -->
+                    </button>
                 </div>
             </div>
         }

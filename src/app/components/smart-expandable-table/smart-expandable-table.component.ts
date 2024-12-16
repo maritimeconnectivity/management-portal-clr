@@ -52,6 +52,8 @@ export class SmartExpandableTableComponent {
   isLoading: boolean = false;
   pageNumbers: number[] = [];
   currentPageNumber = 0;
+  currentPageRange = 0;
+  visiblePageNumbers: number[] = [];
   elementsPerPage = 10;
   roles: Role[] = [];
 
@@ -85,7 +87,26 @@ export class SmartExpandableTableComponent {
     if (changes['totalPages']) {
       this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i);
     }
+    this.updateVisiblePageNumbers();
     
+  }
+
+  updateVisiblePageNumbers() {
+    const startPage = this.currentPageRange * this.elementsPerPage;
+    const endPage = Math.min(startPage + this.elementsPerPage, this.totalPages);
+    this.visiblePageNumbers = Array.from(
+      { length: endPage - startPage },
+      (_, index) => startPage + index
+    );
+  }
+
+  /**
+   * Change the page range (left or right)
+   * @param direction -1 for left, +1 for right
+   */
+  changePageRange(direction: number) {
+    this.currentPageRange += direction;
+    this.updateVisiblePageNumbers();
   }
 
   async loadData(pageNumber: number = this.currentPageNumber) {
