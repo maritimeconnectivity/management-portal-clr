@@ -3,12 +3,15 @@ import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthPermission, hasAdminPermissionInMIR, rolesToPermission } from './auth.permission';
 import { ItemType } from '../common/menuType';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+  private isAuthenticatedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
+  
   constructor(private keycloakService: KeycloakService, private router: Router) {}
 
   public async login() {
@@ -16,6 +19,13 @@ export class AuthService {
     await this.keycloakService.login({
         redirectUri: url.protocol + '//' + url.host + '/pages'
     });
+
+    // Check authentication status after login
+    //this.isAuthenticated();
+  }
+
+  public setAuthenticated(isAuthenticated: boolean) {
+    this.isAuthenticatedSubject.next(isAuthenticated);
   }
 
   public async logout() {
@@ -23,8 +33,11 @@ export class AuthService {
     await this.keycloakService.logout(url.protocol + '//' + url.host + '/login');
   }
 
-  public isAuthenticated(): Promise<boolean> {
-    return Promise.resolve(this.keycloakService.isLoggedIn());
+  public async isAuthenticated(): Promise<boolean> {
+    console.log("isAuthenticated");
+    const authenticated = await this.keycloakService.isLoggedIn();
+    this.setAuthenticated(authenticated);
+    return Promise.resolve(authenticated);
   }
 
   public async getToken(): Promise<string> {
@@ -49,13 +62,13 @@ export class AuthService {
 
   public async getUserRoles(): Promise<string[]> {
     this.protectFromEmptyToken();
-    return this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
+    return this.keycloakService.getKeycloakInstance().tokenParsed!["permissions"];
   }
 
   public async getUserPermission(): Promise<AuthPermission> {
     this.protectFromEmptyToken();
     return new Promise<AuthPermission>(async (resolve, reject) => {
-      const roles = await this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
+      const roles = await this.keycloakService.getKeycloakInstance().tokenParsed!["permissions"];
       resolve(rolesToPermission(roles));
     });
   }
