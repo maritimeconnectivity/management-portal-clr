@@ -62,13 +62,13 @@ export class AuthService {
 
   public async getUserRoles(): Promise<string[]> {
     this.protectFromEmptyToken();
-    return this.keycloakService.getKeycloakInstance().tokenParsed!["permissions"];
+    return this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
   }
 
   public async getUserPermission(): Promise<AuthPermission> {
     this.protectFromEmptyToken();
     return new Promise<AuthPermission>(async (resolve, reject) => {
-      const roles = await this.keycloakService.getKeycloakInstance().tokenParsed!["permissions"];
+      const roles = await this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
       resolve(rolesToPermission(roles));
     });
   }
