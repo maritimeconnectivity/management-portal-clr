@@ -34,7 +34,6 @@ export class AuthService {
   }
 
   public async isAuthenticated(): Promise<boolean> {
-    console.log("isAuthenticated");
     const authenticated = await this.keycloakService.isLoggedIn();
     this.setAuthenticated(authenticated);
     return Promise.resolve(authenticated);
