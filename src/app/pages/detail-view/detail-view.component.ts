@@ -104,7 +104,7 @@ export class DetailViewComponent {
   }
 
   loadItem = async (orgMrn: string) => {
-    this.item = await this.itemManagerService.fetchData(this.itemType, orgMrn, this.id), this.instanceVersion;
+    this.item = await this.itemManagerService.fetchSingleData(this.itemType, orgMrn, this.id), this.instanceVersion;
   }
 
   edit = (item: any) => {

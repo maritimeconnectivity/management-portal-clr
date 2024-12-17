@@ -21,7 +21,29 @@ export class ItemManagerService {
     private instanceService: InstanceControllerService
   ) { }
 
-  fetchData = async (itemType: ItemType, orgMrn: string, id: string, instanceVersion?: string): Promise<any | undefined> => {
+  fetchListOfData = async (entityType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number) => {
+    if (entityType === ItemType.Device) {
+      return await firstValueFrom(this.deviceService.getOrganizationDevices(orgMrn, pageNumber, elementsPerPage));
+    } else if(entityType === ItemType.Organization) {
+      return await firstValueFrom(this.organizationService.getOrganization(pageNumber, elementsPerPage));
+    } else if(entityType === ItemType.User) {
+      return await firstValueFrom(this.userService.getOrganizationUsers(orgMrn, pageNumber, elementsPerPage));
+    } else if(entityType === ItemType.Service) {
+      return await firstValueFrom(this.serviceService.getOrganizationServices(orgMrn, pageNumber, elementsPerPage));
+    } else if(entityType === ItemType.Vessel) {
+      return await firstValueFrom(this.vesselService.getOrganizationVessels(orgMrn, pageNumber, elementsPerPage));
+    } else if(entityType === ItemType.OrgCandidate) {
+      return await firstValueFrom(this.organizationService.getUnapprovedOrganizations(pageNumber, elementsPerPage));
+    } else {
+      throw new Error('Invalid entity type');
+    }
+  }
+
+  fetchRoles = async (orgMrn: string) => {
+    return await firstValueFrom(this.roleService.getRoles(orgMrn));
+  }
+
+  fetchSingleData = async (itemType: ItemType, orgMrn: string, id: string, instanceVersion?: string): Promise<any | undefined> => {
     try {
       let item;
       if (itemType === ItemType.Device) {
@@ -117,5 +139,17 @@ export class ItemManagerService {
 
   migrate = (newServiceMrn: string, orgMrn: string, serviceMrn: string, instanceVersion: string) => {
     return this.serviceService.migrateServiceMrn({mrn: newServiceMrn} as ServicePatch, orgMrn, serviceMrn, instanceVersion);
+  }
+
+  approve = (orgMrn: string) => {
+    return this.organizationService.approveOrganization(orgMrn);
+  }
+
+  createRole = (role: Role, orgMrn: string) => {
+    return this.roleService.createRole(role, orgMrn);
+  }
+
+  createUser = (user: User, orgMrn: string) => {
+    return this.userService.createUser(user, orgMrn);
   }
 }
