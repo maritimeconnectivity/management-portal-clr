@@ -12,6 +12,7 @@ import { InstanceControllerService } from 'src/app/backend-api/service-registry'
 import { AuthService } from 'src/app/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
+import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 
 @Component({
   selector: 'app-list-view',
@@ -39,14 +40,8 @@ export class ListViewComponent {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private deviceService: DeviceControllerService,
-    private organizationService: OrganizationControllerService,
-    private serviceService: ServiceControllerService,
-    private userService: UserControllerService,
-    private vesselService: VesselControllerService,
-    private roleService: RoleControllerService,
-    private instanceService: InstanceControllerService,
     private notifierService: NotifierService,
+    private itemManagerService: ItemManagerService,
     private authService: AuthService,
     private translate: TranslateService
 ) {
@@ -86,45 +81,6 @@ export class ListViewComponent {
     });
   }
 
-  fetchData = async (entityType: ItemType, pageNumber: number, elementsPerPage: number): Promise<any[] | undefined> => {
-    try {
-      let page;
-      if (entityType === ItemType.Device) {
-        page = await firstValueFrom(this.deviceService.getOrganizationDevices(this.orgMrn, pageNumber, elementsPerPage));
-        this.totalPages = page.totalPages!;
-        this.totalElements = page.totalElements!;
-      } else if(entityType === ItemType.Organization) {
-        page = await firstValueFrom(this.organizationService.getOrganization(pageNumber, elementsPerPage));
-        this.totalPages = page.totalPages!;
-        this.totalElements = page.totalElements!;
-      } else if(entityType === ItemType.User) {
-        page = await firstValueFrom(this.userService.getOrganizationUsers(this.orgMrn, pageNumber, elementsPerPage));
-        this.totalPages = page.totalPages!;
-        this.totalElements = page.totalElements!;
-      } else if(entityType === ItemType.Service) {
-        page = await firstValueFrom(this.serviceService.getOrganizationServices(this.orgMrn, pageNumber, elementsPerPage));
-        this.totalPages = page.totalPages!;
-        this.totalElements = page.totalElements!;
-      } else if(entityType === ItemType.Vessel) {
-        page = await firstValueFrom(this.vesselService.getOrganizationVessels(this.orgMrn, pageNumber, elementsPerPage));
-        this.totalPages = page.totalPages!;
-        this.totalElements = page.totalElements!;
-      } else if(entityType === ItemType.Role) {
-        page = await firstValueFrom(this.roleService.getRoles(this.orgMrn));
-      } else if(entityType === ItemType.OrgCandidate) {
-        page = await firstValueFrom(this.organizationService.getUnapprovedOrganizations(pageNumber, elementsPerPage));
-        this.totalPages = page.totalPages!;
-        this.totalElements = page.totalElements!;
-      } else {
-        return [];
-      }
-      return Array.isArray(page) ? page : page.content;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return [];
-    }
-  }
-
   filterVisibleForList = (item: {[key: string]: any}) => {
     return Object.keys(item)
       .filter(key => item[key]?.visibleFrom?.includes('list'))
@@ -134,31 +90,25 @@ export class ListViewComponent {
       }, {} as {[key: string]: any});
   };
 
-  deleteData = (itemType: ItemType, item: any): Observable<any> => {
-    const id = item.mrn;
-
-    if (itemType === ItemType.Device) {
-      return this.deviceService.deleteDevice(this.orgMrn, id);
-    } else if (itemType === ItemType.Organization || itemType === ItemType.OrgCandidate) {
-      return this.organizationService.deleteOrg(id);
-    } else if (itemType === ItemType.User) {
-      return this.userService.deleteUser(this.orgMrn, id);
-    } else if (itemType === ItemType.Service) {
-      if (item.instanceVersion) {
-        return this.serviceService.deleteService(this.orgMrn, id, item.instanceVersion);
-      } else {
-        return this.serviceService.deleteService1(this.orgMrn, id);
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
+    try {
+      if (itemType === ItemType.Role) {
+        return await this.itemManagerService.fetchRoles(this.orgMrn);
       }
-    } else if (itemType === ItemType.Vessel) {
-      return this.vesselService.deleteVessel(this.orgMrn, id);
-    } else if (itemType === ItemType.Role) {
-      return this.roleService.deleteRole(this.orgMrn, parseInt(item.id));
+      const page = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage);
+      if (!page) {
+        return [];
+      }
+      this.totalPages = page.totalPages!;
+      this.totalElements = page.totalElements!;
+      return Array.isArray(page) ? page : page.content;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return [];
     }
-    return throwError('Invalid item type');
   }
   
   onDelete = async (selected: any[]) => {
-
     const handleError = (err: any) => {
       if (err.status === 403) {
         this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
@@ -174,7 +124,7 @@ export class ListViewComponent {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
       await selected.forEach(async (item) => {
-        await this.deleteData(this.itemType, item).pipe(
+        await this.itemManagerService.deleteData(this.itemType, this.orgMrn, item.mrn, item.instanceVersion, item.id && parseInt(item.id)).pipe(
           catchError(err => {
             handleError(err);
             return throwError(err);
@@ -241,7 +191,7 @@ export class ListViewComponent {
   }
 
   migrate = (service: any) => {
-    this.serviceService.migrateServiceMrn({mrn: service.newServiceMrn} as ServicePatch, this.orgMrn, service.mrn, service.instanceVersion).subscribe(
+    this.itemManagerService.migrate(service.newServiceMrn, this.orgMrn, service.mrn, service.instanceVersion).subscribe(
       (res) => {
         // Handle successful response, e.g., process the certificate if needed
         this.notifier.notify('success', this.translate.instant('success.resource.migrate'));
@@ -253,7 +203,7 @@ export class ListViewComponent {
   }
 
   approve = (selectedItem: any) => {
-    this.organizationService.approveOrganization(selectedItem.mrn).subscribe(
+    this.itemManagerService.approve(selectedItem.mrn).subscribe(
       (res) => {
         this.notifier.notify('success', this.translate.instant('success.resource.approveOrganization'));
         this.createAdminRole(selectedItem.mrn).subscribe(
@@ -284,7 +234,7 @@ export class ListViewComponent {
       permission: ORG_ADMIN_AT_MIR, // TODO is this correct? Revise when creating the new role-functionality
       roleName: Role.RoleNameEnum.ORGADMIN,
     };
-    return this.roleService.createRole(role, orgMrn);
+    return this.itemManagerService.createRole(role, orgMrn);
   }
 
   createAdminUser(orgMrn: string, user: User) {
@@ -296,6 +246,6 @@ export class ListViewComponent {
     } else if (user.permissions.length > 0 && user.permissions.indexOf(ORG_ADMIN_AT_MIR) < 0) {
       user.permissions = ',' + ORG_ADMIN_AT_MIR;
     }
-		return this.userService.createUser(user, orgMrn);
+		return this.itemManagerService.createUser(user, orgMrn);
 	}
 }
