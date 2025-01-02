@@ -121,16 +121,6 @@ export class ItemFormComponent {
     // Filter attributes with undefined values
     if (this.isValid()){
       let filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
-      if (this.itemType === ItemType.Instance) {
-        filteredAttributes = { ...filteredAttributes, 
-          dataProductType:
-            filteredAttributes["dataProductType"] && 
-              Array.isArray(filteredAttributes["dataProductType"]) ? filteredAttributes["dataProductType"].map((d: any) => d.value) : [],
-          serviceType:
-          filteredAttributes["serviceType"] && 
-            Array.isArray(filteredAttributes["serviceType"]) ? filteredAttributes["serviceType"].map((d: any) => d.value) : [],
-        }
-      }
       if (this.isForNew) {
         this.onSubmit.emit(filteredAttributes);
       } else {

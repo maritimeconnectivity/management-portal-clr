@@ -20,6 +20,7 @@ import { ItemFormComponent } from '../item-form/item-form.component';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 import { ItemTableComponent } from "../item-table/item-table.component";
+import { preprocessToShow } from 'src/app/common/itemPreprocessor';
 
 @Component({
   selector: 'app-item-view',
@@ -106,6 +107,7 @@ export class ItemViewComponent {
     } else if (this.item && this.itemType === ItemType.Instance) {
       this.itemId = this.item.instanceId;
       this.instanceVersion = this.item.instanceVersion;
+      this.item = preprocessToShow(this.item, this.itemType);
       this.setForm();
     } else if (this.item && this.item.mrn) {
       this.itemId = this.item.mrn;

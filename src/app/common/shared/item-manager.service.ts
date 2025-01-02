@@ -27,7 +27,7 @@ export class ItemManagerService {
     if(itemType === ItemType.Instance) {
       page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage, [], 'response'));
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 0;
-      return { data: page.body!,
+      return { data: (page.body! as InstanceDto[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
         totalElements};
     } else if (itemType === ItemType.Device) {
@@ -45,7 +45,12 @@ export class ItemManagerService {
     } else {
       throw new Error('Invalid entity type');
     }
-    return { data: Array.isArray(page) ? page : page.content!, totalPages: page.totalPages!, totalElements: page.totalElements!};
+    return {
+      data: Array.isArray(page) ?
+        page.map(i => preprocess(i, itemType)) :
+        page.content!.map(i => preprocess(i, itemType)),
+      totalPages: page.totalPages!,
+      totalElements: page.totalElements!};
   }
 
   fetchRoles = async (orgMrn: string) => {
@@ -97,7 +102,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role) {
       return this.roleService.createRole(body as Role, orgMrn);
     } else if (itemType === ItemType.Instance) {
-      return this.instanceService.createInstance(body as InstanceDto);
+      return this.instanceService.createInstance(postprocess(body, itemType) as InstanceDto);
     }
     return new Observable();
   }
@@ -120,7 +125,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role && numberId) {
       return this.roleService.updateRole(body as Role, orgMrn, numberId);
     } else if (itemType === ItemType.Instance && numberId) {
-      return this.instanceService.updateInstance(Object.assign({}, body, { id: numberId }) as InstanceDto, numberId);
+      return this.instanceService.updateInstance(Object.assign({}, postprocess(body, itemType), { id: numberId }) as InstanceDto, numberId);
     }
     return new Observable();
   }

@@ -12,15 +12,10 @@
                 <div class="card-text">
                     <div class="clr-row">
                         @if (itemType === 'instance') {
-                            <div class="clr-col-md-5 clr-col-12">
-                                test
-                            </div>
-                            <div class="clr-col-md-7 clr-col-12">
-                                <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables"
+                            <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables"
                                     [columnForMenu]="columnForMenu"
                                     (openXmlDialogCall)="openXmlDialog($event)" (downloadDocFileCall)="downloadDocFile($event)"
                                     />    
-                            </div>
                         } @else {
                             <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables" 
                                 [activeCertificates]="activeCertificates" [revokedCertificates]="revokedCertificates"
