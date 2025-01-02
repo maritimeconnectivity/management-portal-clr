@@ -696,6 +696,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'MCP MRN as unique identifer',
       placeholder: 'urn:mrn:',
       visibleFrom: ['detail', 'edit', 'edit-new'],
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>:<unique_id>'",
       required: true,
     },
     name: {

@@ -46,6 +46,8 @@ export class ItemFormComponent {
 
   @Input() title: string = '';
 
+  @Input() orgMrn: string = '';
+
   @Output() onCancel: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
@@ -84,6 +86,7 @@ export class ItemFormComponent {
   ngOnChanges(simpleChange: any) {
     if (this.isForNew) {
       this.viewContext = 'edit-new';
+      this.initializeItem();
     }
     if (this.itemType !== ItemType.None) {
       this.setForm();
@@ -106,10 +109,28 @@ export class ItemFormComponent {
     }
   }
 
+  initializeItem = () => {
+    if (this.itemType === ItemType.Instance) {
+      this.item = {instanceId: this.mrnPrefix, organizationId: this.orgMrn, status: 'PROVISIONAL'};
+    } else {
+      this.item = {mrn: this.mrnPrefix};
+    }
+  }
+
   submit = () => {
     // Filter attributes with undefined values
     if (this.isValid()){
-      const filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
+      let filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
+      if (this.itemType === ItemType.Instance) {
+        filteredAttributes = { ...filteredAttributes, 
+          dataProductType:
+            filteredAttributes["dataProductType"] && 
+              Array.isArray(filteredAttributes["dataProductType"]) ? filteredAttributes["dataProductType"].map((d: any) => d.value) : [],
+          serviceType:
+          filteredAttributes["serviceType"] && 
+            Array.isArray(filteredAttributes["serviceType"]) ? filteredAttributes["serviceType"].map((d: any) => d.value) : [],
+        }
+      }
       if (this.isForNew) {
         this.onSubmit.emit(filteredAttributes);
       } else {
@@ -135,7 +156,8 @@ export class ItemFormComponent {
 
   getFormValue = () => {
     if (this.isValid()) {
-      return filterUndefinedAttributes(this.itemForm.value);
+      let formValue = this.itemForm.value;
+      return filterUndefinedAttributes(formValue);
     } else
     return undefined;
   }
@@ -145,7 +167,7 @@ export class ItemFormComponent {
     if (!this.isForNew) {
       this.itemForm.patchValue(this.item);
     } else if (this.itemType !== ItemType.Role) {
-      this.item = {mrn: this.mrnPrefix};
+      this.initializeItem();     
       this.itemForm.patchValue(this.item);
     }
   }
@@ -181,7 +203,7 @@ export class ItemFormComponent {
         return;
       if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
         return;
-      if (key === 'mrn') {
+      if (key === 'mrn' || key === 'instanceId') {
         const mrnReg: RegExp = new RegExp(mrnRegex());
         formElements[key] = ['', [Validators.required, Validators.pattern(mrnReg)]];
       } else if (key === 'email') {

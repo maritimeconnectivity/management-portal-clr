@@ -74,10 +74,13 @@ export class DetailViewComponent {
           this.loadItem(this.orgMrn);
         }
         this.authService.hasPermission(this.itemType, orgMrn === this.id).then((hasPermission) => {
-          this.hasAdminPermission = hasPermission;
+          if (this.itemType !== ItemType.Instance) {
+            this.hasAdminPermission = hasPermission;
+          }
         });
         if (this.itemType === ItemType.Instance) {
           this.apiBase = 'sr';
+          this.hasAdminPermission = true;
         }
       }
       );
