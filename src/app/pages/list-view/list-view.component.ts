@@ -99,13 +99,13 @@ export class ListViewComponent {
       if (itemType === ItemType.Role) {
         return await this.itemManagerService.fetchRoles(this.orgMrn);
       }
-      const page = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage);
-      if (!page) {
+      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage);
+      if (!fetchedItems) {
         return [];
       }
-      this.totalPages = page.totalPages!;
-      this.totalElements = page.totalElements!;
-      return Array.isArray(page) ? page : page.content;
+      this.totalPages = fetchedItems.totalPages!;
+      this.totalElements = fetchedItems.totalElements!;
+      return fetchedItems.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       return [];
