@@ -34,6 +34,8 @@ export class ItemManagerService {
       return await firstValueFrom(this.vesselService.getOrganizationVessels(orgMrn, pageNumber, elementsPerPage));
     } else if(entityType === ItemType.OrgCandidate) {
       return await firstValueFrom(this.organizationService.getUnapprovedOrganizations(pageNumber, elementsPerPage));
+    } else if(entityType === ItemType.Instance) {
+      return await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage));
     } else {
       throw new Error('Invalid entity type');
     }
@@ -62,6 +64,8 @@ export class ItemManagerService {
         item = await firstValueFrom(this.vesselService.getVessel(orgMrn, id));
       } else if (itemType === ItemType.Role) {
         item = await firstValueFrom(this.roleService.getRole(orgMrn, parseInt(id)));
+      } else if (itemType === ItemType.Instance) {
+        item = await firstValueFrom(this.instanceService.getInstance(parseInt(id)));
       } else {
         return {};
       }
