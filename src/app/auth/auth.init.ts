@@ -30,55 +30,8 @@ export const initializeKeycloak = (keycloak: KeycloakService) => {
             bearerPrefix: 'Bearer',
             initOptions: {
                 onLoad: 'check-sso',
-                silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html'
+                silentCheckSsoRedirectUri: window.location.origin + '/assets/silent-check-sso.html',
+                checkLoginIframe: false,
             }
         });
 }
-
-/*
-
-export const initializeKeycloak = (): () => Promise<boolean> => {
-    return async () =>
-      {
-        const keycloak = new Keycloak({
-          url: AppConfig.OIDC_BASE_PATH + '/auth/',
-          realm: 'MCP',
-          clientId: 'MCP-Portal',
-        });
-        
-        try {
-            const authenticated = await keycloak.init({
-              onLoad: 'check-sso',
-              flow: 'standard',
-              checkLoginIframe: false,
-            }).then((authenticated: any) => {
-              AuthService.staticAuthInfo.authz = keycloak;
-              AuthService.staticAuthInfo.logoutUrl = "/login";
-              if (authenticated) {
-                AuthService.staticAuthInfo.loggedIn = true;
-      
-                AuthService.parseAuthInfo(keycloak.tokenParsed);
-      
-                keycloak.onAuthLogout = function() {
-                  console.log("USER LOGGED OUT");
-                  AuthService.handle401();
-                };
-                keycloak.onTokenExpired = function() {
-                  console.log("TOKEN EXPIRED LOGGED OUT");
-                };
-                  return true;
-                } else {
-                  AuthService.staticAuthInfo.loggedIn = false;
-                  return false;
-                }
-              }
-            );
-            console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
-            return authenticated;
-        } catch (error) {
-            console.error('Failed to initialize adapter:', error);
-        }
-      };
-  }
-
-  */

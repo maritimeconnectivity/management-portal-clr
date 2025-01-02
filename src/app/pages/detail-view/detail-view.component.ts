@@ -12,6 +12,7 @@ import { formatVesselToUpload } from 'src/app/common/dataformatter';
 import { migrateVesselAttributes } from 'src/app/common/filterObject';
 import { ItemType } from 'src/app/common/menuType';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
+import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @Component({
@@ -43,13 +44,7 @@ export class DetailViewComponent {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private deviceService: DeviceControllerService,
-    private organizationService: OrganizationControllerService,
-    private userService: UserControllerService,
-    private vesselService: VesselControllerService,
-    private serviceService: ServiceControllerService,
-    private roleService: RoleControllerService,
-    private instanceService: InstanceControllerService,
+    private itemManagerService: ItemManagerService,
     private notifierService: NotifierService,
     private translate: TranslateService,
     private authService: AuthService,
@@ -112,40 +107,8 @@ export class DetailViewComponent {
     });
   }
 
-  fetchData = async (entityType: ItemType, orgMrn: string, id: string): Promise<any | undefined> => {
-    try {
-      let item;
-      if (entityType === ItemType.Device) {
-        item = await firstValueFrom(this.deviceService.getDevice(orgMrn, id));
-      } else if (entityType === ItemType.Organization) {
-        item = await firstValueFrom(this.organizationService.getOrganization1(id));
-      } else if (entityType === ItemType.User) {
-        item = await firstValueFrom(this.userService.getUser(orgMrn, id));
-      } else if (entityType === ItemType.Service) {
-        if (this.instanceVersion.length > 0) {
-          item = await firstValueFrom(this.serviceService.getServiceVersion(orgMrn, id, this.instanceVersion));
-        } else {
-          item = await firstValueFrom(this.serviceService.getService(orgMrn, id));
-        }
-      } else if (entityType === ItemType.Vessel) {
-        item = await firstValueFrom(this.vesselService.getVessel(orgMrn, id));
-        item = migrateVesselAttributes(item);
-      } else if (entityType === ItemType.Role) {
-        item = await firstValueFrom(this.roleService.getRole(orgMrn, parseInt(id)));
-      } else if (entityType === ItemType.Instance) {
-        item = await firstValueFrom(this.instanceService.getInstance(this.numberId));
-      } else {
-        return {};
-      }
-      return item;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return {};
-    }
-  }
-
   loadItem = async (orgMrn: string) => {
-    this.item = await this.fetchData(this.itemType, orgMrn, this.id);
+    this.item = await this.itemManagerService.fetchSingleData(this.itemType, orgMrn, this.id), this.instanceVersion;
   }
 
   edit = (item: any) => {
@@ -171,7 +134,7 @@ export class DetailViewComponent {
   submitDataToBackend(body: object, id?: string) {
     this.isLoading = true;
     if (id === "new") {
-      this.registerData(this.itemType, body, this.orgMrn).pipe(
+      this.itemManagerService.registerData(this.itemType, body, this.orgMrn).pipe(
         catchError(err => {
           return throwError(err);
         })
@@ -189,7 +152,7 @@ export class DetailViewComponent {
         () => this.isLoading = false
       );
     } else if (id) {
-      this.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).pipe(
+      this.itemManagerService.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).pipe(
         catchError(err => {
           return throwError(err);
         })
@@ -207,71 +170,6 @@ export class DetailViewComponent {
         }
       );
     }
-  }
-
-  registerData = (context: ItemType, body: object, orgMrn: string): Observable<any> => {
-    if (context === ItemType.User) {
-      return this.userService.createUser(body as User, orgMrn);
-    } else if (context === ItemType.Device) {
-      return this.deviceService.createDevice(body as Device, orgMrn);
-    } else if (context === ItemType.Vessel) {
-      return this.vesselService.createVessel(formatVesselToUpload(body) as Vessel, orgMrn);
-    } else if (context === ItemType.Service) {
-      return this.serviceService.createService(body as Service, orgMrn);
-    } else if (context === ItemType.Organization) {
-      return this.organizationService.applyOrganization(body as Organization);
-    } else if (context === ItemType.Role) {
-      return this.roleService.createRole(body as Role, orgMrn);
-    } else if (context === ItemType.Instance) {
-      return this.instanceService.createInstance(body as InstanceDto);
-    }
-    return new Observable();
-  }
-
-  updateData = (context: ItemType, body: object, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<any> => {
-    if (context === ItemType.User) {
-      return this.userService.updateUser(body as User, orgMrn, entityMrn);
-    } else if (context === ItemType.Device) {
-      return this.deviceService.updateDevice(body as Device, orgMrn, entityMrn);
-    } else if (context === ItemType.Vessel) {
-      return this.vesselService.updateVessel(formatVesselToUpload(body) as Vessel, orgMrn, entityMrn);
-    } else if (context === ItemType.Service) {
-      if (version) {
-        return this.serviceService.updateService(body as Service, orgMrn, entityMrn, version);
-      } else {
-        return this.serviceService.updateService1(body as Service, orgMrn, entityMrn);
-      }
-    } else if (context === ItemType.Organization || context === ItemType.OrgCandidate) {
-      return this.organizationService.updateOrganization(body as Organization, entityMrn);
-    } else if (context === ItemType.Role) {
-      return this.roleService.updateRole(body as Role, orgMrn, this.numberId);
-    } else if (context === ItemType.Instance && instanceId) {
-      return this.instanceService.updateInstance(Object.assign({}, body, { id: instanceId }) as InstanceDto, instanceId);
-    }
-    return new Observable();
-  }
-
-  deleteData = (context: ItemType, orgMrn: string, entityMrn: string, version?: string, instanceId?: number): Observable<any> => {
-    if (context === ItemType.User) {
-      return this.userService.deleteUser(orgMrn, entityMrn);
-    } else if (context === ItemType.Device) {
-      return this.deviceService.deleteDevice(orgMrn, entityMrn);
-    } else if (context === ItemType.Vessel) {
-      return this.vesselService.deleteVessel(orgMrn, entityMrn);
-    } else if (context === ItemType.Service) {
-      if (version) {
-        return this.serviceService.deleteService(orgMrn, entityMrn, version);
-      } else {
-        return this.serviceService.deleteService1(orgMrn, entityMrn);
-      }
-    } else if (context === ItemType.Organization || context === ItemType.OrgCandidate) {
-      return this.organizationService.deleteOrg(entityMrn);
-    } else if (context === ItemType.Role) {
-      return this.roleService.deleteRole(orgMrn, this.numberId);
-    } else if (context === ItemType.Instance) {
-      return this.instanceService.deleteInstance(this.numberId);
-    }
-    return new Observable();
   }
 
   issueCert = () => {
@@ -299,7 +197,7 @@ export class DetailViewComponent {
   }
 
   migrate = (newServiceMrn: string) => {
-    this.serviceService.migrateServiceMrn({mrn: newServiceMrn} as ServicePatch, this.orgMrn, this.id, this.instanceVersion).subscribe(
+    this.itemManagerService.migrate(newServiceMrn, this.orgMrn, this.id, this.instanceVersion).subscribe(
       (res) => {
         // Handle successful response, e.g., process the certificate if needed
         this.notifier.notify('success', this.translate.instant('success.resource.migrate'));
@@ -315,7 +213,7 @@ export class DetailViewComponent {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return;
     }
-    this.deleteData(this.itemType, this.orgMrn, this.id, this.instanceVersion, this.numberId).pipe(
+    this.itemManagerService.deleteData(this.itemType, this.orgMrn, this.id, this.instanceVersion, this.numberId).pipe(
       catchError(err => {
         return throwError(err);
       })
