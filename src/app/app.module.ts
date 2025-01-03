@@ -13,6 +13,10 @@ import {HttpClient, provideHttpClient, withInterceptorsFromDi} from "@angular/co
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NotifierModule } from 'gramli-angular-notifier';
+import { BASE_PATH as MIR_BASE_PATH } from './backend-api/identity-registry/variables';
+import { BASE_PATH as MSR_BASE_PATH } from './backend-api/service-registry/variables';
+import { BASE_PATH as SECOM_SEARCH_BASE_PATH } from './backend-api/secom/variables';
+import { AppConfig } from './app.config';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -47,6 +51,18 @@ export function HttpLoaderFactory(http: HttpClient) {
             useFactory: initializeKeycloak,
             multi: true,
             deps: [KeycloakService]
+        },
+        {
+            provide: MIR_BASE_PATH,
+            useValue: AppConfig.IR_BASE_PATH,
+        },
+        {
+            provide: MSR_BASE_PATH,
+            useValue: AppConfig.SR_BASE_PATH,
+        },
+        {
+            provide: SECOM_SEARCH_BASE_PATH,
+            useValue: AppConfig.SR_BASE_PATH,
         },
         provideHttpClient(withInterceptorsFromDi())
     ],
