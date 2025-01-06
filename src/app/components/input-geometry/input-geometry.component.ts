@@ -19,18 +19,11 @@ export class InputGeometryComponent {
   @Input() geometry: object[] = [];
   @Input() geometryNames: string[] = [];
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
-  mapContainerHeight: number = 1000;
+  mapContainerHeight: number = 200;
   mapFitToBounds: L.LatLngBounds = latLngBounds([0, 0], [100, 10]);
   responseFeatureGroup: FeatureGroup = featureGroup();
   queryFeatureGroup: FeatureGroup = featureGroup();
   
-  ngAfterViewInit() {
-    this.mapContainerHeight = this.mapElement!.nativeElement.offsetHeight;
-    const parentDiv = this.mapElement!.nativeElement.parentElement.parentElement;
-    if (parentDiv) {
-      this.mapContainerHeight = parentDiv.offsetHeight;
-    }
-  }
   options = {
     layers: [
       tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' })
@@ -56,7 +49,6 @@ export class InputGeometryComponent {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    
     this.loadGeometryOnMap();
     //this.addFeatures();
   }
@@ -98,7 +90,6 @@ export class InputGeometryComponent {
         }
       }
     });
-    console.log(this.responseFeatureGroup.getLayers());
     if (this.responseFeatureGroup.getLayers().length > 0) {
       this.mapFitToBounds = this.responseFeatureGroup.getBounds();
     }

@@ -1,10 +1,20 @@
-<div #map [style.height.px]="mapContainerHeight"
-     leaflet 
-     leafletDraw
-     [leafletOptions]="options"
-     [leafletDrawOptions]="drawOptions"
-     [leafletFitBounds]="mapFitToBounds"
-     (leafletDrawCreated)="onDrawCreated($event)">
-	<div [leafletLayer]="drawnItems"></div>
-     <div [leafletLayer]="responseFeatureGroup"></div>
-</div>
+@if (isEditing) {
+     <div #map [style.height.px]="mapContainerHeight"
+          leaflet 
+          leafletDraw
+          [leafletOptions]="options"
+          [leafletDrawOptions]="drawOptions"
+          [leafletFitBounds]="mapFitToBounds"
+          (leafletDrawCreated)="onDrawCreated($event)">
+          <div [leafletLayer]="drawnItems"></div>
+          <div [leafletLayer]="responseFeatureGroup"></div>
+     </div>
+} @else {
+     <div #map [style.height.px]="mapContainerHeight"
+          leaflet
+          [leafletOptions]="options"
+          [leafletFitBounds]="mapFitToBounds">
+          <div [leafletLayer]="drawnItems"></div>
+          <div [leafletLayer]="responseFeatureGroup"></div>
+     </div>
+}
