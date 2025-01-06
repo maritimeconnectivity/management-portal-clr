@@ -690,15 +690,6 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'ID',
       type: 'number',
     },
-    instanceId: {
-      title: 'Instance ID',
-      type: 'string',
-      description: 'MCP MRN as unique identifer',
-      placeholder: 'urn:mrn:',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
-      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>:<unique_id>'",
-      required: true,
-    },
     name: {
       title: 'Name',
       type: 'string',
