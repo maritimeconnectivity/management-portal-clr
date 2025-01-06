@@ -10,7 +10,7 @@
                 </clr-alert-item>
               </clr-alert>
         }
-        <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
+        <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn"
             [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
     } @else {
     <app-item-view [isLoading]="isLoading" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"

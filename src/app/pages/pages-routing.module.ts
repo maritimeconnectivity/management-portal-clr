@@ -26,7 +26,6 @@ const routes: Routes = [
   {
   path: '',
   component: PagesComponent,
-  canActivate: [authGuard],
   children: [
     {
       path: '',

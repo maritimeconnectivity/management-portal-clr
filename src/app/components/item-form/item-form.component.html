@@ -51,18 +51,42 @@
                   
                 }                
               } @else if (menu.value.options){
-                <clr-select-container>
-                  <label>{{menu.value.title}}</label>                  
-                    <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
-                      <option *ngFor="let option of menu.value.options" [value]="option.value">{{ option.title }}</option>
-                    </select>
-                    <clr-control-helper>{{menu.value.description}}</clr-control-helper>
-                    @if (menu.value.error){
-                    <clr-control-error>{{menu.value.error}}</clr-control-error>
-                    } @else {
-                    <clr-control-error>Please enter a value</clr-control-error>
-                    }
-                </clr-select-container>
+                
+                  @if (menu.value.type === 'stringArray') {
+                    <clr-combobox-container>
+                      <label>{{menu.value.title}}</label>                  
+                      <clr-combobox [formControlName]="menu.key" name="multiSelect" clrMulti="true" [required]="menu.value.required === true">
+                        <ng-container *clrOptionSelected="let selected">
+                          {{ selected?.title }}
+                        </ng-container>
+                        <clr-options>
+                          <clr-option *clrOptionItems="let option of menu.value.options; field: 'title'" [clrValue]="option">
+                            {{ option.title }}
+                          </clr-option>
+                        </clr-options>
+                      </clr-combobox>
+                      <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                      @if (menu.value.error){
+                        <clr-control-error>{{menu.value.error}}</clr-control-error>
+                        } @else {
+                        <clr-control-error>Please select a value</clr-control-error>
+                        }
+                    </clr-combobox-container>
+
+                  } @else {
+                    <clr-select-container>
+                      <label>{{menu.value.title}}</label>                  
+                      <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
+                        <option *ngFor="let option of menu.value.options" [value]="option.value">{{ option.title }}</option>
+                      </select>
+                      <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                      @if (menu.value.error){
+                      <clr-control-error>{{menu.value.error}}</clr-control-error>
+                      } @else {
+                      <clr-control-error>Please select a value</clr-control-error>
+                      }
+                  </clr-select-container>
+                  }
               } @else if (menu.key === 'permissions'){
                 <clr-select-container>
                   <label>{{menu.value.title}}</label>                  

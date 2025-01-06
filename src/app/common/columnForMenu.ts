@@ -690,6 +690,15 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'ID',
       type: 'number',
     },
+    instanceId: {
+      title: 'Instance ID',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      placeholder: 'urn:mrn:',
+      visibleFrom: ['detail', 'edit', 'edit-new'],
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>:<unique_id>'",
+      required: true,
+    },
     name: {
       title: 'Name',
       type: 'string',
@@ -703,6 +712,18 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Version of service instance',
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       required: true,
+    },
+    serviceTypeValue: {
+      title: 'Service type',
+      type: 'string',
+      description: 'Service type of service instance',
+      visibleFrom: ['list'],
+    },
+    serviceTypeTitle: {
+      title: 'Service type',
+      type: 'stringArray',
+      description: 'Service type of service instance',
+      visibleFrom: ['detail'],
     },
     serviceType: {
       title: 'Service type',
@@ -778,7 +799,19 @@ export const ColumnForResource: {[key: string]: object} = {
         },
       ],
       description: 'The service type shall reflect the associated operational service type provided according to defined types',
-      visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
+      visibleFrom: ['edit', 'edit-new'],
+    },
+    dataProductTypeValue: {
+      title: 'Data product type',
+      type: 'string',
+      description: 'Data product type of service instance',
+      visibleFrom: ['list'],
+    },
+    dataProductTypeTitle: {
+      title: 'Data product type',
+      type: 'stringArray',
+      description: 'Data product type of service instance',
+      visibleFrom: ['detail'],
     },
     dataProductType: {
       title: 'Data product type',
@@ -894,7 +927,7 @@ export const ColumnForResource: {[key: string]: object} = {
         },
       ],
       description: 'Data product type defined in IEC 63173-2 SECOM standard',
-      visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
+      visibleFrom: ['edit', 'edit-new'],
     },
     status: {
       title: 'Status',

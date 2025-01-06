@@ -11,15 +11,14 @@
                             class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
                             required="" aria-describedby="clr-form-control-1-helper"
                             [style.width.px]=400>{{convertTimeString(item[menu.key])}}</span>
-                    } @else if(menu.key === 'serviceType' || menu.key === 'dataProductType'){
+                    } @else if(menu.value.type === 'stringArray'){
                         @if (item[menu.key].length > 0) {
                             @for (text of item[menu.key]; track text){
                                 <span class="label label-light-blue">{{text}}</span>
                             }
                         } @else {
                             <button class="btn btn-sm btn-outline" disabled>No value assigned</button>
-                        }
-                        
+                        }                        
                     } @else if(menu.key === 'instanceAsXml'){
                         <button class="btn btn-sm" (click)="openXmlDialog(item[menu.key])">View XML</button>
                     } @else if(menu.key === 'instanceAsDoc'){

@@ -21,6 +21,7 @@ import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 import { ItemTableComponent } from "../item-table/item-table.component";
 import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
+import { preprocessToShow } from 'src/app/common/itemPreprocessor';
 
 @Component({
   selector: 'app-item-view',
@@ -114,6 +115,7 @@ export class ItemViewComponent {
       this.instanceVersion = this.item.instanceVersion;
       this.geometry = [...this.geometry, this.item.geometry];
       this.geometryNames = [this.item.name];
+      this.item = preprocessToShow(this.item, this.itemType);
       this.setForm();
     } else if (this.item && this.item.mrn) {
       this.itemId = this.item.mrn;
