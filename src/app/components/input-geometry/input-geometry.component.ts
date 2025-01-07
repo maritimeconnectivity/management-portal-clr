@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, Renderer2, SimpleChanges, ViewChild } fro
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
 import * as L from 'leaflet';
-import { circle, circleMarker, DrawEvents, featureGroup, FeatureGroup, latLng, latLngBounds, polygon, rectangle, tileLayer } from 'leaflet';
+import { circle, circleMarker, featureGroup, FeatureGroup, latLng, latLngBounds, polygon, rectangle, tileLayer, DrawEvents } from 'leaflet';
 
 @Component({
   selector: 'app-input-geometry',

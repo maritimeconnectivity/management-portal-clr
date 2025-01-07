@@ -1,0 +1,39 @@
+<div> 
+    <form>
+        <div class="card">
+            <div>
+                <div class="clr-justify-content-start no-gutter">
+                    <div class="clr-col">
+                      <clr-select-container>
+                        <select clrSelect name="options" [(ngModel)]="selectedOption" required>
+                          <option value="one">One</option>
+                          <option value="two">Two</option>
+                          <option value="three">Three</option>
+                        </select>
+                      </clr-select-container>
+                    </div>
+                    <div class="clr-col">
+                        :
+                    </div>
+                    <div class="clr-col">
+                      <clr-input-container>
+                        <input clrInput placeholder="My input" name="input" />
+                      </clr-input-container>
+                    </div>
+                </div>
+                <clr-select-container>
+                    <label>add query</label>
+                    <select clrSelect name="options" [(ngModel)]="selectedOption" required>
+                      <option value="one">One</option>
+                      <option value="two">Two</option>
+                      <option value="three">Three</option>
+                    </select>
+                    <clr-control-helper>Helper text</clr-control-helper>
+                    <clr-control-error>This field is required!</clr-control-error>
+                </clr-select-container>
+            </div>
+        </div>
+
+    </form>
+    
+</div>
