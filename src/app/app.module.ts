@@ -4,12 +4,12 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ClarityModule} from "@clr/angular";
-import {ApiModule as MIRApiModule} from './backend-api/identity-registry';
-import {ApiModule as MSRApiModule} from './backend-api/service-registry';
-import {ApiModule as SECOMApiModule} from './backend-api/secom';
+import {BASE_PATH as IR_BASE_PATH, ApiModule as MIRApiModule} from './backend-api/identity-registry';
+import {BASE_PATH as SR_BASE_PATH, ApiModule as MSRApiModule} from './backend-api/service-registry';
+import {BASE_PATH as SECOM_BASE_PATH, ApiModule as SECOMApiModule} from './backend-api/secom';
 import {initializeKeycloak} from './auth/auth.init';
 import {KeycloakAngularModule, KeycloakService} from 'keycloak-angular';
-import {HttpClient, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi} from "@angular/common/http";
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NotifierModule } from 'gramli-angular-notifier';
@@ -17,6 +17,7 @@ import { BASE_PATH as MIR_BASE_PATH } from './backend-api/identity-registry/vari
 import { BASE_PATH as MSR_BASE_PATH } from './backend-api/service-registry/variables';
 import { BASE_PATH as SECOM_SEARCH_BASE_PATH } from './backend-api/secom/variables';
 import { AppConfig } from './app.config';
+import { AuthInterceptor } from './auth/auth.interceptor';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -52,17 +53,13 @@ export function HttpLoaderFactory(http: HttpClient) {
             multi: true,
             deps: [KeycloakService]
         },
+        {   provide: IR_BASE_PATH, useValue: AppConfig.IR_BASE_PATH },
+        {   provide: SR_BASE_PATH, useValue: AppConfig.SR_BASE_PATH },
+        {   provide: SECOM_BASE_PATH, useValue: AppConfig.SR_BASE_PATH },
         {
-            provide: MIR_BASE_PATH,
-            useValue: AppConfig.IR_BASE_PATH,
-        },
-        {
-            provide: MSR_BASE_PATH,
-            useValue: AppConfig.SR_BASE_PATH,
-        },
-        {
-            provide: SECOM_SEARCH_BASE_PATH,
-            useValue: AppConfig.SR_BASE_PATH,
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true
         },
         provideHttpClient(withInterceptorsFromDi())
     ],
