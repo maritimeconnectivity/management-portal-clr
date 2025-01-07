@@ -24,6 +24,7 @@ export class InputGeometryComponent {
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
   responseFeatureGroup: FeatureGroup = featureGroup();
   queryFeatureGroup: FeatureGroup = featureGroup();
+  mapContainerHeightOffset = 120;
   
   constructor(private el: ElementRef, private renderer: Renderer2 ){
 
@@ -53,13 +54,8 @@ export class InputGeometryComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     if (this.fullscreen) {
-      this.mapContainerHeight = window.innerHeight - 120;
-      console.log('Full screen height:', this.mapContainerHeight);
+      this.mapContainerHeight = window.innerHeight - this.mapContainerHeightOffset;
     }
-  }
-
-  ngAfterViewInit() {
-    
   }
 
   public onDrawCreated(e: any) {
