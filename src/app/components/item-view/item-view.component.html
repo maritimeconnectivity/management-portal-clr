@@ -12,21 +12,39 @@
                 <div class="card-text">
                     <div class="clr-row">
                         @if (itemType === 'instance') {
-                            <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables"
+                            <div class="clr-col-md-12">
+                                <app-input-geometry [geometry]="geometry"/>
+                            </div>
+                            <div class="clr-col-md-12">
+                                @if (isLoading) {
+                                    <div class="spinner-view">
+                                        <clr-spinner *ngIf="isLoading">Loading</clr-spinner>
+                                    </div>
+                                } @else {
+                                    <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables"
                                     [columnForMenu]="columnForMenu"
                                     (openXmlDialogCall)="openXmlDialog($event)" (downloadDocFileCall)="downloadDocFile($event)"
                                     />    
+                                }
+                            </div>
                         } @else {
-                            <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables" 
+                            @if (isLoading) {
+                                <div class="spinner-view">
+                                    <clr-spinner *ngIf="isLoading">Loading</clr-spinner>
+                                </div>
+                            } @else {
+                                <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables" 
                                 [activeCertificates]="activeCertificates" [revokedCertificates]="revokedCertificates"
                                 [columnForMenu]="columnForMenu" [serial]="serial"
                                 (clickDownloadBtnCall)="clickDownloadBtn($event)" (clickRevokeBtnCall)="clickRevokeBtn($event)"
                                 (openCertModalCall)="openCertModal()"/>
-                            @if (itemType === 'orgcandidate') {
-                                <app-item-form #newAdminUserForm title="New administrator user" [isForNew]="true" [itemType]="userItemType" [item]="adminUser"
-                                [mrnPrefix]="adminUserMrnPrefix" />
+                                @if (itemType === 'orgcandidate') {
+                                    <app-item-form #newAdminUserForm title="New administrator user" [isForNew]="true" [itemType]="userItemType" [item]="adminUser"
+                                    [mrnPrefix]="adminUserMrnPrefix" />
+                                }
                             }
                         }
+                        
                     </div>
                 </div>
             </div>

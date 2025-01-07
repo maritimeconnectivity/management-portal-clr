@@ -107,6 +107,8 @@ export class ItemFormComponent {
     } else {
       this.onSubmitIsGiven = false;
     }
+
+    this.prepareItem(this.itemType);
   }
 
   initializeItem = () => {
@@ -122,11 +124,40 @@ export class ItemFormComponent {
     if (this.isValid()){
       let filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
       if (this.isForNew) {
-        this.onSubmit.emit(filteredAttributes);
+        if (this.itemType === ItemType.Instance) {
+          this.onSubmit.emit(this.itemForm.value);
+        } else {
+          this.onSubmit.emit(filteredAttributes);
+        }        
       } else {
         const updated = appendUpdatedAttributes(this.item, filteredAttributes);
         this.onSubmit.emit(updated);
       }
+    }
+  }
+
+  prepareItem = (itemType: ItemType) => {
+    if (itemType === ItemType.Instance) {
+      this.item = {
+        comment: "",
+        instanceAsDoc: null,
+        geometryContentType: null,
+        specifications: {},
+        geometryJson: {},
+        instanceAsXml: null,
+        name: "",
+        version: "",
+        serviceType: [],
+        dataProductType: [],
+        status: "",
+        endpointUri: "",
+        organizationId: "",
+        keywords: [],
+        instanceId: "",
+        implementsServiceDesign: "",
+        implementsServiceDesignVersion: "",
+        lastUpdatedAt: ""
+      };
     }
   }
 

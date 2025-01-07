@@ -5,7 +5,7 @@ import { FormsModule, Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { formatDate, JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
-import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule, ClrTextareaModule } from '@clr/angular';
+import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule, ClrSpinnerModule, ClrTextareaModule } from '@clr/angular';
 import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
 import { CertificateService } from 'src/app/common/shared/certificate.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -20,6 +20,7 @@ import { ItemFormComponent } from '../item-form/item-form.component';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 import { ItemTableComponent } from "../item-table/item-table.component";
+import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
 import { preprocessToShow } from 'src/app/common/itemPreprocessor';
 
 @Component({
@@ -29,8 +30,10 @@ import { preprocessToShow } from 'src/app/common/itemPreprocessor';
     SharedModule,
     ClrModalModule,
     ClrRadioModule,
+    ClrSpinnerModule,
     ClrDatepickerModule,
     ItemFormComponent,
+    InputGeometryComponent,
     FormsModule,
     ClrTextareaModule,
     ItemTableComponent
@@ -45,6 +48,7 @@ export class ItemViewComponent {
   @Input() mrnPrefix: string = 'urn:mrn:';
   @Input() instanceVersion: string | undefined = undefined;
   @Input() serial: string | undefined = undefined;
+  @Input() isLoading: boolean = true;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
@@ -79,6 +83,8 @@ export class ItemViewComponent {
   xmlModalOpened = false;
   xmlContent = "";
   showCertTables = false;
+  geometry: any[] = [];
+  geometryNames: string[] = [];
 
   constructor(private certificateService: CertificateService,
     private translate: TranslateService,
@@ -107,6 +113,8 @@ export class ItemViewComponent {
     } else if (this.item && this.itemType === ItemType.Instance) {
       this.itemId = this.item.instanceId;
       this.instanceVersion = this.item.instanceVersion;
+      this.geometry = [...this.geometry, this.item.geometry];
+      this.geometryNames = [this.item.name];
       this.item = preprocessToShow(this.item, this.itemType);
       this.setForm();
     } else if (this.item && this.item.mrn) {

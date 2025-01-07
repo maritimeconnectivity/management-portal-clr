@@ -30,6 +30,7 @@ export class ItemTableComponent {
   @Output() clickRevokeBtnCall = new EventEmitter<any>();
   @Output() clickDownloadBtnCall = new EventEmitter<any>();
   @Output() openCertModalCall = new EventEmitter();
+  
   isTimestampFormat(key: string): boolean {
     return timestampKeys.includes(key);
   }
