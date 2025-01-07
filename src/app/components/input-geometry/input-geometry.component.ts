@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
 import * as L from 'leaflet';
@@ -18,12 +18,17 @@ export class InputGeometryComponent {
   @Input() isEditing: boolean = false;
   @Input() geometry: object[] = [];
   @Input() geometryNames: string[] = [];
+  @Input() fullscreen: boolean = false;
+  @Input() mapContainerHeight: number = 200;
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
-  mapContainerHeight: number = 200;
-  mapFitToBounds: L.LatLngBounds = latLngBounds([0, 0], [100, 10]);
+  mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
   responseFeatureGroup: FeatureGroup = featureGroup();
   queryFeatureGroup: FeatureGroup = featureGroup();
   
+  constructor(private el: ElementRef, private renderer: Renderer2 ){
+
+  }
+
   options = {
     layers: [
       tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' })
@@ -43,6 +48,19 @@ export class InputGeometryComponent {
       featureGroup: this.responseFeatureGroup
     }
   };
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    if (this.fullscreen) {
+      this.mapContainerHeight = window.innerHeight - 120;
+      console.log('Full screen height:', this.mapContainerHeight);
+    }
+  }
+
+  ngAfterViewInit() {
+    
+  }
 
   public onDrawCreated(e: any) {
     this.drawnItems.addLayer((e as DrawEvents.Created).layer);
