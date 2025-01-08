@@ -1,41 +1,61 @@
-<div> 
-    <div class="card" style="padding-top: 0px;">
-        <div style="padding: 10px;">
-            <app-lucene-component-input [fieldInfo]="fieldInfo" (onCreate)="onCreate($event)"></app-lucene-component-input>
-            <div className="d-flex bg-light flex-row bd-highlight mb-3">
-                <ng-template #luceneComponentHost></ng-template>
-            </div>
-            <!--
+<div class="card" style="margin-top: 0px;">
+    <div class="card-header">
+        <div class="card-header-title">Service Search</div>
+    </div>
+    <div class="clr-container" style="padding: 10px;">
+        <div class="clr-row clr-col-sm-12 clr-col-md-12">
             <div class="clr-justify-content-start no-gutter">
-                <div class="clr-col">
-                    <clr-select-container>
-                    <select clrSelect name="options" [(ngModel)]="selectedOption" required>
-                        <option value="one">One</option>
-                        <option value="two">Two</option>
-                        <option value="three">Three</option>
-                    </select>
-                    </clr-select-container>
+                <div class="clr-container">
+                    <div class="clr-row clr-justify-content-start">
+                        <div class="clr-col" style="display: flex; align-items: center; gap: 8px;">
+                            <clr-select-container style="margin-top: 0px;" >
+                                <select clrSelect name="options" required inline>
+                                    <option value="one">One</option>
+                                    <option value="two">Two</option>
+                                    <option value="three">Three</option>
+                                </select>
+                            </clr-select-container>
+                            <span>:</span>
+                            <clr-input-container style="margin-top: 0px;" >
+                                <input clrInput placeholder="My input" name="input" />
+                            </clr-input-container>
+                            <button class="btn btn-danger btn-sm">X</button>
+                        </div>
+                        <div class="clr-col">
+                            <clr-select-container style="margin-top: 0px;" >
+                                <select clrSelect name="options" required inline>
+                                    <option value="and">AND</option>
+                                    <option value="or">OR</option>
+                                </select>
+                            </clr-select-container>
+                        </div>
+                        <div class="clr-col" style="display: flex; align-items: center; gap: 8px;">
+                            <clr-select-container style="margin-top: 0px;" >
+                                <select clrSelect name="options" required inline>
+                                    <option value="one">One</option>
+                                    <option value="two">Two</option>
+                                    <option value="three">Three</option>
+                                </select>
+                            </clr-select-container>
+                            <span>:</span>
+                            <clr-input-container style="margin-top: 0px;" >
+                                <input clrInput placeholder="My input" name="input" />
+                            </clr-input-container>                                
+                        </div>
+                    </div>
                 </div>
-                <div class="clr-col">
-                    :
-                </div>
-                <div class="clr-col">
-                    <clr-input-container>
-                    <input clrInput placeholder="My input" name="input" />
-                    </clr-input-container>
-                </div>
+                
             </div>
-            <clr-select-container>
-                <label>add query</label>
-                <select clrSelect name="options" [(ngModel)]="selectedOption" required>
-                    <option value="one">One</option>
-                    <option value="two">Two</option>
-                    <option value="three">Three</option>
-                </select>
-                <clr-control-helper>Helper text</clr-control-helper>
-                <clr-control-error>This field is required!</clr-control-error>
-            </clr-select-container>
-            -->
+        </div>
+        <div class="clr-row clr-col-sm-12 clr-col-md-12">
+            <app-lucene-component-input [fieldInfo]="fieldInfo" (onCreate)="onCreate($event)"></app-lucene-component-input>    
+        </div>
+        <div class="clr-row clr-col-sm-12 clr-col-md-12">
+            <button class="btn btn-primary btn-block">Search</button>
+        </div>
+        
+        <div className="d-flex bg-light flex-row bd-highlight mb-3">
+            <ng-template #luceneComponentHost></ng-template>
         </div>
     </div>
 </div>

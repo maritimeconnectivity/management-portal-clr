@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ClrComboboxModule, ClrInputModule, ClrSelectModule } from '@clr/angular';
 import { Observable, of } from 'rxjs';
 import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
+import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
 
 @Component({
   selector: 'app-lucene-component-input',
@@ -20,7 +21,7 @@ import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
 })
 export class LuceneComponentInputComponent {
   options: string[] = [];
-  filteredOptions$: Observable<string[]> | undefined;
+  filteredOptions = srFieldInfo;
 
   @ViewChild('autoInput') input: any;
 
@@ -30,7 +31,7 @@ export class LuceneComponentInputComponent {
   ngOnInit() {
     console.log('fieldInfo', this.fieldInfo);
     this.options = this.fieldInfo?.map(e => e.name);
-    this.filteredOptions$ = of(this.options);
+    //this.filteredOptions$ = of(this.options);
   }
 
   private filter(value: string): string | undefined {
