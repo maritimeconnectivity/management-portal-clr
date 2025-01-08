@@ -1,0 +1,9 @@
+<div class="d-inline-flex p-1" style="align-items:flex-start">
+    <clr-combobox [(ngModel)]="selectedItem" (ngModelChange)="onSelectedChange($event)" placeholder="Select field">
+        <clr-options>
+            <clr-option *ngFor="let c of fieldInfo" [clrValue]="c.value">{{c.name}}</clr-option>
+        </clr-options>
+    </clr-combobox>
+    <input clrInput [disabled]="!selectedItem" [value]="fieldValue" [style.min-width.px]="140" (input)="onEdit($event.target ? '$event.target.value' : '')">
+    <button class="btn btn-danger" (click)="delete()">X</button>
+</div>

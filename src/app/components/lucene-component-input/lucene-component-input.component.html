@@ -1,0 +1,21 @@
+<div class="p-0">
+    <clr-input-container>
+        <label>Query Field</label>
+        <input #autoInput
+        clrInput
+        type="text"
+        (input)="onChange('$event.target.value')"
+        placeholder="Click to generate query field"
+        />
+    </clr-input-container>
+
+    <clr-combobox-container>
+        <clr-combobox #auto (clrSelectedChange)="onSelectionChange('$event')">
+            <clr-options>
+                <clr-option *ngFor="let option of filteredOptions$ | async" [clrValue]="option">
+                    {{ option }}
+                </clr-option>
+            </clr-options>
+        </clr-combobox>
+    </clr-combobox-container>
+</div>
