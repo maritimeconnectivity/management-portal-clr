@@ -1,0 +1,19 @@
+.overlay-container {
+    position: relative;
+}
+  
+.overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000; /* Ensure the overlay is above the input geometry */
+    background: rgba(255, 255, 255, 0.8); /* Optional: Add a background to the overlay */
+    padding: 10px; /* Optional: Add padding to the overlay */
+    border-radius: 8px; /* Optional: Add border radius to the overlay */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow to the overlay */
+}
+
+.leaflet-container {
+    z-index: 1;
+}

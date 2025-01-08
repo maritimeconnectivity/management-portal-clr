@@ -1,6 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ClrComboboxModule, ClrInputModule } from '@clr/angular';
+import { ClrComboboxModule, ClrInputModule, ClrSelectModule } from '@clr/angular';
 import { Observable, of } from 'rxjs';
 import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
 
@@ -10,7 +11,9 @@ import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
   imports: [
     ClrInputModule,
     ClrComboboxModule,
-    FormsModule
+    FormsModule,
+    ClrSelectModule,
+    CommonModule
   ],
   templateUrl: './lucene-component-input.component.html',
   styleUrl: './lucene-component-input.component.css'
@@ -25,6 +28,7 @@ export class LuceneComponentInputComponent {
   @Output() onCreate = new EventEmitter<any>();
 
   ngOnInit() {
+    console.log('fieldInfo', this.fieldInfo);
     this.options = this.fieldInfo?.map(e => e.name);
     this.filteredOptions$ = of(this.options);
   }

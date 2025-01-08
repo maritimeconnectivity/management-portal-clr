@@ -1,14 +1,23 @@
-import _ from "lucene-query-string-builder";
-import { LogicalOperator } from '../model/localOperator';
 
-export const buildTerm = (data: object) => {
+import * as _ from "lucene-query-string-builder";
+import { LogicalOperator } from './localOperator';
+
+export const buildTerm = (data: {[key: string]: any}): string => {
     if (data) {
       const key = Object.keys(data).pop();
-      return key && data[key] !== undefined &&  _.field(key, _.term(data[key]));
+      if (key && data[key] !== undefined) {
+        return _.field(key, _.term(data[key]));
+      }
     }
+    return '';
 }
 
-export function buildQuery(terms: object[]) {
+interface Term {
+  operator?: LogicalOperator;
+  [key: string]: any;
+}
+
+export function buildQuery(terms: Term[]): any {
   if (terms.length === 1) {
     return buildTerm(terms[0]);
   } else if (terms.length >= 3) {
