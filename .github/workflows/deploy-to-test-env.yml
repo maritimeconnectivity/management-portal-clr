@@ -31,4 +31,4 @@ jobs:
         pnpm install -g @angular/cli
         git config --global user.name "GhPages Deploy Bot"
         git config --global user.email "jinki+gh_deploy@dmc.international"
-        ng deploy --repo=https://github.com/maritimeconnectivity/test-management-portal-pages --cname=test-management.maritimeconnectivity.net --dir="dist/management-portal-clr"
+        ng deploy -c test --repo=https://github.com/maritimeconnectivity/test-management-portal-pages --cname=test-management.maritimeconnectivity.net --dir="dist/management-portal-clr"
