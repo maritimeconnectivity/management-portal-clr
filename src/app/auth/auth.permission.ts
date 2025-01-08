@@ -40,6 +40,9 @@ export enum AuthPermissionForMSR {
 
 export const rolesToPermission = (roles: RoleNameEnum[]): AuthPermission => {
     let permission = AuthPermission.User;
+    if (!roles) {
+      return permission;
+    }
     for (const roleString of roles) {
       switch (roleString as RoleNameEnum) {
         case RoleNameEnum.ORGADMIN: {
