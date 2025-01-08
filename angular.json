@@ -140,6 +140,16 @@
           "builder": "angular-cli-ghpages:deploy",
           "options": {
             "cname": "test-management.maritimeconnectivity.net"
+          },
+          "configurations": {
+            "test": {
+              "buildTarget": "management-portal-clr:build:test",
+              "cname": "test-management.maritimeconnectivity.net"
+            },
+            "pd": {
+              "buildTarget": "management-portal-clr:build:production",
+              "cname": "management.maritimeconnectivity.net"
+            }
           }
         }
       }
