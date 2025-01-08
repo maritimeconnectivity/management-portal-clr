@@ -98,17 +98,17 @@ export const MENU_ITEMS: any[] = [
         link: '/pages/sr/instance',
         group: 'mysr'
       },
-      {
-        title: 'separator',
-      },
-      {
-        title: 'Global Search',
-      },
-      {
-        title: 'menu.ledger.search',
-        link: '/pages/ledger/search',
-        group: 'global'
-      },
+      // {
+      //   title: 'separator',
+      // },
+      // {
+      //   title: 'Global Search',
+      // },
+      // {
+      //   title: 'menu.ledger.search',
+      //   link: '/pages/ledger/search',
+      //   group: 'global'
+      // },
     ],
   },
   {
