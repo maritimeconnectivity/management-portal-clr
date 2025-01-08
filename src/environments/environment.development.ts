@@ -14,33 +14,26 @@
  * limitations under the License.
  */
 
-/**
- * @license
- * Copyright Akveo. All Rights Reserved.
- * Licensed under the MIT License. See License.txt in the project root for license information.
- */
- export const environment = {
-  production: true,
-  staging: false,
-  irBasePath: 'https://api.maritimeconnectivity.net',
+export const environment = {
+  production: false,
+  irBasePath: 'https://test-api.maritimeconnectivity.net',
   irProvider: 'MCP Consortium',
   irContact: 'info@maritimeconnectivity.net',
-  oidcBasePath: 'https://maritimeid.maritimeconnectivity.net',
-  hasServiceRegistry: true,
-  srBasePath: 'https://msr.maritimeconnectivity.net',
+  oidcBasePath: 'https://test-maritimeid.maritimeconnectivity.net',
+  hasServiceRegistry: false,
+  srBasePath: 'https://msr-test.maritimeconnectivity.net',
   srProvider: 'MCP Consortium',
   srContact: 'info@maritimeconnectivity.net',
-  hasMSRLedger: false,
-  ledgerPath: '',
+  hasMSRLedger: true,
+  ledgerPath: 'https://test-ledger.maritimeconnectivity.net',
   mpProvider: 'MCP Consortium',
   mpContact: 'info@maritimeconnectivity.net',
-  environmentTitle: 'MCC Testbed',
+  environmentTitle: 'MCC Testbed TEST',
   termsOfUse: 'By applying for access to the MCP testbed, you agree not to store any personal information on the platform such as names and email addresses. Please use generic names, such as \'John Doe\' and generic email addresses such as \'info@company.com\'. It does need to be a working email address though, since access will be granted through this email address. Furthermore, if anyone chooses to federate an identity registry into the MCP testbed, this should only contain test data - not actual personal information. This is due to the European Union General Data Protection Regulation (GDPR). For more information, contact the MCC secretariat.',
-  idpNamespace: 'mcc',
+  idpNamespace: 'mcc-test',
+  environmentName: 'test',
   mpName: 'MCC MCP Testbed',
-  environmentName: 'public-demonstrator',
   footerName: 'Maritime Connectivity Platform Consortium',
   footerLink: 'https://maritimeconnectivity.net',
   logoImg: 'assets/images/logo.svg',
-  loginBgImg: '',
 };
