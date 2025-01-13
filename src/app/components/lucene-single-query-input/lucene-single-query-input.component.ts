@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ClarityIcons, codeIcon } from '@cds/core/icon';
 import { ClarityModule, ClrAlertModule, ClrComboboxModule } from '@clr/angular';
 import { LuceneComponent } from 'src/app/common/lucene-query/lucene-component';
 import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
 import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
+ClarityIcons.addIcons(codeIcon);
 
 @Component({
   selector: 'app-lucene-single-query-input',
@@ -74,5 +76,9 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
 
   delete(): void {
     this.onDelete.emit(this.id);
+  }
+
+  createExpressionWithBrackets(): void {
+    
   }
 }

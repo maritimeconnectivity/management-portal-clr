@@ -14,12 +14,13 @@ export const buildTerm = (data: {[key: string]: any}): string => {
 
 interface Term {
   operator?: LogicalOperator;
+  group?: Term[];
   [key: string]: any;
 }
 
 export function buildQuery(terms: Term[]): any {
   if (terms.length === 1) {
-    return buildTerm(terms[0]);
+    return terms[0].group ? buildQuery(terms[0].group): buildTerm(terms[0]);
   } else if (terms.length >= 3) {
     const op = terms[terms.length - 2];
     if (op['operator'] === LogicalOperator.And) {

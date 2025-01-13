@@ -12,6 +12,7 @@ import { LuceneSingleQueryInputComponent } from '../lucene-single-query-input/lu
 import { ClarityIcons, filterGridIcon, connectIcon } from '@cds/core/icon';
 import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
 import { CommonModule } from '@angular/common';
+import { LuceneQueryOutput } from 'src/app/common/lucene-query/lucene-query-output';
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
 
@@ -24,10 +25,6 @@ const shortid = require('shortid');
     FormsModule,
     ClrInputModule,
     ClrAlertModule,
-    LuceneSingleQueryInputComponent,
-    LuceneLogicInputComponent,
-    LuceneLogicInputComponent,
-    LuceneSingleQueryInputComponent,
     CommonModule,
 ],
   templateUrl: './svc-search-input.component.html',
@@ -37,11 +34,15 @@ export class SvcSearchInputComponent {
   group: LuceneComponentItem[] = [];
   data: object[] = [{}];
   selectedItem: string = '';
+  queryString = '';
+  freetext = '';
 
   @Input() title: string = 'Service Search';
   @Input() btnTitle: string = 'Search';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
   @Output() onUpdateQuery = new EventEmitter<any>();
+
+  @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
   @ViewChild('luceneComponentHost', { read: ViewContainerRef, static: false }) luceneComponentHost!: ViewContainerRef;
 
   constructor(private resolver: ComponentFactoryResolver) {
@@ -85,15 +86,24 @@ export class SvcSearchInputComponent {
       }
     }
     this.loadComponent();
-    this.exportQuery();
+    this.updateLuceneQuery();
   }
 
-  exportQuery() {
+  onEditQuery(componentId: string, data: object): void {
+    this.group = this.group.map(e => e.id === componentId ? {...e, data: data} : e);
+    this.updateLuceneQuery();
+  }
+
+  search(): void {
+    console.log(this.queryString);
+  }
+
+  updateLuceneQuery = () => {
     const dataArray = this.group.map(e => e.data);
-    const queryString = buildQuery(dataArray);
+    this.queryString = buildQuery(dataArray);
 
     // flattening data array for SearchParameters
-    let data: { [key: string]: any } = {};
+    let data: Record<string, any> = {};
     dataArray.forEach((e: { [key: string]: any }) => {
       if (Object.keys(e).length &&
         Object.keys(e).pop() !== 'operator') {
@@ -103,12 +113,19 @@ export class SvcSearchInputComponent {
           }
         }
       });
-    this.onUpdateQuery.emit({queryString, data});
+    this.luceneQueryStringInput.nativeElement.value = this.queryString;
+
+    // get rid of " to convert it to the freetext
+    if (this.queryString.length > 0) {
+      this.freetext = this.queryString.split('"').join('');
+    }
   }
 
-  onEditQuery(componentId: string, data: object): void {
-    this.group = this.group.map(e => e.id === componentId ? {...e, data: data} : e);
-    this.exportQuery();
+  onQueryStringChanged = (event: any) => {
+    this.queryString = event.target.value;
+    if (this.queryString.length === 0) {
+      this.clearInput();
+    }
   }
 
   clearInput(): void {
@@ -124,5 +141,7 @@ export class SvcSearchInputComponent {
     this.group.push(new LuceneComponentItem(LuceneSingleQueryInputComponent, shortid.generate(),
       {[this.fieldInfo?.filter(e => e.value === value).pop()?.value as string]: ''}, this.fieldInfo));
     this.loadComponent();
+    this.updateLuceneQuery();
+    this.selectedItem = '';
   }
 }

@@ -20,6 +20,9 @@
                 <input clrInput [disabled]="!selectedItem" [value]="fieldValue" name="input" (input)="onEdit($event)"/>
             </clr-input-container>
             @if (requireCloseBtn) {
+                <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="createExpressionWithBrackets()">
+                    <cds-icon shape="code"></cds-icon>
+                </button>
                 <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="delete()">
                     <cds-icon shape="times"></cds-icon>
                 </button>

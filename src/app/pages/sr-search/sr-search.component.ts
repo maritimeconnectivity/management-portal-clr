@@ -25,7 +25,6 @@ import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-
 export class SrSearchComponent {
   @ViewChild('map')
   geometryMap!: InputGeometryComponent;
-  @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
   @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent!: SvcSearchInputComponent;
   queryGeometry: any = {};
   geometries: any[] = [];
@@ -68,17 +67,6 @@ export class SrSearchComponent {
     }
   }
 
-  onUpdateLuceneQuery = (query: LuceneQueryOutput) => {
-    this.queryString = query.queryString ? query.queryString : '';
-    this.luceneQueryStringInput.nativeElement.value = this.queryString;
-
-    // get rid of " to convert it to the freetext
-    this.freetext = this.queryString.split('"').join('');
-    if (this.queryString.length === 0) {
-      this.clearAll();
-    }
-  }
-
   onUpdateGeometry = (event: any) => {
     this.queryGeometry = event['data'];
     this.search(this.searchParams, geojsonToWKT(this.queryGeometry), this.freetext);
@@ -104,7 +92,8 @@ export class SrSearchComponent {
   }
 
   onSearch = () => {
-    this.search(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '', this.freetext);
+    console.log(this.queryString);
+    //this.search(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '', this.freetext);
   }
 
   onQueryStringChanged = (event: any) => {
