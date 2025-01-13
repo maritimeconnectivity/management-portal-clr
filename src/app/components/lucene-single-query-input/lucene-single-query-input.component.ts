@@ -20,7 +20,6 @@ import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-
 
 export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent {
   options: string[] = [];
-  filteredOptions = srFieldInfo;
   selectedItem: string = '';
   field: string = '';
   fieldValue: string = '';
@@ -31,7 +30,7 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   @Input() requireInfo: boolean = false;
   @Input() id: string = '';
   @Input() data: { [key: string]: any } = {};
-  @Input() fieldInfo: QueryFieldInfo[] = [];
+  @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
   @Output() onUpdate = new EventEmitter<any>();
   @Output() onDelete = new EventEmitter<any>();
 
@@ -57,7 +56,8 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
     return array1.filter(value => array2.includes(value));
   }
 
-  onEdit(value: string): void {
+  onEdit(event: any): void {
+    const value: string = event.target.value;
     if (this.field) {
       this.data = {[this.field]: value};
       this.fieldValue = value;

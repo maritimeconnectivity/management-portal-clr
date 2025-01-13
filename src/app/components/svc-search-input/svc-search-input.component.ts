@@ -1,4 +1,4 @@
-import { Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, Input, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule, ClrAlertModule, ClrInputModule, ClrSelectModule } from '@clr/angular';
 import { LuceneComponentItem } from 'src/app/common/lucene-query/lucene-component-item';
@@ -37,20 +37,24 @@ export class SvcSearchInputComponent {
   group: LuceneComponentItem[] = [];
   data: object[] = [{}];
   selectedItem: string = '';
-  filteredOptions = srFieldInfo;
 
   @Input() title: string = 'Service Search';
   @Input() btnTitle: string = 'Search';
-  @Input() fieldInfo: QueryFieldInfo[] = [];
+  @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
   @Output() onUpdateQuery = new EventEmitter<any>();
-  @ViewChild(LuceneComponentDirective, {static: true}) luceneComponentHost!: LuceneComponentDirective;
+  @ViewChild('luceneComponentHost', { read: ViewContainerRef, static: false }) luceneComponentHost!: ViewContainerRef;
 
   constructor(private resolver: ComponentFactoryResolver) {
   }
 
+  ngAfterViewInit() {
+    if (this.luceneComponentHost) {
+      this.loadComponent();
+    }
+  }
+
   loadComponent() {
-    /*
-    const viewContainerRef = this.luceneComponentHost.viewContainerRef;
+    const viewContainerRef = this.luceneComponentHost;
     viewContainerRef.clear();
 
     this.group.forEach((component) => {
@@ -64,11 +68,6 @@ export class SvcSearchInputComponent {
       componentRef.instance.onDelete.subscribe(id => this.onDeleteById(id));
       
     });
-    */
-  }
-
-  ngOnInit(): void {
-    this.loadComponent();
   }
 
   onDeleteById(id: string) {
@@ -112,21 +111,18 @@ export class SvcSearchInputComponent {
     this.exportQuery();
   }
 
-  onCreate(value: any): void {
-    if (this.group.length > 0) {
-      this.group.push(new LuceneComponentItem(LuceneLogicInputComponent, shortid.generate(), {'operator': LogicalOperator.And}));
-    }
-    this.group.push(new LuceneComponentItem(LuceneSingleQueryInputComponent, shortid.generate(),
-      {[this.fieldInfo?.filter(e => e.name === value).pop()?.value as string]: ''}, this.fieldInfo));
-    this.loadComponent();
-  }
-
   clearInput(): void {
     this.group = [];
     this.loadComponent();
   }
 
-  onSelectionChange(value: any): void {
-    console.log(value);
+  onSelectionChange(event: any): void {
+    const value = event.target.value;
+    if (this.group.length > 0) {
+      this.group.push(new LuceneComponentItem(LuceneLogicInputComponent, shortid.generate(), {'operator': LogicalOperator.And}));
+    }
+    this.group.push(new LuceneComponentItem(LuceneSingleQueryInputComponent, shortid.generate(),
+      {[this.fieldInfo?.filter(e => e.value === value).pop()?.value as string]: ''}, this.fieldInfo));
+    this.loadComponent();
   }
 }

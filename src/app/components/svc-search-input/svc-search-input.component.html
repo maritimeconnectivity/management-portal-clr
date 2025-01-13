@@ -10,8 +10,8 @@
                     <div class="clr-row clr-col-sm-12 clr-col-md-12" style="display: flex; align-items: center; gap: 8px;">
                         <span cds-text="subsection">Add query: </span> 
                         <clr-select-container style="margin-top: 0px;">
-                            <select clrSelect [(ngModel)]="selectedItem" name="options" required (clrSelectedChange)="onSelectionChange('$event')">
-                                <option *ngFor="let option of filteredOptions" [value]="option">{{option.name}}</option>
+                            <select clrSelect [(ngModel)]="selectedItem" name="options" required (change)="onSelectionChange($event)">
+                                <option *ngFor="let option of fieldInfo" [value]="option.value">{{option.name}}</option>
                             </select>
                         </clr-select-container>
                     </div>
@@ -20,9 +20,7 @@
                             <div class="clr-container">
                                 <div class="clr-row clr-justify-content-start content-area">
                                     <ng-template #luceneComponentHost></ng-template>
-                                    <app-lucene-single-query-input />
-                                    <app-lucene-logic-input />
-                                    <app-lucene-single-query-input />
+                                    <!-- query container -->
                                 </div>
                             </div>
                         </div>
@@ -30,7 +28,7 @@
                     <div class="card-separator"></div>
                     <div class="clr-row clr-col-sm-12 clr-col-md-12">
                         <button class="btn btn-primary btn-block">{{btnTitle}}</button>
-                        <button class="btn btn-primary btn-block">Clear all</button>
+                        <button class="btn btn-primary btn-block" (click)="clearInput()">Clear all</button>
                     </div>
                 </div>
             </clr-tab-content>

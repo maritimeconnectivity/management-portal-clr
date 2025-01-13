@@ -9,7 +9,7 @@
                     <label>Search attribute</label>
                 }
                 <select clrSelect [(ngModel)]="selectedItem" name="options" required (clrSelectedChange)="onSelectionChange('$event')">
-                    <option *ngFor="let option of filteredOptions" [value]="option">{{option.name}}</option>
+                    <option *ngFor="let option of fieldInfo" [value]="option.value">{{option.name}}</option>
                 </select>
             </clr-select-container>
             <span>:</span>
@@ -17,7 +17,7 @@
                 @if (requireInfo) {
                     <label>Value</label>
                 }
-                <input clrInput [disabled]="!selectedItem" [value]="fieldValue" name="input" (input)="onEdit($event.target ? '$event.target.value' : '')"/>
+                <input clrInput [disabled]="!selectedItem" [value]="fieldValue" name="input" (input)="onEdit($event)"/>
             </clr-input-container>
             @if (requireCloseBtn) {
                 <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="delete()">
