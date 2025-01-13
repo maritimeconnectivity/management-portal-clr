@@ -6,6 +6,7 @@ import { preprocess } from '../itemPreprocessor';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
 import { postprocess } from '../itemPostprocessor';
 import { FetchedItems } from '../fetchedItems';
+import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class ItemManagerService {
     private serviceService: ServiceControllerService,
     private vesselService: VesselControllerService,
     private roleService: RoleControllerService,
-    private instanceService: InstanceControllerService
+    private instanceService: InstanceControllerService,
+    private secomService: SECOMService,
   ) { }
 
   fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number): Promise<FetchedItems> => {
@@ -28,6 +30,12 @@ export class ItemManagerService {
       page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage, [], 'response'));
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 0;
       return { data: (page.body! as InstanceDto[]).map(i => preprocess(i, itemType)),
+        totalPages: Math.ceil( totalElements / elementsPerPage),
+        totalElements};
+    } else if(itemType === ItemType.SearchObjectResult) {
+      page = await firstValueFrom(this.secomService.search({}, pageNumber, elementsPerPage, 'response'));
+      const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
+      return { data: (page.body?.searchServiceResult! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
         totalElements};
     } else if (itemType === ItemType.Device) {

@@ -33,6 +33,7 @@ export enum ItemType {
   OrgCandidate = 'orgcandidate',
   LedgerInstance = 'ledgerInstance',
   Certificate = 'certificate',
+  SearchObjectResult = 'searchobjectresult',
 }
 
 /**

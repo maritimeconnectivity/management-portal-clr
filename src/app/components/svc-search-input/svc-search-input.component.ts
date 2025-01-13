@@ -1,6 +1,6 @@
 import { Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ClrInputModule, ClrSelectModule } from '@clr/angular';
+import { ClarityModule, ClrAlertModule, ClrInputModule, ClrSelectModule } from '@clr/angular';
 import { ComponentsModule } from '../components.module';
 import { LuceneComponentInputComponent } from '../lucene-component-input/lucene-component-input.component';
 import { LuceneComponentItem } from 'src/app/common/lucene-query/lucene-component-item';
@@ -11,6 +11,8 @@ import { buildQuery } from 'src/app/common/lucene-query/query-builder';
 import { LuceneLogicInputComponent } from '../lucene-logic-input/lucene-logic-input.component';
 import { LogicalOperator } from 'src/app/common/lucene-query/localOperator';
 import { LuceneSingleQueryInputComponent } from '../lucene-single-query-input/lucene-single-query-input.component';
+import { ClarityIcons, filterGridIcon, connectIcon } from '@cds/core/icon';
+ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
 
 @Component({
@@ -18,11 +20,16 @@ const shortid = require('shortid');
   standalone: true,
   imports: [
     ClrSelectModule,
+    ClarityModule,
     FormsModule,
     ClrInputModule,
-    ComponentsModule,
-    LuceneComponentInputComponent
-  ],
+    LuceneComponentInputComponent,
+    ClrAlertModule,
+    LuceneSingleQueryInputComponent,
+    LuceneLogicInputComponent,
+    LuceneLogicInputComponent,
+    LuceneSingleQueryInputComponent,
+],
   templateUrl: './svc-search-input.component.html',
   styleUrl: './svc-search-input.component.css'
 })
@@ -30,6 +37,8 @@ export class SvcSearchInputComponent {
   group: LuceneComponentItem[] = [];
   data: object[] = [{}];
 
+  @Input() title: string = 'Service Search';
+  @Input() btnTitle: string = 'Search';
   @Input() fieldInfo: QueryFieldInfo[] = [];
   @Output() onUpdateQuery = new EventEmitter<any>();
   @ViewChild(LuceneComponentDirective, {static: true}) luceneComponentHost!: LuceneComponentDirective;
@@ -38,10 +47,12 @@ export class SvcSearchInputComponent {
   }
 
   loadComponent() {
+    /*
     const viewContainerRef = this.luceneComponentHost.viewContainerRef;
     viewContainerRef.clear();
 
     this.group.forEach((component) => {
+      
       const factory = this.resolver.resolveComponentFactory(component.component);
       const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
       componentRef.instance.id = component.id;
@@ -49,7 +60,9 @@ export class SvcSearchInputComponent {
       componentRef.instance.fieldInfo = component.fieldInfo ? component.fieldInfo : undefined;
       componentRef.instance.onUpdate.subscribe(value => this.onEditQuery(value.id, value.data));
       componentRef.instance.onDelete.subscribe(id => this.onDeleteById(id));
+      
     });
+    */
   }
 
   ngOnInit(): void {

@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ClrSelectModule } from '@clr/angular';
+import { ClarityModule } from '@clr/angular';
 import { LogicalOperator } from 'src/app/common/lucene-query/localOperator';
 
 @Component({
   selector: 'app-lucene-logic-input',
   standalone: true,
   imports: [
-    ClrSelectModule,
+    ClarityModule,
     FormsModule
   ],
   templateUrl: './lucene-logic-input.component.html',

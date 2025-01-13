@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ClrComboboxModule } from '@clr/angular';
+import { ClarityModule, ClrAlertModule, ClrComboboxModule } from '@clr/angular';
 import { LuceneComponent } from 'src/app/common/lucene-query/lucene-component';
 import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
 
@@ -8,7 +8,7 @@ import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
   selector: 'app-lucene-single-query-input',
   standalone: true,
   imports: [
-    ClrComboboxModule,
+    ClarityModule,
     FormsModule
   ],
   templateUrl: './lucene-single-query-input.component.html',

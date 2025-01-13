@@ -29,7 +29,6 @@ export class LuceneComponentInputComponent {
   @Output() onCreate = new EventEmitter<any>();
 
   ngOnInit() {
-    console.log('fieldInfo', this.fieldInfo);
     this.options = this.fieldInfo?.map(e => e.name);
     //this.filteredOptions$ = of(this.options);
   }

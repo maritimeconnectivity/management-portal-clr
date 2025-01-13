@@ -7,6 +7,8 @@ import { ItemFormComponent } from "../item-form/item-form.component";
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
+import { ComponentsModule } from '../components.module';
+import { SvcSearchInputComponent } from '../svc-search-input/svc-search-input.component';
 
 @Component({
   selector: 'app-smart-expandable-table',
@@ -15,7 +17,7 @@ import { Role, RoleControllerService } from 'src/app/backend-api/identity-regist
     ClarityModule,
     ClrDatagridModule,
     ItemViewComponent,
-    ItemFormComponent
+    SvcSearchInputComponent,
 ],
   templateUrl: './smart-expandable-table.component.html',
   styleUrl: './smart-expandable-table.component.css'
