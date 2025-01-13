@@ -1,31 +1,61 @@
-<div class="card" style="margin-top: 0px;">
+<div class="card" style="margin-top: 0px; min-width: 700px;">
     <div class="card-header">
         <div class="card-header-title">{{title}}</div>
     </div>
-    <div class="clr-container" style="padding: 10px;">
-        <div class="clr-row clr-col-sm-12 clr-col-md-12">
-            <p cds-text="subsection">Current filter</p>
-            <div class="clr-justify-content-start no-gutter">
-                <div class="clr-container">
-                    <div class="clr-row clr-justify-content-start content-area">
-                        <app-lucene-single-query-input />
-                        <app-lucene-logic-input />
-                        <app-lucene-single-query-input />
+    <clr-tabs>
+        <clr-tab>
+            <button clrTabLink>Query generator</button>
+            <clr-tab-content *clrIfActive>
+                <div class="clr-container" style="padding: 10px;">
+                    <div class="clr-row clr-col-sm-12 clr-col-md-12" style="display: flex; align-items: center; gap: 8px;">
+                        <span cds-text="subsection">Add query: </span> 
+                        <clr-select-container style="margin-top: 0px;">
+                            <select clrSelect [(ngModel)]="selectedItem" name="options" required (clrSelectedChange)="onSelectionChange('$event')">
+                                <option *ngFor="let option of filteredOptions" [value]="option">{{option.name}}</option>
+                            </select>
+                        </clr-select-container>
+                    </div>
+                    <div class="clr-row clr-col-sm-12 clr-col-md-12">
+                        <div class="clr-justify-content-start no-gutter">
+                            <div class="clr-container">
+                                <div class="clr-row clr-justify-content-start content-area">
+                                    <ng-template #luceneComponentHost></ng-template>
+                                    <app-lucene-single-query-input />
+                                    <app-lucene-logic-input />
+                                    <app-lucene-single-query-input />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-separator"></div>
+                    <div class="clr-row clr-col-sm-12 clr-col-md-12">
+                        <button class="btn btn-primary btn-block">{{btnTitle}}</button>
+                        <button class="btn btn-primary btn-block">Clear all</button>
                     </div>
                 </div>
+            </clr-tab-content>
+        </clr-tab>
+        <clr-tab>
+            <button clrTabLink>Query text editor</button>
+            <clr-tab-content *clrIfActive>
+                <form class="clr-form clr-form-horizontal">
+                    <div class="clr-form-control">
+                      <div class="clr-control-container" style="width: 100%;">
+                        <div class="clr-textarea-wrapper" style="width: 100%;">
+                          <textarea id="textarea-helper" class="clr-textarea" style="width: 100%;"></textarea>
+                          <cds-icon class="clr-validate-icon" shape="exclamation-circle"></cds-icon>
+                        </div>
+                        <span class="clr-subtext">Please edit Lucene query text.</span>
+                      </div>
+                    </div>
+                  </form>
+                <div class="card-separator"></div>
+                <div class="clr-row clr-col-sm-12 clr-col-md-12">
+                    <button class="btn btn-primary btn-block">{{btnTitle}}</button>
+                </div>
+            </clr-tab-content>
+        </clr-tab>
+    </clr-tabs>
 
-            </div>
-        </div>
-        <div class="clr-row clr-col-sm-12 clr-col-md-12">
-            <app-lucene-component-input [fieldInfo]="fieldInfo"
-                (onCreate)="onCreate($event)"></app-lucene-component-input>
-        </div>
-        <div class="clr-row clr-col-sm-12 clr-col-md-12">
-            <button class="btn btn-primary btn-block">{{btnTitle}}</button>
-        </div>
 
-        <div className="d-flex bg-light flex-row bd-highlight mb-3">
-            <ng-template #luceneComponentHost></ng-template>
-        </div>
-    </div>
 </div>

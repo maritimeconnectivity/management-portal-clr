@@ -1,8 +1,6 @@
 import { Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule, ClrAlertModule, ClrInputModule, ClrSelectModule } from '@clr/angular';
-import { ComponentsModule } from '../components.module';
-import { LuceneComponentInputComponent } from '../lucene-component-input/lucene-component-input.component';
 import { LuceneComponentItem } from 'src/app/common/lucene-query/lucene-component-item';
 import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
 import { LuceneComponentDirective } from 'src/app/common/lucene-query/lucene-component-directive';
@@ -12,6 +10,8 @@ import { LuceneLogicInputComponent } from '../lucene-logic-input/lucene-logic-in
 import { LogicalOperator } from 'src/app/common/lucene-query/localOperator';
 import { LuceneSingleQueryInputComponent } from '../lucene-single-query-input/lucene-single-query-input.component';
 import { ClarityIcons, filterGridIcon, connectIcon } from '@cds/core/icon';
+import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
+import { CommonModule } from '@angular/common';
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
 
@@ -23,12 +23,12 @@ const shortid = require('shortid');
     ClarityModule,
     FormsModule,
     ClrInputModule,
-    LuceneComponentInputComponent,
     ClrAlertModule,
     LuceneSingleQueryInputComponent,
     LuceneLogicInputComponent,
     LuceneLogicInputComponent,
     LuceneSingleQueryInputComponent,
+    CommonModule,
 ],
   templateUrl: './svc-search-input.component.html',
   styleUrl: './svc-search-input.component.css'
@@ -36,6 +36,8 @@ const shortid = require('shortid');
 export class SvcSearchInputComponent {
   group: LuceneComponentItem[] = [];
   data: object[] = [{}];
+  selectedItem: string = '';
+  filteredOptions = srFieldInfo;
 
   @Input() title: string = 'Service Search';
   @Input() btnTitle: string = 'Search';
@@ -122,5 +124,9 @@ export class SvcSearchInputComponent {
   clearInput(): void {
     this.group = [];
     this.loadComponent();
+  }
+
+  onSelectionChange(value: any): void {
+    console.log(value);
   }
 }

@@ -5,17 +5,25 @@
                 <cds-icon class="alert-icon" shape="filter-grid"></cds-icon>
             </div>
             <clr-select-container style="margin-top: 0px;">
-                <select clrSelect [(ngModel)]="selectedItem" name="options" required (clrSelectedChange)="onSelectedChange('$event')">
+                @if (requireInfo) {
+                    <label>Search attribute</label>
+                }
+                <select clrSelect [(ngModel)]="selectedItem" name="options" required (clrSelectedChange)="onSelectionChange('$event')">
                     <option *ngFor="let option of filteredOptions" [value]="option">{{option.name}}</option>
                 </select>
             </clr-select-container>
             <span>:</span>
             <clr-input-container style="margin-top: 0px;">
+                @if (requireInfo) {
+                    <label>Value</label>
+                }
                 <input clrInput [disabled]="!selectedItem" [value]="fieldValue" name="input" (input)="onEdit($event.target ? '$event.target.value' : '')"/>
             </clr-input-container>
-            <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="delete()">
-                <cds-icon shape="times"></cds-icon>
-            </button>
+            @if (requireCloseBtn) {
+                <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="delete()">
+                    <cds-icon shape="times"></cds-icon>
+                </button>
+            }
         </div>
     </div>
 </clr-alert>

@@ -1,27 +1,34 @@
+import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule, ClrAlertModule, ClrComboboxModule } from '@clr/angular';
 import { LuceneComponent } from 'src/app/common/lucene-query/lucene-component';
 import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
+import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
 
 @Component({
   selector: 'app-lucene-single-query-input',
   standalone: true,
   imports: [
     ClarityModule,
-    FormsModule
+    FormsModule,
+    CommonModule
   ],
   templateUrl: './lucene-single-query-input.component.html',
   styleUrl: './lucene-single-query-input.component.css'
 })
 
 export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent {
+  options: string[] = [];
+  filteredOptions = srFieldInfo;
   selectedItem: string = '';
   field: string = '';
   fieldValue: string = '';
   valueEditable: boolean = false;
   value: string = '';
 
+  @Input() requireCloseBtn: boolean = true;
+  @Input() requireInfo: boolean = false;
   @Input() id: string = '';
   @Input() data: { [key: string]: any } = {};
   @Input() fieldInfo: QueryFieldInfo[] = [];
@@ -29,6 +36,7 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   @Output() onDelete = new EventEmitter<any>();
 
   constructor() {
+    this.options = this.fieldInfo?.map(e => e.name);
   }
 
   ngOnInit(): void {
@@ -57,7 +65,7 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
     }
   }
 
-  onSelectedChange(value: any): void {
+  onSelectionChange(value: any): void {
     this.field = value;
     this.valueEditable = true;
     this.data = {[this.field]: this.fieldValue};
