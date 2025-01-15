@@ -1,0 +1,9 @@
+.alert-max-width {
+    max-width: 500px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .custom-alert-spacing {
+    margin: 0 auto;
+  }

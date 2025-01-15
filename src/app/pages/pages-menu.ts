@@ -94,21 +94,26 @@ export const MENU_ITEMS: any[] = [
         group: 'mysr'
       },
       {
+        title: 'Map Search',
+        link: '/pages/sr/mapsearch',
+        group: 'mysr'
+      },
+      {
         title: 'menu.sr.instances',
         link: '/pages/sr/instance',
         group: 'mysr'
       },
-      {
-        title: 'separator',
-      },
-      {
-        title: 'Global Search',
-      },
-      {
-        title: 'menu.ledger.search',
-        link: '/pages/ledger/search',
-        group: 'global'
-      },
+      // {
+      //   title: 'separator',
+      // },
+      // {
+      //   title: 'Global Search',
+      // },
+      // {
+      //   title: 'menu.ledger.search',
+      //   link: '/pages/ledger/search',
+      //   group: 'global'
+      // },
     ],
   },
   {

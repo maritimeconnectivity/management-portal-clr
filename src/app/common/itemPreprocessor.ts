@@ -7,8 +7,8 @@ export const preprocess = (item: any, itemType: ItemType): any => {
         return migrateVesselAttributes(item);
     } else if (itemType === ItemType.Instance) {
         return { ...item, 
-            serviceTypeValue: item.serviceType.join(", "),
-            dataProductTypeValue: item.dataProductType.join(", "),
+            serviceTypeValue: item.serviceType ? Array.isArray(item.serviceType) ? item.serviceType.join(", ") : item.serviceType : "",
+            dataProductTypeValue: item.dataProductType ? Array.isArray(item.dataProductType) ? item.dataProductType.join(", ") : item.dataProductType : "",
         }
     }
     return item;

@@ -5,7 +5,8 @@
 .overlay {
     position: absolute;
     top: 30px;
-    left: 0%;
+    left: 60px;
+    right: 30px;
     /*transform: translate(-50%, -50%);*/
     z-index: 1000; /* Ensure the overlay is above the input geometry */
     background: rgba(255, 255, 255, 0.8); /* Optional: Add a background to the overlay */
