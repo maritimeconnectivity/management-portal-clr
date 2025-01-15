@@ -59,8 +59,9 @@ export class SvcSearchInputComponent {
     const viewContainerRef = this.luceneComponentHost;
     viewContainerRef.clear();
 
+    // create visual components based on luceneTerm
     for (const term of this.luceneTerm) {
-      if ((term as Term).group) {
+      if ((term as Term).group && (term as Term).group!.length > 0) {
         const factory = this.resolver.resolveComponentFactory(LuceneTermInputComponent);
         const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
         componentRef.instance.id = term.id;
@@ -90,53 +91,10 @@ export class SvcSearchInputComponent {
         }
       }
     }
-
-    // this.group.forEach((component) => {
-    //   if ((component.data as Term).group) {
-    //     console.log(component);
-    //     const factory = this.resolver.resolveComponentFactory(LuceneTermInputComponent);
-    //     const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
-    //     componentRef.instance.id = shortid.generate();
-    //     componentRef.instance.data = (component.data as Term).group!;
-    //     componentRef.instance.fieldInfo = this.fieldInfo;
-    //     componentRef.instance.onUpdate.subscribe(value => this.editLuceneItem(value.id, value.data));
-    //     componentRef.instance.onDelete.subscribe(id => this.deleteLuceneItem(id));
-    //     componentRef.instance.onExtend?.subscribe(id => this.extendToGroup(id));
-    //     if (componentRef.instance.generateItems) {
-    //       componentRef.instance.generateItems(component.data, component.fieldInfo!);
-    //     }
-    //   } else {
-    //     const factory = this.resolver.resolveComponentFactory(component.component);
-    //     const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
-    //     componentRef.instance.id = component.id;
-    //     componentRef.instance.data = component.data;
-    //     componentRef.instance.fieldInfo = component.fieldInfo ? component.fieldInfo : undefined;
-    //     componentRef.instance.onUpdate.subscribe(value => this.editLuceneItem(value.id, value.data));
-    //     componentRef.instance.onDelete.subscribe(id => this.deleteLuceneItem(id));
-    //     componentRef.instance.onExtend?.subscribe(id => this.extendToGroup(id));
-    //   }
-    // });
   }
 
   deleteLuceneItem(id: string) {
     this.luceneTerm = this.deleteTerm(this.luceneTerm, id);
-    console.log(id);
-    console.log(this.luceneTerm);
-    /*
-    const element = this.group.filter(e => e.id === id).pop();
-    if (element) {
-      const index = this.group.indexOf(element);
-      if (index === 0) {
-        if (this.group.length === 1) {
-          this.group.splice(0, 1);
-        } else {
-          this.group.splice(0, 2);
-        }
-      } else {
-        this.group.splice(index - 1, 2);
-      }
-    }
-      */
     this.loadComponent();
     this.updateLuceneQuery();
   }
@@ -154,16 +112,9 @@ export class SvcSearchInputComponent {
     return terms;
   }
 
-  deleteTerm(terms: Term[], id: string): Term[] {
-    for (const term of terms) {
-      // group이 존재하면 재귀적으로 순회
-      if (term.group && term.group.length > 0) {
-        this.deleteTerm(term.group, id);
-      }
-    }
-    const element = terms.filter(e => e.id === id).pop();
-    if (element) {
-      const index = terms.indexOf(element);
+  deleteOperandAndOperator(terms: Term[], target: Term): Term[] {
+    if (target) {
+      const index = terms.indexOf(target);
       if (index === 0) {
         if (terms.length === 1) {
           terms.splice(0, 1);
@@ -177,20 +128,25 @@ export class SvcSearchInputComponent {
     return terms;
   }
 
+  deleteTerm(terms: Term[], id: string): Term[] {
+    for (const term of terms) {
+      // group이 존재하면 재귀적으로 순회
+      if (term.group && term.group.length > 0) {
+        this.deleteTerm(term.group, id);
+      }
+    }
+    terms.filter(e => e.group && e.group.length === 0).forEach(e => this.deleteOperandAndOperator(terms, e));
+    const element = terms.filter(e => e.id === id).pop();
+    if (element) {
+      this.deleteOperandAndOperator(terms, element);
+    }
+    
+    return terms;
+  }
+
   updateLuceneItem(componentId: string, data: object): void {
     this.group = this.group.map(e => e.id === componentId ? { ...e, ...data } : e);
     this.luceneTerm = this.updateTerm(this.luceneTerm, componentId, data);
-    //console.log(this.updateTerm(this.luceneTerm, componentId, data));
-    /*
-    this.luceneTerm = this.luceneTerm.map(e => {
-      if (e.id === componentId) {
-      return { ...e, ...data };
-      } else if (e.group) {
-      return { ...e, group: e.group.map(g => g.id === componentId ? { ...g, ...data } : g) };
-      }
-      return e;
-    });
-    */
     this.updateLuceneQuery();
   }
 
@@ -244,7 +200,8 @@ export class SvcSearchInputComponent {
   }
 
   clearInput(): void {
-    this.group = [];
+    this.luceneTerm = [];
+    this.updateLuceneQuery();
     this.loadComponent();
   }
 
@@ -257,6 +214,6 @@ export class SvcSearchInputComponent {
 
     this.updateLuceneQuery();
     this.loadComponent();
-    this.selectedItem = '';
+    event.target.value = '';
   }
 }

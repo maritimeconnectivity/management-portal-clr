@@ -14,7 +14,6 @@ export const buildTerm = (data: {[key: string]: any}): string => {
 }
 
 export function buildQuery(terms: Term[]): string {
-  console.log(terms);
   if (terms.length === 1) {
     return terms[0].group ? "(" + buildQuery(terms[0].group) + ")": buildTerm(terms[0]);
   } else if (terms.length >= 3) {

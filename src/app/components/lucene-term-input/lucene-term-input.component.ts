@@ -47,6 +47,9 @@ export class LuceneTermInputComponent implements LuceneComponent {
       componentRef.instance.id = component.id;
       componentRef.instance.data = component;
       componentRef.instance.fieldInfo = fieldInfo;
+      if (componentRef.instance instanceof LuceneSingleQueryInputComponent) {
+        (componentRef.instance as LuceneSingleQueryInputComponent).requireExtendBtn = false;
+      }
       componentRef.instance.onUpdate.subscribe(value => this.onEditQuery(value.id, value.data));
       componentRef.instance.onDelete.subscribe(id => this.onDeleteById(id));
       componentRef.instance.onExtend?.subscribe(id => this.onExtendById(id));
