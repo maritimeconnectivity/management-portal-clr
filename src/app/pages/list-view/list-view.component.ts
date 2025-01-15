@@ -94,12 +94,12 @@ export class ListViewComponent {
       }, {} as {[key: string]: any});
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object) => {
     try {
       if (itemType === ItemType.Role) {
         return await this.itemManagerService.fetchRoles(this.orgMrn);
       }
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage);
+      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
       if (!fetchedItems) {
         return [];
       }

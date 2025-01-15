@@ -49,6 +49,7 @@ export class ItemViewComponent {
   @Input() instanceVersion: string | undefined = undefined;
   @Input() serial: string | undefined = undefined;
   @Input() isLoading: boolean = true;
+  @Input() viewOnly: boolean = false;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
@@ -110,7 +111,7 @@ export class ItemViewComponent {
     if (this.item && this.itemType === ItemType.Role) {
       this.itemId = this.item.id;
       this.setForm();
-    } else if (this.item && this.itemType === ItemType.Instance) {
+    } else if (this.item && this.itemType === ItemType.Instance || this.itemType === ItemType.SearchObjectResult) {
       this.itemId = this.item.instanceId;
       this.instanceVersion = this.item.instanceVersion;
       this.geometry = [...this.geometry, this.item.geometry];
@@ -137,7 +138,7 @@ export class ItemViewComponent {
   }
 
   checkIfShowCertTables = () => {
-    if (this.itemType === ItemType.Role || this.itemType === ItemType.OrgCandidate || this.itemType === ItemType.Instance) {
+    if (this.itemType === ItemType.Role || this.itemType === ItemType.OrgCandidate || this.itemType === ItemType.Instance || this.itemType === ItemType.SearchObjectResult) {
       this.showCertTables = false;
     } else {
       this.showCertTables = true;

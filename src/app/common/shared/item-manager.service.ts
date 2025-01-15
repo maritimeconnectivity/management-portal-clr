@@ -24,7 +24,7 @@ export class ItemManagerService {
     private secomService: SECOMService,
   ) { }
 
-  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number): Promise<FetchedItems> => {
+  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchParam?: object): Promise<FetchedItems> => {
     let page;
     if(itemType === ItemType.Instance) {
       page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage, [], 'response'));
@@ -32,8 +32,8 @@ export class ItemManagerService {
       return { data: (page.body! as InstanceDto[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
         totalElements};
-    } else if(itemType === ItemType.SearchObjectResult) {
-      page = await firstValueFrom(this.secomService.search({}, pageNumber, elementsPerPage, 'response'));
+    } else if(itemType === ItemType.SearchObjectResult && secomSearchParam) {
+      page = await firstValueFrom(this.secomService.search(secomSearchParam, pageNumber, elementsPerPage, 'response'));
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
       return { data: (page.body?.searchServiceResult! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),

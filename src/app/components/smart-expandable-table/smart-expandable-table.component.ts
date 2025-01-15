@@ -132,6 +132,7 @@ export class SmartExpandableTableComponent {
   userRowSelect = (selectedItem: any) => {
     this.expanded = true;
     this.selectedItem = selectedItem;
+    console.log(selectedItem);
     this.onRowSelect.emit(selectedItem);
   }
 

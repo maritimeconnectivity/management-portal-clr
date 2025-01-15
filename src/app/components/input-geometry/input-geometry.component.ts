@@ -1,8 +1,9 @@
-import { Component, ElementRef, Input, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
 import * as L from 'leaflet';
 import { circle, circleMarker, featureGroup, FeatureGroup, latLng, latLngBounds, polygon, rectangle, tileLayer, DrawEvents } from 'leaflet';
+import { getGeometryCollectionFromMap } from 'src/app/common/mapToGeometry';
 
 @Component({
   selector: 'app-input-geometry',
@@ -19,7 +20,9 @@ export class InputGeometryComponent {
   @Input() geometry: object[] = [];
   @Input() geometryNames: string[] = [];
   @Input() fullscreen: boolean = false;
+  @Input() isForSearch: boolean = false;
   @Input() mapContainerHeight: number = 200;
+  @Output() onGeometryChange = new EventEmitter<any>();
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
   responseFeatureGroup: FeatureGroup = featureGroup();
@@ -56,15 +59,22 @@ export class InputGeometryComponent {
     if (this.fullscreen) {
       this.mapContainerHeight = window.innerHeight - this.mapContainerHeightOffset;
     }
+    this.drawnItems.addLayer(this.responseFeatureGroup);
+    this.drawnItems.addLayer(this.queryFeatureGroup);
   }
 
   public onDrawCreated(e: any) {
-    this.drawnItems.addLayer((e as DrawEvents.Created).layer);
+    this.queryFeatureGroup.addLayer((e as DrawEvents.Created).layer);
+    this.onGeometryChange.emit({ fieldName: 'geometry',
+      data: getGeometryCollectionFromMap( this.isForSearch ? this.queryFeatureGroup : this.responseFeatureGroup)});
+  }
+
+  public onDrawDeleted(e: any) {
+    this.queryFeatureGroup.removeLayer((e as DrawEvents.Deleted).layer);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.loadGeometryOnMap();
-    //this.addFeatures();
   }
 
   clearMap = () => {

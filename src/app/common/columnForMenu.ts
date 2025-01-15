@@ -1101,6 +1101,126 @@ export const ColumnForResource: {[key: string]: object} = {
       visibleFrom: ['detail'],
     },
   },
+  searchobjectresult: {
+    instanceId: {
+      title: "Instance ID",
+      type: "string",
+      description: "MCP MRN as unique identifier",
+      placeholder: "urn:mrn:",
+      visibleFrom: ["detail", "edit", "edit-new"]
+    },
+    name: {
+      title: "Name",
+      type: "string",
+      description: "Name of service instance",
+      visibleFrom: ["detail", "list", "edit", "edit-new"],
+    },
+    version: {
+      title: "Version",
+      type: "string",
+      description: "Version of service instance",
+      visibleFrom: ["detail", "list", "edit", "edit-new"],
+    },
+    status: {
+      title: "Status",
+      type: "string",
+      options: [
+        { title: "Provisional", value: "PROVISIONAL" },
+        { title: "Released", value: "RELEASED" },
+        { title: "Deprecated", value: "DEPRECATED" },
+        { title: "Deleted", value: "DELETED" }
+      ],
+      visibleFrom: ["detail", "list", "edit", "edit-new"],
+    },
+    description: {
+      title: "Description",
+      type: "string",
+      visibleFrom: ["detail", "edit", "edit-new"]
+    },
+    dataProductType: {
+      title: "Data product type",
+      type: "stringArray",
+      options: [
+        { title: "S-57 Electronic Navigational Chart (ENC)", value: "S57" },
+        { title: "S-101 Electronic Navigational Chart (ENC)", value: "S101" },
+        { title: "S-102 Bathymetric Surface", value: "S102" }
+      ],
+      description: "Data product type defined in IEC 63173-2 SECOM standard",
+      visibleFrom: ["edit", "edit-new"]
+    },
+    organizationId: {
+      title: "Organization ID",
+      type: "string",
+      visibleFrom: ["detail", "edit", "edit-new"],
+    },
+    endpointUri: {
+      title: "Endpoint URI",
+      type: "string",
+      visibleFrom: ["detail", "edit", "edit-new"],
+    },
+    endpointType: {
+      title: "Endpoint type",
+      type: "string",
+      visibleFrom: []
+    },
+    keywords: {
+      title: "Keywords",
+      type: "stringArray",
+      placeholder: "Please enter keyword",
+      visibleFrom: ["detail", "list", "edit", "edit-new"]
+    },
+    unlocode: {
+      title: "Unlocode",
+      type: "string",
+      placeholder: "Please enter UN/LOCODE",
+      visibleFrom: []
+    },
+    instanceAsXml: {
+      title: "Instance as XML",
+      type: "file",
+      notShowOnEdit: true,
+      visibleFrom: []
+    },
+    publishedAt: {
+      title: "Created at",
+      type: "string",
+      description: "Time of creation",
+      filter: false,
+      immutable: true,
+      notShowOnEdit: true,
+      visibleFrom: []
+    },
+    lastUpdatedAt: {
+      title: "Updated at",
+      type: "string",
+      description: "Time of last update",
+      filter: false,
+      immutable: true,
+      notShowOnEdit: true,
+      visibleFrom: ["detail"]
+    },
+    comment: {
+      title: "Comment",
+      type: "string",
+      description: "Comment description",
+      visibleFrom: ["detail", "edit", "edit-new"]
+    },
+    mmsi: {
+      title: "MMSI",
+      type: "string",
+      visibleFrom: []
+    },
+    imo: {
+      title: "IMO number",
+      type: "string",
+      visibleFrom: []
+    },
+    geometry: {
+      title: "Geometry",
+      type: "object",
+      visibleFrom: []
+    }
+  },
   newOrganization: {
     orgMrn: {
       title: 'Maritime Resource Name (MRN) for organization',

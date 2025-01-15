@@ -6,7 +6,8 @@
                [leafletOptions]="options"
                [leafletDrawOptions]="drawOptions"
                [leafletFitBounds]="mapFitToBounds"
-               (leafletDrawCreated)="onDrawCreated($event)">
+               (leafletDrawCreated)="onDrawCreated($event)"
+               (leafletDrawDeleted)="onDrawDeleted($event)">
                <div [leafletLayer]="drawnItems"></div>
                <div [leafletLayer]="responseFeatureGroup"></div>
           </div>

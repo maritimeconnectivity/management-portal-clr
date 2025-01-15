@@ -13,6 +13,7 @@ import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-
 import { ItemTableComponent } from 'src/app/components/item-table/item-table.component';
 import { ClarityModule } from '@clr/angular';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
+import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
 
 @Component({
   selector: 'app-sr-search',
@@ -30,7 +31,7 @@ import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 export class SrSearchComponent {
   @ViewChild('map')
   geometryMap!: InputGeometryComponent;
-  @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent!: SvcSearchInputComponent;
+  @ViewChild('exTable') smartTable!: SmartExpandableTableComponent;
   queryGeometry: any = {};
   geometries: any[] = [];
   geometryNames: string[] = [];
@@ -44,16 +45,8 @@ export class SrSearchComponent {
   instances: SearchObjectResult[] = [];
   showTables = true;
   contextForAttributes = 'list';
-  menuType = ItemType.Instance;
   isLoading = false;
   settings = {};
-  mySettings = {
-    actions: false,
-    mode: 'external',
-    delete: false,
-    columns: ColumnForResource[this.menuType],
-    hideSubHeader: true,
-  };
   allInstances: InstanceDto[] = [];
   fieldInfo = srFieldInfo;
 
@@ -65,21 +58,30 @@ export class SrSearchComponent {
   ) { }
 
   ngOnInit(): void {
-    if(ColumnForResource.hasOwnProperty(this.menuType.toString())) {
-      this.mySettings.columns = Object.assign({}, ...
-        Object.entries(ColumnForResource[this.menuType.toString()]).filter(([k,v]) => Array.isArray(v['visibleFrom']) && v['visibleFrom'].includes(this.contextForAttributes)).map(([k,v]) => ({[k]:v}))
-      );
-      this.settings = Object.assign({}, this.mySettings);
-
-      this.instanceControllerService.getInstances().subscribe(
-        instances => this.allInstances = instances,
-      );
-    }
+    this.setLabel();
   }
+
+  setLabel = () => {
+    this.labels = this.filterVisibleForList(ColumnForResource[this.itemType.toString()]);
+  }
+
+  filterVisibleForList = (item: {[key: string]: any}) => {
+    return Object.keys(item)
+      .filter(key => item[key]?.visibleFrom?.includes('list'))
+      .reduce((result, key) => {
+        result[key] = item[key];
+        return result;
+      }, {} as {[key: string]: any});
+  };
 
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
     try {
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage);
+      const secomSearchParam = this.buildSearchParam(this.freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : ''); //geojsonToWKT(this.queryGeometry) : '');
+      console.log(secomSearchParam);
+      if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
+        return [];
+      }
+      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
       if (!fetchedItems) {
         return [];
       }
@@ -92,21 +94,25 @@ export class SrSearchComponent {
     }
   }
 
-  onUpdateGeometry = (event: any) => {
-    this.queryGeometry = event['data'];
-    this.search(this.freetext, this.searchParams, geojsonToWKT(this.queryGeometry));
-  }
-
-  search = (freetext: string, searchParams?: SearchParameters, wktString?: string) => {
-    this.isLoading = true;
-    // send a query with given geometry, converted to WKT
+  buildSearchParam = (freetext: string, searchParams?: SearchParameters, geojsonString?: string): object => {
     const queryObject: any = { freetext: freetext };
     if (searchParams) {
       queryObject["query"] = searchParams;
     }
-    if (wktString) {
-      queryObject["geometry"] = wktString;
+    if (geojsonString) {
+      queryObject["geometry"] = geojsonString;
     }
+    return queryObject;
+  }
+
+  onUpdateGeometry = (event: any) => {
+    this.queryGeometry = event['data']['geometries'][0];
+    this.smartTable.loadData();
+  }
+
+  search = (freetext: string, searchParams?: SearchParameters, geojsonString?: string) => {
+    this.isLoading = true;
+    const queryObject = this.buildSearchParam(freetext, searchParams, geojsonString);
     this.secomSearchController.search(queryObject).subscribe(res => {
       this.instances = res.searchServiceResult;
       this.refreshData(this.instances);
@@ -123,9 +129,9 @@ export class SrSearchComponent {
   }
 
   onSearch = (freetext: string) => {
-    console.log(freetext);
     this.freetext = freetext;
-    this.search(freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '');
+    this.smartTable.loadData();
+    //this.search(freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '');
   }
 
   onClear = () => {
@@ -137,7 +143,6 @@ export class SrSearchComponent {
 
   clearAll = () => {
     this.clearMap();
-    this.luceneQueryInputComponent?.clearInput();
   }
 
   clearMap = () => {
