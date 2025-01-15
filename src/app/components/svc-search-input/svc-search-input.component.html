@@ -6,7 +6,7 @@
         <div class="clr-row clr-col-sm-12 clr-col-md-12" style="display: flex; align-items: center; gap: 8px;">
             <span cds-text="subsection">Add query: </span> 
             <clr-select-container style="margin-top: 0px;">
-                <select clrSelect [(ngModel)]="selectedItem" name="options" required (change)="onSelectionChange($event)">
+                <select clrSelect [(ngModel)]="selectedItem" name="options" required (change)="addLuceneItem($event)">
                     <option *ngFor="let option of fieldInfo" [value]="option.value">{{option.name}}</option>
                 </select>
             </clr-select-container>

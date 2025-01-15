@@ -6,6 +6,7 @@ import { ClarityModule, ClrAlertModule, ClrComboboxModule } from '@clr/angular';
 import { LuceneComponent } from 'src/app/common/lucene-query/lucene-component';
 import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
 import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
+const shortid = require('shortid');
 ClarityIcons.addIcons(codeIcon);
 
 @Component({
@@ -29,15 +30,23 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   value: string = '';
 
   @Input() requireCloseBtn: boolean = true;
+  @Input() requireExtendBtn: boolean = true;
   @Input() requireInfo: boolean = false;
   @Input() id: string = '';
-  @Input() data: { [key: string]: any } = {};
+  @Input() data: { id: string, [key: string]: any } = { id: ''};
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
   @Output() onUpdate = new EventEmitter<any>();
   @Output() onDelete = new EventEmitter<any>();
+  @Output() onExtend = new EventEmitter<any>();
 
   constructor() {
     this.options = this.fieldInfo?.map(e => e.name);
+    this.id = shortid.generate();
+    this.data = {id: this.id};
+  }
+
+  loadComponent(): void {
+      
   }
 
   ngOnInit(): void {
@@ -61,7 +70,7 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   onEdit(event: any): void {
     const value: string = event.target.value;
     if (this.field) {
-      this.data = {[this.field]: value};
+      this.data = {id: this.id, [this.field]: value};
       this.fieldValue = value;
       this.onUpdate.emit({id: this.id, data: this.data});
     }
@@ -70,7 +79,7 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   onSelectionChange(value: any): void {
     this.field = value;
     this.valueEditable = true;
-    this.data = {[this.field]: this.fieldValue};
+    this.data = {id: this.id, [this.field]: this.fieldValue};
     this.onUpdate.emit({id: this.id, data: this.data});
   }
 
@@ -79,6 +88,6 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   }
 
   createExpressionWithBrackets(): void {
-    
+    this.onExtend.emit(this.id);
   }
 }

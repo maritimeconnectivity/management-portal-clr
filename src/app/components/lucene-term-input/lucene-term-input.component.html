@@ -1,0 +1,15 @@
+<clr-alert [clrAlertType]="'neutral'" [clrAlertClosable]="false" class="custom-alert-spacing">
+    <div class="alert-items" styles="padding-top: 0px; padding-bottom: 0px;">
+        <div class="alert-item clr-justify-content-center" styles="padding-top: 0px; padding-bottom: 0px;">
+            
+            <div class="alert-icon-wrapper">
+                <cds-icon class="alert-icon" shape="filter-grid"></cds-icon>
+            </div>
+            <ng-template #luceneComponentHost></ng-template>
+            
+            <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="delete()">
+                <cds-icon shape="times"></cds-icon>
+            </button>
+        </div>
+    </div>
+</clr-alert>
