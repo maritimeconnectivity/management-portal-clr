@@ -1,13 +1,23 @@
-<clr-alert [clrAlertType]="'neutral'" [clrAlertClosable]="false" class="custom-alert-spacing">
-    <div class="alert-items" styles="padding-top: 0px; padding-bottom: 0px;">
-        <div class="alert-item clr-justify-content-center" styles="padding-top: 0px; padding-bottom: 0px;">
-            
-            <div class="alert-icon-wrapper">
-                <cds-icon class="alert-icon" shape="filter-grid"></cds-icon>
-            </div>
+<clr-alert [clrAlertType]="'neutral'" [clrAlertClosable]="false" class="custom-alert-spacing alert-max-width">
+    <div class="alert-items" style="padding-top: 0px; padding-bottom: 0px;">
+        <div class="alert-item" style="padding-top: 0px; padding-bottom: 0px;">
             <ng-template #luceneComponentHost></ng-template>
-            
-            <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="delete()">
+
+            @if (showSelect) {
+            <clr-select-container style="margin-top: 0px;">
+                <select clrSelect [(ngModel)]="selectedItem" name="options" required (change)="addLuceneItem($event)">
+                    <option *ngFor="let option of fieldInfo" [value]="option.value">{{option.name}}</option>
+                </select>
+            </clr-select-container>
+            } @else {
+            <button type="button" class="custom-close-btn"
+                style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="showSelect = true">
+                <cds-icon shape="plus"></cds-icon>
+            </button>
+            }
+
+            <button type="button" class="custom-close-btn"
+                style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="delete()">
                 <cds-icon shape="times"></cds-icon>
             </button>
         </div>

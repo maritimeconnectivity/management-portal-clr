@@ -70,6 +70,7 @@ export class SvcSearchInputComponent {
         componentRef.instance.onUpdate.subscribe(value => this.updateLuceneItem(value.id, value.data));
         componentRef.instance.onDelete.subscribe(id => this.deleteLuceneItem(id));
         componentRef.instance.onExtend?.subscribe(id => this.extendToGroup(id));
+        componentRef.instance.onAdd?.subscribe(item => this.addLuceneItemForGroup(item));
         if (componentRef.instance.generateItems) {
           componentRef.instance.generateItems(term, this.fieldInfo);
         }
@@ -107,6 +108,20 @@ export class SvcSearchInputComponent {
   
       if (term.group && term.group.length > 0) {
         this.updateTerm(term.group, id, data);
+      }
+    }
+    return terms;
+  }
+
+  addTermToGroup(terms: Term[], groupId: string, key: string): Term[] {
+    for (const term of terms) {
+      if (term.id === groupId) {
+        term.group?.push({ id: shortid.generate(), 'operator': LogicalOperator.And });
+        term.group?.push({ id: shortid.generate(), [key]: '' });
+      }
+  
+      if (term.group && term.group.length > 0) {
+        this.addTermToGroup(term.group, groupId, key);
       }
     }
     return terms;
@@ -215,5 +230,11 @@ export class SvcSearchInputComponent {
     this.updateLuceneQuery();
     this.loadComponent();
     event.target.value = '';
+  }
+
+  addLuceneItemForGroup(item: any): void {
+    this.addTermToGroup(this.luceneTerm, item.groupId, item.key);
+    this.updateLuceneQuery();
+    this.loadComponent();
   }
 }

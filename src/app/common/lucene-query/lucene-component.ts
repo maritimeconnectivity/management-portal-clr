@@ -8,6 +8,7 @@ export interface LuceneComponent {
     fieldInfo?: QueryFieldInfo[];
     onUpdate: EventEmitter<any>;
     onDelete: EventEmitter<any>;
+    onAdd?: EventEmitter<any>;
     onExtend?: EventEmitter<any>;
 
     generateItems?(data: Term, fieldInfo: QueryFieldInfo[]): void;

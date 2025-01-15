@@ -22,12 +22,15 @@ const shortid = require('shortid');
 })
 export class LuceneTermInputComponent implements LuceneComponent {
   group: LuceneComponentItem[] = [];
+  selectedItem: string = '';
+  showSelect: boolean = false;
 
   @Input() id: string = '';
   @Input() data: { id: string, [key: string]: any } = { id: ''};
   @Input() fieldInfo: QueryFieldInfo[] = [];
   @Output() onUpdate = new EventEmitter<any>();
   @Output() onDelete = new EventEmitter<any>();
+  @Output() onAdd = new EventEmitter<any>();
   @Output() onExtend = new EventEmitter<any>();
 
   @ViewChild('luceneComponentHost', { read: ViewContainerRef, static: true }) luceneComponentHost!: ViewContainerRef;
@@ -70,5 +73,11 @@ export class LuceneTermInputComponent implements LuceneComponent {
 
   onExtendById(id: string): void {
     this.onExtend.emit(id);
+  }
+
+  addLuceneItem(event: any): void {
+    this.selectedItem = event.target.value;
+    this.onAdd.emit({groupId: this.id, key: this.selectedItem});
+    this.showSelect = false;
   }
 }
