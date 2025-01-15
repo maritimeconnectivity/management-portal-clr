@@ -29,8 +29,8 @@ import { SmartExpandableTableComponent } from 'src/app/components/smart-expandab
   styleUrl: './sr-search.component.css'
 })
 export class SrSearchComponent {
-  @ViewChild('map')
-  geometryMap!: InputGeometryComponent;
+  @ViewChild('map') geometryMap!: InputGeometryComponent;
+  @ViewChild('queryInput') queryInput!: SvcSearchInputComponent;
   @ViewChild('exTable') smartTable!: SmartExpandableTableComponent;
   queryGeometry: any = {};
   geometries: any[] = [];
@@ -77,7 +77,6 @@ export class SrSearchComponent {
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
     try {
       const secomSearchParam = this.buildSearchParam(this.freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : ''); //geojsonToWKT(this.queryGeometry) : '');
-      console.log(secomSearchParam);
       if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
         return [];
       }
@@ -106,8 +105,21 @@ export class SrSearchComponent {
   }
 
   onUpdateGeometry = (event: any) => {
+    // currently handling only one geometry
     this.queryGeometry = event['data']['geometries'][0];
     this.smartTable.loadData();
+    this.queryInput.addGeoItem();
+  }
+
+  onClearGeometry = () => {
+    this.queryGeometry = {};
+    this.queryInput.deleteGeoItem();
+  }
+
+  onClearAll = () => {
+    this.onClear();
+    this.onClearGeometry();
+    this.geometryMap.clearMap();
   }
 
   search = (freetext: string, searchParams?: SearchParameters, geojsonString?: string) => {
@@ -142,7 +154,7 @@ export class SrSearchComponent {
   }
 
   clearAll = () => {
-    this.clearMap();
+    
   }
 
   clearMap = () => {

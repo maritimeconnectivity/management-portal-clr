@@ -14,6 +14,7 @@ import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-
 import { CommonModule } from '@angular/common';
 import { LuceneQueryOutput } from 'src/app/common/lucene-query/lucene-query-output';
 import { LuceneTermInputComponent } from '../lucene-term-input/lucene-term-input.component';
+import { LuceneGeoQueryInputComponent } from '../lucene-geo-query-input/lucene-geo-query-input.component';
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
 
@@ -36,11 +37,13 @@ export class SvcSearchInputComponent {
   luceneTerm: Term[] = [];
   selectedItem: string = '';
   queryString = '';
+  geometryIncluded: boolean = false;
 
   @Input() title: string = 'Service Search';
   @Input() btnTitle: string = 'Search';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
   @Output() onSearch = new EventEmitter<any>();
+  @Output() onClearAll = new EventEmitter<any>();
 
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
   @ViewChild('luceneComponentHost', { read: ViewContainerRef, static: false }) luceneComponentHost!: ViewContainerRef;
@@ -91,6 +94,38 @@ export class SvcSearchInputComponent {
         }
       }
     }
+    if (this.geometryIncluded) {
+      if (this.luceneTerm.length > 0) {
+        const factory = this.resolver.resolveComponentFactory(LuceneLogicInputComponent);
+        const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
+        componentRef.instance.id = shortid.generate();
+        componentRef.instance.fieldInfo = this.fieldInfo;
+        componentRef.instance.onUpdate.subscribe(value => this.updateLuceneItem(value.id, value.data));
+        componentRef.instance.onDelete.subscribe(id => this.deleteLuceneItem(id));
+        componentRef.instance.onExtend?.subscribe(id => this.extendToGroup(id));
+        if (!this.group.find(e => e.id === componentRef.instance.id)) {
+          this.group.push(new LuceneComponentItem(factory.componentType, componentRef.instance.id, componentRef.instance.data, this.fieldInfo));
+        }
+      }
+      const factory = this.resolver.resolveComponentFactory(LuceneGeoQueryInputComponent);
+      const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
+      componentRef.instance.id = 'geo';
+      if (!this.group.find(e => e.id === 'geo')) {
+        this.group.push(new LuceneComponentItem(factory.componentType, componentRef.instance.id, componentRef.instance.data, this.fieldInfo));
+      }
+    }
+  }
+
+  addGeoItem(): void {
+    this.geometryIncluded = true;
+    this.loadComponent();
+    this.updateLuceneQuery();
+  }
+
+  deleteGeoItem(): void {
+    this.geometryIncluded = false;
+    this.loadComponent();
+    this.updateLuceneQuery();
   }
 
   deleteLuceneItem(id: string) {
@@ -123,6 +158,14 @@ export class SvcSearchInputComponent {
         this.addTermToGroup(term.group, groupId, key);
       }
     }
+    return terms;
+  }
+
+  addTerm(terms: Term[], target: Term): Term[] {
+    if (terms.length > 0) {
+      terms.push({ id: shortid.generate(), 'operator': LogicalOperator.And });
+    }
+    terms.push(target);
     return terms;
   }
 
@@ -217,14 +260,12 @@ export class SvcSearchInputComponent {
     this.luceneTerm = [];
     this.updateLuceneQuery();
     this.loadComponent();
+    this.onClearAll.emit();
   }
 
   addLuceneItem(event: any): void {
     const value = event.target.value;
-    if (this.luceneTerm.length > 0) {
-      this.luceneTerm.push({ id: shortid.generate(), 'operator': LogicalOperator.And });
-    }
-    this.luceneTerm.push({ id: shortid.generate(), [this.fieldInfo?.filter(e => e.value === value).pop()?.value as string]: '' });
+    this.luceneTerm = this.addTerm(this.luceneTerm, { id: shortid.generate(), [this.fieldInfo?.filter(e => e.value === value).pop()?.value as string]: '' });
 
     this.updateLuceneQuery();
     this.loadComponent();

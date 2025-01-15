@@ -9,7 +9,6 @@
                (leafletDrawCreated)="onDrawCreated($event)"
                (leafletDrawDeleted)="onDrawDeleted($event)">
                <div [leafletLayer]="drawnItems"></div>
-               <div [leafletLayer]="responseFeatureGroup"></div>
           </div>
      } @else {
           <div #map [style.height.px]="mapContainerHeight"
@@ -17,7 +16,6 @@
                [leafletOptions]="options"
                [leafletFitBounds]="mapFitToBounds">
                <div [leafletLayer]="drawnItems"></div>
-               <div [leafletLayer]="responseFeatureGroup"></div>
           </div>
      }
 </div>

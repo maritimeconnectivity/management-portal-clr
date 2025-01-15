@@ -23,6 +23,7 @@ export class InputGeometryComponent {
   @Input() isForSearch: boolean = false;
   @Input() mapContainerHeight: number = 200;
   @Output() onGeometryChange = new EventEmitter<any>();
+  @Output() onClear = new EventEmitter<any>();
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
   responseFeatureGroup: FeatureGroup = featureGroup();
@@ -49,7 +50,7 @@ export class InputGeometryComponent {
       circlemarker: undefined,
     },
     edit: {
-      featureGroup: this.responseFeatureGroup
+      featureGroup: this.queryFeatureGroup
     }
   };
 
@@ -70,7 +71,8 @@ export class InputGeometryComponent {
   }
 
   public onDrawDeleted(e: any) {
-    this.queryFeatureGroup.removeLayer((e as DrawEvents.Deleted).layer);
+    this.queryFeatureGroup.clearLayers();
+    this.onClear.emit();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -78,6 +80,8 @@ export class InputGeometryComponent {
   }
 
   clearMap = () => {
+    this.queryFeatureGroup.clearLayers();
+    this.responseFeatureGroup.clearLayers();
     this.geometry = [];
     this.geometryNames = [];
   }
