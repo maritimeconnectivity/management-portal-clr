@@ -1,6 +1,22 @@
-<div class="overlay-container">
-    <app-input-geometry [fullscreen]="true" [isEditing]="true"></app-input-geometry>
-    <div class="overlay">
-      <app-svc-search-input />
+<div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+  <div class="clr-row clr-col-md-12">
+    <app-svc-search-input (onSearch)="onSearch($event)" style="width: 100%;"/>
+  </div>
+    <div class="clr-row">
+      <div class="clr-col-md-12">
+        <app-input-geometry [mapContainerHeight]="400" [isEditing]="true"/>
+        <div class="clr-col-md-12">
+          @if (isLoading) {
+              <div class="spinner-view">
+                  <clr-spinner *ngIf="isLoading">Loading</clr-spinner>
+              </div>
+          } @else {
+              <app-smart-expandable-table #exTable
+                [itemType]="itemType" [labels]="labels" [getData]="fetchData"
+                [totalPages]="totalPages" [totalElements]="totalElements"
+                (onRefresh)="refreshData()"
+            placeholder="There is no data." />
+          }
+        </div>
     </div>
 </div>

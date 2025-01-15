@@ -1,4 +1,4 @@
-<div class="card" style="margin-top: 0px; min-width: 700px;">
+<div class="card" style="margin-top: 0px;">
     <div class="card-header">
         <div class="card-header-title">{{title}}</div>
     </div>
@@ -16,7 +16,7 @@
         <div class="clr-row clr-col-sm-12 clr-col-md-12">
             <div class="clr-justify-content-start no-gutter">
                 <div class="clr-container">
-                    <div class="clr-row clr-justify-content-start content-area">
+                    <div class="clr-row clr-justify-content-start" style="padding: 3px;">
                         <ng-template #luceneComponentHost></ng-template>
                         <!-- query container -->
                     </div>
@@ -25,10 +25,12 @@
         </div>
         <div class="card-separator"></div>
         <div class="clr-row clr-col-sm-12 clr-col-md-12">
-            <button class="btn btn-primary btn-block" (click)="search()">{{btnTitle}}</button>
-            <button class="btn btn-primary btn-block" (click)="clearInput()">Clear all</button>
+            <div class="clr-col clr-col-sm-8">
+                <button class="btn btn-primary btn-block" (click)="search()">{{btnTitle}}</button>
+            </div>
+            <div class="clr-col clr-col-sm-4">
+                <button class="btn btn-primary btn-block" (click)="clearInput()">Clear all</button>
+            </div>
         </div>
     </div>
-
-
 </div>

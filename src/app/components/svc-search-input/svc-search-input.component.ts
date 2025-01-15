@@ -36,12 +36,11 @@ export class SvcSearchInputComponent {
   luceneTerm: Term[] = [];
   selectedItem: string = '';
   queryString = '';
-  freetext = '';
 
   @Input() title: string = 'Service Search';
   @Input() btnTitle: string = 'Search';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
-  @Output() onUpdateQuery = new EventEmitter<any>();
+  @Output() onSearch = new EventEmitter<any>();
 
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
   @ViewChild('luceneComponentHost', { read: ViewContainerRef, static: false }) luceneComponentHost!: ViewContainerRef;
@@ -183,7 +182,7 @@ export class SvcSearchInputComponent {
   }
 
   search(): void {
-    console.log(this.queryString);
+    this.onSearch.emit(this.queryString);
   }
 
   updateLuceneQuery = () => {
@@ -203,7 +202,7 @@ export class SvcSearchInputComponent {
 
     // get rid of " to convert it to the freetext
     if (this.queryString && this.queryString.length > 0) {
-      this.freetext = this.queryString.split('"').join('');
+      this.queryString = this.queryString.split('"').join('');
     }
   }
 

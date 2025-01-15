@@ -10,10 +10,6 @@
     </div>
 </div>
 } @else {
-
-@if (itemType === 'instance') {
-    <app-svc-search-input title='Service Filter' btnTitle="Filter"></app-svc-search-input>
-}
 <clr-datagrid [(clrDgSelected)]="selected" (clrDgRefresh)="refresh($event)" [clrDgLoading]="isLoading">
     @if (onAdd || onDelete || onDownload) {
     <clr-dg-action-bar>

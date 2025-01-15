@@ -94,6 +94,11 @@ export const MENU_ITEMS: any[] = [
         group: 'mysr'
       },
       {
+        title: 'Map Search',
+        link: '/pages/sr/mapsearch',
+        group: 'mysr'
+      },
+      {
         title: 'menu.sr.instances',
         link: '/pages/sr/instance',
         group: 'mysr'

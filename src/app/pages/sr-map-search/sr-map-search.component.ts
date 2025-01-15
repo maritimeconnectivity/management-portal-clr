@@ -10,9 +10,6 @@ import { LuceneQueryOutput } from 'src/app/common/lucene-query/lucene-query-outp
 import { Router } from '@angular/router';
 import { geojsonToWKT } from '@terraformer/wkt';
 import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
-import { ItemTableComponent } from 'src/app/components/item-table/item-table.component';
-import { ClarityModule } from '@clr/angular';
-import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 
 @Component({
   selector: 'app-sr-search',
@@ -20,14 +17,12 @@ import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
   imports: [
     InputGeometryComponent,
     ComponentsModule,
-    ClarityModule,
     SvcSearchInputComponent,
-    ItemTableComponent,
 ],
-  templateUrl: './sr-search.component.html',
-  styleUrl: './sr-search.component.css'
+  templateUrl: './sr-map-search.component.html',
+  styleUrl: './sr-map-search.component.css'
 })
-export class SrSearchComponent {
+export class SrMapSearchComponent {
   @ViewChild('map')
   geometryMap!: InputGeometryComponent;
   @ViewChild('luceneQueryInputComponent') luceneQueryInputComponent!: SvcSearchInputComponent;
@@ -35,12 +30,8 @@ export class SrSearchComponent {
   geometries: any[] = [];
   geometryNames: string[] = [];
   searchParams: SearchParameters = {};
-  labels: {[key: string]: any} = {};
+  queryString = '';
   freetext = '';
-  orgMrn: string = "";
-  totalPages = 0;
-  totalElements = 0;
-  itemType = ItemType.SearchObjectResult;
   instances: SearchObjectResult[] = [];
   showTables = true;
   contextForAttributes = 'list';
@@ -61,7 +52,6 @@ export class SrSearchComponent {
     private router: Router,
     private secomSearchController: SECOMService,
     private instanceControllerService: InstanceControllerService,
-    private itemManagerService: ItemManagerService,
   ) { }
 
   ngOnInit(): void {
@@ -74,21 +64,6 @@ export class SrSearchComponent {
       this.instanceControllerService.getInstances().subscribe(
         instances => this.allInstances = instances,
       );
-    }
-  }
-
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
-    try {
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage);
-      if (!fetchedItems) {
-        return [];
-      }
-      this.totalPages = fetchedItems.totalPages!;
-      this.totalElements = fetchedItems.totalElements!;
-      return fetchedItems.data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      return [];
     }
   }
 
@@ -126,6 +101,13 @@ export class SrSearchComponent {
     console.log(freetext);
     this.freetext = freetext;
     this.search(freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '');
+  }
+
+  onQueryStringChanged = (event: any) => {
+    this.queryString = event.target.value;
+    if (this.queryString.length === 0) {
+      this.clearAll();
+    }
   }
 
   onClear = () => {
