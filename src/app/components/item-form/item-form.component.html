@@ -152,7 +152,11 @@
                   <div _ngcontent-ng-c3994056840="" class="clr-row ng-star-inserted"><label _ngcontent-ng-c3994056840="" class="clr-control-label clr-col-12 clr-col-md-2" for="clr-form-control-13"></label>
                     <div class="clr-col-md-10 clr-col-12" ng-reflect-ng-class="clr-col-md-10 clr-col-12">
                       <clr-button-group class="btn-outline-primary btn-sm">
-                        <clr-button (click)="downloadFile(menu.key)">{{item[menu.key]}}<cds-icon shape="download"></cds-icon></clr-button>
+                        <clr-button (click)="downloadFile(menu.key)">{{
+                          item[menu.key.replace('Name', '')].name.length > 20 ?
+                          shortenFileName(item[menu.key.replace('Name', '')].name, 20)
+                            : item[menu.key.replace('Name', '')].name}}
+                          <cds-icon shape="download"></cds-icon></clr-button>
                         <clr-button (click)="deleteFile(menu.key)" class="btn-outline-warning"><cds-icon shape="times"></cds-icon></clr-button>
                       </clr-button-group>
                     </div>

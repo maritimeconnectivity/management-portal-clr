@@ -111,15 +111,15 @@ export class FileHelperService {
     }
   }
 
-  public deleteDoc(docFile: DocDto): Promise<boolean> {
+  public deleteDoc(docId: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.docControllerService.deleteDoc(docFile.id!).subscribe(
+      this.docControllerService.deleteDoc(docId!).subscribe(
         () => {
-          this.notifierService.notify('success', this.translate.instant('success.file.delete') + docFile.name);
+          this.notifierService.notify('success', this.translate.instant('success.file.delete'));
           resolve(true);
         },
         (error) => {
-          this.notifierService.notify('error', this.translate.instant('error.file.delete') + docFile.name + error);
+          this.notifierService.notify('error', this.translate.instant('error.file.delete') + error);
           reject(false);
         }
       );
@@ -139,6 +139,33 @@ export class FileHelperService {
         }
       );
     });
+  }
+
+  public uploadDoc = async (doc: DocDto): Promise<DocDto> => {
+    return new Promise((resolve, reject) => this.docControllerService.createDoc(doc).subscribe(
+      (res) => {
+        this.notifierService.notify('success', this.translate.instant('success.file.upload') + doc.name);
+        resolve(res);
+      },
+      (error) => {
+        this.notifierService.notify('error', this.translate.instant('error.file.upload') + doc.name + error);
+        reject(error);
+      }
+    ));
+  }
+  
+
+  public uploadXml = async (xml: XmlDto): Promise<XmlDto> => {
+    return new Promise((resolve, reject) => this.xmlControllerService.createXml(xml).subscribe(
+      (res) => {
+        this.notifierService.notify('success', this.translate.instant('success.file.upload') + xml.name);
+        resolve(res);
+      },
+      (error) => {
+        this.notifierService.notify('error', this.translate.instant('error.file.upload') + xml.name + error);
+        reject(error);
+      }
+    ));
   }
 
   private convertBase64ToByteArray(base64Content: string): Uint8Array {

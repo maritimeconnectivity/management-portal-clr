@@ -15,6 +15,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { preprocess, preprocessToShow, preprocessToUpload } from 'src/app/common/itemPreprocessor';
 import { FileHelperService } from 'src/app/common/shared/file-helper.service';
 import { encodeFileToBase64 } from 'src/app/common/file-decoder';
+import { DocDto, InstanceDto, XmlDto } from 'src/app/backend-api/service-registry';
 
 @Component({
   selector: 'app-item-form',
@@ -66,6 +67,8 @@ export class ItemFormComponent {
   roles: Role[] = [];
   id = '';
   onSubmitIsGiven = true;
+  docToBeDeleted: DocDto | undefined;
+  xmlToBeDeleted: XmlDto | undefined;
 
   constructor(private formBuilder: FormBuilder,
     private roleService: RoleControllerService,
@@ -127,23 +130,35 @@ export class ItemFormComponent {
     }
   }
 
-  submit = () => {
+  submit = async () => {
     // Filter attributes with undefined values
     if (this.isValid()){
       let filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
       if (this.isForNew) {
         if (this.itemType === ItemType.Instance) {
-          console.log(this.item);
-          this.item = preprocessToUpload(this.itemForm.value, this.itemType);
-
-          this.onSubmit.emit(preprocessToUpload(this.itemForm.value, this.itemType));
-        } else {
-          this.onSubmit.emit(filteredAttributes);
-        }        
+          // the document should be uploaded before submitting
+          if (this.item.instanceAsDoc && this.item.instanceAsDocName.length === 0) { // this means there is an update
+            const result = await this.fileHelperService.uploadDoc(this.item.instanceAsDoc);
+            this.item.instanceAsDoc = result;
+          }
+        }
+        this.onSubmit.emit(preprocessToUpload(filteredAttributes, this.itemType));        
       } else {
         const updated = appendUpdatedAttributes(this.item, filteredAttributes);
-        console.log('Updated:', updated);
-        this.onSubmit.emit(updated);
+        let preprocessSuccess = true;
+        // the document should be uploaded before submitting
+        if (this.item.instanceAsDoc && this.item.instanceAsDocName.length === 0) { // this means there is an update
+          const result = await this.fileHelperService.uploadDoc(this.item.instanceAsDoc);
+          this.item.instanceAsDoc = result;
+          preprocessSuccess = result ? true : false;
+        } else if (this.docToBeDeleted) { // this means the document should be deleted
+          // preprocessSuccess = await this.fileHelperService.deleteDoc(this.docToBeDeleted!.id!);
+          this.item.instanceAsDoc = null;
+        }
+        if (preprocessSuccess) {
+          console.log('Updated:', updated);
+          this.onSubmit.emit(preprocessToUpload(updated, this.itemType));
+        }
       }
     }
   }
@@ -314,16 +329,38 @@ export class ItemFormComponent {
     if (key === 'instanceAsDocName' && this.item.instanceAsDoc) {
       if (this.item.instanceAsDocName === '') {
         // this is for deletion of file, which hasn't been uploaded yet
+        this.docToBeDeleted = this.item.instanceAsDoc;
         this.item.instanceAsDoc = null;
         this.item.instanceAsDocName = '';
-      } else {
-        // this is for deletion of file, which has been uploaded
-        // so you need to delete it from the server first
-        this.fileHelperService.deleteDoc(this.item.instanceAsDoc).then( (result: boolean) => result ? this.item.instanceAsDoc = null : null);
       }
       
     } else if (key === 'instanceAsXmlName' && this.item.instanceAsXml) {
       this.fileHelperService.deleteXml(this.item.instanceAsXml).then( (result: boolean) => result ? this.item.instanceAsXml = null : null);
     }
+  }
+
+  shortenFileName = (fileName: string, maxLength: number): string => {
+    // Find the last dot to get the file extension
+    const lastDotIndex = fileName.lastIndexOf('.');
+    if (lastDotIndex === -1) {
+      // If there's no dot, return the original fileName
+      return fileName;
+    }
+  
+    // Extract the file extension
+    const extension = fileName.substring(lastDotIndex);
+    // Extract the main part of the file name
+    const mainPart = fileName.substring(0, lastDotIndex);
+  
+    // Check if the main part needs to be shortened
+    if (mainPart.length <= maxLength) {
+      return fileName;
+    }
+  
+    // Shorten the main part and add ellipsis
+    const shortenedMainPart = mainPart.substring(0, maxLength) + '..';
+  
+    // Combine the shortened main part with the file extension
+    return shortenedMainPart + extension;
   }
 }

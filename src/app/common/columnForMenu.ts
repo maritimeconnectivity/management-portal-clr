@@ -696,12 +696,6 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Service type of service instance',
       visibleFrom: ['list'],
     },
-    serviceTypeTitle: {
-      title: 'Service type',
-      type: 'stringArray',
-      description: 'Service type of service instance',
-      visibleFrom: ['detail'],
-    },
     serviceType: {
       title: 'Service type',
       type: 'stringArray',
@@ -776,19 +770,13 @@ export const ColumnForResource: {[key: string]: object} = {
         },
       ],
       description: 'The service type shall reflect the associated operational service type provided according to defined types',
-      visibleFrom: ['edit', 'edit-new'],
+      visibleFrom: ['detail', 'edit', 'edit-new'],
     },
     dataProductTypeValue: {
       title: 'Data product type',
       type: 'string',
       description: 'Data product type of service instance',
       visibleFrom: ['list'],
-    },
-    dataProductTypeTitle: {
-      title: 'Data product type',
-      type: 'stringArray',
-      description: 'Data product type of service instance',
-      visibleFrom: ['detail'],
     },
     dataProductType: {
       title: 'Data product type',
@@ -904,7 +892,7 @@ export const ColumnForResource: {[key: string]: object} = {
         },
       ],
       description: 'Data product type defined in IEC 63173-2 SECOM standard',
-      visibleFrom: ['edit', 'edit-new'],
+      visibleFrom: ['detail', 'edit', 'edit-new'],
     },
     status: {
       title: 'Status',
