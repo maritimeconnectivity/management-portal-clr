@@ -61,6 +61,7 @@ export class ItemFormComponent {
   @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild(ClrForm, { static: true }) clrForm: ClrForm | undefined;
+  @ViewChild('map') geometryMap!: InputGeometryComponent;
 
   viewContext = 'edit';
 
@@ -107,6 +108,10 @@ export class ItemFormComponent {
         if (this.itemType === ItemType.Instance) {
           this.item = preprocessToShow(this.item, this.itemType);
           console.log(this.item);
+          if (this.item.geometry) {
+            this.geometryMap.clearMap();
+            this.geometry = [this.item.geometry];
+          }
         }
         this.itemForm.patchValue(this.item);
       }
@@ -385,7 +390,7 @@ export class ItemFormComponent {
     return shortenedMainPart + extension;
   }
 
-  setGeometry = (geometry: any) => {
+  setGeometryInput = (geometry: any) => {
     if (this.itemType === ItemType.Instance) {
       this.item.geometry = geometry.data.geometries[0];
     }

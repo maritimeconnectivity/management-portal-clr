@@ -26,13 +26,7 @@ export class InputGeometryComponent {
   @Output() onClear = new EventEmitter<any>();
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
-  responseFeatureGroup: FeatureGroup = featureGroup();
-  drawnGroup: FeatureGroup = featureGroup();
   mapContainerHeightOffset = 120;
-  
-  constructor(private el: ElementRef, private renderer: Renderer2 ){
-
-  }
 
   options = {
     layers: [
@@ -41,18 +35,50 @@ export class InputGeometryComponent {
     trackResize: false
   };
 
+  // Define styles
+  responseFeatureStyle = {
+    color: "#ff0000", // Border color
+    fillColor: 'blue', // Fill color
+    weight: 2 // Border width
+  };
+
+  drawnFeatureStyle = {
+    color: "#ff0000", // Border color
+    fillColor: 'red', // Fill color
+    weight: 2 // Border width
+  };
+
   drawnItems: FeatureGroup = featureGroup();
+  responseFeatureGroup: FeatureGroup = featureGroup();
+  drawnGroup: FeatureGroup = featureGroup();
 
   drawOptions = {
     draw: {
       circle: undefined,
       rectangle: undefined,
       circlemarker: undefined,
+      polygon: {
+        shapeOptions: {
+          color: '#f35f57',
+          weight: 10,
+        },
+      },
+      polyline: {
+        shapeOptions: {
+          color: '#f35f57',
+          weight: 10,
+        },
+      },
     },
     edit: {
       featureGroup: this.drawnGroup
     }
   };
+
+  constructor(private el: ElementRef, private renderer: Renderer2 ){
+    this.responseFeatureGroup.setStyle(this.responseFeatureStyle);
+    this.drawnGroup.setStyle(this.drawnFeatureStyle);
+  }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -60,6 +86,7 @@ export class InputGeometryComponent {
     if (this.fullscreen) {
       this.mapContainerHeight = window.innerHeight - this.mapContainerHeightOffset;
     }
+
     this.drawnItems.addLayer(this.responseFeatureGroup);
     this.drawnItems.addLayer(this.drawnGroup);
   }
