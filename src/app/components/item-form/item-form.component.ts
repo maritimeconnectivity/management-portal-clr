@@ -347,7 +347,12 @@ export class ItemFormComponent {
       }
       
     } else if (key === 'instanceAsXmlName' && this.item.instanceAsXml) {
-      this.fileHelperService.deleteXml(this.item.instanceAsXml).then( (result: boolean) => result ? this.item.instanceAsXml = null : null);
+      if (this.item.instanceAsXmlName === '') {
+        // this is for deletion of file, which hasn't been uploaded yet
+        this.xmlToBeDeleted = this.item.instanceAsXml;
+        this.item.instanceAsXml = null;
+        this.item.instanceAsXmlName = '';
+      }
     }
   }
 
