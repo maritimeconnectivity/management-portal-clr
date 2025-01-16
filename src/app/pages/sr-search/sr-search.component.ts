@@ -80,12 +80,20 @@ export class SrSearchComponent {
       if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
         return [];
       }
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
+      // a bit of hack to deal with the fact that the search service does not support total number of elements....
+      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchParam);
       if (!fetchedItems) {
         return [];
       }
       this.totalPages = fetchedItems.totalPages!;
       this.totalElements = fetchedItems.totalElements!;
+      this.geometries = [];
+      this.geometryNames = [];
+      fetchedItems.data?.forEach(i =>
+        {
+          this.geometries.push(i.geometry);
+          this.geometryNames.push(i.name);
+        });
       return fetchedItems.data;
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -111,14 +119,14 @@ export class SrSearchComponent {
     this.queryInput.addGeoItem();
   }
 
-  onClearGeometry = () => {
+  onClearQueryGeometry = () => {
     this.queryGeometry = {};
     this.queryInput.deleteGeoItem();
   }
 
   onClearAll = () => {
     this.onClear();
-    this.onClearGeometry();
+    this.onClearQueryGeometry();
     this.geometryMap.clearMap();
   }
 
@@ -136,7 +144,6 @@ export class SrSearchComponent {
           this.geometries.push(i.geometry);
           this.geometryNames.push(i.name);
         });
-      this.geometryMap.loadGeometryOnMap();
     });
   }
 
@@ -147,14 +154,16 @@ export class SrSearchComponent {
   }
 
   onClear = () => {
-    this.geometries = [];
-    this.queryGeometry = {};
-    this.searchParams = {};
     this.clearAll();
   }
 
   clearAll = () => {
-    
+    this.freetext = '';
+    this.searchParams = {};
+    this.clearMap();
+    this.onClearQueryGeometry();
+    this.searchParams = {};
+    this.smartTable.clear();
   }
 
   clearMap = () => {
@@ -165,12 +174,12 @@ export class SrSearchComponent {
 
   refreshData(data?: any) {
     if (data) {
-      //this.source.load(data);
       if (data.length === 0) {
         this.clearMap();
+      } else {
+        this.geometryMap.loadGeometryOnMap();
       }
     } else {
-      //this.source.load([]);
     }
   }
 

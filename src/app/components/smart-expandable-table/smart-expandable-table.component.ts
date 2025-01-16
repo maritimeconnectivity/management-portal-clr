@@ -140,6 +140,10 @@ export class SmartExpandableTableComponent {
     this.selectedItem = {};
   }
 
+  clear = () => {
+    this.data = [];
+  }
+
   edit = (selectedItem: any) => {
     this.expanded = true;
     this.selectedItem = selectedItem;
