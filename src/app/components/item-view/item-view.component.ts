@@ -1,13 +1,11 @@
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild } from '@angular/core';
 import { ItemType, timestampKeys } from 'src/app/common/menuType';
-import { CertTableComponent } from '../cert-table/cert-table.component';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { FormsModule, Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { formatDate, JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
-import { convertTime } from 'src/app/common/timeConverter';
-import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule } from '@clr/angular';
+import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule, ClrSpinnerModule, ClrTextareaModule } from '@clr/angular';
 import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
 import { CertificateService } from 'src/app/common/shared/certificate.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -21,6 +19,9 @@ import { migrateVesselAttributes } from 'src/app/common/filterObject';
 import { ItemFormComponent } from '../item-form/item-form.component';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
+import { ItemTableComponent } from "../item-table/item-table.component";
+import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
+import { preprocessToShow } from 'src/app/common/itemPreprocessor';
 
 @Component({
   selector: 'app-item-view',
@@ -29,12 +30,14 @@ import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
     SharedModule,
     ClrModalModule,
     ClrRadioModule,
+    ClrSpinnerModule,
     ClrDatepickerModule,
     ItemFormComponent,
-    CertTableComponent,
+    InputGeometryComponent,
     FormsModule,
-    JsonPipe,
-  ],
+    ClrTextareaModule,
+    ItemTableComponent
+],
   templateUrl: './item-view.component.html',
   styleUrl: './item-view.component.css'
 })
@@ -45,6 +48,8 @@ export class ItemViewComponent {
   @Input() mrnPrefix: string = 'urn:mrn:';
   @Input() instanceVersion: string | undefined = undefined;
   @Input() serial: string | undefined = undefined;
+  @Input() isLoading: boolean = true;
+  @Input() viewOnly: boolean = false;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
@@ -54,6 +59,7 @@ export class ItemViewComponent {
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
   @ViewChild('revokeModal', { static: true }) revokeModal: ClrModal | undefined;
   @ViewChild('migrateModal', { static: true }) migrateModal: ClrModal | undefined;
+  @ViewChild('xmlModal', { static: true }) xmlModal: ClrModal | undefined;
   @ViewChild(ItemFormComponent) newAdminUserForm: ItemFormComponent | undefined;
 
   viewContext = 'detail';
@@ -75,6 +81,11 @@ export class ItemViewComponent {
   userItemType = ItemType.User;
   adminUser: any = {permissions: ORG_ADMIN_AT_MIR };
   adminUserMrnPrefix = 'urn:mrn:mcp:';
+  xmlModalOpened = false;
+  xmlContent = "";
+  showCertTables = false;
+  geometry: any[] = [];
+  geometryNames: string[] = [];
 
   constructor(private certificateService: CertificateService,
     private translate: TranslateService,
@@ -100,6 +111,13 @@ export class ItemViewComponent {
     if (this.item && this.itemType === ItemType.Role) {
       this.itemId = this.item.id;
       this.setForm();
+    } else if (this.item && this.itemType === ItemType.Instance || this.itemType === ItemType.SearchObjectResult) {
+      this.itemId = this.item.instanceId;
+      this.instanceVersion = this.item.instanceVersion;
+      this.geometry = [...this.geometry, this.item.geometry];
+      this.geometryNames = [this.item.name];
+      this.item = preprocessToShow(this.item, this.itemType);
+      this.setForm();
     } else if (this.item && this.item.mrn) {
       this.itemId = this.item.mrn;
       if (this.item.instanceVersion) {
@@ -115,6 +133,15 @@ export class ItemViewComponent {
     }
     if (this.itemType === ItemType.OrgCandidate) {
       this.adminUserMrnPrefix = getMrnPrefixFromOrgMrn(this.item.mrn);
+    }
+    this.checkIfShowCertTables();
+  }
+
+  checkIfShowCertTables = () => {
+    if (this.itemType === ItemType.Role || this.itemType === ItemType.OrgCandidate || this.itemType === ItemType.Instance || this.itemType === ItemType.SearchObjectResult) {
+      this.showCertTables = false;
+    } else {
+      this.showCertTables = true;
     }
   }
 
@@ -141,10 +168,6 @@ export class ItemViewComponent {
     return revokedCerts.map((cert) => ({ ...cert, revokeReason: this.revokeReasons.filter((reason) => reason.value === cert.revokeReason)[0].title }));
   }
 
-  sortColumnForMenu = (a: any, b: any) => {
-    return sortColumnForMenu(a, b);
-  }
-
   edit = () => {
     this.onEdit.emit(this.item);
   }
@@ -163,14 +186,6 @@ export class ItemViewComponent {
   deleteItem = () => {
     this.onDelete.emit(this.item);
   }
-  
-  isTimestampFormat(key: string): boolean {
-    return timestampKeys.includes(key);
-  }
-
-  convertTimeString = (time: string): string => {
-    return convertTime(time);
-  }
 
   openCertModal = () => {
     if (this.itemType === ItemType.Service && this.instanceVersion) {
@@ -181,6 +196,35 @@ export class ItemViewComponent {
     this.certModalOpened = true;
     this.issue();
   }
+
+  openXmlDialog = (xml: any, isEditing: boolean = false) => {
+    this.xmlModalOpened = true;
+    this.xmlModal?.open();
+    this.xmlContent = xml.content;
+  }
+
+  downloadDocFile = (doc: any) => {
+    this.downloadFile(doc.name, doc.filecontentContentType, doc.filecontent);
+  }
+
+  downloadFile(filename: string, type: string, data: string) {
+    // decode base64 string, remove space for IE compatibility
+    var binary = atob(data.replace(/\s/g, ''));
+    var len = binary.length;
+    var buffer = new ArrayBuffer(len);
+    var view = new Uint8Array(buffer);
+    for (var i = 0; i < len; i++) {
+        view[i] = binary.charCodeAt(i);
+    }
+
+    var blob = new Blob([view], {type: type});
+    var elem = window.document.createElement('a');
+    elem.href = window.URL.createObjectURL(blob);
+    elem.download = filename;
+    document.body.appendChild(elem);
+    elem.click();
+    document.body.removeChild(elem);
+}
 
   issue = () => {
     issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser, this.instanceVersion).then((cert: CertificateBundle | undefined) => {
@@ -216,7 +260,7 @@ export class ItemViewComponent {
     selected.forEach((certificate) => {
       const endText = formatDate(certificate.end, 'yyyy-MM-ddTHH-mm-ss', this.locale);
       this.fileHelper.downloadPemCertificate({certificate: certificate.certificate},
-        this.item.mrn + '_exp_' + endText, this.notifier);
+        this.item.mrn + '_exp_' + endText);
     });
   }
 
@@ -253,7 +297,7 @@ export class ItemViewComponent {
 
   public download() {
     if (this.certificateBundle) {
-      this.fileHelper.downloadPemCertificate(this.certificateBundle, this.itemId, this.notifier);
+      this.fileHelper.downloadPemCertificate(this.certificateBundle, this.itemId);
       this.notifier.notify('success', this.translate.instant('success.certificate.chosen'));
     }
   }

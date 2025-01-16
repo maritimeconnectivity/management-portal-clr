@@ -1,0 +1,15 @@
+.card-separator {
+    border-top: 1px solid #dcdcdc;
+    margin: 8px 0;
+}
+
+/*
+.clr-control-container {
+    display: block;
+    width: 100%;
+
+    .clr-select-wrapper,
+    .clr-select {
+      width: 100%;
+    }
+}*/

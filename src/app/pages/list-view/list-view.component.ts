@@ -35,6 +35,7 @@ export class ListViewComponent {
   totalPages = 0;
   totalElements = 0;
   hasAdminPermission = false;
+  apiBase = 'ir';
   private readonly notifier: NotifierService;
 
   constructor(
@@ -58,6 +59,9 @@ export class ListViewComponent {
         this.authService.hasPermission(this.itemType).then((hasPermission) => {
           this.hasAdminPermission = true;
         });
+        if (this.itemType === ItemType.Instance) {
+          this.apiBase = 'sr';
+        }
       });
     });
   }
@@ -90,18 +94,18 @@ export class ListViewComponent {
       }, {} as {[key: string]: any});
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object) => {
     try {
       if (itemType === ItemType.Role) {
         return await this.itemManagerService.fetchRoles(this.orgMrn);
       }
-      const page = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage);
-      if (!page) {
+      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
+      if (!fetchedItems) {
         return [];
       }
-      this.totalPages = page.totalPages!;
-      this.totalElements = page.totalElements!;
-      return Array.isArray(page) ? page : page.content;
+      this.totalPages = fetchedItems.totalPages!;
+      this.totalElements = fetchedItems.totalElements!;
+      return fetchedItems.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       return [];
@@ -144,7 +148,7 @@ export class ListViewComponent {
     if (!this.hasAdminPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
-      this.router.navigateByUrl('/pages/ir/'+this.itemType+'/new');
+      this.router.navigateByUrl('/pages/' + this.apiBase + '/'+this.itemType+'/new');
     }
   }
 
@@ -173,16 +177,16 @@ export class ListViewComponent {
 
   moveToEditPage = (selectedItem: any) => {
     let url = '';
-    if (this.itemType === ItemType.Role) {
-      url = '/pages/ir/'+this.itemType+'/'+selectedItem.id;
+    if (this.itemType === ItemType.Role || this.itemType === ItemType.Instance) {
+      url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.id;
     } else if (this.itemType === ItemType.Service) {
       if (selectedItem.instanceVersion) {
-        url = '/pages/ir/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion; //backward compatibility
+        url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion; //backward compatibility
       } else {
-        url = '/pages/ir/'+this.itemType+'/'+selectedItem.mrn;
+        url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.mrn;
       }
     } else {
-      url = '/pages/ir/'+this.itemType+'/'+selectedItem.mrn;
+      url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.mrn;
     }
     const urlTree = this.router.createUrlTree([url], {
       queryParams: { edit: true }
@@ -212,7 +216,7 @@ export class ListViewComponent {
             this.createAdminUser(selectedItem.mrn, selectedItem.adminUser).subscribe(
               (res) => {
                 this.notifier.notify('success', this.translate.instant('success.resource.approveOrganization.user') + ' - ' + selectedItem.adminUser.mrn);
-                this.router.navigateByUrl('/pages/ir/organization');
+                this.router.navigateByUrl('/pages/' + this.apiBase + '/organization');
               },
               err => {
                 this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.userCreation') + err.error?.message);

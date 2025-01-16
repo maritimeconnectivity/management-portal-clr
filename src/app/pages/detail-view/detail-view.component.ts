@@ -6,10 +6,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { NotifierService } from 'gramli-angular-notifier';
 import { catchError, firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Device, DeviceControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, ServicePatch, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
-import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
-import { formatVesselToUpload } from 'src/app/common/dataformatter';
-import { migrateVesselAttributes } from 'src/app/common/filterObject';
 import { ItemType } from 'src/app/common/menuType';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
@@ -34,11 +30,12 @@ export class DetailViewComponent {
   numberId = -1;
   instanceVersion = "";
   mrnPrefix = "urn:mrn:";
-  isLoading = false;
+  isLoading = true;
   isForNew = false;
   item: any = {};
   hasAdminPermission = false;
   serial = '';
+  apiBase = 'ir';
   private readonly notifier: NotifierService;
 
   constructor(private route: ActivatedRoute,
@@ -73,8 +70,14 @@ export class DetailViewComponent {
           this.loadItem(this.orgMrn);
         }
         this.authService.hasPermission(this.itemType, orgMrn === this.id).then((hasPermission) => {
-          this.hasAdminPermission = hasPermission;
+          if (this.itemType !== ItemType.Instance) {
+            this.hasAdminPermission = hasPermission;
+          }
         });
+        if (this.itemType === ItemType.Instance) {
+          this.apiBase = 'sr';
+          this.hasAdminPermission = true;
+        }
       }
       );
     });
@@ -97,7 +100,7 @@ export class DetailViewComponent {
       if (this.id === "new") {
         this.isForNew = true;
       }
-      if (this.itemType === ItemType.Role) {
+      if (this.itemType === ItemType.Role || this.itemType === ItemType.Instance) {
         this.numberId = parseInt(this.id);
       }
     });
@@ -105,6 +108,7 @@ export class DetailViewComponent {
 
   loadItem = async (orgMrn: string) => {
     this.item = await this.itemManagerService.fetchSingleData(this.itemType, orgMrn, this.id), this.instanceVersion;
+    this.isLoading = false;
   }
 
   edit = (item: any) => {
@@ -138,7 +142,7 @@ export class DetailViewComponent {
         res => {
           this.notifier.notify('success', this.translate.instant('success.resource.create'));
           this.isLoading = false;
-          this.router.navigateByUrl('/pages/ir/' + this.itemType);
+          this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
         },
         err => {
           this.notifierService.notify('error',
@@ -189,7 +193,7 @@ export class DetailViewComponent {
   }
 
   back = () => {
-    this.router.navigateByUrl('/pages/ir/' + this.itemType);
+    this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
   }
 
   migrate = (newServiceMrn: string) => {
@@ -216,7 +220,7 @@ export class DetailViewComponent {
     ).subscribe(
       res => {
         this.notifier.notify('success', this.translate.instant('success.resource.delete'));
-        this.router.navigateByUrl('/pages/ir/' + this.itemType);
+        this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
       },
       err => {
         this.notifierService.notify('error',

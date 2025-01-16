@@ -5,6 +5,8 @@ import { Device, DeviceControllerService, Organization, OrganizationControllerSe
 import { preprocess } from '../itemPreprocessor';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
 import { postprocess } from '../itemPostprocessor';
+import { FetchedItems } from '../fetchedItems';
+import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
 
 @Injectable({
   providedIn: 'root'
@@ -18,25 +20,45 @@ export class ItemManagerService {
     private serviceService: ServiceControllerService,
     private vesselService: VesselControllerService,
     private roleService: RoleControllerService,
-    private instanceService: InstanceControllerService
+    private instanceService: InstanceControllerService,
+    private secomService: SECOMService,
   ) { }
 
-  fetchListOfData = async (entityType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number) => {
-    if (entityType === ItemType.Device) {
-      return await firstValueFrom(this.deviceService.getOrganizationDevices(orgMrn, pageNumber, elementsPerPage));
-    } else if(entityType === ItemType.Organization) {
-      return await firstValueFrom(this.organizationService.getOrganization(pageNumber, elementsPerPage));
-    } else if(entityType === ItemType.User) {
-      return await firstValueFrom(this.userService.getOrganizationUsers(orgMrn, pageNumber, elementsPerPage));
-    } else if(entityType === ItemType.Service) {
-      return await firstValueFrom(this.serviceService.getOrganizationServices(orgMrn, pageNumber, elementsPerPage));
-    } else if(entityType === ItemType.Vessel) {
-      return await firstValueFrom(this.vesselService.getOrganizationVessels(orgMrn, pageNumber, elementsPerPage));
-    } else if(entityType === ItemType.OrgCandidate) {
-      return await firstValueFrom(this.organizationService.getUnapprovedOrganizations(pageNumber, elementsPerPage));
+  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchParam?: object): Promise<FetchedItems> => {
+    let page;
+    if(itemType === ItemType.Instance) {
+      page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage, [], 'response'));
+      const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 0;
+      return { data: (page.body! as InstanceDto[]).map(i => preprocess(i, itemType)),
+        totalPages: Math.ceil( totalElements / elementsPerPage),
+        totalElements};
+    } else if(itemType === ItemType.SearchObjectResult && secomSearchParam) {
+      page = await firstValueFrom(this.secomService.search(secomSearchParam, pageNumber, elementsPerPage, 'response'));
+      const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
+      return { data: (page.body?.searchServiceResult! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
+        totalPages: Math.ceil( totalElements / elementsPerPage),
+        totalElements};
+    } else if (itemType === ItemType.Device) {
+      page = await firstValueFrom(this.deviceService.getOrganizationDevices(orgMrn, pageNumber, elementsPerPage));
+    } else if(itemType === ItemType.Organization) {
+      page = await firstValueFrom(this.organizationService.getOrganization(pageNumber, elementsPerPage));
+    } else if(itemType === ItemType.User) {
+      page = await firstValueFrom(this.userService.getOrganizationUsers(orgMrn, pageNumber, elementsPerPage));
+    } else if(itemType === ItemType.Service) {
+      page = await firstValueFrom(this.serviceService.getOrganizationServices(orgMrn, pageNumber, elementsPerPage));
+    } else if(itemType === ItemType.Vessel) {
+      page = await firstValueFrom(this.vesselService.getOrganizationVessels(orgMrn, pageNumber, elementsPerPage));
+    } else if(itemType === ItemType.OrgCandidate) {
+      page = await firstValueFrom(this.organizationService.getUnapprovedOrganizations(pageNumber, elementsPerPage));
     } else {
       throw new Error('Invalid entity type');
     }
+    return {
+      data: Array.isArray(page) ?
+        page.map(i => preprocess(i, itemType)) :
+        page.content!.map(i => preprocess(i, itemType)),
+      totalPages: page.totalPages!,
+      totalElements: page.totalElements!};
   }
 
   fetchRoles = async (orgMrn: string) => {
@@ -62,6 +84,8 @@ export class ItemManagerService {
         item = await firstValueFrom(this.vesselService.getVessel(orgMrn, id));
       } else if (itemType === ItemType.Role) {
         item = await firstValueFrom(this.roleService.getRole(orgMrn, parseInt(id)));
+      } else if (itemType === ItemType.Instance) {
+        item = await firstValueFrom(this.instanceService.getInstance(parseInt(id)));
       } else {
         return {};
       }
@@ -86,7 +110,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role) {
       return this.roleService.createRole(body as Role, orgMrn);
     } else if (itemType === ItemType.Instance) {
-      return this.instanceService.createInstance(body as InstanceDto);
+      return this.instanceService.createInstance(postprocess(body, itemType) as InstanceDto);
     }
     return new Observable();
   }
@@ -109,7 +133,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role && numberId) {
       return this.roleService.updateRole(body as Role, orgMrn, numberId);
     } else if (itemType === ItemType.Instance && numberId) {
-      return this.instanceService.updateInstance(Object.assign({}, body, { id: numberId }) as InstanceDto, numberId);
+      return this.instanceService.updateInstance(Object.assign({}, postprocess(body, itemType), { id: numberId }) as InstanceDto, numberId);
     }
     return new Observable();
   }

@@ -13,9 +13,6 @@ import {HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NotifierModule } from 'gramli-angular-notifier';
-import { BASE_PATH as MIR_BASE_PATH } from './backend-api/identity-registry/variables';
-import { BASE_PATH as MSR_BASE_PATH } from './backend-api/service-registry/variables';
-import { BASE_PATH as SECOM_SEARCH_BASE_PATH } from './backend-api/secom/variables';
 import { AppConfig } from './app.config';
 import { AuthInterceptor } from './auth/auth.interceptor';
 

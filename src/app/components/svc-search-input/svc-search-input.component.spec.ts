@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IrGuideComponent } from './ir-guide.component';
+import { SvcSearchInputComponent } from './svc-search-input.component';
 
-describe('IrGuideComponent', () => {
-  let component: IrGuideComponent;
-  let fixture: ComponentFixture<IrGuideComponent>;
+describe('SvcSearchInputComponent', () => {
+  let component: SvcSearchInputComponent;
+  let fixture: ComponentFixture<SvcSearchInputComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IrGuideComponent]
+      imports: [SvcSearchInputComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(IrGuideComponent);
+    fixture = TestBed.createComponent(SvcSearchInputComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

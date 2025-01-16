@@ -1,0 +1,70 @@
+<div class="clr-form clr-form-horizontal">
+    <div class="clr-form-horizontal clr-form-control clr-row"
+        *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
+        <label class="clr-control-label clr-col-12 clr-col-md-2">{{menu.value.title}}</label>
+        <div class="clr-control-container clr-col-md-10 clr-col-12"
+            ng-reflect-ng-class="clr-col-md-10 clr-col-12">
+            <div class="clr-input-wrapper">
+                @if (item[menu.key]) {
+                    @if (isTimestampFormat(menu.key)) {
+                        <span clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
+                            class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
+                            required="" aria-describedby="clr-form-control-1-helper"
+                            [style.width.px]=400>{{convertTimeString(item[menu.key])}}</span>
+                    } @else if(menu.value.type === 'stringArray'){
+                        @if (item[menu.key].length > 0) {
+                            @if (menu.key === 'serviceType' || menu.key === 'dataProductType'){
+                                @for (attr of item[menu.key]; track attr){
+                                    <span class="label label-light-blue">{{attr.title}}</span>
+                                }
+                            } @else {
+                                <!-- keyword -->
+                                @for (attr of item[menu.key]; track attr){
+                                    <span class="label label-light-blue">{{attr}}</span>
+                                }
+                            }
+                            
+                        } @else {
+                            <button class="btn btn-sm btn-outline" disabled>No value assigned</button>
+                        }                        
+                    } @else if(menu.key === 'instanceAsXml'){
+                        <button class="btn btn-sm" (click)="openXmlDialog(item[menu.key])">View XML</button>
+                    } @else if(menu.key === 'instanceAsDoc'){
+                        <button class="btn btn-sm" (click)="downloadDocFile(item[menu.key])">Download file</button>
+                    } @else {
+                        <span clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
+                            class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
+                            required="" aria-describedby="clr-form-control-1-helper"
+                            [style.width.px]=400>{{item[menu.key]}}</span>
+                    }
+                } @else {
+                    @if (menu.key === 'instanceAsXml'){
+                        <button class="btn btn-sm btn-outline" disabled>No XML data available</button>
+                    } @else if(menu.key === 'instanceAsDoc'){
+                        <button class="btn btn-sm btn-outline" disabled>No document available</button>
+                    } @else {
+                        <span clrinput="" type="string" ng-reflect-name="mrn" ng-reflect-required="true"
+                        class="clr-input ng-untouched ng-pristine ng-invalid ng-star-inserted"
+                        required="" aria-describedby="clr-form-control-1-helper"
+                        [style.width.px]=400></span>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    @if (showCertTables) {
+        <div class="clr-form-horizontal clr-form-control clr-row">
+            <label class="clr-control-label clr-col-12 clr-col-md-2">Active certificates</label>
+            <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+                <app-cert-table context="active" [data]="activeCertificates" [serial]="serial" (onAdd)="openCertModal()" (onDownload)="clickDownloadBtn($event)" (onRevoke)="clickRevokeBtn($event)" />
+            </div>
+        </div>
+        <div class="clr-form-horizontal clr-form-control clr-row">
+            <label class="clr-control-label clr-col-12 clr-col-md-2">Revoked certificates</label>
+            <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
+                <app-cert-table context="revoked" [data]="revokedCertificates" />
+            </div>
+        </div>
+    }
+
+</div>

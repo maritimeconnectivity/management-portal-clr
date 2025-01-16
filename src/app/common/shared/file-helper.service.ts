@@ -19,7 +19,7 @@ import {Injectable} from '@angular/core';
 import * as fileSaver from 'file-saver';
 import * as JSZip from 'jszip';
 import { CertificateBundle } from '../certificateBundle';
-import { DocDto, XmlDto } from 'src/app/backend-api/service-registry';
+import { DocControllerService, DocDto, XmlControllerService, XmlDto } from 'src/app/backend-api/service-registry';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -27,12 +27,15 @@ import { TranslateService } from '@ngx-translate/core';
   providedIn: 'root',
 })
 export class FileHelperService {
-  constructor(private translate: TranslateService) {
+  constructor(private translate: TranslateService,
+    private notifierService: NotifierService,
+    private xmlControllerService: XmlControllerService,
+    private docControllerService: DocControllerService,
+  ) {
 
   }
 
-  public downloadPemCertificate(certificateBundle: CertificateBundle, entityName: string,
-                                notifierService: NotifierService) {
+  public downloadPemCertificate(certificateBundle: CertificateBundle, entityName: string) {
     try {
       const nameNoSpaces = entityName.split(' ').join('_');
 
@@ -54,57 +57,115 @@ export class FileHelperService {
         fileSaver.saveAs(content, "Certificate_" + nameNoSpaces + ".zip");
       });
     } catch (error) {
-      notifierService.notify('error', this.translate.instant('error.file.downloadcert') + error);
+      this.notifierService.notify('error', this.translate.instant('error.file.downloadcert') + error);
     }
   }
 
-  public downloadXml(xmlFile: XmlDto, notifierService: NotifierService): void {
+  public downloadXml(xmlFile: XmlDto): void {
     if (!xmlFile) {
-      notifierService.notify('error', this.translate.instant('error.file.empty'));
+      this.notifierService.notify('error', this.translate.instant('error.file.empty'));
       return;
     }
     let fileContent = xmlFile.content;
 
     let fileName = xmlFile.name;
     let fileType = xmlFile.contentContentType!;
-    this.downloadFile(fileContent, fileType, fileName, notifierService);
+    this.downloadFile(fileContent, fileType, fileName);
   }
 
-  public downloadDoc(docFile: DocDto, notifierService: NotifierService): void {
+  public downloadDoc(docFile: DocDto): void {
+    console.log(docFile);
     if (!docFile) {
-      notifierService.notify('error', this.translate.instant('error.file.empty'));
+      this.notifierService.notify('error', this.translate.instant('error.file.empty'));
       return;
     }
     // TODO: I belive it is wrong that "content" is an array of strings. Please be wary of this may change in the future
     if (docFile.filecontent.length > 1 && docFile.filecontent.length < 10) {
-      notifierService.notify('error', this.translate.instant('error.file.wrongformat') + docFile.name);
+      this.notifierService.notify('error', this.translate.instant('error.file.wrongformat') + docFile.name);
       return;
     }
     let fileContent = docFile.filecontent.toString();
 
     let fileName = docFile.name;
     let fileType = docFile.filecontentContentType!;
-    this.downloadBase64File(fileContent, fileType, fileName, notifierService);
+    this.downloadBase64File(fileContent, fileType, fileName);
   }
 
-  public downloadBase64File(base64Content: string, fileType: string, fileName: string, notifierService: NotifierService): void {
+  public downloadBase64File(base64Content: string, fileType: string, fileName: string): void {
     try {
       let byteArray = this.convertBase64ToByteArray(base64Content);
 
       let blob = new Blob([byteArray], {type: fileType});
       fileSaver.saveAs(blob, fileName);
     } catch (error) {
-      notifierService.notify('error', this.translate.instant('error.file.downloaderror') + error);
+      this.notifierService.notify('error', this.translate.instant('error.file.downloaderror') + error);
     }
   }
 
-  public downloadFile(content: string, fileType: string, fileName: string, notifierService: NotifierService): void {
+  public downloadFile(content: string, fileType: string, fileName: string): void {
     try {
       let blob = new Blob([content], {type: fileType});
       fileSaver.saveAs(blob, fileName);
     } catch (error) {
-      notifierService.notify('error', this.translate.instant('error.file.downloaderror') + error);
+      this.notifierService.notify('error', this.translate.instant('error.file.downloaderror') + error);
     }
+  }
+
+  public deleteDoc(docId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.docControllerService.deleteDoc(docId!).subscribe(
+        () => {
+          this.notifierService.notify('success', this.translate.instant('success.file.delete'));
+          resolve(true);
+        },
+        (error) => {
+          this.notifierService.notify('error', this.translate.instant('error.file.delete') + error);
+          reject(false);
+        }
+      );
+    });
+  }
+
+  public deleteXml(xmlFile: XmlDto): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.xmlControllerService.deleteXml(xmlFile.id!).subscribe(
+        () => {
+          this.notifierService.notify('success', this.translate.instant('success.file.delete') + xmlFile.name);
+          resolve(true);
+        },
+        (error) => {
+          this.notifierService.notify('error', this.translate.instant('error.file.delete') + xmlFile.name + error);
+          reject(false);
+        }
+      );
+    });
+  }
+
+  public uploadDoc = async (doc: DocDto): Promise<DocDto> => {
+    return new Promise((resolve, reject) => this.docControllerService.createDoc(doc).subscribe(
+      (res) => {
+        this.notifierService.notify('success', this.translate.instant('success.file.upload') + doc.name);
+        resolve(res);
+      },
+      (error) => {
+        this.notifierService.notify('error', this.translate.instant('error.file.upload') + doc.name + error);
+        reject(error);
+      }
+    ));
+  }
+  
+
+  public uploadXml = async (xml: XmlDto): Promise<XmlDto> => {
+    return new Promise((resolve, reject) => this.xmlControllerService.createXml(xml).subscribe(
+      (res) => {
+        this.notifierService.notify('success', this.translate.instant('success.file.upload') + xml.name);
+        resolve(res);
+      },
+      (error) => {
+        this.notifierService.notify('error', this.translate.instant('error.file.upload') + xml.name + error);
+        reject(error);
+      }
+    ));
   }
 
   private convertBase64ToByteArray(base64Content: string): Uint8Array {
@@ -115,4 +176,5 @@ export class FileHelperService {
     }
     return new Uint8Array(byteNumbers);
   }
+
 }

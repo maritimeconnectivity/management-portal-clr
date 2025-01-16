@@ -70,7 +70,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -82,7 +81,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -131,6 +129,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Contact e-mail',
       visibleFrom: ['detail', 'edit', 'edit-new'],
       required: true,
+      error: "Please enter a valid email address",
     },
     url: {
       title: 'URL',
@@ -138,6 +137,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'URL of organization',
       visibleFrom: ['detail', 'edit', 'edit-new'],
       required: true,
+      error: "Please enter a valid URL",
     },
     address: {
       title: 'Address',
@@ -170,7 +170,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -182,7 +181,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -302,7 +300,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -314,7 +311,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -352,6 +348,7 @@ export const ColumnForResource: {[key: string]: object} = {
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       immutable: true,
       required: true,
+      error: "Please enter a valid email address",
     },
     permissions: {
       title: 'Permissions',
@@ -379,7 +376,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -391,7 +387,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -486,7 +481,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -498,7 +492,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -570,7 +563,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -582,7 +574,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -625,6 +616,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Contact e-mail',
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       required: true,
+      error: "Please enter a valid email address",
     },
     url: {
       title: 'URL',
@@ -632,6 +624,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'URL of organization',
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       required: true,
+      error: "Please enter a valid URL",
     },
     address: {
       title: 'Address',
@@ -664,7 +657,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -676,7 +668,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -684,14 +675,6 @@ export const ColumnForResource: {[key: string]: object} = {
     id: {
       title: 'ID',
       type: 'number',
-    },
-    instanceId: {
-      title: 'Instance ID',
-      type: 'string',
-      description: 'MCP MRN as unique identifer',
-      placeholder: 'urn:mrn:',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
-      required: true,
     },
     name: {
       title: 'Name',
@@ -707,11 +690,11 @@ export const ColumnForResource: {[key: string]: object} = {
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
       required: true,
     },
-    comment: {
-      title: 'Comment',
+    serviceTypeValue: {
+      title: 'Service type',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
-      required: true,
+      description: 'Service type of service instance',
+      visibleFrom: ['list'],
     },
     serviceType: {
       title: 'Service type',
@@ -787,7 +770,13 @@ export const ColumnForResource: {[key: string]: object} = {
         },
       ],
       description: 'The service type shall reflect the associated operational service type provided according to defined types',
-      visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
+      visibleFrom: ['detail', 'edit', 'edit-new'],
+    },
+    dataProductTypeValue: {
+      title: 'Data product type',
+      type: 'string',
+      description: 'Data product type of service instance',
+      visibleFrom: ['list'],
     },
     dataProductType: {
       title: 'Data product type',
@@ -903,7 +892,7 @@ export const ColumnForResource: {[key: string]: object} = {
         },
       ],
       description: 'Data product type defined in IEC 63173-2 SECOM standard',
-      visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
+      visibleFrom: ['detail', 'edit', 'edit-new'],
     },
     status: {
       title: 'Status',
@@ -938,19 +927,26 @@ export const ColumnForResource: {[key: string]: object} = {
     endpointType: {
       title: 'Endpoint type',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     organizationId: {
       title: 'Organization ID',
       type: 'string',
       visibleFrom: ['detail', 'edit', 'edit-new'],
-      immutable: true,
+      required: true,
     },
     keywords: {
       title: 'Keywords',
       type: 'stringArray',
       placeholder: 'Please enter keyword',
       visibleFrom: ['detail', 'list', 'edit', 'edit-new'],
+    },
+    instanceId: {
+      title: 'Instance ID',
+      type: 'string',
+      description: 'MCP MRN as unique identifer',
+      placeholder: 'urn:mrn:',
+      visibleFrom: ['detail', 'edit', 'edit-new'],
     },
     implementsServiceDesign: {
       title: 'Technical design ID',
@@ -965,10 +961,15 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['detail', 'edit', 'edit-new'],
     },
+    comment: {
+      title: 'Comment',
+      type: 'string',
+      visibleFrom: ['detail', 'edit', 'edit-new'],
+    },
     geometryContentType: {
       title: 'Geometry content type',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     geometry: {
       title: 'Geometry',
@@ -979,23 +980,27 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'Unlocode',
       type: 'string',
       placeholder: 'Please enter UN/LOCODE',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     mmsi: {
       title: 'MMSI',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     imo: {
       title: 'IMO number',
       type: 'string',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     instanceAsXml: {
       title: 'Instance as XML',
-      type: 'xml',
-      notShowOnEdit: true,
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      type: 'file',
+      visibleFrom: ['detail'],
+    },
+    instanceAsXmlName: {
+      title: 'Instance as XML',
+      type: 'file',
+      visibleFrom: ['edit', 'edit-new'],
     },
     instanceAsDocId: {
       title: 'Instance as DocId',
@@ -1004,7 +1009,12 @@ export const ColumnForResource: {[key: string]: object} = {
     instanceAsDoc: {
       title: 'Instance as document',
       type: 'file',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: ['detail'],
+    },
+    instanceAsDocName: {
+      title: 'Instance as document',
+      type: 'file',
+      visibleFrom: ['edit', 'edit-new'],
     },
     ledgerRequestId: {
       title: 'Ledger Request ID',
@@ -1047,13 +1057,13 @@ export const ColumnForResource: {[key: string]: object} = {
           value: 'REJECTED',
         },
       ],
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     docIds: {
       title: 'Related documents',
       type: 'fileArray',
       filter: false,
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     publishedAt: {
       title: 'Created at',
@@ -1061,8 +1071,7 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Time of creation',
       filter: false,
       immutable: true,
-      notShowOnEdit: true,
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: [],
     },
     lastUpdatedAt: {
       title: 'Updated at',
@@ -1070,9 +1079,125 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Time of last update',
       filter: false,
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
+  },
+  searchobjectresult: {
+    instanceId: {
+      title: "Instance ID",
+      type: "string",
+      description: "MCP MRN as unique identifier",
+      placeholder: "urn:mrn:",
+      visibleFrom: ["detail", "edit", "edit-new"]
+    },
+    name: {
+      title: "Name",
+      type: "string",
+      description: "Name of service instance",
+      visibleFrom: ["detail", "list", "edit", "edit-new"],
+    },
+    version: {
+      title: "Version",
+      type: "string",
+      description: "Version of service instance",
+      visibleFrom: ["detail", "list", "edit", "edit-new"],
+    },
+    status: {
+      title: "Status",
+      type: "string",
+      options: [
+        { title: "Provisional", value: "PROVISIONAL" },
+        { title: "Released", value: "RELEASED" },
+        { title: "Deprecated", value: "DEPRECATED" },
+        { title: "Deleted", value: "DELETED" }
+      ],
+      visibleFrom: ["detail", "list", "edit", "edit-new"],
+    },
+    description: {
+      title: "Description",
+      type: "string",
+      visibleFrom: ["detail", "edit", "edit-new"]
+    },
+    dataProductType: {
+      title: "Data product type",
+      type: "stringArray",
+      options: [
+        { title: "S-57 Electronic Navigational Chart (ENC)", value: "S57" },
+        { title: "S-101 Electronic Navigational Chart (ENC)", value: "S101" },
+        { title: "S-102 Bathymetric Surface", value: "S102" }
+      ],
+      description: "Data product type defined in IEC 63173-2 SECOM standard",
+      visibleFrom: ["edit", "edit-new"]
+    },
+    organizationId: {
+      title: "Organization ID",
+      type: "string",
+      visibleFrom: ["detail", "edit", "edit-new"],
+    },
+    endpointUri: {
+      title: "Endpoint URI",
+      type: "string",
+      visibleFrom: ["detail", "edit", "edit-new"],
+    },
+    endpointType: {
+      title: "Endpoint type",
+      type: "string",
+      visibleFrom: []
+    },
+    keywords: {
+      title: "Keywords",
+      type: "stringArray",
+      placeholder: "Please enter keyword",
+      visibleFrom: ["detail", "list", "edit", "edit-new"]
+    },
+    unlocode: {
+      title: "Unlocode",
+      type: "string",
+      placeholder: "Please enter UN/LOCODE",
+      visibleFrom: []
+    },
+    instanceAsXml: {
+      title: "Instance as XML",
+      type: "file",
+      visibleFrom: []
+    },
+    publishedAt: {
+      title: "Created at",
+      type: "string",
+      description: "Time of creation",
+      filter: false,
+      immutable: true,
+      visibleFrom: []
+    },
+    lastUpdatedAt: {
+      title: "Updated at",
+      type: "string",
+      description: "Time of last update",
+      filter: false,
+      immutable: true,
+      visibleFrom: ["detail"]
+    },
+    comment: {
+      title: "Comment",
+      type: "string",
+      description: "Comment description",
+      visibleFrom: ["detail", "edit", "edit-new"]
+    },
+    mmsi: {
+      title: "MMSI",
+      type: "string",
+      visibleFrom: []
+    },
+    imo: {
+      title: "IMO number",
+      type: "string",
+      visibleFrom: []
+    },
+    geometry: {
+      title: "Geometry",
+      type: "object",
+      visibleFrom: []
+    }
   },
   newOrganization: {
     orgMrn: {

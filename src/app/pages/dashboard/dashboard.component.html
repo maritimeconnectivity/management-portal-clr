@@ -1,5 +1,6 @@
 <h1>{{title}}</h1>
 
+<h3>Certificate overview</h3>
 <clr-tabs>
     <clr-tab>
       <button clrTabLink>Device</button>
@@ -26,3 +27,65 @@
         </clr-tab-content>
       </clr-tab>
 </clr-tabs>
+
+<h3>MCP components</h3>
+<div class="clr-row">
+  <div class="clr-col-4">
+    <div class="card">
+      <div class="card-header">Identity Registry</div>
+      <div class="card-block">
+        <div class="card-title">Features</div>
+        <div class="card-text">
+          <ul class="list">
+            <li><b>Identity Management</b>: Provides each maritime entity a unique Maritime Resource Name (MRN).</li>
+            <li><b>Public Key Infrastructure (PKI)</b>: Ensures entities have a secure cryptographic identity, including key pairs and certificates.</li>
+            <li><b>Authentication</b>: Supports authorization for secure integration, using standards like OAuth 2.0/OpenID Connect.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="https://maritimeconnectivity.net/mcp-documents/#MIR" target="_blank" class="btn btn-sm btn-link">Documentation</a>
+        <a href="https://developers.maritimeconnectivity.net/identity/index.html" target="_blank" class="btn btn-sm btn-link">Dev Docs</a>
+        <a href="https://github.com/maritimeconnectivity/IdentityRegistry" target="_blank" class="btn btn-sm btn-link">Repo</a>
+      </div>
+    </div>
+  </div>
+  <div class="clr-col-4">
+    <div class="card">
+      <div class="card-header">Service Registry</div>
+      <div class="card-block">
+        <div class="card-title">Features</div>
+        <div class="card-text">
+          <ul class="list">
+            <li><b>Service Discovery</b>: Enable end-users to discover these services. Users can search for services based on keywords, organizations, locations, or a combination of criteria.</li>
+            <li><b>Service Management</b>: Supports the management of service information for service providers.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="https://maritimeconnectivity.net/mcp-documents/#MSR" target="_blank" class="btn btn-sm btn-link">Documentation</a>
+        <a href="https://github.com/maritimeconnectivity/ServiceRegistry/wiki" target="_blank" class="btn btn-sm btn-link">Dev Docs</a>
+        <a href="https://github.com/maritimeconnectivity/ServiceRegistry" target="_blank" class="btn btn-sm btn-link">Repo</a>
+      </div>
+    </div>
+  </div>
+  <div class="clr-col-4">
+    <div class="card">
+      <div class="card-header">Maritime Messaging Service</div>
+      <div class="card-block">
+        <div class="card-title">Features</div>
+        <div class="card-text">
+          <ul class="list">
+            <li><b>MRN addressed messaging</b>: Uses the Maritime Resource Name (MRN) as a standardized endpoint address, enabling consistent and precise delivery of messages.</li>
+            <li><b>Broadcast (subject-cast) messaging</b>: Enable broadcast messages to users who have subscribed to a specific subject tag.</li>
+            <li><b>Seamless Information Transfer</b>: Enables transparent communication across various connection types.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="https://maritimeconnectivity.net/mcp-documents/#MMS" target="_blank" class="btn btn-sm btn-link">Documentation</a>
+        <a href="https://github.com/maritimeconnectivity/MMS" target="_blank" class="btn btn-sm btn-link">Repo</a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,8 @@ import { ItemFormComponent } from "../item-form/item-form.component";
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
+import { ComponentsModule } from '../components.module';
+import { SvcSearchInputComponent } from '../svc-search-input/svc-search-input.component';
 
 @Component({
   selector: 'app-smart-expandable-table',
@@ -15,7 +17,7 @@ import { Role, RoleControllerService } from 'src/app/backend-api/identity-regist
     ClarityModule,
     ClrDatagridModule,
     ItemViewComponent,
-    ItemFormComponent
+    SvcSearchInputComponent,
 ],
   templateUrl: './smart-expandable-table.component.html',
   styleUrl: './smart-expandable-table.component.css'
@@ -67,12 +69,11 @@ export class SmartExpandableTableComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    if (this.labels) {
-      this.labelKeys = Object.keys(this.labels!);
-      this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
-    }
 
     this.authService.getOrgMrn().then((orgMrn) => {
+      if (this.itemType === ItemType.Instance) {
+        return;
+      }
       this.roleService.getRoles(orgMrn).subscribe((roles) => {
         this.roles = roles;
       });
@@ -82,7 +83,11 @@ export class SmartExpandableTableComponent {
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
-
+    if (changes['labels']) {
+      this.labelKeys = Object.keys(this.labels!);
+      this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
+    }
+    
     // apply updates of total pages for pagination
     if (changes['totalPages']) {
       this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i);
@@ -133,6 +138,10 @@ export class SmartExpandableTableComponent {
   back = () => {
     this.expanded = false;
     this.selectedItem = {};
+  }
+
+  clear = () => {
+    this.data = [];
   }
 
   edit = (selectedItem: any) => {

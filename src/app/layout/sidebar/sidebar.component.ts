@@ -36,7 +36,9 @@ export class SidebarComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.authService.getUserRoles().then((roles) => {
-      this.isSiteAdmin = roles.includes('ROLE_SITE_ADMIN');
+      if (roles) {
+        this.isSiteAdmin = roles.includes('ROLE_SITE_ADMIN');
+      }
     });
   }
 }

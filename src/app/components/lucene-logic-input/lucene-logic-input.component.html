@@ -1,0 +1,17 @@
+<clr-alert [clrAlertType]="'neutral'" [clrAlertClosable]="false" class="custom-alert-spacing">
+    <div class="alert-items" style="display: flex; align-items: center;">
+      <div class="alert-item clr-justify-content-center" style="display: flex; align-items: center; gap: 8px;">
+        <!--
+        <div class="alert-icon-wrapper">
+          <cds-icon class="alert-icon" shape="connect"></cds-icon>
+        </div>
+        -->
+        <clr-select-container style="margin-top: 0px;">
+          <select clrSelect name="options" required inline [(ngModel)]="data['operator']" (ngModelChange)="onSelectionChange($event)">
+            <option value="and">AND</option>
+            <option value="or">OR</option>
+          </select>
+        </clr-select-container>
+      </div>
+    </div>
+</clr-alert>

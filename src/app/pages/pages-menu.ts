@@ -74,17 +74,17 @@ export const MENU_ITEMS: any[] = [
     title: 'menu.sr',
     icon: 'layers',
     children: [
-      {
-        title: 'My Company',
-      },
-      {
-        title: 'menu.sr.org.services',
-        link: '/pages/sr/instanceorg',
-        group: 'myorg',
-      },
-      {
-        title: 'separator',
-      },
+      // {
+      //   title: 'My Company',
+      // },
+      // {
+      //   title: 'menu.sr.org.services',
+      //   link: '/pages/sr/instanceorg',
+      //   group: 'myorg',
+      // },
+      // {
+      //   title: 'separator',
+      // },
       {
         title: 'My SR',
       },
@@ -93,22 +93,27 @@ export const MENU_ITEMS: any[] = [
         link: '/pages/sr/search',
         group: 'mysr'
       },
+      // {
+      //   title: 'Map Search',
+      //   link: '/pages/sr/mapsearch',
+      //   group: 'mysr'
+      // },
       {
         title: 'menu.sr.instances',
         link: '/pages/sr/instance',
         group: 'mysr'
       },
-      {
-        title: 'separator',
-      },
-      {
-        title: 'Global Search',
-      },
-      {
-        title: 'menu.ledger.search',
-        link: '/pages/ledger/search',
-        group: 'global'
-      },
+      // {
+      //   title: 'separator',
+      // },
+      // {
+      //   title: 'Global Search',
+      // },
+      // {
+      //   title: 'menu.ledger.search',
+      //   link: '/pages/ledger/search',
+      //   group: 'global'
+      // },
     ],
   },
   {

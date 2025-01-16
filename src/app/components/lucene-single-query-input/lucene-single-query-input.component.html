@@ -1,0 +1,36 @@
+<clr-alert [clrAlertType]="'neutral'" [clrAlertClosable]="false" class="custom-alert-spacing">
+    <div class="alert-items" styles="padding-top: 0px; padding-bottom: 0px;">
+        <div class="alert-item clr-justify-content-center" styles="padding-top: 0px; padding-bottom: 0px;">
+            <!--
+            <div class="alert-icon-wrapper">
+                <cds-icon class="alert-icon" shape="filter-grid"></cds-icon>
+            </div>
+            -->
+            <clr-select-container style="margin-top: 0px;">
+                @if (requireInfo) {
+                    <label>Search attribute</label>
+                }
+                <select clrSelect [(ngModel)]="selectedItem" name="options" required (clrSelectedChange)="onSelectionChange('$event')">
+                    <option *ngFor="let option of fieldInfo" [value]="option.value">{{option.name}}</option>
+                </select>
+            </clr-select-container>
+            <span>:</span>
+            <clr-input-container style="margin-top: 0px;">
+                @if (requireInfo) {
+                    <label>Value</label>
+                }
+                <input clrInput [disabled]="!selectedItem" [value]="fieldValue" name="input" (input)="onEdit($event)"/>
+            </clr-input-container>
+            @if (requireExtendBtn){
+                <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="createExpressionWithBrackets()">
+                    <cds-icon shape="code"></cds-icon>
+                </button>
+            }
+            @if (requireCloseBtn) {
+                <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="delete()">
+                    <cds-icon shape="times"></cds-icon>
+                </button>
+            }
+        </div>
+    </div>
+</clr-alert>

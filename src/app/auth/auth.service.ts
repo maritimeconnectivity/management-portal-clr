@@ -68,6 +68,9 @@ export class AuthService {
     this.protectFromEmptyToken();
     return new Promise<AuthPermission>(async (resolve, reject) => {
       const roles = await this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
+      if (!roles) {
+        resolve(AuthPermission.User);
+      }
       resolve(rolesToPermission(roles));
     });
   }
@@ -78,6 +81,9 @@ export class AuthService {
       if (!this.keycloakService.isLoggedIn())
         resolve(false);
       this.getUserPermission().then((permission) => {
+        if (!permission) {
+          resolve(false);
+        }
         if (hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin)) { // super admin
           resolve(true);
         } else if (context === ItemType.User) {
