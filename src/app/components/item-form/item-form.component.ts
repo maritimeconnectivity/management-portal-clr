@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ClrForm, ClrFormsModule } from '@clr/angular';
+import { ClarityModule, ClrForm, ClrFormsModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { appendUpdatedAttributes, filterUndefinedAttributes } from 'src/app/common/filterObject';
 import { ItemType } from 'src/app/common/menuType';
@@ -12,6 +12,7 @@ import { Role, RoleControllerService } from 'src/app/backend-api/identity-regist
 import { AuthService } from 'src/app/auth/auth.service';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
+import { preprocess, preprocessToShow, preprocessToUpload } from 'src/app/common/itemPreprocessor';
 
 @Component({
   selector: 'app-item-form',
@@ -22,7 +23,8 @@ import { TranslateService } from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     JsonPipe,
-    CertTableComponent
+    CertTableComponent,
+    ClarityModule,
   ],
   templateUrl: './item-form.component.html',
   styleUrl: './item-form.component.css'
@@ -81,6 +83,7 @@ export class ItemFormComponent {
         });
       });
     }
+    this.prepareItem(this.itemType);
   }
 
   ngOnChanges(simpleChange: any) {
@@ -90,7 +93,10 @@ export class ItemFormComponent {
     }
     if (this.itemType !== ItemType.None) {
       this.setForm();
-      if (this.item) {
+      if (Object.keys(this.item).length !== 0) {
+        if (this.itemType === ItemType.Instance) {
+          this.item = preprocessToShow(this.item, this.itemType);
+        }
         this.itemForm.patchValue(this.item);
       }
     }
@@ -107,8 +113,6 @@ export class ItemFormComponent {
     } else {
       this.onSubmitIsGiven = false;
     }
-
-    this.prepareItem(this.itemType);
   }
 
   initializeItem = () => {
@@ -125,7 +129,7 @@ export class ItemFormComponent {
       let filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
       if (this.isForNew) {
         if (this.itemType === ItemType.Instance) {
-          this.onSubmit.emit(this.itemForm.value);
+          this.onSubmit.emit(preprocessToUpload(this.itemForm.value, this.itemType));
         } else {
           this.onSubmit.emit(filteredAttributes);
         }        
@@ -232,6 +236,8 @@ export class ItemFormComponent {
       } else if (key === 'url') {
         const urlReg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
         formElements[key] = ['', [Validators.required, Validators.pattern(urlReg)]];
+      } else if (key === 'instanceAsDoc' || key === 'instanceAsXml') {
+        formElements[key] = ['', value.required ? Validators.required : undefined];
       } else {
         formElements[key] = ['', value.required ? Validators.required : undefined];
       }

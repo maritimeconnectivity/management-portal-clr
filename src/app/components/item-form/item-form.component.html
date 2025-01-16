@@ -2,120 +2,176 @@
   <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
     <div class="card">
       <div class="card-header">
-        {{title}}
+        {{ title }}
       </div>
       <div class="card-block">
         <div class="card-text">
           <form clrForm [formGroup]="itemForm" class="ng-untouched">
-            <div *ngFor="let menu of columnForMenu | keyvalue:sortColumnForMenu">
+            <div
+              *ngFor="let menu of columnForMenu | keyvalue : sortColumnForMenu"
+            >
               @if (menu.key === 'mrn'){
-              <clr-input-container>
-                <label>{{menu.value.title}}</label>
-                <input clrInput [type]="menu.value.type" [formControlName]="menu.key"
-                  [required]="menu.value.required === true" [placeholder]="mrnPrefix"
-                  (ngModelChange)="onMrnChange($event)" (keydown)="onMrnKeyDown($event)" [style.width.px]=400 />
-                  <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                <clr-input-container>
+                  <label>{{ menu.value.title }}</label>
+                  <input
+                    clrInput
+                    [type]="menu.value.type"
+                    [formControlName]="menu.key"
+                    [required]="menu.value.required === true"
+                    [placeholder]="mrnPrefix"
+                    (ngModelChange)="onMrnChange($event)"
+                    (keydown)="onMrnKeyDown($event)"
+                    [style.width.px]="400"
+                  />
+                  <clr-control-helper>{{
+                    menu.value.description
+                  }}</clr-control-helper>
                   @if (menu.value.error){
-                  <clr-control-error>{{menu.value.error}}</clr-control-error>
+                  <clr-control-error>{{ menu.value.error }}</clr-control-error>
                   } @else {
                   <clr-control-error>Please enter a value</clr-control-error>
                   }
                 </clr-input-container>
               } @else if (menu.value.type === 'stringArray'){
-                @if (item[menu.key].length > 0) {
-                  @for (text of item[menu.key]; track text){
-                      <span class="label label-light-blue">{{text}}</span>
-                  }
-                } @else {
-                    <button class="btn btn-sm btn-outline" disabled>No value assigned</button>
-                }
-                @if (menu.value.options) {
-                  <clr-select-container>
-                    <label>{{menu.value.title}}</label>          
-                      <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
-                        <option *ngFor="let option of menu.value.options" [value]="option.value">{{ option.title }}</option>
-                      </select>
-                      <clr-control-helper>{{menu.value.description}}</clr-control-helper>
-                      @if (menu.value.error){
-                      <clr-control-error>{{menu.value.error}}</clr-control-error>
-                      } @else {
-                      <clr-control-error>Please enter a value</clr-control-error>
-                      }
-                  </clr-select-container>
-                } @else {
-                  <clr-input-container>
-                    <label>{{menu.value.title}}</label>          
-                    <input clrInput [type]="menu.value.type" [formControlName]="menu.key"
-                  [required]="menu.value.required === true" [style.width.px]=400 />
-                  </clr-input-container>
-                  
-                }                
-              } @else if (menu.value.options){
-                
-                  @if (menu.value.type === 'stringArray') {
-                    <clr-combobox-container>
-                      <label>{{menu.value.title}}</label>                  
-                      <clr-combobox [formControlName]="menu.key" name="multiSelect" clrMulti="true" [required]="menu.value.required === true">
-                        <ng-container *clrOptionSelected="let selected">
-                          {{ selected?.title }}
-                        </ng-container>
-                        <clr-options>
-                          <clr-option *clrOptionItems="let option of menu.value.options; field: 'title'" [clrValue]="option">
-                            {{ option.title }}
-                          </clr-option>
-                        </clr-options>
-                      </clr-combobox>
-                      <clr-control-helper>{{menu.value.description}}</clr-control-helper>
-                      @if (menu.value.error){
-                        <clr-control-error>{{menu.value.error}}</clr-control-error>
+                <!-- array element handling -->
+                    @if (menu.value.options) {
+                      <clr-combobox-container>
+                        <label>{{ menu.value.title }}</label>
+                        <clr-combobox
+                          [formControlName]="menu.key"
+                          name="multiSelect"
+                          clrMulti="true"
+                          [required]="menu.value.required === true"
+                        >
+                          <ng-container *clrOptionSelected="let selected">
+                            {{ selected?.title }}
+                          </ng-container>
+                          <clr-options>
+                            <clr-option
+                              *clrOptionItems="
+                                let option of menu.value.options;
+                                field: 'title'
+                              "
+                              [clrValue]="option"
+                            >
+                              {{ option.title }}
+                            </clr-option>
+                          </clr-options>
+                        </clr-combobox>
+                        <clr-control-helper>{{
+                          menu.value.description
+                        }}</clr-control-helper>
+                        @if (menu.value.error){
+                        <clr-control-error>{{ menu.value.error }}</clr-control-error>
                         } @else {
                         <clr-control-error>Please select a value</clr-control-error>
                         }
-                    </clr-combobox-container>
-
-                  } @else {
-                    <clr-select-container>
-                      <label>{{menu.value.title}}</label>                  
-                      <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
-                        <option *ngFor="let option of menu.value.options" [value]="option.value">{{ option.title }}</option>
-                      </select>
-                      <clr-control-helper>{{menu.value.description}}</clr-control-helper>
-                      @if (menu.value.error){
-                      <clr-control-error>{{menu.value.error}}</clr-control-error>
-                      } @else {
-                      <clr-control-error>Please select a value</clr-control-error>
-                      }
-                  </clr-select-container>
-                  }
-              } @else if (menu.key === 'permissions'){
-                <clr-select-container>
-                  <label>{{menu.value.title}}</label>                  
-                    <select clrSelect [formControlName]="menu.key" [required]="menu.value.required === true" [style.width.px]=400>
-                      <option *ngFor="let role of roles" [value]="role.permission">{{ role.permission }}</option>
-                    </select>
-                    <clr-control-helper>{{menu.value.description}}</clr-control-helper>
-                    @if (menu.value.error){
-                    <clr-control-error>{{menu.value.error}}</clr-control-error>
+                      </clr-combobox-container>
                     } @else {
-                    <clr-control-error>Please enter a value</clr-control-error>
+                      <clr-input-container>
+                        <label>{{ menu.value.title }}</label>
+                        <input
+                          clrInput
+                          [type]="menu.value.type"
+                          [formControlName]="menu.key"
+                          [required]="menu.value.required === true"
+                          [style.width.px]="400"
+                        />
+                      </clr-input-container>
                     }
-                </clr-select-container>
-              } @else {
+            } @else if (menu.value.options){
+              <!-- singular, but with options -->
+              <clr-select-container>
+                <label>{{ menu.value.title }}</label>
+                <select
+                  clrSelect
+                  [formControlName]="menu.key"
+                  [required]="menu.value.required === true"
+                  [style.width.px]="400"
+                >
+                  <option
+                    *ngFor="let option of menu.value.options"
+                    [value]="option.value"
+                  >
+                    {{ option.title }}
+                  </option>
+                </select>
+                <clr-control-helper>{{
+                  menu.value.description
+                }}</clr-control-helper>
+                @if (menu.value.error){
+                <clr-control-error>{{ menu.value.error }}</clr-control-error>
+                } @else {
+                <clr-control-error>Please select a value</clr-control-error>
+                }
+              </clr-select-container>
+              } @else if (menu.key === 'permissions'){
+              <clr-select-container>
+                <label>{{ menu.value.title }}</label>
+                <select
+                  clrSelect
+                  [formControlName]="menu.key"
+                  [required]="menu.value.required === true"
+                  [style.width.px]="400"
+                >
+                  <option *ngFor="let role of roles" [value]="role.permission">
+                    {{ role.permission }}
+                  </option>
+                </select>
+                <clr-control-helper>{{
+                  menu.value.description
+                }}</clr-control-helper>
+                @if (menu.value.error){
+                <clr-control-error>{{ menu.value.error }}</clr-control-error>
+                } @else {
+                <clr-control-error>Please enter a value</clr-control-error>
+                }
+              </clr-select-container>
+              } @else if(menu.value.type === 'file') {
                 <clr-input-container>
-                  <label>{{menu.value.title}}</label>
-                <input clrInput [type]="menu.value.type" [formControlName]="menu.key"
-                [required]="menu.value.required === true" [style.width.px]=400 />
-                <clr-control-helper>{{menu.value.description}}</clr-control-helper>
+                  <label>{{ menu.value.title }}</label>
+                  <clr-button-group class="btn-primary">
+                    <clr-button>Create</clr-button>
+                    <clr-button>Favorite</clr-button>
+                  </clr-button-group>
+                  <input
+                    clrInput
+                    [type]="menu.value.type"
+                    [required]="menu.value.required === true"
+                    [style.width.px]="400"
+                  />
+                  <clr-control-helper>{{
+                    menu.value.description
+                  }}</clr-control-helper>
                   @if (menu.value.error){
-                  <clr-control-error>{{menu.value.error}}</clr-control-error>
+                  <clr-control-error>{{ menu.value.error }}</clr-control-error>
                   } @else {
                   <clr-control-error>Please enter a value</clr-control-error>
                   }
                 </clr-input-container>
+              } @else {
+              <clr-input-container>
+                <label>{{ menu.value.title }}</label>
+                <input
+                  clrInput
+                  [type]="menu.value.type"
+                  [formControlName]="menu.key"
+                  [required]="menu.value.required === true"
+                  [style.width.px]="400"
+                />
+                <clr-control-helper>{{
+                  menu.value.description
+                }}</clr-control-helper>
+                @if (menu.value.error){
+                <clr-control-error>{{ menu.value.error }}</clr-control-error>
+                } @else {
+                <clr-control-error>Please enter a value</clr-control-error>
+                }
+              </clr-input-container>
               }
             </div>
 
-              <!--
+            <!--
                 <div class="form-group row" *ngIf="!isEditing || (isEditing && isFieldVisible(menu.key))">
                   <div for="input{{menu.key}}" class="label col-sm-3 col-form-label" nbPopover="{{menu.value.description}}" nbPopoverTrigger="hint" nbPopoverPlacement="top">{{menu.value.title}}</div>
                   <div class="col-sm-9 my-auto">
@@ -159,13 +215,15 @@
         </div>
       </div>
       @if (onSubmitIsGiven){
-        <div class="card-footer">
-          <button class="btn btn-primary" type="submit" (click)="submit()">Submit</button>
-          <button class="btn btn-warning" (click)="resetForm()">Reset</button>
-          @if (!isForNew){
-            <button class="btn btn-danger" (click)="cancel()">Cancel</button>
-          }        
-        </div>
+      <div class="card-footer">
+        <button class="btn btn-primary" type="submit" (click)="submit()">
+          Submit
+        </button>
+        <button class="btn btn-warning" (click)="resetForm()">Reset</button>
+        @if (!isForNew){
+        <button class="btn btn-danger" (click)="cancel()">Cancel</button>
+        }
+      </div>
       }
     </div>
   </div>
