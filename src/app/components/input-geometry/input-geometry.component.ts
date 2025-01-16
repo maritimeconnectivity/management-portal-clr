@@ -35,19 +35,6 @@ export class InputGeometryComponent {
     trackResize: false
   };
 
-  // Define styles
-  responseFeatureStyle = {
-    color: "#ff0000", // Border color
-    fillColor: 'blue', // Fill color
-    weight: 2 // Border width
-  };
-
-  drawnFeatureStyle = {
-    color: "#ff0000", // Border color
-    fillColor: 'red', // Fill color
-    weight: 2 // Border width
-  };
-
   drawnItems: FeatureGroup = featureGroup();
   responseFeatureGroup: FeatureGroup = featureGroup();
   drawnGroup: FeatureGroup = featureGroup();
@@ -76,8 +63,6 @@ export class InputGeometryComponent {
   };
 
   constructor(private el: ElementRef, private renderer: Renderer2 ){
-    this.responseFeatureGroup.setStyle(this.responseFeatureStyle);
-    this.drawnGroup.setStyle(this.drawnFeatureStyle);
   }
 
   ngOnInit(): void {
