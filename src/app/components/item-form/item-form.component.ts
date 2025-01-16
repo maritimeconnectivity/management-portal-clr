@@ -137,9 +137,13 @@ export class ItemFormComponent {
       if (this.isForNew) {
         if (this.itemType === ItemType.Instance) {
           // the document should be uploaded before submitting
-          if (this.item.instanceAsDoc && this.item.instanceAsDocName.length === 0) { // this means there is an update
+          if (this.item.instanceAsDoc) { // this means there is an update
             const result = await this.fileHelperService.uploadDoc(this.item.instanceAsDoc);
             this.item.instanceAsDoc = result;
+          }
+          if (this.item.instanceAsXml) { // this means there is an update
+            const result = await this.fileHelperService.uploadXml(this.item.instanceAsXml);
+            this.item.instanceAsXml = result;
           }
         }
         this.onSubmit.emit(preprocessToUpload(filteredAttributes, this.itemType));        
@@ -155,8 +159,17 @@ export class ItemFormComponent {
           // preprocessSuccess = await this.fileHelperService.deleteDoc(this.docToBeDeleted!.id!);
           this.item.instanceAsDoc = null;
         }
+
+        if (this.item.instanceAsXml && this.item.instanceAsXmlName.length === 0) { // this means there is an update
+          const result = await this.fileHelperService.uploadXml(this.item.instanceAsXml);
+          this.item.instanceAsXml = result;
+          preprocessSuccess = result ? true : false;
+        } else if (this.xmlToBeDeleted) { // this means the document should be deleted
+          // preprocessSuccess = await this.fileHelperService.deleteXml(this.xmlToBeDeleted!.id!);
+          this.item.instanceAsXml = null;
+        }
+
         if (preprocessSuccess) {
-          console.log('Updated:', updated);
           this.onSubmit.emit(preprocessToUpload(updated, this.itemType));
         }
       }
@@ -309,8 +322,7 @@ export class ItemFormComponent {
           };
           this.item.instanceAsDocName = '';
         } else if (key === 'instanceAsXmlName') {
-          this.item.instanceAsXml = file;
-          this.item.instanceAsXmlName = file.name;
+          alert("xml compliance checker is not implemented yet");
         }
       });
     }

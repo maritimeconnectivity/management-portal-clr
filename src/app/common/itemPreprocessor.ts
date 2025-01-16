@@ -64,7 +64,7 @@ export const preprocessToUpload = (item: any, itemType: ItemType): any => {
         return {...item, 
             instanceAsDoc: typeof item.instanceAsDoc === 'string' ? null: item.instanceAsDoc,
             instanceAsXml: typeof item.instanceAsXml === 'string' ? null: item.instanceAsXml,
-            keywords: item.keywords.length > 0 ? item.keywords.split(",") : [],
+            keywords: typeof item.keywords === 'string' ? item.keywords.length > 0 ? item.keywords.split(",") : [] : item.keywords,
         }
     }
 }
