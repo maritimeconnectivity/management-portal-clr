@@ -226,6 +226,13 @@
                   </div>
                 </div>
                 -->
+                @if (itemType === 'instance') {
+                  <div _ngcontent-ng-c3994056840="" class="clr-row ng-star-inserted"><label _ngcontent-ng-c3994056840="" class="clr-control-label clr-col-12 clr-col-md-2" for="clr-form-control-13">Service coverage</label>
+                    <div class="clr-col-md-10 clr-col-12" ng-reflect-ng-class="clr-col-md-10 clr-col-12">
+                      <app-input-geometry [geometry]="geometry" [isEditing]="true" [mapContainerHeight]="400" (onGeometryChange)="setGeometry($event)"/>
+                    </div>
+                  </div>
+                }
           </form>
         </div>
       </div>

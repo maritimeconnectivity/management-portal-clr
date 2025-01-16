@@ -27,7 +27,7 @@ export class InputGeometryComponent {
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
   responseFeatureGroup: FeatureGroup = featureGroup();
-  queryFeatureGroup: FeatureGroup = featureGroup();
+  drawnGroup: FeatureGroup = featureGroup();
   mapContainerHeightOffset = 120;
   
   constructor(private el: ElementRef, private renderer: Renderer2 ){
@@ -50,7 +50,7 @@ export class InputGeometryComponent {
       circlemarker: undefined,
     },
     edit: {
-      featureGroup: this.queryFeatureGroup
+      featureGroup: this.drawnGroup
     }
   };
 
@@ -61,17 +61,17 @@ export class InputGeometryComponent {
       this.mapContainerHeight = window.innerHeight - this.mapContainerHeightOffset;
     }
     this.drawnItems.addLayer(this.responseFeatureGroup);
-    this.drawnItems.addLayer(this.queryFeatureGroup);
+    this.drawnItems.addLayer(this.drawnGroup);
   }
 
   public onDrawCreated(e: any) {
-    this.queryFeatureGroup.addLayer((e as DrawEvents.Created).layer);
+    this.drawnGroup.addLayer((e as DrawEvents.Created).layer);
     this.onGeometryChange.emit({ fieldName: 'geometry',
-      data: getGeometryCollectionFromMap( this.isForSearch ? this.queryFeatureGroup : this.responseFeatureGroup)});
+      data: getGeometryCollectionFromMap( this.isForSearch || this.isEditing ? this.drawnGroup : this.responseFeatureGroup)});
   }
 
   public onDrawDeleted(e: any) {
-    this.queryFeatureGroup.clearLayers();
+    this.drawnGroup.clearLayers();
     this.onClear.emit();
   }
 
@@ -80,7 +80,7 @@ export class InputGeometryComponent {
   }
 
   clearMap = () => {
-    this.queryFeatureGroup.clearLayers();
+    this.drawnGroup.clearLayers();
     this.responseFeatureGroup.clearLayers();
     this.geometry = [];
     this.geometryNames = [];

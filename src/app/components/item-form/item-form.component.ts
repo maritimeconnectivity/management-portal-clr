@@ -16,6 +16,8 @@ import { preprocess, preprocessToShow, preprocessToUpload } from 'src/app/common
 import { FileHelperService } from 'src/app/common/shared/file-helper.service';
 import { encodeFileToBase64 } from 'src/app/common/file-decoder';
 import { DocDto, InstanceDto, XmlDto } from 'src/app/backend-api/service-registry';
+import { ComponentsModule } from '../components.module';
+import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
 
 @Component({
   selector: 'app-item-form',
@@ -28,6 +30,7 @@ import { DocDto, InstanceDto, XmlDto } from 'src/app/backend-api/service-registr
     JsonPipe,
     CertTableComponent,
     ClarityModule,
+    InputGeometryComponent,
   ],
   templateUrl: './item-form.component.html',
   styleUrl: './item-form.component.css'
@@ -69,6 +72,7 @@ export class ItemFormComponent {
   onSubmitIsGiven = true;
   docToBeDeleted: DocDto | undefined;
   xmlToBeDeleted: XmlDto | undefined;
+  geometry: any[] = [];
 
   constructor(private formBuilder: FormBuilder,
     private roleService: RoleControllerService,
@@ -379,5 +383,11 @@ export class ItemFormComponent {
   
     // Combine the shortened main part with the file extension
     return shortenedMainPart + extension;
+  }
+
+  setGeometry = (geometry: any) => {
+    if (this.itemType === ItemType.Instance) {
+      this.item.geometry = geometry.data.geometries[0];
+    }
   }
 }
