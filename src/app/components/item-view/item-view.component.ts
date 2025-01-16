@@ -260,7 +260,7 @@ export class ItemViewComponent {
     selected.forEach((certificate) => {
       const endText = formatDate(certificate.end, 'yyyy-MM-ddTHH-mm-ss', this.locale);
       this.fileHelper.downloadPemCertificate({certificate: certificate.certificate},
-        this.item.mrn + '_exp_' + endText, this.notifier);
+        this.item.mrn + '_exp_' + endText);
     });
   }
 
@@ -297,7 +297,7 @@ export class ItemViewComponent {
 
   public download() {
     if (this.certificateBundle) {
-      this.fileHelper.downloadPemCertificate(this.certificateBundle, this.itemId, this.notifier);
+      this.fileHelper.downloadPemCertificate(this.certificateBundle, this.itemId);
       this.notifier.notify('success', this.translate.instant('success.certificate.chosen'));
     }
   }

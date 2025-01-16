@@ -130,15 +130,13 @@
               } @else if(menu.value.type === 'file') {
                 <clr-input-container>
                   <label>{{ menu.value.title }}</label>
-                  <clr-button-group class="btn-primary">
-                    <clr-button>Create</clr-button>
-                    <clr-button>Favorite</clr-button>
-                  </clr-button-group>
                   <input
                     clrInput
                     [type]="menu.value.type"
+                    [formControlName]="menu.key"
                     [required]="menu.value.required === true"
                     [style.width.px]="400"
+                    (change)="onFileChange($event, menu.key)"
                   />
                   <clr-control-helper>{{
                     menu.value.description
@@ -149,6 +147,19 @@
                   <clr-control-error>Please enter a value</clr-control-error>
                   }
                 </clr-input-container>
+                <!-- show file download and delete buttons when element exists -->
+                @if (item[menu.key.replace('Name', '')]){
+                  <div _ngcontent-ng-c3994056840="" class="clr-row ng-star-inserted"><label _ngcontent-ng-c3994056840="" class="clr-control-label clr-col-12 clr-col-md-2" for="clr-form-control-13"></label>
+                    <div class="clr-col-md-10 clr-col-12" ng-reflect-ng-class="clr-col-md-10 clr-col-12">
+                      <clr-button-group class="btn-outline-primary btn-sm">
+                        <clr-button (click)="downloadFile(menu.key)">{{item[menu.key]}}<cds-icon shape="download"></cds-icon></clr-button>
+                        <clr-button (click)="deleteFile(menu.key)" class="btn-outline-warning"><cds-icon shape="times"></cds-icon></clr-button>
+                      </clr-button-group>
+                    </div>
+                  </div>
+                }
+
+                
               } @else {
               <clr-input-container>
                 <label>{{ menu.value.title }}</label>

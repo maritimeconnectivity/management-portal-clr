@@ -70,7 +70,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -82,7 +81,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -172,7 +170,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -184,7 +181,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -304,7 +300,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -316,7 +311,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -382,7 +376,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -394,7 +387,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -489,7 +481,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -501,7 +492,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -573,7 +563,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -585,7 +574,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -669,7 +657,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
     updatedAt: {
@@ -681,7 +668,6 @@ export const ColumnForResource: {[key: string]: object} = {
         return convertTime(timestamp);
       },
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail', 'list'],
     },
   },
@@ -1021,8 +1007,12 @@ export const ColumnForResource: {[key: string]: object} = {
     instanceAsXml: {
       title: 'Instance as XML',
       type: 'file',
-      notShowOnEdit: true,
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: ['detail'],
+    },
+    instanceAsXmlName: {
+      title: 'Instance as XML',
+      type: 'file',
+      visibleFrom: ['edit', 'edit-new'],
     },
     instanceAsDocId: {
       title: 'Instance as DocId',
@@ -1031,7 +1021,12 @@ export const ColumnForResource: {[key: string]: object} = {
     instanceAsDoc: {
       title: 'Instance as document',
       type: 'file',
-      visibleFrom: ['detail', 'edit', 'edit-new'],
+      visibleFrom: ['detail'],
+    },
+    instanceAsDocName: {
+      title: 'Instance as document',
+      type: 'file',
+      visibleFrom: ['edit', 'edit-new'],
     },
     ledgerRequestId: {
       title: 'Ledger Request ID',
@@ -1088,7 +1083,6 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Time of creation',
       filter: false,
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: [],
     },
     lastUpdatedAt: {
@@ -1097,7 +1091,6 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'Time of last update',
       filter: false,
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ['detail'],
     },
   },
@@ -1178,7 +1171,6 @@ export const ColumnForResource: {[key: string]: object} = {
     instanceAsXml: {
       title: "Instance as XML",
       type: "file",
-      notShowOnEdit: true,
       visibleFrom: []
     },
     publishedAt: {
@@ -1187,7 +1179,6 @@ export const ColumnForResource: {[key: string]: object} = {
       description: "Time of creation",
       filter: false,
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: []
     },
     lastUpdatedAt: {
@@ -1196,7 +1187,6 @@ export const ColumnForResource: {[key: string]: object} = {
       description: "Time of last update",
       filter: false,
       immutable: true,
-      notShowOnEdit: true,
       visibleFrom: ["detail"]
     },
     comment: {

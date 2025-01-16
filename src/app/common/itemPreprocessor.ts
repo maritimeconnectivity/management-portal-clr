@@ -51,6 +51,9 @@ export const preprocessToShow = (item: any, itemType: ItemType): any => {
         let result2 = (ColumnForResource[itemType] as any).dataProductType.options.filter((o: any) => dataProductType.includes(o.value));
         item.dataProductTypeTitle = result2.map((o: any) => o.title);
         
+        item.instanceAsDocName = item.instanceAsDoc ? '' : undefined;
+        item.instanceAsXmlName = item.instanceAsXml ? '' : undefined;
+        console.log(item);
     }
     return item;
 }

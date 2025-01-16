@@ -13,6 +13,8 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
 import { preprocess, preprocessToShow, preprocessToUpload } from 'src/app/common/itemPreprocessor';
+import { FileHelperService } from 'src/app/common/shared/file-helper.service';
+import { encodeFileToBase64 } from 'src/app/common/file-decoder';
 
 @Component({
   selector: 'app-item-form',
@@ -70,6 +72,7 @@ export class ItemFormComponent {
     private authService: AuthService,
     private notifierService: NotifierService,
     private translate: TranslateService,
+    private fileHelperService: FileHelperService,
   ) {
   }
 
@@ -96,6 +99,7 @@ export class ItemFormComponent {
       if (Object.keys(this.item).length !== 0) {
         if (this.itemType === ItemType.Instance) {
           this.item = preprocessToShow(this.item, this.itemType);
+          console.log(this.item);
         }
         this.itemForm.patchValue(this.item);
       }
@@ -129,12 +133,16 @@ export class ItemFormComponent {
       let filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
       if (this.isForNew) {
         if (this.itemType === ItemType.Instance) {
+          console.log(this.item);
+          this.item = preprocessToUpload(this.itemForm.value, this.itemType);
+
           this.onSubmit.emit(preprocessToUpload(this.itemForm.value, this.itemType));
         } else {
           this.onSubmit.emit(filteredAttributes);
         }        
       } else {
         const updated = appendUpdatedAttributes(this.item, filteredAttributes);
+        console.log('Updated:', updated);
         this.onSubmit.emit(updated);
       }
     }
@@ -269,5 +277,53 @@ export class ItemFormComponent {
   }
 
   capitalize = (s: string): string => s[0].toUpperCase() + s.slice(1);
-  
+ 
+  onFileChange = (event: any, key: string) => {
+    if (event.target.files.length > 0) {
+      const file = event.target.files[0];
+      encodeFileToBase64(file).then((result: { file: File, content: string }) => {
+        console.log(key);
+        if (key === 'instanceAsDocName') {
+          this.item.instanceAsDoc = {
+            name: result.file.name,
+            comment: "",
+            mimetype: result.file.type,
+            filecontent: result.content,
+            filecontentContentType: result.file.type,
+            instanceId: this.item.id
+          };
+          this.item.instanceAsDocName = '';
+        } else if (key === 'instanceAsXmlName') {
+          this.item.instanceAsXml = file;
+          this.item.instanceAsXmlName = file.name;
+        }
+      });
+    }
+    console.log('File changed:', event);
+
+  }
+  downloadFile = (key: string) => {
+    if (key === 'instanceAsDocName') {
+      this.fileHelperService.downloadDoc(this.item.instanceAsDoc);
+    } else if (key === 'instanceAsXmlName') {
+      this.fileHelperService.downloadXml(this.item.instanceAsXml);
+    }
+  }
+
+  deleteFile = async (key: string) => {
+    if (key === 'instanceAsDocName' && this.item.instanceAsDoc) {
+      if (this.item.instanceAsDocName === '') {
+        // this is for deletion of file, which hasn't been uploaded yet
+        this.item.instanceAsDoc = null;
+        this.item.instanceAsDocName = '';
+      } else {
+        // this is for deletion of file, which has been uploaded
+        // so you need to delete it from the server first
+        this.fileHelperService.deleteDoc(this.item.instanceAsDoc).then( (result: boolean) => result ? this.item.instanceAsDoc = null : null);
+      }
+      
+    } else if (key === 'instanceAsXmlName' && this.item.instanceAsXml) {
+      this.fileHelperService.deleteXml(this.item.instanceAsXml).then( (result: boolean) => result ? this.item.instanceAsXml = null : null);
+    }
+  }
 }
