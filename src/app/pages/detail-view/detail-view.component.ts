@@ -120,6 +120,7 @@ export class DetailViewComponent {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return;
     }
+    this.loadItem(this.orgMrn);
     this.isEditing = true;
   }
 
