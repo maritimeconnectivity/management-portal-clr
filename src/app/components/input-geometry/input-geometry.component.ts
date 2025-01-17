@@ -126,7 +126,6 @@ export class InputGeometryComponent {
       }
       const geomLayer = L.geoJSON(geometry);
       geomLayer.on('click', (e: any) => {
-        console.log('Clicked on geometry:', this.geometryBacklink[i]);
         this.onShowBacklink.emit(this.geometryBacklink[i]);
       });
       this.responseFeatureGroup.addLayer(geomLayer);

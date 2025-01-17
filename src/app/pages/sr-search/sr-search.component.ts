@@ -168,7 +168,6 @@ export class SrSearchComponent {
   }
 
   view = (selectedItem: any) => {
-    console.log('view', selectedItem);
     this.itemManagerService.fetchSingleData(this.instanceType, this.orgMrn, selectedItem.instanceId, selectedItem.version).then((instance) => {
       this.selectedInstance = instance;
       this.showPanel = true;

@@ -40,7 +40,6 @@ export const getGeometryCollectionFromMap = (drawnItems: any) => {
 export const getSingleGeometryFromMap = (drawnItems: any) => {
     // Initialise a single geometry object
     var geometry = undefined;
-    console.log(drawnItems.toGeoJSON());
     drawnItems.toGeoJSON().features.forEach((feature: { geometry: any; }) => {
         geometry = feature.geometry;
     });
