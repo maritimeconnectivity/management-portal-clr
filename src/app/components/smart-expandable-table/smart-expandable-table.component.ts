@@ -39,6 +39,7 @@ export class SmartExpandableTableComponent {
   @Output() onRevokeCerts: EventEmitter<any[]> = new EventEmitter();
   @Output() onDownloadCerts: EventEmitter<any[]> = new EventEmitter();
   @Output() onEdit: EventEmitter<any> = new EventEmitter();
+  @Output() onView: EventEmitter<any> = new EventEmitter();
   @Output() onMigrate: EventEmitter<any> = new EventEmitter();
   @Output() onRefresh: EventEmitter<any> = new EventEmitter();
   @Output() onApprove: EventEmitter<any> = new EventEmitter();
@@ -130,9 +131,13 @@ export class SmartExpandableTableComponent {
   }
 
   userRowSelect = (selectedItem: any) => {
-    this.expanded = true;
-    this.selectedItem = selectedItem;
-    this.onRowSelect.emit(selectedItem);
+    if (this.itemType === ItemType.SearchObjectResult) {
+      this.onView.emit(selectedItem);
+    } else {
+      this.expanded = true;
+      this.selectedItem = selectedItem;
+      this.onRowSelect.emit(selectedItem);
+    }
   }
 
   back = () => {

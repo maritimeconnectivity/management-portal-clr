@@ -6,7 +6,7 @@
       <div class="clr-col-md-12">
         <app-input-geometry #map [mapContainerHeight]="400" [isEditing]="true"
         (onGeometryChange)="onUpdateGeometry($event)" [isForSearch]="true"
-        [geometry]="geometries" [geometryNames]="geometryNames"
+        [geometry]="geometries" [geometryBacklink]="geometryBacklink"
         (onClear)="onClearQueryGeometry()"/>
         <div class="clr-col-md-12">
           @if (isLoading) {
@@ -17,9 +17,24 @@
               <app-smart-expandable-table #exTable
                 [itemType]="itemType" [labels]="labels" [getData]="fetchData"
                 [totalPages]="totalPages" [totalElements]="totalElements"
-                (onRefresh)="refreshData()"
+                (onRefresh)="refreshData()" (onView)="view($event)"
             placeholder="There is no data." />
           }
         </div>
     </div>
 </div>
+
+<clr-side-panel
+  [(clrSidePanelOpen)]="showPanel"
+  [clrSidePanelPreventClose]="true"
+  (clrSidePanelAlternateClose)="showPanel = false"
+  #panel
+>
+  <div class="side-panel-body">
+    <app-item-view [isLoading]="isLoading" [itemType]="instanceType" [item]="selectedInstance" [orgMrn]="orgMrn" [viewOnly]="true" [noMap]="true"/>
+  </div>
+  <div class="side-panel-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="moveToEditPage(selectedInstance, false)">Move to Detail Page</button>
+    <button type="button" class="btn btn-primary" (click)="panel.close()">Close</button>
+  </div>
+</clr-side-panel>

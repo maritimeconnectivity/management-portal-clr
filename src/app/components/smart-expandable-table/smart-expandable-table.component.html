@@ -45,10 +45,10 @@
     <clr-dg-row *clrDgItems="let datum of data!" [clrDgItem]="datum">
         @for (itemName of labelKeys; track itemName){
         @if (isTimestampFormat(itemName)) {
-        <clr-dg-cell (click)="userRowSelect(datum)">{{ convertTimeString(datum[itemName]) }}</clr-dg-cell>
-        } @else {
-        <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[itemName] }}</clr-dg-cell>
-        }
+            <clr-dg-cell (click)="userRowSelect(datum)">{{ convertTimeString(datum[itemName]) }}</clr-dg-cell>
+            } @else {
+            <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[itemName] }}</clr-dg-cell>
+            }
         }
     </clr-dg-row>
     @if (detailView) {

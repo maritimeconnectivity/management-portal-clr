@@ -74,7 +74,6 @@ export class FileHelperService {
   }
 
   public downloadDoc(docFile: DocDto): void {
-    console.log(docFile);
     if (!docFile) {
       this.notifierService.notify('error', this.translate.instant('error.file.empty'));
       return;

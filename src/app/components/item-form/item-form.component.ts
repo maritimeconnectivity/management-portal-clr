@@ -107,7 +107,6 @@ export class ItemFormComponent {
       if (Object.keys(this.item).length !== 0) {
         if (this.itemType === ItemType.Instance) {
           this.item = preprocessToShow(this.item, this.itemType);
-          console.log(this.item);
           if (this.item.geometry) {
             this.geometryMap.clearMap();
             this.geometry = [this.item.geometry];
@@ -142,20 +141,23 @@ export class ItemFormComponent {
   submit = async () => {
     // Filter attributes with undefined values
     if (this.isValid()){
-      let filteredAttributes = filterUndefinedAttributes(this.itemForm.value);
+      let filteredAttributes: any = filterUndefinedAttributes(this.itemForm.value);
       if (this.isForNew) {
         if (this.itemType === ItemType.Instance) {
           // the document should be uploaded before submitting
           if (this.item.instanceAsDoc) { // this means there is an update
             const result = await this.fileHelperService.uploadDoc(this.item.instanceAsDoc);
-            this.item.instanceAsDoc = result;
+            filteredAttributes.instanceAsDoc = result;
           }
           if (this.item.instanceAsXml) { // this means there is an update
             const result = await this.fileHelperService.uploadXml(this.item.instanceAsXml);
-            this.item.instanceAsXml = result;
+            filteredAttributes.instanceAsXml = result;
+          }
+          if (this.item.geometry) {
+            filteredAttributes.geometry = this.item.geometry;
           }
         }
-        this.onSubmit.emit(preprocessToUpload(filteredAttributes, this.itemType));        
+        this.onSubmit.emit(preprocessToUpload(filteredAttributes, this.itemType));
       } else {
         const updated = appendUpdatedAttributes(this.item, filteredAttributes);
         let preprocessSuccess = true;
@@ -319,7 +321,6 @@ export class ItemFormComponent {
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
       encodeFileToBase64(file).then((result: { file: File, content: string }) => {
-        console.log(key);
         if (key === 'instanceAsDocName') {
           this.item.instanceAsDoc = {
             name: result.file.name,
@@ -335,7 +336,6 @@ export class ItemFormComponent {
         }
       });
     }
-    console.log('File changed:', event);
 
   }
   downloadFile = (key: string) => {

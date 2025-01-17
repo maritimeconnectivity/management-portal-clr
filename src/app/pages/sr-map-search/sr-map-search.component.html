@@ -1,6 +1,25 @@
 <div class="overlay-container">
-    <app-input-geometry [fullscreen]="true" [isEditing]="true"></app-input-geometry>
+    <app-input-geometry #map [fullscreen]="true" [isEditing]="true"
+      (onGeometryChange)="onUpdateGeometry($event)" [isForSearch]="true"
+      [geometry]="geometries" [geometryBacklink]="geometryBacklink"
+      (onShowBacklink)="showInstanceInfo($event)"
+      (onClear)="onClearQueryGeometry()" />
     <div class="overlay">
-      <app-svc-search-input (onSearch)="onSearch($event)"/>
+      <app-svc-search-input #queryInput (onSearch)="onSearch($event)" (onClearAll)="onClearAll()" />
     </div>
 </div>
+
+<clr-side-panel
+  [(clrSidePanelOpen)]="showPanel"
+  [clrSidePanelPreventClose]="true"
+  (clrSidePanelAlternateClose)="showPanel = false"
+  #panel
+>
+  <div class="side-panel-body">
+    <app-item-view [isLoading]="isLoading" [itemType]="instanceType" [item]="selectedInstance" [orgMrn]="''" [viewOnly]="true" [noMap]="true"/>
+  </div>
+  <div class="side-panel-footer">
+    <button type="button" class="btn btn-outline-primary" (click)="moveToEditPage(selectedInstance, false)">Move to Detail</button>
+    <button type="button" class="btn btn-primary" (click)="panel.close()">Close</button>
+  </div>
+</clr-side-panel>

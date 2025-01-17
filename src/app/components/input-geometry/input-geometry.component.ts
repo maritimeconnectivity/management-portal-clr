@@ -4,6 +4,7 @@ import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
 import * as L from 'leaflet';
 import { circle, circleMarker, featureGroup, FeatureGroup, latLng, latLngBounds, polygon, rectangle, tileLayer, DrawEvents } from 'leaflet';
 import { getGeometryCollectionFromMap } from 'src/app/common/mapToGeometry';
+import { InstanceInfo } from 'src/app/common/menuType';
 
 @Component({
   selector: 'app-input-geometry',
@@ -18,11 +19,12 @@ import { getGeometryCollectionFromMap } from 'src/app/common/mapToGeometry';
 export class InputGeometryComponent {
   @Input() isEditing: boolean = false;
   @Input() geometry: object[] = [];
-  @Input() geometryNames: string[] = [];
+  @Input() geometryBacklink: InstanceInfo[] = [];
   @Input() fullscreen: boolean = false;
   @Input() isForSearch: boolean = false;
   @Input() mapContainerHeight: number = 200;
   @Output() onGeometryChange = new EventEmitter<any>();
+  @Output() onShowBacklink = new EventEmitter<InstanceInfo>();
   @Output() onClear = new EventEmitter<any>();
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
@@ -33,19 +35,6 @@ export class InputGeometryComponent {
       tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' })
     ],
     trackResize: false
-  };
-
-  // Define styles
-  responseFeatureStyle = {
-    color: "#ff0000", // Border color
-    fillColor: 'blue', // Fill color
-    weight: 2 // Border width
-  };
-
-  drawnFeatureStyle = {
-    color: "#ff0000", // Border color
-    fillColor: 'red', // Fill color
-    weight: 2 // Border width
   };
 
   drawnItems: FeatureGroup = featureGroup();
@@ -76,8 +65,6 @@ export class InputGeometryComponent {
   };
 
   constructor(private el: ElementRef, private renderer: Renderer2 ){
-    this.responseFeatureGroup.setStyle(this.responseFeatureStyle);
-    this.drawnGroup.setStyle(this.drawnFeatureStyle);
   }
 
   ngOnInit(): void {
@@ -110,7 +97,7 @@ export class InputGeometryComponent {
     this.drawnGroup.clearLayers();
     this.responseFeatureGroup.clearLayers();
     this.geometry = [];
-    this.geometryNames = [];
+    this.geometryBacklink = [];
   }
 
   loadGeometryOnMap = () => {
@@ -131,17 +118,26 @@ export class InputGeometryComponent {
       if (!geometry || !geometry.coordinates || geometry.coordinates.length === 0) {
         return;
       }
+      if (this.isForSearch) {
+        // when this is for search, we will not render the geometry covers the whole world
+        if (geometry.type === 'Polygon' && geometry.coordinates[0].filter((e: any[]) => JSON.stringify(e) === JSON.stringify([-180, -90])).length === 2) {
+          return ;
+        }
+      }
       const geomLayer = L.geoJSON(geometry);
+      geomLayer.on('click', (e: any) => {
+        this.onShowBacklink.emit(this.geometryBacklink[i]);
+      });
       this.responseFeatureGroup.addLayer(geomLayer);
       //*
       // assign name plate to the region
-      if (this.geometryNames && this.geometryNames.length > 0 && this.geometryNames[i]) {
+      if (this.geometryBacklink && this.geometryBacklink.length > 0 && this.geometryBacklink[i]) {
         if (geometry.type === 'Point') {
           const coordinate = geometry.coordinates;
-          this.setToolTip(this.geometryNames[i], coordinate[1], coordinate[0]);
+          this.setToolTip(this.geometryBacklink[i].name, coordinate[1], coordinate[0]);
         } else {
           const coordinate = geomLayer.getBounds().getCenter();
-          this.setToolTip(this.geometryNames[i], coordinate.lat, coordinate.lng);
+          this.setToolTip(this.geometryBacklink[i].name, coordinate.lat, coordinate.lng);
         }
       }
     });

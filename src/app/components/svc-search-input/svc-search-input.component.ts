@@ -256,6 +256,12 @@ export class SvcSearchInputComponent {
     }
   }
 
+  clearInputOnly(): void {
+    this.luceneTerm = [];
+    this.updateLuceneQuery();
+    this.loadComponent();
+  }
+
   clearInput(): void {
     this.luceneTerm = [];
     this.updateLuceneQuery();

@@ -3,7 +3,7 @@ import { InputGeometryComponent } from "../../components/input-geometry/input-ge
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SvcSearchInputComponent } from "../../components/svc-search-input/svc-search-input.component";
 import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
-import { ItemType } from 'src/app/common/menuType';
+import { InstanceInfo, ItemType } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
 import { LuceneQueryOutput } from 'src/app/common/lucene-query/lucene-query-output';
@@ -14,6 +14,8 @@ import { ItemTableComponent } from 'src/app/components/item-table/item-table.com
 import { ClarityModule } from '@clr/angular';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
+import { NotifierService } from 'gramli-angular-notifier';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sr-search',
@@ -34,7 +36,7 @@ export class SrSearchComponent {
   @ViewChild('exTable') smartTable!: SmartExpandableTableComponent;
   queryGeometry: any = {};
   geometries: any[] = [];
-  geometryNames: string[] = [];
+  geometryBacklink: InstanceInfo[] = [];
   searchParams: SearchParameters = {};
   labels: {[key: string]: any} = {};
   freetext = '';
@@ -49,12 +51,17 @@ export class SrSearchComponent {
   settings = {};
   allInstances: InstanceDto[] = [];
   fieldInfo = srFieldInfo;
+  apiBase = 'sr';
+  showPanel = false;
+  selectedInstance: any = {};
+  instanceType = ItemType.Instance;
 
   constructor(
     private router: Router,
     private secomSearchController: SECOMService,
-    private instanceControllerService: InstanceControllerService,
     private itemManagerService: ItemManagerService,
+    private notifier: NotifierService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -81,18 +88,25 @@ export class SrSearchComponent {
         return [];
       }
       // a bit of hack to deal with the fact that the search service does not support total number of elements....
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchParam);
+      let fetchedItems;
+      try {
+        fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchParam);
+      } catch (error) {
+        console.error('Error fetching items:', error);
+        this.notifier.notify('error', (error as any).message);
+        return [];
+      }
       if (!fetchedItems) {
         return [];
       }
       this.totalPages = fetchedItems.totalPages!;
       this.totalElements = fetchedItems.totalElements!;
       this.geometries = [];
-      this.geometryNames = [];
+      this.geometryBacklink = [];
       fetchedItems.data?.forEach(i =>
         {
           this.geometries.push(i.geometry);
-          this.geometryNames.push(i.name);
+          this.geometryBacklink.push({instanceId: i.instanceId, name: i.name, version: i.version});
         });
       return fetchedItems.data;
     } catch (error) {
@@ -138,11 +152,11 @@ export class SrSearchComponent {
       this.refreshData(this.instances);
       this.isLoading = false;
       this.geometries = [];
-      this.geometryNames = [];
+      this.geometryBacklink = [];
       this.instances?.forEach(i =>
         {
           this.geometries.push(i.geometry);
-          this.geometryNames.push(i.name);
+          this.geometryBacklink.push({instanceId: i.instanceId, name: i.name, version: i.version});
         });
     });
   }
@@ -151,6 +165,21 @@ export class SrSearchComponent {
     this.freetext = freetext;
     this.smartTable.loadData();
     //this.search(freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '');
+  }
+
+  view = (selectedItem: any) => {
+    this.itemManagerService.fetchSingleData(this.instanceType, this.orgMrn, selectedItem.instanceId, selectedItem.version).then((instance) => {
+      this.selectedInstance = instance;
+      this.showPanel = true;
+    });
+  }
+
+  moveToEditPage = (selectedItem: any, forEdit: boolean = true) => {
+    const url = '/pages/' + this.apiBase + '/'+ItemType.Instance+'/'+selectedItem.instanceId + '/' + selectedItem.version;
+    const urlTree = this.router.createUrlTree([url], {
+      queryParams: { edit: forEdit }
+    });
+    this.router.navigateByUrl(urlTree);
   }
 
   onClear = () => {
@@ -168,7 +197,7 @@ export class SrSearchComponent {
 
   clearMap = () => {
     this.geometries = [];
-    this.geometryNames = [];
+    this.geometryBacklink = [];
     this.geometryMap?.clearMap();
   }
 
