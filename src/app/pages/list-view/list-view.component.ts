@@ -183,7 +183,7 @@ export class ListViewComponent {
     let url = '';
     if (this.itemType === ItemType.Role) {
       url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.id;
-    } else if (this.itemType === ItemType.Instance) {
+    } else if (this.itemType === ItemType.Instance || this.itemType === ItemType.SearchObjectResult) {
       url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.instanceId + '/' + selectedItem.version;
     } else if (this.itemType === ItemType.Service) {
       if (selectedItem.instanceVersion) {

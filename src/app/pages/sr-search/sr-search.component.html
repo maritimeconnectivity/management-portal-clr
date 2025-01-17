@@ -17,7 +17,7 @@
               <app-smart-expandable-table #exTable
                 [itemType]="itemType" [labels]="labels" [getData]="fetchData"
                 [totalPages]="totalPages" [totalElements]="totalElements"
-                (onRefresh)="refreshData()"
+                (onRefresh)="refreshData()" (onView)="view($event)"
             placeholder="There is no data." />
           }
         </div>

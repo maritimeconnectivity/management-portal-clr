@@ -86,7 +86,6 @@ export class ItemManagerService {
         item = await firstValueFrom(this.roleService.getRole(orgMrn, parseInt(id)));
       } else if (itemType === ItemType.Instance && instanceVersion) {
         item = await firstValueFrom(this.instanceService.getInstanceByMRNAndVersion(id, instanceVersion));
-        //item = await firstValueFrom(this.instanceService.getInstance(parseInt(id)));
       } else {
         return {};
       }

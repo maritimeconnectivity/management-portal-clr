@@ -14,6 +14,8 @@ import { ItemTableComponent } from 'src/app/components/item-table/item-table.com
 import { ClarityModule } from '@clr/angular';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
+import { NotifierService } from 'gramli-angular-notifier';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sr-search',
@@ -49,12 +51,14 @@ export class SrSearchComponent {
   settings = {};
   allInstances: InstanceDto[] = [];
   fieldInfo = srFieldInfo;
+  apiBase = 'sr';
 
   constructor(
     private router: Router,
     private secomSearchController: SECOMService,
-    private instanceControllerService: InstanceControllerService,
     private itemManagerService: ItemManagerService,
+    private notifier: NotifierService,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -81,7 +85,14 @@ export class SrSearchComponent {
         return [];
       }
       // a bit of hack to deal with the fact that the search service does not support total number of elements....
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchParam);
+      let fetchedItems;
+      try {
+        fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchParam);
+      } catch (error) {
+        console.error('Error fetching items:', error);
+        this.notifier.notify('error', (error as any).message);
+        return [];
+      }
       if (!fetchedItems) {
         return [];
       }
@@ -151,6 +162,19 @@ export class SrSearchComponent {
     this.freetext = freetext;
     this.smartTable.loadData();
     //this.search(freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '');
+  }
+
+  view = (selectedItem: any) => {
+    console.log('view', selectedItem);
+    this.moveToEditPage(selectedItem, false);
+  }
+
+  moveToEditPage = (selectedItem: any, forEdit: boolean = true) => {
+    const url = '/pages/' + this.apiBase + '/'+ItemType.Instance+'/'+selectedItem.instanceId + '/' + selectedItem.version;
+    const urlTree = this.router.createUrlTree([url], {
+      queryParams: { edit: forEdit }
+    });
+    this.router.navigateByUrl(urlTree);
   }
 
   onClear = () => {
