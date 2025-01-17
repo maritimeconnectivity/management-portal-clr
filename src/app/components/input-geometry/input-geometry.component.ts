@@ -116,6 +116,12 @@ export class InputGeometryComponent {
       if (!geometry || !geometry.coordinates || geometry.coordinates.length === 0) {
         return;
       }
+      if (this.isForSearch) {
+        // when this is for search, we will not render the geometry covers the whole world
+        if (geometry.type === 'Polygon' && geometry.coordinates[0].filter((e: any[]) => JSON.stringify(e) === JSON.stringify([-180, -90])).length === 2) {
+          return ;
+        }
+      }
       const geomLayer = L.geoJSON(geometry);
       this.responseFeatureGroup.addLayer(geomLayer);
       //*
