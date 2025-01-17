@@ -30,12 +30,11 @@
   (clrSidePanelAlternateClose)="showPanel = false"
   #panel
 >
-  <div class="side-panel-title">Confirm on close</div>
   <div class="side-panel-body">
     <app-item-view [isLoading]="isLoading" [itemType]="instanceType" [item]="selectedInstance" [orgMrn]="orgMrn" [viewOnly]="true" [noMap]="true"/>
   </div>
   <div class="side-panel-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="moveToEditPage(selectedInstance, false)">Move to Detail</button>
+    <button type="button" class="btn btn-outline-primary" (click)="moveToEditPage(selectedInstance, false)">Move to Detail Page</button>
     <button type="button" class="btn btn-primary" (click)="panel.close()">Close</button>
   </div>
 </clr-side-panel>
