@@ -175,10 +175,16 @@ export class ListViewComponent {
     this.moveToEditPage(selectedItem);
   }
 
-  moveToEditPage = (selectedItem: any) => {
+  view = (selectedItem: any) => {
+    this.moveToEditPage(selectedItem, false);
+  }
+
+  moveToEditPage = (selectedItem: any, forEdit: boolean = true) => {
     let url = '';
-    if (this.itemType === ItemType.Role || this.itemType === ItemType.Instance) {
+    if (this.itemType === ItemType.Role) {
       url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.id;
+    } else if (this.itemType === ItemType.Instance) {
+      url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.instanceId + '/' + selectedItem.version;
     } else if (this.itemType === ItemType.Service) {
       if (selectedItem.instanceVersion) {
         url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.mrn+'/'+selectedItem.instanceVersion; //backward compatibility
@@ -189,7 +195,7 @@ export class ListViewComponent {
       url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.mrn;
     }
     const urlTree = this.router.createUrlTree([url], {
-      queryParams: { edit: true }
+      queryParams: { edit: forEdit }
     });
     this.router.navigateByUrl(urlTree);
   }

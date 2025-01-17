@@ -28,6 +28,7 @@ export class DetailViewComponent {
   orgMrn: string = "";
   id: string = "";
   numberId = -1;
+  instanceMrn = "";
   instanceVersion = "";
   mrnPrefix = "urn:mrn:";
   isLoading = true;
@@ -100,14 +101,14 @@ export class DetailViewComponent {
       if (this.id === "new") {
         this.isForNew = true;
       }
-      if (this.itemType === ItemType.Role || this.itemType === ItemType.Instance) {
+      if (this.itemType === ItemType.Role) {
         this.numberId = parseInt(this.id);
       }
     });
   }
 
   loadItem = async (orgMrn: string) => {
-    this.item = await this.itemManagerService.fetchSingleData(this.itemType, orgMrn, this.id), this.instanceVersion;
+    this.item = await this.itemManagerService.fetchSingleData(this.itemType, orgMrn, this.id, this.instanceVersion);
     this.isLoading = false;
   }
 
