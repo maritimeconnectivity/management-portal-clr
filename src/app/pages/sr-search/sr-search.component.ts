@@ -52,6 +52,9 @@ export class SrSearchComponent {
   allInstances: InstanceDto[] = [];
   fieldInfo = srFieldInfo;
   apiBase = 'sr';
+  showPanel = false;
+  selectedInstance: any = {};
+  instanceType = ItemType.Instance;
 
   constructor(
     private router: Router,
@@ -166,7 +169,10 @@ export class SrSearchComponent {
 
   view = (selectedItem: any) => {
     console.log('view', selectedItem);
-    this.moveToEditPage(selectedItem, false);
+    this.itemManagerService.fetchSingleData(this.instanceType, this.orgMrn, selectedItem.instanceId, selectedItem.version).then((instance) => {
+      this.selectedInstance = instance;
+      this.showPanel = true;
+    });
   }
 
   moveToEditPage = (selectedItem: any, forEdit: boolean = true) => {

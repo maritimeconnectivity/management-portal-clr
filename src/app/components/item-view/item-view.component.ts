@@ -50,6 +50,7 @@ export class ItemViewComponent {
   @Input() serial: string | undefined = undefined;
   @Input() isLoading: boolean = true;
   @Input() viewOnly: boolean = false;
+  @Input() noMap: boolean = false;
   @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
