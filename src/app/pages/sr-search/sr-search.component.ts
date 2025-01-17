@@ -16,6 +16,7 @@ import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-sr-search',
@@ -61,10 +62,14 @@ export class SrSearchComponent {
     private secomSearchController: SECOMService,
     private itemManagerService: ItemManagerService,
     private notifier: NotifierService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private authService: AuthService,
   ) { }
 
   ngOnInit(): void {
+    this.authService.getOrgMrn().then(orgMrn => {
+      this.orgMrn = orgMrn;
+    });
     this.setLabel();
   }
 

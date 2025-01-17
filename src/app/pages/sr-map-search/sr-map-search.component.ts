@@ -14,6 +14,7 @@ import { ClarityModule } from '@clr/angular';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-sr-search',
@@ -37,6 +38,7 @@ export class SrMapSearchComponent {
   searchParams: SearchParameters = {};
   queryString = '';
   freetext = '';
+  orgMrn: string = "";
   instances: SearchObjectResult[] = [];
   itemType = ItemType.SearchObjectResult;
   showTables = true;
@@ -54,10 +56,14 @@ export class SrMapSearchComponent {
     private instanceControllerService: InstanceControllerService,
     private itemManagerService: ItemManagerService,
     private notifier: NotifierService,
-    private translate: TranslateService
-  ) { }
-
-  ngOnInit(): void {
+    private translate: TranslateService,
+    private authService: AuthService,
+    ) { }
+  
+    ngOnInit(): void {
+      this.authService.getOrgMrn().then(orgMrn => {
+        this.orgMrn = orgMrn;
+      });
   }
 
   onUpdateGeometry = (event: any) => {

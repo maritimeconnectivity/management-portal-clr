@@ -5,7 +5,7 @@
       (onShowBacklink)="showInstanceInfo($event)"
       (onClear)="onClearQueryGeometry()" />
     <div class="overlay">
-      <app-svc-search-input #queryInput (onSearch)="onSearch($event)" (onClearAll)="onClearAll()" />
+      <app-svc-search-input #queryInput [orgMrn]="orgMrn" (onSearch)="onSearch($event)" (onClearAll)="onClearAll()" />
     </div>
 </div>
 
