@@ -109,6 +109,9 @@ export class DetailViewComponent {
 
   loadItem = async (orgMrn: string) => {
     this.item = await this.itemManagerService.fetchSingleData(this.itemType, orgMrn, this.id, this.instanceVersion);
+    if (this.itemType === ItemType.Instance && this.item) {
+      this.numberId = parseInt(this.item.id);
+    }
     this.isLoading = false;
   }
 
