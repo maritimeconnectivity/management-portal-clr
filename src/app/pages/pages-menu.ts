@@ -85,19 +85,19 @@ export const MENU_ITEMS: any[] = [
       // {
       //   title: 'separator',
       // },
-      {
-        title: 'My SR',
-      },
+      // {
+      //   title: 'My SR',
+      // },
       {
         title: 'menu.sr.search',
         link: '/pages/sr/search',
         group: 'mysr'
       },
-      // {
-      //   title: 'Map Search',
-      //   link: '/pages/sr/mapsearch',
-      //   group: 'mysr'
-      // },
+      {
+        title: 'Map Search',
+        link: '/pages/sr/mapsearch',
+        group: 'mysr'
+      },
       {
         title: 'menu.sr.instances',
         link: '/pages/sr/instance',
