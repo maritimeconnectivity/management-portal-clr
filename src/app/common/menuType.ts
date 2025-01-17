@@ -101,3 +101,9 @@ export const MenuTypeIconNames = {
   instanceorg: 'compass',
   orgcandidate: 'clipboard',
 };
+
+export interface InstanceInfo {
+  instanceId: string;
+  version: string;
+  name: string;
+}

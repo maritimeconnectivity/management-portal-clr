@@ -3,7 +3,7 @@ import { InputGeometryComponent } from "../../components/input-geometry/input-ge
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SvcSearchInputComponent } from "../../components/svc-search-input/svc-search-input.component";
 import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
-import { ItemType } from 'src/app/common/menuType';
+import { InstanceInfo, ItemType } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
 import { LuceneQueryOutput } from 'src/app/common/lucene-query/lucene-query-output';
@@ -33,7 +33,7 @@ export class SrMapSearchComponent {
   queryGeometry: any = {};
   showPanel = false;
   geometries: any[] = [];
-  geometryNames: string[] = [];
+  geometryBacklink: InstanceInfo[] = [];
   searchParams: SearchParameters = {};
   queryString = '';
   freetext = '';
@@ -100,11 +100,11 @@ export class SrMapSearchComponent {
         return;
       }
       this.geometries = [];
-      this.geometryNames = [];
+      this.geometryBacklink = [];
       fetchedItems.data?.forEach(i =>
         {
           this.geometries.push(i.geometry);
-          this.geometryNames.push(i.name);
+          this.geometryBacklink.push({instanceId: i.instanceId, name: i.name, version: i.version});
         });
       this.geometryMap.loadGeometryOnMap();
   }
@@ -131,7 +131,7 @@ export class SrMapSearchComponent {
 
   clearMap = () => {
     this.geometries = [];
-    this.geometryNames = [];
+    this.geometryBacklink = [];
     this.geometryMap?.clearMap();
   }
 
@@ -144,6 +144,13 @@ export class SrMapSearchComponent {
     } else {
       //this.source.load([]);
     }
+  }
+
+  showInstanceInfo = (event: InstanceInfo) => {
+    this.itemManagerService.fetchSingleData(this.instanceType, "", event.instanceId, event.version).then((instance) => {
+      this.selectedInstance = instance;
+      this.showPanel = true;
+    });
   }
 
   onEdit(event: any): void {

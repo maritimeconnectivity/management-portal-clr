@@ -3,7 +3,7 @@ import { InputGeometryComponent } from "../../components/input-geometry/input-ge
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SvcSearchInputComponent } from "../../components/svc-search-input/svc-search-input.component";
 import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
-import { ItemType } from 'src/app/common/menuType';
+import { InstanceInfo, ItemType } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
 import { LuceneQueryOutput } from 'src/app/common/lucene-query/lucene-query-output';
@@ -36,7 +36,7 @@ export class SrSearchComponent {
   @ViewChild('exTable') smartTable!: SmartExpandableTableComponent;
   queryGeometry: any = {};
   geometries: any[] = [];
-  geometryNames: string[] = [];
+  geometryBacklink: InstanceInfo[] = [];
   searchParams: SearchParameters = {};
   labels: {[key: string]: any} = {};
   freetext = '';
@@ -102,11 +102,11 @@ export class SrSearchComponent {
       this.totalPages = fetchedItems.totalPages!;
       this.totalElements = fetchedItems.totalElements!;
       this.geometries = [];
-      this.geometryNames = [];
+      this.geometryBacklink = [];
       fetchedItems.data?.forEach(i =>
         {
           this.geometries.push(i.geometry);
-          this.geometryNames.push(i.name);
+          this.geometryBacklink.push({instanceId: i.instanceId, name: i.name, version: i.version});
         });
       return fetchedItems.data;
     } catch (error) {
@@ -152,11 +152,11 @@ export class SrSearchComponent {
       this.refreshData(this.instances);
       this.isLoading = false;
       this.geometries = [];
-      this.geometryNames = [];
+      this.geometryBacklink = [];
       this.instances?.forEach(i =>
         {
           this.geometries.push(i.geometry);
-          this.geometryNames.push(i.name);
+          this.geometryBacklink.push({instanceId: i.instanceId, name: i.name, version: i.version});
         });
     });
   }
@@ -198,7 +198,7 @@ export class SrSearchComponent {
 
   clearMap = () => {
     this.geometries = [];
-    this.geometryNames = [];
+    this.geometryBacklink = [];
     this.geometryMap?.clearMap();
   }
 

@@ -4,6 +4,7 @@ import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
 import * as L from 'leaflet';
 import { circle, circleMarker, featureGroup, FeatureGroup, latLng, latLngBounds, polygon, rectangle, tileLayer, DrawEvents } from 'leaflet';
 import { getGeometryCollectionFromMap } from 'src/app/common/mapToGeometry';
+import { InstanceInfo } from 'src/app/common/menuType';
 
 @Component({
   selector: 'app-input-geometry',
@@ -18,11 +19,12 @@ import { getGeometryCollectionFromMap } from 'src/app/common/mapToGeometry';
 export class InputGeometryComponent {
   @Input() isEditing: boolean = false;
   @Input() geometry: object[] = [];
-  @Input() geometryNames: string[] = [];
+  @Input() geometryBacklink: InstanceInfo[] = [];
   @Input() fullscreen: boolean = false;
   @Input() isForSearch: boolean = false;
   @Input() mapContainerHeight: number = 200;
   @Output() onGeometryChange = new EventEmitter<any>();
+  @Output() onShowBacklink = new EventEmitter<InstanceInfo>();
   @Output() onClear = new EventEmitter<any>();
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
@@ -95,7 +97,7 @@ export class InputGeometryComponent {
     this.drawnGroup.clearLayers();
     this.responseFeatureGroup.clearLayers();
     this.geometry = [];
-    this.geometryNames = [];
+    this.geometryBacklink = [];
   }
 
   loadGeometryOnMap = () => {
@@ -123,16 +125,20 @@ export class InputGeometryComponent {
         }
       }
       const geomLayer = L.geoJSON(geometry);
+      geomLayer.on('click', (e: any) => {
+        console.log('Clicked on geometry:', this.geometryBacklink[i]);
+        this.onShowBacklink.emit(this.geometryBacklink[i]);
+      });
       this.responseFeatureGroup.addLayer(geomLayer);
       //*
       // assign name plate to the region
-      if (this.geometryNames && this.geometryNames.length > 0 && this.geometryNames[i]) {
+      if (this.geometryBacklink && this.geometryBacklink.length > 0 && this.geometryBacklink[i]) {
         if (geometry.type === 'Point') {
           const coordinate = geometry.coordinates;
-          this.setToolTip(this.geometryNames[i], coordinate[1], coordinate[0]);
+          this.setToolTip(this.geometryBacklink[i].name, coordinate[1], coordinate[0]);
         } else {
           const coordinate = geomLayer.getBounds().getCenter();
-          this.setToolTip(this.geometryNames[i], coordinate.lat, coordinate.lng);
+          this.setToolTip(this.geometryBacklink[i].name, coordinate.lat, coordinate.lng);
         }
       }
     });
