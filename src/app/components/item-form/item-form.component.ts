@@ -18,6 +18,7 @@ import { encodeFileToBase64 } from 'src/app/common/file-decoder';
 import { DocDto, InstanceDto, XmlDto } from 'src/app/backend-api/service-registry';
 import { ComponentsModule } from '../components.module';
 import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
+import { mustIncludePatternValidator } from 'src/app/common/mustIncludeValidator';
 
 @Component({
   selector: 'app-item-form',
@@ -275,9 +276,9 @@ export class ItemFormComponent {
         return;
       if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
         return;
-      if (key === 'mrn' || key === 'instanceId') {
+      if ( key === 'mrn' || key === 'instanceId') {
         const mrnReg: RegExp = new RegExp(mrnRegex());
-        formElements[key] = ['', [Validators.required, Validators.pattern(mrnReg)]];
+        formElements[key] = ['', [Validators.required, mustIncludePatternValidator( new RegExp(this.mrnPrefix, 'i'))]];
       } else if (key === 'email') {
         formElements[key] = ['', [Validators.required, Validators.email]];
       } else if (key === 'url') {
