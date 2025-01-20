@@ -12,7 +12,7 @@
             >
               @if (menu.key === 'mrn'){
                 <clr-input-container>
-                  <label>{{ menu.value.title }}</label>
+                  <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                   <input
                     clrInput
                     [type]="menu.value.type"
@@ -36,7 +36,7 @@
                 <!-- array element handling -->
                     @if (menu.value.options) {
                       <clr-combobox-container>
-                        <label>{{ menu.value.title }}</label>
+                        <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                         <clr-combobox
                           [formControlName]="menu.key"
                           name="multiSelect"
@@ -69,7 +69,7 @@
                       </clr-combobox-container>
                     } @else {
                       <clr-input-container>
-                        <label>{{ menu.value.title }}</label>
+                        <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                         <input
                           clrInput
                           [type]="menu.value.type"
@@ -82,7 +82,7 @@
             } @else if (menu.value.options){
               <!-- singular, but with options -->
               <clr-select-container>
-                <label>{{ menu.value.title }}</label>
+                <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                 <select
                   clrSelect
                   [formControlName]="menu.key"
@@ -107,7 +107,7 @@
               </clr-select-container>
               } @else if (menu.key === 'permissions'){
               <clr-select-container>
-                <label>{{ menu.value.title }}</label>
+                <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                 <select
                   clrSelect
                   [formControlName]="menu.key"
@@ -129,7 +129,7 @@
               </clr-select-container>
               } @else if(menu.value.type === 'file') {
                 <clr-input-container>
-                  <label>{{ menu.value.title }}</label>
+                  <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                   <input
                     clrInput
                     [type]="menu.value.type"
@@ -166,7 +166,7 @@
                 
               } @else {
               <clr-input-container>
-                <label>{{ menu.value.title }}</label>
+                <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                 <input
                   clrInput
                   [type]="menu.value.type"
@@ -193,6 +193,7 @@
                   </div>
                 }
           </form>
+          <div cds-text="secondary regular" style="padding-top: 20px;"> *: required</div>
         </div>
       </div>
       @if (onSubmitIsGiven){

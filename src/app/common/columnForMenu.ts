@@ -947,6 +947,8 @@ export const ColumnForResource: {[key: string]: object} = {
       description: 'MCP MRN as unique identifer',
       placeholder: 'urn:mrn:',
       visibleFrom: ['detail', 'edit', 'edit-new'],
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>'",
+      required: true,
     },
     implementsServiceDesign: {
       title: 'Technical design ID',
@@ -965,6 +967,7 @@ export const ColumnForResource: {[key: string]: object} = {
       title: 'Comment',
       type: 'string',
       visibleFrom: ['detail', 'edit', 'edit-new'],
+      required: true,
     },
     geometryContentType: {
       title: 'Geometry content type',
@@ -1181,7 +1184,8 @@ export const ColumnForResource: {[key: string]: object} = {
       title: "Comment",
       type: "string",
       description: "Comment description",
-      visibleFrom: ["detail", "edit", "edit-new"]
+      visibleFrom: ["detail", "edit", "edit-new"],
+      required: true,
     },
     mmsi: {
       title: "MMSI",
@@ -1207,6 +1211,7 @@ export const ColumnForResource: {[key: string]: object} = {
       visibleFrom: ['detail', 'edit', 'edit-new'],
       required: true,
       shortIdType: 'organization',
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>'",
     },
     orgName: {
       title: 'Organization name',
@@ -1258,6 +1263,7 @@ export const ColumnForResource: {[key: string]: object} = {
       type: 'string',
       description: 'MCP MRN as unique identifer',
       visibleFrom: ['list'],
+      error: "Please enter a valid MCP MRN, respecting the format 'urn:mrn:mcp:<entity_type>:<id_provider_id>:<org_id>'",
     },
     version: {
       title: 'Version',
