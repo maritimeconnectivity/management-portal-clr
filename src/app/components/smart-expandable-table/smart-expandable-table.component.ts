@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { ClarityModule, ClrDatagridModule, ClrDatagridStateInterface } from '@clr/angular';
-import { ItemType, timestampKeys } from 'src/app/common/menuType';
+import { ItemType, itemTypeToString, timestampKeys } from 'src/app/common/menuType';
 import { ItemViewComponent } from "../item-view/item-view.component";
 import { convertTime } from 'src/app/common/timeConverter';
 import { ItemFormComponent } from "../item-form/item-form.component";
@@ -62,7 +62,7 @@ export class SmartExpandableTableComponent {
 
   constructor(private router: Router,
     private authService: AuthService,
-    private roleService: RoleControllerService
+    private roleService: RoleControllerService,
   ) {
     this.isLoading = true;
   }
@@ -70,6 +70,8 @@ export class SmartExpandableTableComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
+
+    this.loadElementsPerPage();
 
     this.authService.getOrgMrn().then((orgMrn) => {
       if (this.itemType === ItemType.Instance) {
@@ -79,6 +81,12 @@ export class SmartExpandableTableComponent {
         this.roles = roles;
       });
     });
+  }
+
+  loadElementsPerPage = () => {
+    // Retrieve the number of elements per page from localStorage
+    const storedElementsPerPage = localStorage.getItem('management-portal:elementsPerPage');
+    this.elementsPerPage = storedElementsPerPage ? parseInt(storedElementsPerPage) : 10;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -187,5 +195,20 @@ export class SmartExpandableTableComponent {
         }
       }
     });
+  }
+
+  updateNumberOfElements = (event: any) => {
+    const newElementsPerPage = parseInt(event.target.value.split(':').pop());
+    if (this.elementsPerPage !== newElementsPerPage) {
+      this.currentPageNumber = 0;
+      this.elementsPerPage = newElementsPerPage;
+      // Save the number of elements per page to localStorage
+      localStorage.setItem('management-portal:elementsPerPage', this.elementsPerPage.toString());
+      this.loadData();
+    }
+  }
+
+  getItemTypeTitle = (itemType: ItemType) => {
+    return itemTypeToString(itemType);
   }
 }

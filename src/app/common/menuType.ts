@@ -107,3 +107,14 @@ export interface InstanceInfo {
   version: string;
   name: string;
 }
+
+const capitalize = (s: string): string => s[0].toUpperCase() + s.slice(1);
+
+export const itemTypeToString = (itemType: ItemType): string => {
+  if (itemType === ItemType.Instance || itemType === ItemType.SearchObjectResult) {
+    return 'Service instance';
+  } else if (itemType === ItemType.OrgCandidate) {
+    return 'Organization candidate';
+  }
+  return capitalize(itemType.toString());
+}

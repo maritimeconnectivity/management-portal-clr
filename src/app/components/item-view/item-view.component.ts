@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild } from '@angular/core';
-import { ItemType, timestampKeys } from 'src/app/common/menuType';
+import { ItemType, itemTypeToString, timestampKeys } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { FormsModule, Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
@@ -315,5 +315,7 @@ export class ItemViewComponent {
     this.fromBrowser = false;
   }
   
-  capitalize = (s: string): string => s[0].toUpperCase() + s.slice(1);
+  getItemTypeTitle = (itemType: ItemType) => {
+    return itemTypeToString(itemType);
+  }
 }
