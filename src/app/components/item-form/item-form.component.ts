@@ -108,7 +108,7 @@ export class ItemFormComponent {
       if (Object.keys(this.item).length !== 0) {
         if (this.itemType === ItemType.Instance) {
           this.item = preprocessToShow(this.item, this.itemType);
-          if (this.item.geometry) {
+          if (this.item.geometry && this.geometryMap) {
             this.geometryMap.clearMap();
             this.geometry = [this.item.geometry];
           }
