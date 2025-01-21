@@ -76,7 +76,8 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
     }
   }
 
-  onSelectionChange(value: any): void {
+  onSelectionChange(event: any): void {
+    const value = event.target.value;
     this.field = value;
     this.valueEditable = true;
     this.data = {id: this.id, [this.field]: this.fieldValue};
