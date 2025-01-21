@@ -61,6 +61,9 @@
     }
 
     <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="elementsPerPage">
+            <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]" (change)="updateNumberOfElements($event)">{{getItemTypeTitle(itemType)}}s per page</clr-dg-page-size>
+        </clr-dg-pagination>
         @if (totalPages > 1) {
         <div class="clr-row clr-justify-content-center">
             <div class="btn-group btn-outline-primary btn-sm">
