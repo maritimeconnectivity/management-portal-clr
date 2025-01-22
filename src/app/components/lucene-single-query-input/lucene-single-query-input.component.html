@@ -10,17 +10,28 @@
                 @if (requireInfo) {
                     <label>Search attribute</label>
                 }
-                <select clrSelect [(ngModel)]="selectedItem" name="options" required (change)="onSelectionChange($event)">
+                <select clrSelect [(ngModel)]="selectedItem" name="options" (change)="onSelectionChange($event)">
                     <option *ngFor="let option of fieldInfo" [value]="option.value">{{option.name}}</option>
                 </select>
             </clr-select-container>
             <span>:</span>
-            <clr-input-container style="margin-top: 0px;">
-                @if (requireInfo) {
-                    <label>Value</label>
-                }
-                <input clrInput [disabled]="!selectedItem" [value]="fieldValue" name="input" (input)="onEdit($event)"/>
-            </clr-input-container>
+            @if (selectOptions.length > 0) {
+                <clr-select-container style="margin-top: 0px;">
+                    @if (requireInfo) {
+                        <label>Search attribute</label>
+                    }
+                    <select clrSelect [(ngModel)]="selectedOption" name="valueOptions" (change)="onEdit($event)">
+                        <option *ngFor="let option of selectOptions" [value]="option.value">{{option.title}}</option>
+                    </select>
+                </clr-select-container>
+            } @else {
+                <clr-input-container style="margin-top: 0px;">
+                    @if (requireInfo) {
+                        <label>Value</label>
+                    }
+                    <input clrInput [disabled]="!selectedItem" [value]="fieldValue" name="input" (input)="onEdit($event)"/>
+                </clr-input-container>
+            }
             @if (requireExtendBtn){
                 <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="createExpressionWithBrackets()">
                     <cds-icon shape="code"></cds-icon>
