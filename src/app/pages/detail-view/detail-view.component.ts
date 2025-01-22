@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { ItemType } from 'src/app/common/menuType';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
+import { loadLang } from 'src/app/common/translateHelper';
 import { ComponentsModule } from 'src/app/components/components.module';
 
 @Component({
@@ -47,7 +48,7 @@ export class DetailViewComponent {
     private authService: AuthService,
   ) {
     this.notifier = notifierService;
-    translate.use('en-GB');
+    loadLang(translate);
   }
 
   ngOnInit(): void {
@@ -177,10 +178,6 @@ export class DetailViewComponent {
     }
   }
 
-  issueCert = () => {
-    this.notifier.notify('success', this.translate.instant('success.certificate.issue'));
-  }
-
   revokeCerts = (certs: any[]) => {
     if (certs.length === 0) {
       this.notifier.notify('error', this.translate.instant('error.selection.noSelection'));
@@ -209,7 +206,7 @@ export class DetailViewComponent {
         this.loadItem(this.orgMrn);
       },
       err => {
-        this.notifier.notify('error', this.translate.instant('error.resource.migrate'));
+        this.notifier.notify('error', this.translate.instant('error.resource.migrate') + err.error.message);
       });
   }
 
