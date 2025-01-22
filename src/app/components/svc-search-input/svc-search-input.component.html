@@ -1,6 +1,22 @@
 <div class="card" style="margin-top: 0px;">
     <div class="card-header">
-        <div class="card-header-title">{{title}}</div>
+        <div class="card-header-title">{{title}}
+            <clr-signpost>
+                <clr-signpost-content *clrIfOpen [clrPosition]="'right-bottom'" >
+                  <h4>How to search service?</h4>
+                  <p>
+                    Service Registry provides a service search with parameters defined in IEC 63173-2 SECOM standard.
+                    Please choose parameter from <b>Add query</b> elements and enter value you want to search and press <b>Search</b> button.
+                    </p>
+                    <p>
+                    Geographical search: You can also do a geometry search by clicking icons on the left side. <br>
+                    <img src="assets/images/geometry_search.png" alt="Search with geometries"/>
+                    So you can define an area of interest together with the search parameters. <br>
+                  </p>
+                </clr-signpost-content>
+              </clr-signpost>
+        </div>
+        
     </div>
     <div class="clr-container" style="padding: 10px;">
         <div class="clr-row clr-col-sm-12 clr-col-md-12" style="display: flex; align-items: center; gap: 8px;">
@@ -11,7 +27,7 @@
                 </select>
             </clr-select-container>
         </div>
-        <input nbInput hidden fullWidth placeholder="field1:value1 AND/OR field2:value2" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
+        <input hidden fullWidth placeholder="field1:value1 AND/OR field2:value2" autocorrect="off" autocapitalize="off" spellcheck="off" type="text"
                   class="form-control search-location" #luceneQueryStringInput (change)="onQueryStringChanged($event)">
         <div class="clr-row clr-col-sm-12 clr-col-md-12">
             <div class="clr-justify-content-start no-gutter">
