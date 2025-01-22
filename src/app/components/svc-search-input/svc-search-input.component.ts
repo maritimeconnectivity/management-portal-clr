@@ -62,7 +62,6 @@ export class SvcSearchInputComponent {
     const viewContainerRef = this.luceneComponentHost;
     viewContainerRef.clear();
 
-    console.log(this.luceneTerm);
     // create visual components based on luceneTerm
     for (const term of this.luceneTerm) {
       if ((term as Term).group && (term as Term).group!.length > 0) {
@@ -292,10 +291,10 @@ export class SvcSearchInputComponent {
       this.luceneTerm = this.addTerm(this.luceneTerm, { id: shortid.generate(), organizationId: this.orgMrn });
 
     } else if (preset === 'nw') {
-      this.luceneTerm = this.addTerm(this.luceneTerm, { id: shortid.generate(), dataProductType: 's124' });
+      this.luceneTerm = this.addTerm(this.luceneTerm, { id: shortid.generate(), dataProductType: 'S124' });
     } else if (preset === 'route') {
       this.luceneTerm = this.addTerm(this.luceneTerm, { id: shortid.generate(), group: 
-        [ {id: shortid.generate(), dataProductType: 's101' },
+        [ {id: shortid.generate(), dataProductType: 'S101' },
           {id: shortid.generate(), operator: LogicalOperator.Or },
           {id: shortid.generate(), dataProductType: 'RTZ' }
         ]});
