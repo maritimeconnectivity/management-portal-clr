@@ -68,6 +68,7 @@ export const preprocessToUpload = (item: any, itemType: ItemType): any => {
             keywords: typeof item.keywords === 'string' ? item.keywords.length > 0 ? item.keywords.split(",") : [] : item.keywords,
         }
     }
+    return item;
 }
 
 export const preprocessToShow = (item: any, itemType: ItemType): any => {
