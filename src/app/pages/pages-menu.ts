@@ -18,7 +18,16 @@
 /**
  * menu for pages
  */
-export const MENU_ITEMS: any[] = [
+interface MenuItem {
+  title: string;
+  icon?: string;
+  link?: string;
+  group?: string;
+  forSiteAdmin?: boolean;
+  children?: MenuItem[];
+}
+
+export const MENU_ITEMS: MenuItem[] = [
   {
     title: 'menu.ir',
     icon: 'lock',
