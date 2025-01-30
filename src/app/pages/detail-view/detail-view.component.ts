@@ -3,14 +3,17 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClarityModule } from '@clr/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { wktToGeoJSON } from '@terraformer/wkt';
 import { NotifierService } from 'gramli-angular-notifier';
 import { catchError, firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { ItemType } from 'src/app/common/menuType';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
+import { mustIncludePatternValidator } from 'src/app/common/mustIncludeValidator';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { loadLang } from 'src/app/common/translateHelper';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { G1128XmlInputComponent } from 'src/app/components/g1128-xml-input/g1128-xml-input.component';
 
 @Component({
   selector: 'app-detail-view',
@@ -18,7 +21,8 @@ import { ComponentsModule } from 'src/app/components/components.module';
   imports: [
     NgIf,
     ComponentsModule,
-    ClarityModule
+    ClarityModule,
+    G1128XmlInputComponent,
   ],
   templateUrl: './detail-view.component.html',
   styleUrl: './detail-view.component.css'
@@ -38,6 +42,7 @@ export class DetailViewComponent {
   hasAdminPermission = false;
   serial = '';
   apiBase = 'ir';
+  isVerified = false;
   private readonly notifier: NotifierService;
 
   constructor(private route: ActivatedRoute,
@@ -113,6 +118,7 @@ export class DetailViewComponent {
     if (this.itemType === ItemType.Instance && this.item) {
       this.numberId = parseInt(this.item.id);
     }
+    console.log(this.item);
     this.isLoading = false;
   }
 
@@ -229,5 +235,45 @@ export class DetailViewComponent {
           this.translate.instant('error.resource.deletionFailed') + err.error.message);
       }
     );
+  }
+
+  onVerify = (xmlString: string) => {
+    this.itemManagerService.verifyG1128Xml(xmlString).subscribe({
+      next: (res: any) => {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+        const geometryAsWKT = xmlDoc.getElementsByTagName("geometryAsWKT")[0]?.textContent || '';
+        console.log(geometryAsWKT);
+        console.log(wktToGeoJSON(geometryAsWKT));
+        this.notifier.notify('success', this.translate.instant('success.xml.verified'));
+        this.item = {...this.item,
+          name: res.name,
+          version: res.version,
+          serviceType: res.serviceType,
+          status: res.status,
+          endpointUri: res.endpoint,
+          keywords: res.keywords,
+          instanceId: res.id,
+          implementsServiceDesign: res.implementsServiceDesign.id,
+          implementsServiceDesignVersion: res.implementsServiceDesign.version,
+          comment: res.description,
+          instanceAsXmlName: xmlString,
+          geometry: wktToGeoJSON(geometryAsWKT),
+        };
+        
+        if (!new RegExp(this.mrnPrefix, 'i').test(res.id)) {
+          this.notifier.notify('error', this.translate.instant('error.xml.idNotValid') + " : " + res.id);
+        }
+        
+        this.isVerified = true;
+      },
+      error: err => {
+        if (err.status === 400) {
+          this.notifier.notify('error', this.translate.instant('error.xml.invalidXml'));
+        } else {
+          this.notifier.notify('error', err.message);
+        }
+      }
+    });
   }
 }

@@ -61,6 +61,8 @@ export class ItemFormComponent {
 
   @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
 
+  @Output() verify: EventEmitter<any> = new EventEmitter<any>();
+
   @ViewChild(ClrForm, { static: true }) clrForm: ClrForm | undefined;
   @ViewChild('map') geometryMap!: InputGeometryComponent;
 
@@ -74,6 +76,7 @@ export class ItemFormComponent {
   onSubmitIsGiven = true;
   docToBeDeleted: DocDto | undefined;
   xmlToBeDeleted: XmlDto | undefined;
+  isXmlEditorEnabled = false;
   geometry: any[] = [];
 
   constructor(private formBuilder: FormBuilder,
@@ -101,17 +104,19 @@ export class ItemFormComponent {
   ngOnChanges(simpleChange: any) {
     if (this.isForNew) {
       this.viewContext = 'edit-new';
-      this.initializeItem();
+      if (this.item && Object.keys(this.item).length === 0) {
+        this.initializeItem();
+      }
+      if (this.itemType === ItemType.Instance) {
+        this.formatInstanceItem();
+        this.geometry = [this.item.geometry];
+      }
     }
     if (this.itemType !== ItemType.None) {
       this.setForm();
       if (Object.keys(this.item).length !== 0) {
         if (this.itemType === ItemType.Instance) {
-          this.item = preprocessToShow(this.item, this.itemType);
-          if (this.item.geometry && this.geometryMap) {
-            this.geometryMap.clearMap();
-            this.geometry = [this.item.geometry];
-          }
+          this.formatInstanceItem();
         }
         this.itemForm.patchValue(this.item);
       }
@@ -129,6 +134,18 @@ export class ItemFormComponent {
     } else {
       this.onSubmitIsGiven = false;
     }
+  }
+
+  formatInstanceItem = () => {
+    this.item = preprocessToShow(this.item, this.itemType);
+    if (this.item.geometry && this.geometryMap) {
+      this.geometryMap.clearMap();
+      this.geometry = [this.item.geometry];
+    }
+    if (this.item.instanceAsXml) {
+      this.item.instanceAsXmlName = this.item.instanceAsXml.content.replace(/\\n/g, '').replace(/\\r/g, '').replace(/\\"/g, '"');
+    }
+    this.item = {...this.item, organizationId: this.orgMrn};
   }
 
   initializeItem = () => {
@@ -249,13 +266,14 @@ export class ItemFormComponent {
     this.onCancel.emit();
   }
 
-  onMrnKeyDown(event: Event) {
-    const newValue = (event.target as HTMLInputElement).value;
+  onMrnKeyDown(event: KeyboardEvent) {
+    const newValue = (event.target as HTMLInputElement).value + event.key;
     if (newValue.includes(this.mrnPrefix)) {
       this.item['mrn'] = newValue;
     } else {
       (event.target as HTMLInputElement).value = this.mrnPrefix;
     }
+    this.itemForm.patchValue(this.item);
   }
 
   onMrnChange(value: string) {
@@ -277,7 +295,6 @@ export class ItemFormComponent {
       if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
         return;
       if ( key === 'mrn' || key === 'instanceId') {
-        const mrnReg: RegExp = new RegExp(mrnRegex());
         formElements[key] = ['', [Validators.required, mustIncludePatternValidator( new RegExp(this.mrnPrefix, 'i'))]];
       } else if (key === 'email') {
         formElements[key] = ['', [Validators.required, Validators.email]];
@@ -395,5 +412,17 @@ export class ItemFormComponent {
     if (this.itemType === ItemType.Instance) {
       this.item.geometry = geometry.data.geometries[0];
     }
+  }
+
+  setXmlEditor = () => {
+    this.isXmlEditorEnabled = !this.isXmlEditorEnabled;
+  }
+  
+  onVerify = () => {
+    if (!this.itemForm.value['instanceAsXmlName'] || this.itemForm.value['instanceAsXmlName'].length === 0) {
+      this.notifierService.notify('error', this.translate.instant('error.form.emptyXml'));
+      return;
+    }
+    this.verify.emit(this.itemForm.value['instanceAsXmlName']);
   }
 }

@@ -3,7 +3,7 @@ import { ItemType } from '../menuType';
 import { firstValueFrom, Observable } from 'rxjs';
 import { Device, DeviceControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, ServicePatch, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { preprocess } from '../itemPreprocessor';
-import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
+import { InstanceControllerService, InstanceDto, XmlControllerService } from 'src/app/backend-api/service-registry';
 import { postprocess } from '../itemPostprocessor';
 import { FetchedItems } from '../fetchedItems';
 import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
@@ -22,6 +22,7 @@ export class ItemManagerService {
     private roleService: RoleControllerService,
     private instanceService: InstanceControllerService,
     private secomService: SECOMService,
+    private xmlService: XmlControllerService,
   ) { }
 
   fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchParam?: object): Promise<FetchedItems> => {
@@ -175,5 +176,9 @@ export class ItemManagerService {
 
   createUser = (user: User, orgMrn: string) => {
     return this.userService.createUser(user, orgMrn);
+  }
+
+  verifyG1128Xml = (xml: string) => {
+    return this.xmlService.validateXmlWithG1128Schema(xml, 'INSTANCE');
   }
 }

@@ -74,7 +74,9 @@ export const preprocessToUpload = (item: any, itemType: ItemType): any => {
 export const preprocessToShow = (item: any, itemType: ItemType): any => {
     if (itemType === ItemType.Instance) {
         item.instanceAsDocName = item.instanceAsDoc ? '' : undefined;
-        item.instanceAsXmlName = item.instanceAsXml ? '' : undefined;
+        if (!item.instanceAsXmlName || item.instanceAsXmlName.length === 0) {
+            item.instanceAsXmlName = item.instanceAsXml ? '' : undefined;
+        }        
     }
     return item;
 }

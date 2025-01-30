@@ -12,7 +12,6 @@ import { MsrLedgerSearchComponent } from './msr-ledger/msr-ledger-search/msr-led
 import { LedgerGuideComponent } from './msr-ledger/ledger-guide/ledger-guide.component';
 import { AboutComponent } from './about/about.component';
 */
-import { authGuard } from '../auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
 import { AboutComponent } from './about/about.component';
