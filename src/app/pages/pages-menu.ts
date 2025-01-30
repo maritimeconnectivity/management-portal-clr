@@ -18,13 +18,22 @@
 /**
  * menu for pages
  */
-export const MENU_ITEMS: any[] = [
+interface MenuItem {
+  title: string;
+  icon?: string;
+  link?: string;
+  group?: string;
+  forSiteAdmin?: boolean;
+  children?: MenuItem[];
+}
+
+export const MENU_ITEMS: MenuItem[] = [
   {
     title: 'menu.ir',
     icon: 'lock',
     children: [
       {
-        title: 'My company',
+        title: 'menu.ir.myorg',
       },
       {
         title: 'menu.ir.org.devices',
@@ -55,7 +64,7 @@ export const MENU_ITEMS: any[] = [
         title: 'separator',
       },
       {
-        title: 'My IR',
+        title: 'menu.ir.myir',
       },
       {
         title: 'menu.ir.organizations',
@@ -94,7 +103,7 @@ export const MENU_ITEMS: any[] = [
         group: 'mysr'
       },
       {
-        title: 'Search with Map',
+        title: 'menu.sr.search.map',
         link: '/pages/sr/mapsearch',
         group: 'mysr'
       },

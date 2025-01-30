@@ -190,7 +190,7 @@ export class ItemViewComponent {
 
   openCertModal = () => {
     if (this.itemType === ItemType.Service && this.instanceVersion) {
-      this.notifier.notify('error', this.translate.instant('error.form.requiremigrate'));
+      this.notifier.notify('error', this.translate.instant('error.selection.wrongtype'));
       return ;
     }
     this.certModal?.open();
@@ -230,7 +230,7 @@ export class ItemViewComponent {
   issue = () => {
     issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser, this.instanceVersion).then((cert: CertificateBundle | undefined) => {
       this.certificateBundle = cert;
-      this.notifier.notify('success', this.translate.instant('success.resource.create'));
+      this.notifier.notify('success', this.translate.instant('success.certificate.issue'));
     });
   }
 
@@ -267,7 +267,7 @@ export class ItemViewComponent {
 
   clickRevokeBtn = (selected: any[]) => {
     if (this.itemType === ItemType.Service && this.instanceVersion) {
-      this.notifier.notify('error', this.translate.instant('error.form.requiremigrate'));
+      this.notifier.notify('error', this.translate.instant('error.selection.wrongtype'));
       return ;
     }
     if (selected.length === 0) {

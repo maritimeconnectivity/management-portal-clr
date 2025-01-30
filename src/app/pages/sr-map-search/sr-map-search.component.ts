@@ -15,6 +15,7 @@ import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/auth/auth.service';
+import { loadLang } from 'src/app/common/translateHelper';
 
 @Component({
   selector: 'app-sr-search',
@@ -58,7 +59,9 @@ export class SrMapSearchComponent {
     private notifier: NotifierService,
     private translate: TranslateService,
     private authService: AuthService,
-    ) { }
+    ) {
+      loadLang(translate);
+    }
   
     ngOnInit(): void {
       this.authService.getOrgMrn().then(orgMrn => {
@@ -99,7 +102,7 @@ export class SrMapSearchComponent {
         fetchedItems = await this.itemManagerService.fetchListOfData(ItemType.SearchObjectResult, "", 0, 100, secomSearchParam);
       } catch (error) {
         console.error('Error fetching items:', error);
-        this.notifier.notify('error', (error as any).message);
+        this.notifier.notify('error.search.general', (error as any).message);
         return;
       }
       if (!fetchedItems) {

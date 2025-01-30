@@ -143,6 +143,8 @@
     },    
     "menu": {
         "ir": "인증 레지스트리",
+        "ir.myorg": "나의 기관",
+        "ir.myir": "나의 IR",
         "ir.organizations": "모든 기관",
         "ir.guide": "도움말",
         "sr": "서비스 레지스트리",
@@ -162,14 +164,8 @@
         "ir.org.vessels": "선박",
         "ir.org.roles": "권한",
         "sr.org": "소속 기관",
-        "sr.org.services": "서비스"
-    },
-    "table": {
-        "resource": {
-            "device": {
-                "name": "Nameeeeeee"
-            }
-        }
+        "sr.org.services": "서비스",
+        "sr.search.map": "지도 기반 검색"
     },
     "success": {
         "resource": {
@@ -177,7 +173,18 @@
             "update": " - 성공적으로 업데이트되었습니다",
             "create": " - 성공적으로 생성되었습니다",
             "approveOrganization": "가입 요청이 승인되었습니다",
-            "uploadImage": "업로드된 이미지가 성공적으로 삭제되었습니다"
+            "uploadImage": "업로드된 이미지가 성공적으로 삭제되었습니다",
+            "migrate": "성공적으로 마이그레이션되었습니다"
+        },
+        "certificate": {
+            "issue": "인증서가 성공적으로 발급되었습니다",
+            "revoke": "인증서가 성공적으로 해지되었습니다",
+            "delete": "인증서가 성공적으로 삭제되었습니다"
+        },
+        "file": {
+            "download": "파일이 성공적으로 다운로드되었습니다",
+            "delete":" - 성공적으로 삭제되었습니다",
+            "upload": "파일이 성공적으로 업로드되었습니다"
         }
     },
     "warning": {
@@ -187,6 +194,26 @@
         }
     },
     "error": {
+        "selection": {
+            "noSelection": "선택된 항목이 없습니다",
+            "wrongType": "잘못된 유형의 항목이 선택되었습니다"
+        },
+        "form": {
+            "invalid": "잘못된 입력값이 있습니다",
+            "invalidmrn": "MRN 형식이 잘못되었습니다",
+            "requiremigrate": "마이그레이션이 필요합니다"
+        },
+        "certificate": {
+            "issue": "인증서 발급 중 오류가 발생했습니다",
+            "revoke": "인증서 해지 중 오류가 발생했습니다",
+            "delete": "인증서 삭제 중 오류가 발생했습니다"
+        },
+        "file": {
+            "downloadcert": "인증서 다운로드 중 오류가 발생했습니다",
+            "empty": "다운 받을 파일이 없습니다",
+            "wrongformat": "잘못된 파일 형식입니다",
+            "downloaderror": "파일 다운로드 중 오류가 발생했습니다"
+        },
         "resource": {
             "noDataService": "해당 DataService가 없습니다 - ",
             "permissionError": "권한이 없습니다",
@@ -199,9 +226,13 @@
             "noUser": "사용자 데이터 없음",
             "fetchOrgInfo": "조직 정보를 가져오는 중 오류가 발생했습니다.",
             "creationFailed" : "생성 실패 - ",
+            "deletionFailed" : "삭제 실패 - ",
             "updateFailed" : "업데이트 실패 - ",
-            "errorInDeletion": "삭제 실패 - ",
+            "migrate": "마이그레이션 실패 - ",
             "updateImageFailed": "이미지를 업데이트하는 중에 오류가 발생했습니다 - "
+        },
+        "search": {
+            "general": "검색 중 오류가 발생했습니다"
         }
     },
     "header": {

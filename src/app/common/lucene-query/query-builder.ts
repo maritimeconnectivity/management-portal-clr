@@ -1,13 +1,13 @@
 
-import * as _ from "lucene-query-string-builder";
 import { LogicalOperator } from './localOperator';
 import { Term } from "./lucene-component";
+import * as lucene from 'lucene-query-string-builder';
 
 export const buildTerm = (data: {[key: string]: any}): string => {
     if (data) {
       const key = Object.keys(data).pop();
       if (key && data[key] !== undefined) {
-        return _.field(key, _.term(data[key]));
+        return lucene.field(key, lucene.term(data[key]));
       }
     }
     return '';
@@ -21,9 +21,9 @@ export function buildQuery(terms: Term[]): string {
     const o1 = terms.slice(0, terms.length - 2);
     const o2 = terms[terms.length - 1];
     if (op['operator'] === LogicalOperator.And) {
-      return _.and( buildQuery(o1), o2.group ? "(" + buildQuery(o2.group) + ")": buildTerm(o2));
+      return lucene.and( buildQuery(o1), o2.group ? "(" + buildQuery(o2.group) + ")": buildTerm(o2));
     } else if (op['operator'] === LogicalOperator.Or) {
-      return _.or( buildQuery(o1), o2.group ? "(" + buildQuery(o2.group) + ")": buildTerm(o2));
+      return lucene.or( buildQuery(o1), o2.group ? "(" + buildQuery(o2.group) + ")": buildTerm(o2));
     }
   }
   return '';

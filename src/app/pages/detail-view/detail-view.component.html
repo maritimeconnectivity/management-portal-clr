@@ -14,7 +14,7 @@
             [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"/>
     } @else {
     <app-item-view [isLoading]="isLoading" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"
-        (onEdit)="edit(item)" (onIssueCert)="issueCert()"
+        (onEdit)="edit(item)"
         (onRefresh)="loadItem(orgMrn)" (onMigrate)="migrate($event)" (onDelete)="deleteItem()" />
     }
 </div>

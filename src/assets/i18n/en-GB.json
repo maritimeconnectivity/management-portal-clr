@@ -146,6 +146,8 @@
     },    
     "menu": {
         "ir": "Identity Registry",
+        "ir.myorg": "My Organization",
+        "ir.myir": "My IR",
         "ir.organizations": "Organizations",
         "ir.guide": "User Guide",
         "sr": "Service Registry",
@@ -165,16 +167,8 @@
         "ir.org.vessels": "Vessels",
         "ir.org.roles": "Roles",
         "sr.org": "My Organization",
-        "sr.org.services": "Services"
-    },
-    "table": {
-        "resource": {
-            "device": {
-                "name": {
-                    "title": "Nameeeeeee"
-                }
-            }
-        }
+        "sr.org.services": "Services",
+        "sr.search.map": "Map Search"
     },
     "success": {
         "resource": {
@@ -191,6 +185,11 @@
             "issue": "Certificates have been successfully issued",
             "revoke": "Certificates have been successfully revoked",
             "chosen": "Chosen certificates have downloaded"
+        },
+        "file": {
+            "delete": "File has been successfully deleted",
+            "download": "File has been successfully downloaded",
+            "upload": "File has been successfully uploaded"
         }
     },
     "warning": {
@@ -201,7 +200,8 @@
     },
     "error": {
         "selection": {
-            "noSelection": "You need to select at least one item"
+            "noSelection": "You need to select at least one item",
+            "wrongtype": "You choose wrong type"
         },
         "form": {
             "invalid": "Please fill in all required fields",
@@ -227,13 +227,16 @@
                 "reject": "The organization is not approved",
                 "general": "There was an error in approving the organization"
             },
-            "noUser": "No user data",
+            "noUser": "No user data is given",
             "fetchOrgInfo": "Error in fetching organization information",
             "creationFailed" : "Creation has failed",
             "deletionFailed" : "Deletion has failed",
             "updateFailed" : "Update has failed",
             "updateImageFailed": "There was error in updating image",
             "migrate": "Service migration failed"
+        },
+        "search": {
+            "general": "There was error in processing given search"
         }
     },
     "header": {
