@@ -133,7 +133,6 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role && numberId) {
       return this.roleService.updateRole(body as Role, orgMrn, numberId);
     } else if (itemType === ItemType.Instance && numberId) {
-      console.log(Object.assign({}, preprocessToUpload(body, itemType), { id: numberId }) as InstanceDto);
       return this.instanceService.updateInstance(Object.assign({}, preprocessToUpload(body, itemType), { id: numberId }) as InstanceDto, numberId);
     }
     return new Observable();

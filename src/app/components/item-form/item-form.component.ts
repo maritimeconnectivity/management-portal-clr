@@ -105,7 +105,6 @@ export class ItemFormComponent {
   }
 
   ngOnChanges(simpleChange: any) {
-    console.log(simpleChange);
     if (this.isForNew) {
       this.viewContext = 'edit-new';
       if (this.item && Object.keys(this.item).length === 0) {
