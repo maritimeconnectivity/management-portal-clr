@@ -192,7 +192,8 @@
             "upload": "File has been successfully uploaded"
         },
         "xml": {
-            "verified": "G1128 XML has been successfully verified"
+            "verified": "G1128 XML has been successfully verified",
+            "update": "G1128 XML has been successfully updated"
         }
     },
     "warning": {

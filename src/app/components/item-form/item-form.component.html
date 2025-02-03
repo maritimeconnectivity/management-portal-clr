@@ -8,7 +8,11 @@
         <div class="card-text">
           @if (itemType === 'instance') {
             <button class="btn btn-primary" (click)="setXmlEditor()" *ngIf="!isXmlEditorEnabled">
-              Create with G1128 XML
+              @if (isForNew) {
+                Create with G1128 XML
+              } @else {
+                Edit with G1128 XML
+              }
             </button>
             <button class="btn btn-warning" type="submit" (click)="setXmlEditor()" *ngIf="isXmlEditorEnabled">
               Back to instance
@@ -171,8 +175,6 @@
                     </div>
                   </div>
                 }
-
-                
               } @else if(menu.value.type === 'xml') {
                 <clr-textarea-container *ngIf="isXmlEditorEnabled">
                   <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>

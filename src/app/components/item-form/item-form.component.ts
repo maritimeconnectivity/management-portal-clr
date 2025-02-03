@@ -5,7 +5,7 @@ import { ClarityModule, ClrForm, ClrFormsModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { appendUpdatedAttributes, filterUndefinedAttributes } from 'src/app/common/filterObject';
 import { ItemType } from 'src/app/common/menuType';
-import { mrnRegex } from 'src/app/common/mrnRegex';
+import { mrnRegex, mrnValidator } from 'src/app/common/mrnRegex';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
@@ -57,6 +57,8 @@ export class ItemFormComponent {
 
   @Input() orgMrn: string = '';
 
+  @Input() isVerified = false;
+
   @Output() onCancel: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
@@ -78,6 +80,7 @@ export class ItemFormComponent {
   xmlToBeDeleted: XmlDto | undefined;
   isXmlEditorEnabled = false;
   geometry: any[] = [];
+  isXmlVerified = false;
 
   constructor(private formBuilder: FormBuilder,
     private roleService: RoleControllerService,
@@ -102,6 +105,7 @@ export class ItemFormComponent {
   }
 
   ngOnChanges(simpleChange: any) {
+    console.log(simpleChange);
     if (this.isForNew) {
       this.viewContext = 'edit-new';
       if (this.item && Object.keys(this.item).length === 0) {
@@ -109,7 +113,6 @@ export class ItemFormComponent {
       }
       if (this.itemType === ItemType.Instance) {
         this.formatInstanceItem();
-        this.geometry = [this.item.geometry];
       }
     }
     if (this.itemType !== ItemType.None) {
@@ -138,11 +141,11 @@ export class ItemFormComponent {
 
   formatInstanceItem = () => {
     this.item = preprocessToShow(this.item, this.itemType);
-    if (this.item.geometry && this.geometryMap) {
+    if (this.geometryMap) {
       this.geometryMap.clearMap();
-      this.geometry = [this.item.geometry];
     }
-    if (this.item.instanceAsXml) {
+    this.geometry = [this.item.geometry];
+    if (this.item.instanceAsXml && (!this.item.instanceAsXmlName || this.item.instanceAsXmlName.length === 0)) {
       this.item.instanceAsXmlName = this.item.instanceAsXml.content.replace(/\\n/g, '').replace(/\\r/g, '').replace(/\\"/g, '"');
     }
     this.item = {...this.item, organizationId: this.orgMrn};
@@ -177,7 +180,7 @@ export class ItemFormComponent {
         }
         this.onSubmit.emit(preprocessToUpload(filteredAttributes, this.itemType));
       } else {
-        const updated = appendUpdatedAttributes(this.item, filteredAttributes);
+        const updated = appendUpdatedAttributes(this.item, filteredAttributes, this.columnForMenu);
         let preprocessSuccess = true;
         // the document should be uploaded before submitting
         if (this.item.instanceAsDoc && this.item.instanceAsDocName.length === 0) { // this means there is an update
@@ -294,8 +297,10 @@ export class ItemFormComponent {
         return;
       if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
         return;
-      if ( key === 'mrn' || key === 'instanceId') {
+      if ( key === 'mrn') {
         formElements[key] = ['', [Validators.required, mustIncludePatternValidator( new RegExp(this.mrnPrefix, 'i'))]];
+      } else if ( key === 'instanceId' || key === 'subsidaryMrn') {
+        formElements[key] = ['', [Validators.required, mrnValidator()]];
       } else if (key === 'email') {
         formElements[key] = ['', [Validators.required, Validators.email]];
       } else if (key === 'url') {
@@ -425,4 +430,5 @@ export class ItemFormComponent {
     }
     this.verify.emit(this.itemForm.value['instanceAsXmlName']);
   }
+
 }
