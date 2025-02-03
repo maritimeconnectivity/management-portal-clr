@@ -16,6 +16,7 @@
 
 declare const fetch: Function
 import {environment} from '../environments/environment';
+import { mpVersion } from './common/version';
 
 export class AppConfig {
     static OIDC_BASE_PATH: string;
@@ -59,7 +60,7 @@ export class AppConfig {
         AppConfig.MP_NAME = environment.mpName;
         AppConfig.TERMS_OF_USE = environment.termsOfUse;
         AppConfig.MP_CONTACT = environment.mpContact;
-        AppConfig.MP_VERSION = "test";
+        AppConfig.MP_VERSION = mpVersion;
         AppConfig.FOOTER_NAME = environment.footerName;
         AppConfig.FOOTER_LINK = environment.footerLink;
         AppConfig.LOGO_IMG = environment.logoImg;

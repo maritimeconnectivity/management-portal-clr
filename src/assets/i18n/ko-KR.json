@@ -185,6 +185,10 @@
             "download": "파일이 성공적으로 다운로드되었습니다",
             "delete":" - 성공적으로 삭제되었습니다",
             "upload": "파일이 성공적으로 업로드되었습니다"
+        },
+        "xml": {
+            "verified": "G1128 XML이 성공적으로 검증되었습니다",
+            "update": "G1128 XML이 성공적으로 업데이트되었습니다"
         }
     },
     "warning": {
@@ -202,6 +206,11 @@
             "invalid": "잘못된 입력값이 있습니다",
             "invalidmrn": "MRN 형식이 잘못되었습니다",
             "requiremigrate": "마이그레이션이 필요합니다"
+        },
+        "xml" :{
+            "emptyXml": "입력된 XML이 없습니다",
+            "invalidXml": "G1128 XML 형식에 맞지 않았습니다",
+            "idNotValid": "ID가 기관의 MRN 규칙을 따르지 않습니다"
         },
         "certificate": {
             "issue": "인증서 발급 중 오류가 발생했습니다",

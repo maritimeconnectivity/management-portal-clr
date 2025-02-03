@@ -1,9 +1,9 @@
 export const filterUndefinedAttributes = (entity: {}) => Object.fromEntries(Object.entries(entity).filter(([key, value]) => value !== undefined && typeof value === 'string' ? value!.toString().length > 0 : true))
 
-export const appendUpdatedAttributes = (original: any, updates: any): any => {
+export const appendUpdatedAttributes = (original: any, updates: any, attributes: any): any => {
     const updatedItem = { ...original };
     for (const key in updates) {
-      if (updatedItem.hasOwnProperty(key) && updates[key] !== updatedItem[key]) {
+      if (attributes.hasOwnProperty(key)) {
         updatedItem[key] = updates[key];
       }
     }

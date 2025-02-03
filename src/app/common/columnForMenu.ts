@@ -1002,7 +1002,7 @@ export const ColumnForResource: {[key: string]: object} = {
     },
     instanceAsXmlName: {
       title: 'Instance as XML',
-      type: 'file',
+      type: 'xml',
       visibleFrom: ['edit', 'edit-new'],
     },
     instanceAsDocId: {

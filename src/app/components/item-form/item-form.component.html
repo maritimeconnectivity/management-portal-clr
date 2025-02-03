@@ -6,12 +6,24 @@
       </div>
       <div class="card-block">
         <div class="card-text">
+          @if (itemType === 'instance') {
+            <button class="btn btn-primary" (click)="setXmlEditor()" *ngIf="!isXmlEditorEnabled">
+              @if (isForNew) {
+                Create with G1128 XML
+              } @else {
+                Edit with G1128 XML
+              }
+            </button>
+            <button class="btn btn-warning" type="submit" (click)="setXmlEditor()" *ngIf="isXmlEditorEnabled">
+              Back to instance
+            </button>
+          }
           <form clrForm [formGroup]="itemForm" class="ng-untouched">
             <div
               *ngFor="let menu of columnForMenu | keyvalue : sortColumnForMenu"
             >
               @if (menu.key === 'mrn'){
-                <clr-input-container>
+                <clr-input-container *ngIf="!isXmlEditorEnabled">
                   <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                   <input
                     clrInput
@@ -35,7 +47,7 @@
               } @else if (menu.value.type === 'stringArray'){
                 <!-- array element handling -->
                     @if (menu.value.options) {
-                      <clr-combobox-container>
+                      <clr-combobox-container *ngIf="!isXmlEditorEnabled">
                         <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                         <clr-combobox
                           [formControlName]="menu.key"
@@ -68,7 +80,7 @@
                         }
                       </clr-combobox-container>
                     } @else {
-                      <clr-input-container>
+                      <clr-input-container *ngIf="!isXmlEditorEnabled">
                         <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                         <input
                           clrInput
@@ -81,7 +93,7 @@
                     }
             } @else if (menu.value.options){
               <!-- singular, but with options -->
-              <clr-select-container>
+              <clr-select-container *ngIf="!isXmlEditorEnabled">
                 <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                 <select
                   clrSelect
@@ -106,7 +118,7 @@
                 }
               </clr-select-container>
               } @else if (menu.key === 'permissions'){
-              <clr-select-container>
+              <clr-select-container *ngIf="!isXmlEditorEnabled">
                 <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                 <select
                   clrSelect
@@ -128,7 +140,7 @@
                 }
               </clr-select-container>
               } @else if(menu.value.type === 'file') {
-                <clr-input-container>
+                <clr-input-container *ngIf="!isXmlEditorEnabled">
                   <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                   <input
                     clrInput
@@ -149,7 +161,8 @@
                 </clr-input-container>
                 <!-- show file download and delete buttons when element exists -->
                 @if (item[menu.key.replace('Name', '')]){
-                  <div _ngcontent-ng-c3994056840="" class="clr-row ng-star-inserted"><label _ngcontent-ng-c3994056840="" class="clr-control-label clr-col-12 clr-col-md-2" for="clr-form-control-13"></label>
+                  <div _ngcontent-ng-c3994056840="" class="clr-row ng-star-inserted" *ngIf="!isXmlEditorEnabled">
+                    <label _ngcontent-ng-c3994056840="" class="clr-control-label clr-col-12 clr-col-md-2" for="clr-form-control-13"></label>
                     <div class="clr-col-md-10 clr-col-12" ng-reflect-ng-class="clr-col-md-10 clr-col-12">
                       <clr-button-group class="btn-outline-primary btn-sm">
                         <clr-button (click)="downloadFile(menu.key)">{{
@@ -162,10 +175,29 @@
                     </div>
                   </div>
                 }
-
-                
+              } @else if(menu.value.type === 'xml') {
+                <clr-textarea-container *ngIf="isXmlEditorEnabled">
+                  <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
+                  <textarea
+                    clrTextarea
+                    cols="150"
+                    rows="60"
+                    [formControlName]="menu.key"
+                    [required]="menu.value.required === true"
+                    [style.width.px]="400"
+                    [hidden]="!isXmlEditorEnabled"
+                  ></textarea>
+                  <clr-control-helper>{{
+                    menu.value.description
+                  }}</clr-control-helper>
+                  @if (menu.value.error){
+                  <clr-control-error>{{ menu.value.error }}</clr-control-error>
+                  } @else {
+                  <clr-control-error>Please enter a value</clr-control-error>
+                  }
+                </clr-textarea-container>
               } @else {
-              <clr-input-container>
+              <clr-input-container *ngIf="!isXmlEditorEnabled">
                 <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
                 <input
                   clrInput
@@ -186,7 +218,8 @@
               }
             </div>
                 @if (itemType === 'instance') {
-                  <div _ngcontent-ng-c3994056840="" class="clr-row ng-star-inserted" style="margin-top: 24px;"><label _ngcontent-ng-c3994056840="" class="clr-control-label clr-col-12 clr-col-md-2" for="clr-form-control-13">Service coverage</label>
+                  <div _ngcontent-ng-c3994056840="" class="clr-row ng-star-inserted" style="margin-top: 24px;" *ngIf="!isXmlEditorEnabled">
+                    <label _ngcontent-ng-c3994056840="" class="clr-control-label clr-col-12 clr-col-md-2" for="clr-form-control-13">Service coverage</label>
                     <div class="clr-col-md-10 clr-col-12" ng-reflect-ng-class="clr-col-md-10 clr-col-12">
                       <app-input-geometry #map [geometry]="geometry" [isEditing]="true" [mapContainerHeight]="400" (onGeometryChange)="setGeometryInput($event)"/>
                     </div>
@@ -198,10 +231,16 @@
       </div>
       @if (onSubmitIsGiven){
       <div class="card-footer">
-        <button class="btn btn-primary" type="submit" (click)="submit()">
+        <button class="btn btn-primary" type="submit" (click)="submit()" *ngIf="!isXmlEditorEnabled">
           Submit
         </button>
-        <button class="btn btn-warning" (click)="resetForm()">Reset</button>
+        <button class="btn btn-success" type="submit" (click)="onVerify()" *ngIf="isXmlEditorEnabled">
+          Verify
+        </button>
+        <button class="btn btn-warning" type="submit" (click)="setXmlEditor()" *ngIf="isXmlEditorEnabled">
+          Back to instance
+        </button>
+        <button class="btn btn-warning" (click)="resetForm()" *ngIf="!isXmlEditorEnabled">Reset</button>
         @if (!isForNew){
         <button class="btn btn-danger" (click)="cancel()">Cancel</button>
         }

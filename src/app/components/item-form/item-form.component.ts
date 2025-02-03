@@ -5,7 +5,7 @@ import { ClarityModule, ClrForm, ClrFormsModule } from '@clr/angular';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { appendUpdatedAttributes, filterUndefinedAttributes } from 'src/app/common/filterObject';
 import { ItemType } from 'src/app/common/menuType';
-import { mrnRegex } from 'src/app/common/mrnRegex';
+import { mrnRegex, mrnValidator } from 'src/app/common/mrnRegex';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { CertTableComponent } from '../cert-table/cert-table.component';
 import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
@@ -57,9 +57,13 @@ export class ItemFormComponent {
 
   @Input() orgMrn: string = '';
 
+  @Input() isVerified = false;
+
   @Output() onCancel: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output() verify: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild(ClrForm, { static: true }) clrForm: ClrForm | undefined;
   @ViewChild('map') geometryMap!: InputGeometryComponent;
@@ -74,7 +78,9 @@ export class ItemFormComponent {
   onSubmitIsGiven = true;
   docToBeDeleted: DocDto | undefined;
   xmlToBeDeleted: XmlDto | undefined;
+  isXmlEditorEnabled = false;
   geometry: any[] = [];
+  isXmlVerified = false;
 
   constructor(private formBuilder: FormBuilder,
     private roleService: RoleControllerService,
@@ -101,17 +107,18 @@ export class ItemFormComponent {
   ngOnChanges(simpleChange: any) {
     if (this.isForNew) {
       this.viewContext = 'edit-new';
-      this.initializeItem();
+      if (this.item && Object.keys(this.item).length === 0) {
+        this.initializeItem();
+      }
+      if (this.itemType === ItemType.Instance) {
+        this.formatInstanceItem();
+      }
     }
     if (this.itemType !== ItemType.None) {
       this.setForm();
       if (Object.keys(this.item).length !== 0) {
         if (this.itemType === ItemType.Instance) {
-          this.item = preprocessToShow(this.item, this.itemType);
-          if (this.item.geometry && this.geometryMap) {
-            this.geometryMap.clearMap();
-            this.geometry = [this.item.geometry];
-          }
+          this.formatInstanceItem();
         }
         this.itemForm.patchValue(this.item);
       }
@@ -129,6 +136,18 @@ export class ItemFormComponent {
     } else {
       this.onSubmitIsGiven = false;
     }
+  }
+
+  formatInstanceItem = () => {
+    this.item = preprocessToShow(this.item, this.itemType);
+    if (this.geometryMap) {
+      this.geometryMap.clearMap();
+    }
+    this.geometry = [this.item.geometry];
+    if (this.item.instanceAsXml && (!this.item.instanceAsXmlName || this.item.instanceAsXmlName.length === 0)) {
+      this.item.instanceAsXmlName = this.item.instanceAsXml.content.replace(/\\n/g, '').replace(/\\r/g, '').replace(/\\"/g, '"');
+    }
+    this.item = {...this.item, organizationId: this.orgMrn};
   }
 
   initializeItem = () => {
@@ -160,7 +179,7 @@ export class ItemFormComponent {
         }
         this.onSubmit.emit(preprocessToUpload(filteredAttributes, this.itemType));
       } else {
-        const updated = appendUpdatedAttributes(this.item, filteredAttributes);
+        const updated = appendUpdatedAttributes(this.item, filteredAttributes, this.columnForMenu);
         let preprocessSuccess = true;
         // the document should be uploaded before submitting
         if (this.item.instanceAsDoc && this.item.instanceAsDocName.length === 0) { // this means there is an update
@@ -249,13 +268,14 @@ export class ItemFormComponent {
     this.onCancel.emit();
   }
 
-  onMrnKeyDown(event: Event) {
-    const newValue = (event.target as HTMLInputElement).value;
+  onMrnKeyDown(event: KeyboardEvent) {
+    const newValue = (event.target as HTMLInputElement).value + event.key;
     if (newValue.includes(this.mrnPrefix)) {
       this.item['mrn'] = newValue;
     } else {
       (event.target as HTMLInputElement).value = this.mrnPrefix;
     }
+    this.itemForm.patchValue(this.item);
   }
 
   onMrnChange(value: string) {
@@ -276,9 +296,10 @@ export class ItemFormComponent {
         return;
       if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
         return;
-      if ( key === 'mrn' || key === 'instanceId') {
-        const mrnReg: RegExp = new RegExp(mrnRegex());
+      if ( key === 'mrn') {
         formElements[key] = ['', [Validators.required, mustIncludePatternValidator( new RegExp(this.mrnPrefix, 'i'))]];
+      } else if ( key === 'instanceId' || key === 'subsidaryMrn') {
+        formElements[key] = ['', [Validators.required, mrnValidator()]];
       } else if (key === 'email') {
         formElements[key] = ['', [Validators.required, Validators.email]];
       } else if (key === 'url') {
@@ -396,4 +417,17 @@ export class ItemFormComponent {
       this.item.geometry = geometry.data.geometries[0];
     }
   }
+
+  setXmlEditor = () => {
+    this.isXmlEditorEnabled = !this.isXmlEditorEnabled;
+  }
+  
+  onVerify = () => {
+    if (!this.itemForm.value['instanceAsXmlName'] || this.itemForm.value['instanceAsXmlName'].length === 0) {
+      this.notifierService.notify('error', this.translate.instant('error.form.emptyXml'));
+      return;
+    }
+    this.verify.emit(this.itemForm.value['instanceAsXmlName']);
+  }
+
 }

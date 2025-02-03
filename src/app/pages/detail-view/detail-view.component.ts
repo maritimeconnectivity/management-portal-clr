@@ -1,13 +1,16 @@
 import { NgIf } from '@angular/common';
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ClarityModule } from '@clr/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { wktToGeoJSON } from '@terraformer/wkt';
 import { NotifierService } from 'gramli-angular-notifier';
 import { catchError, firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
+import { InstanceDto, XmlDto } from 'src/app/backend-api/service-registry';
 import { ItemType } from 'src/app/common/menuType';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
+import { mustIncludePatternValidator } from 'src/app/common/mustIncludeValidator';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { loadLang } from 'src/app/common/translateHelper';
 import { ComponentsModule } from 'src/app/components/components.module';
@@ -18,7 +21,7 @@ import { ComponentsModule } from 'src/app/components/components.module';
   imports: [
     NgIf,
     ComponentsModule,
-    ClarityModule
+    ClarityModule,
   ],
   templateUrl: './detail-view.component.html',
   styleUrl: './detail-view.component.css'
@@ -38,6 +41,7 @@ export class DetailViewComponent {
   hasAdminPermission = false;
   serial = '';
   apiBase = 'ir';
+  isVerified = false;
   private readonly notifier: NotifierService;
 
   constructor(private route: ActivatedRoute,
@@ -137,44 +141,72 @@ export class DetailViewComponent {
     this.submitDataToBackend(item, this.id);
   }
 
+  callCreate = (body: object) => {
+    this.itemManagerService.registerData(this.itemType, body, this.orgMrn).subscribe(
+      res => {
+        this.notifier.notify('success', this.translate.instant('success.resource.create'));
+        this.isLoading = false;
+        this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
+      },
+      err => {
+        this.notifierService.notify('error',
+          this.translate.instant('error.resource.creationFailed') + err.error.message);
+        this.isLoading = false;
+      },
+      () => this.isLoading = false
+    );
+  }
+
+  callUpdate = (body:object, id: string) => {
+    this.itemManagerService.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).subscribe(
+      async res => {
+        this.notifier.notify('success', this.translate.instant('success.resource.update'));
+        this.isLoading = false;
+        // if version is different, redirect to the new version
+        if (this.itemType === ItemType.Instance && this.instanceVersion !== res.version) {
+          this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
+        } else {
+          this.loadItem(this.orgMrn);
+        }        
+        this.isEditing = false;
+      },
+      err => {
+        this.notifierService.notify('error',
+          this.translate.instant('error.resource.updateFailed') + err.error.message);
+        this.isLoading = false;
+      }
+    );
+  }
+
   submitDataToBackend(body: object, id?: string) {
     this.isLoading = true;
+    // when creating a new instance with verified xml
+    if (this.itemType === ItemType.Instance && this.isVerified && this.item.instanceAsXmlName) {
+      // if the xml is not already saved as an xmlDto
+      if (!this.item.instanceAsXml) {
+        const xmlDto: XmlDto = {
+          name: this.item.name,
+          content: this.item.instanceAsXmlName,
+          contentContentType: 'application/xml'
+        };
+        (body as InstanceDto).instanceAsXml = xmlDto;
+      } else {
+        // here you need to update the xml first
+        this.item.instanceAsXml.content = this.item.instanceAsXmlName;
+        this.itemManagerService.updateXml(this.item.instanceAsXml, this.item.instanceAsXml.id).subscribe(
+          res => {
+            this.notifier.notify('success', this.translate.instant('success.xml.update'));
+          },
+          err => {
+            this.notifier.notify('error', this.translate.instant('error.xml.update') + err.error.message);
+          });
+      }
+      
+    }
     if (id === "new") {
-      this.itemManagerService.registerData(this.itemType, body, this.orgMrn).pipe(
-        catchError(err => {
-          return throwError(err);
-        })
-      ).subscribe(
-        res => {
-          this.notifier.notify('success', this.translate.instant('success.resource.create'));
-          this.isLoading = false;
-          this.router.navigateByUrl('/pages/' + this.apiBase + '/' + this.itemType);
-        },
-        err => {
-          this.notifierService.notify('error',
-            this.translate.instant('error.resource.creationFailed') + err.error.message);
-          this.isLoading = false;
-        },
-        () => this.isLoading = false
-      );
+      this.callCreate(body);
     } else if (id) {
-      this.itemManagerService.updateData(this.itemType, body, this.orgMrn, id, this.instanceVersion, this.numberId).pipe(
-        catchError(err => {
-          return throwError(err);
-        })
-      ).subscribe(
-        res => {
-          this.notifier.notify('success', 'success.resource.update');
-          this.isLoading = false;
-          this.loadItem(this.orgMrn);
-          this.isEditing = false;
-        },
-        err => {
-          this.notifierService.notify('error',
-            this.translate.instant('error.resource.updateFailed') + err.error.message);
-          this.isLoading = false;
-        }
-      );
+      this.callUpdate(body, id);
     }
   }
 
@@ -229,5 +261,43 @@ export class DetailViewComponent {
           this.translate.instant('error.resource.deletionFailed') + err.error.message);
       }
     );
+  }
+
+  onVerify = (xmlString: string) => {
+    this.itemManagerService.verifyG1128Xml(xmlString).subscribe({
+      next: (res: any) => {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+        const geometryAsWKT = xmlDoc.getElementsByTagName("geometryAsWKT")[0]?.textContent || '';
+        this.notifier.notify('success', this.translate.instant('success.xml.verified'));
+        this.item = {...this.item,
+          name: res.name,
+          version: res.version,
+          serviceType: res.serviceType,
+          status: res.status,
+          endpointUri: res.endpoint,
+          keywords: res.keywords,
+          instanceId: res.id,
+          implementsServiceDesign: res.implementsServiceDesign.id,
+          implementsServiceDesignVersion: res.implementsServiceDesign.version,
+          comment: res.description,
+          instanceAsXmlName: xmlString,
+          geometry: wktToGeoJSON(geometryAsWKT),
+        };
+        
+        if (!new RegExp(this.mrnPrefix, 'i').test(res.id)) {
+          this.notifier.notify('warning', this.translate.instant('error.xml.idNotValid') + " : " + res.id);
+        }
+        
+        this.isVerified = true;
+      },
+      error: err => {
+        if (err.status === 400) {
+          this.notifier.notify('error', this.translate.instant('error.xml.invalidXml'));
+        } else {
+          this.notifier.notify('error', err.message);
+        }
+      }
+    });
   }
 }

@@ -1,4 +1,5 @@
 import { ColumnForResource } from "./columnForMenu";
+import { formatVesselToUpload } from "./dataformatter";
 import { migrateVesselAttributes } from "./filterObject";
 import { ItemType } from "./menuType";
 
@@ -60,12 +61,25 @@ export const preprocess = (item: any, itemType: ItemType): any => {
 }
 
 export const preprocessToUpload = (item: any, itemType: ItemType): any => {
-    if (itemType === ItemType.Instance) {
-        return {...item, 
-            instanceAsDoc: typeof item.instanceAsDoc === 'string' ? null: item.instanceAsDoc,
-            instanceAsXml: typeof item.instanceAsXml === 'string' ? null: item.instanceAsXml,
+    if (itemType === ItemType.Vessel) {
+        return formatVesselToUpload(item);
+    } else if (itemType === ItemType.Instance) {
+        return {
+            ...item,
+            dataProductType: item["dataProductType"] && Array.isArray(item["dataProductType"]) 
+            ? item["dataProductType"].map((d: any) => d.value).filter((d: any) => d !== undefined) 
+            : [],
+            serviceType: item["serviceType"] && Array.isArray(item["serviceType"]) 
+            ? item["serviceType"].map((d: any) => d.value).filter((d: any) => d !== undefined) 
+            : [],
+            instanceAsDoc: typeof item.instanceAsDoc === 'string' ? null : item.instanceAsDoc,
+            instanceAsXml: typeof item.instanceAsXml === 'string' ? null : item.instanceAsXml,
             comment: item.comment ? item.comment : '',
-            keywords: typeof item.keywords === 'string' ? item.keywords.length > 0 ? item.keywords.split(",") : [] : item.keywords,
+            keywords: typeof item.keywords === 'string' 
+            ? item.keywords.length > 0 
+                ? item.keywords.split(",") 
+                : [] 
+            : item.keywords,
         }
     }
     return item;
@@ -74,7 +88,9 @@ export const preprocessToUpload = (item: any, itemType: ItemType): any => {
 export const preprocessToShow = (item: any, itemType: ItemType): any => {
     if (itemType === ItemType.Instance) {
         item.instanceAsDocName = item.instanceAsDoc ? '' : undefined;
-        item.instanceAsXmlName = item.instanceAsXml ? '' : undefined;
+        if (!item.instanceAsXmlName || item.instanceAsXmlName.length === 0) {
+            item.instanceAsXmlName = item.instanceAsXml ? '' : undefined;
+        }        
     }
     return item;
 }

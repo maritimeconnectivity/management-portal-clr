@@ -190,6 +190,10 @@
             "delete": "File has been successfully deleted",
             "download": "File has been successfully downloaded",
             "upload": "File has been successfully uploaded"
+        },
+        "xml": {
+            "verified": "G1128 XML has been successfully verified",
+            "update": "G1128 XML has been successfully updated"
         }
     },
     "warning": {
@@ -207,6 +211,11 @@
             "invalid": "Please fill in all required fields",
             "invalidmrn": "Please enter a valid MRN",
             "requiremigrate" :"You need to migrate the service first"
+        },
+        "xml" :{
+            "emptyXml": "The XML form is empty",
+            "invalidXml": "The XML format is invalid according to G1128",
+            "idNotValid": "The ID is not valid according to organization's MRN rule"
         },
         "certificate": {
             "revoke": "There was an error in revoking the certificate"
