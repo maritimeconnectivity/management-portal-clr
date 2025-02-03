@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { ItemType } from '../menuType';
 import { firstValueFrom, Observable } from 'rxjs';
 import { Device, DeviceControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, ServicePatch, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
-import { preprocess } from '../itemPreprocessor';
-import { InstanceControllerService, InstanceDto, XmlControllerService } from 'src/app/backend-api/service-registry';
-import { postprocess } from '../itemPostprocessor';
+import { preprocess, preprocessToUpload } from '../itemPreprocessor';
+import { InstanceControllerService, InstanceDto, XmlControllerService, XmlDto } from 'src/app/backend-api/service-registry';
 import { FetchedItems } from '../fetchedItems';
 import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
 
@@ -103,7 +102,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Device) {
       return this.deviceService.createDevice(body as Device, orgMrn);
     } else if (itemType === ItemType.Vessel) {
-      return this.vesselService.createVessel(postprocess(body, itemType) as Vessel, orgMrn);
+      return this.vesselService.createVessel(preprocessToUpload(body, itemType) as Vessel, orgMrn);
     } else if (itemType === ItemType.Service) {
       return this.serviceService.createService(body as Service, orgMrn);
     } else if (itemType === ItemType.Organization) {
@@ -111,7 +110,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role) {
       return this.roleService.createRole(body as Role, orgMrn);
     } else if (itemType === ItemType.Instance) {
-      return this.instanceService.createInstance(postprocess(body, itemType) as InstanceDto);
+      return this.instanceService.createInstance(preprocessToUpload(body, itemType) as InstanceDto);
     }
     return new Observable();
   }
@@ -122,7 +121,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Device) {
       return this.deviceService.updateDevice(body as Device, orgMrn, entityMrn);
     } else if (itemType === ItemType.Vessel) {
-      return this.vesselService.updateVessel(postprocess(body, itemType) as Vessel, orgMrn, entityMrn);
+      return this.vesselService.updateVessel(preprocessToUpload(body, itemType) as Vessel, orgMrn, entityMrn);
     } else if (itemType === ItemType.Service) {
       if (version) {
         return this.serviceService.updateService(body as Service, orgMrn, entityMrn, version);
@@ -134,7 +133,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role && numberId) {
       return this.roleService.updateRole(body as Role, orgMrn, numberId);
     } else if (itemType === ItemType.Instance && numberId) {
-      return this.instanceService.updateInstance(Object.assign({}, postprocess(body, itemType), { id: numberId }) as InstanceDto, numberId);
+      return this.instanceService.updateInstance(Object.assign({}, preprocessToUpload(body, itemType), { id: numberId }) as InstanceDto, numberId);
     }
     return new Observable();
   }
@@ -180,5 +179,13 @@ export class ItemManagerService {
 
   verifyG1128Xml = (xml: string) => {
     return this.xmlService.validateXmlWithG1128Schema(xml, 'INSTANCE');
+  }
+
+  createXml = (xmlDto: XmlDto) => {
+    return this.xmlService.createXml(xmlDto);
+  }
+
+  updateXml = (xmlDto: XmlDto, id: number) => {
+    return this.xmlService.updateXml(xmlDto, id);
   }
 }
