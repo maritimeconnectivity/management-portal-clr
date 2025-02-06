@@ -269,7 +269,7 @@ export class ItemFormComponent {
   }
 
   onMrnKeyDown(event: KeyboardEvent) {
-    const newValue = (event.target as HTMLInputElement).value + event.key;
+    const newValue = (event.target as HTMLInputElement).value;
     if (newValue.includes(this.mrnPrefix)) {
       this.item['mrn'] = newValue;
     } else {
