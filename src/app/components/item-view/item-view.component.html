@@ -50,6 +50,14 @@
                 <div class="card-footer">
                     @if (itemType === 'service' && instanceVersion) {
                         <button class="btn btn-primary" (click)="clickMigrateBtn()">Migrate</button>
+                        <clr-signpost>
+                            <clr-signpost-content clrPosition="top-right" *clrIfOpen>
+                              <h3>If you are using chrome browser for migration</h3>
+                              <p>
+                                We recommend you to use an incognito window to avoid CORS issues.
+                              </p>
+                            </clr-signpost-content>
+                          </clr-signpost>
                     } @else if(itemType === 'orgcandidate') {
                         <button class="btn btn-success" (click)="approve()">Approve</button>
                     } @else {

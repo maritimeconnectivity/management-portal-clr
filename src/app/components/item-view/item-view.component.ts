@@ -5,7 +5,7 @@ import { FormsModule, Validators } from '@angular/forms';
 import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
 import { formatDate, JsonPipe } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
-import { ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule, ClrSpinnerModule, ClrTextareaModule } from '@clr/angular';
+import { ClarityModule, ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule, ClrSpinnerModule, ClrTextareaModule } from '@clr/angular';
 import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
 import { CertificateService } from 'src/app/common/shared/certificate.service';
 import { AuthService } from 'src/app/auth/auth.service';
@@ -28,6 +28,7 @@ import { preprocessToShow } from 'src/app/common/itemPreprocessor';
   standalone: true,
   imports: [
     SharedModule,
+    ClarityModule,
     ClrModalModule,
     ClrRadioModule,
     ClrSpinnerModule,
