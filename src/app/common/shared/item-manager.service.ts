@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { ItemType } from '../menuType';
 import { firstValueFrom, Observable } from 'rxjs';
 import { Device, DeviceControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, ServicePatch, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
-import { preprocess, preprocessToUpload } from '../itemPreprocessor';
+import { preprocess } from '../itemPreprocessor';
 import { InstanceControllerService, InstanceDto, XmlControllerService, XmlDto } from 'src/app/backend-api/service-registry';
 import { FetchedItems } from '../fetchedItems';
-import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
+import { SearchObjectResult, SECOMService } from 'src/app/backend-api/secom';
 
 @Injectable({
   providedIn: 'root'
@@ -102,7 +102,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Device) {
       return this.deviceService.createDevice(body as Device, orgMrn);
     } else if (itemType === ItemType.Vessel) {
-      return this.vesselService.createVessel(preprocessToUpload(body, itemType) as Vessel, orgMrn);
+      return this.vesselService.createVessel(body as Vessel, orgMrn);
     } else if (itemType === ItemType.Service) {
       return this.serviceService.createService(body as Service, orgMrn);
     } else if (itemType === ItemType.Organization) {
@@ -110,7 +110,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role) {
       return this.roleService.createRole(body as Role, orgMrn);
     } else if (itemType === ItemType.Instance) {
-      return this.instanceService.createInstance(preprocessToUpload(body, itemType) as InstanceDto);
+      return this.instanceService.createInstance(body as InstanceDto);
     }
     return new Observable();
   }
@@ -121,7 +121,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Device) {
       return this.deviceService.updateDevice(body as Device, orgMrn, entityMrn);
     } else if (itemType === ItemType.Vessel) {
-      return this.vesselService.updateVessel(preprocessToUpload(body, itemType) as Vessel, orgMrn, entityMrn);
+      return this.vesselService.updateVessel(body as Vessel, orgMrn, entityMrn);
     } else if (itemType === ItemType.Service) {
       if (version) {
         return this.serviceService.updateService(body as Service, orgMrn, entityMrn, version);
@@ -133,7 +133,7 @@ export class ItemManagerService {
     } else if (itemType === ItemType.Role && numberId) {
       return this.roleService.updateRole(body as Role, orgMrn, numberId);
     } else if (itemType === ItemType.Instance && numberId) {
-      return this.instanceService.updateInstance(Object.assign({}, preprocessToUpload(body, itemType), { id: numberId }) as InstanceDto, numberId);
+      return this.instanceService.updateInstance(Object.assign({}, body, { id: numberId }) as InstanceDto, numberId);
     }
     return new Observable();
   }
