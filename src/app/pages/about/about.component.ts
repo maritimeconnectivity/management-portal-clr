@@ -45,51 +45,37 @@ export class AboutComponent {
   constructor(private http: HttpClient) {
     this.fetchVersionFromSwaggerFile(AppConfig.IR_BASE_PATH + '/v3/api-docs').then(version => {
       this.irVersion = version;
+      this.updateVersion('Identity Registry', version);
     });
     if (!this.hasServiceRegistry) {
       this.components = this.components.filter(c => c.name !== 'Service Registry');
     } else {
       this.fetchVersionFromSwaggerFile(AppConfig.SR_BASE_PATH + '/v3/api-docs').then(version => {
         this.srVersion = version;
-        this.updateSrVersion();
+        this.updateVersion('Service Registry', version);
       });
     }
   }
 
-  updateSrVersion() {
-    this.components = this.components.map(c => {
-      if (c.name === 'Service Registry') {
-        c.version = this.srVersion;
-      }
-      return c;
-    });
-  }  
-
-  async fetchVersionFromSwaggerFile(url: string): Promise<string> {
-
-  let headers = this.defaultHeaders;
-
-  // to determine the Accept header
-  let httpHeaderAccepts: string[] = [
-      '*/*'
-  ];
-  const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-  if (httpHeaderAcceptSelected != undefined) {
-      headers = headers.set('Accept', httpHeaderAcceptSelected);
+  updateVersion(attrName: string, version: string) {
+    this.components = this.components.map(c => 
+      c.name === attrName ? { ...c, version: version } : c);
   }
 
-  return new Promise<string>((resolve, reject) => {
-    this.http.request<any>('get', url,
-      {
-        withCredentials: this.configuration.withCredentials,
-        headers: headers,
-      }
-    ).subscribe((res: any) => {
-      resolve(res.info.version ? res.info.version : 'Unknown');
-    }, (error: any) => {
-      reject('Unknown');
+  async fetchVersionFromSwaggerFile(url: string): Promise<string> {
+    const headers = this.defaultHeaders.set('Accept', '*/*');
+    return new Promise<string>((resolve, reject) => {
+      this.http.request<any>('get', url,
+        {
+          withCredentials: false,
+          headers: headers,
+        }
+      ).subscribe((res: any) => {
+        resolve(res.info.version ? res.info.version : 'Unknown');
+      }, (error: any) => {
+        reject('Unknown');
+      });
     });
-  });
   }
 
 }
