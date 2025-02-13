@@ -55,7 +55,7 @@ export class SrMapSearchComponent {
   searchParams: SearchParameters = {};
   queryString = '';
   freetext = '';
-  orgMrn: string = "";
+  orgMrn = "";
   instances: SearchObjectResult[] = [];
   itemType = ItemType.SearchObjectResult;
   showTables = true;
@@ -69,8 +69,6 @@ export class SrMapSearchComponent {
 
   constructor(
     private router: Router,
-    private secomSearchController: SECOMService,
-    private instanceControllerService: InstanceControllerService,
     private itemManagerService: ItemManagerService,
     private notifier: NotifierService,
     private translate: TranslateService,
@@ -89,6 +87,7 @@ export class SrMapSearchComponent {
     // currently handling only one geometry
     this.queryGeometry = event['data']['geometries'][0];
     this.queryInput.addGeoItem();
+
     this.search(this.freetext, this.searchParams);
   }
 
@@ -171,11 +170,14 @@ export class SrMapSearchComponent {
     }
   }
 
-  showInstanceInfo = (event: InstanceInfo) => {
+  showInstanceInfo = (event: InstanceInfo[]) => {
+    this.showPanel = true;
+    this.allInstances = [];
+    /*
     this.itemManagerService.fetchSingleData(this.instanceType, "", event.instanceId, event.version).then((instance) => {
       this.selectedInstance = instance;
-      this.showPanel = true;
     });
+    */
   }
 
   onEdit(event: any): void {

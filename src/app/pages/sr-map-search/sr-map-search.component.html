@@ -2,7 +2,7 @@
     <app-input-geometry #map [fullscreen]="true" [isEditing]="true"
       (onGeometryChange)="onUpdateGeometry($event)" [isForSearch]="true"
       [geometry]="geometries" [geometryBacklink]="geometryBacklink"
-      (onShowBacklink)="showInstanceInfo($event)"
+      (select)="showInstanceInfo($event)"
       (onClear)="onClearQueryGeometry()" />
     <div class="overlay">
       <app-svc-search-input #queryInput [orgMrn]="orgMrn" (onSearch)="onSearch($event)" (onClearAll)="onClearAll()" />

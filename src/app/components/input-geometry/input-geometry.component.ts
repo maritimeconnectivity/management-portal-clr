@@ -40,7 +40,7 @@ export class InputGeometryComponent {
   @Input() isForSearch: boolean = false;
   @Input() mapContainerHeight: number = 200;
   @Output() onGeometryChange = new EventEmitter<any>();
-  @Output() onShowBacklink = new EventEmitter<InstanceInfo>();
+  @Output() select = new EventEmitter<InstanceInfo[]>();
   @Output() onClear = new EventEmitter<any>();
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
@@ -142,7 +142,8 @@ export class InputGeometryComponent {
       }
       const geomLayer = L.geoJSON(geometry);
       geomLayer.on('click', (e: any) => {
-        this.onShowBacklink.emit(this.geometryBacklink[i]);
+        console.log(e);
+        this.select.emit([this.geometryBacklink[i]]);
       });
       this.responseFeatureGroup.addLayer(geomLayer);
       //*
