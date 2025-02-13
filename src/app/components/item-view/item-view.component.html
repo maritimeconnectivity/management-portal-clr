@@ -61,7 +61,7 @@
                     } @else if(itemType === 'orgcandidate') {
                         <button class="btn btn-success" (click)="approve()">Approve</button>
                     } @else {
-                        <button class="btn btn-primary" (click)="edit()">Edit</button>
+                        <button class="btn btn-primary" (click)="onEdit()">Edit</button>
                     }
                     <button class="btn btn-danger" (click)="deleteItem()">Delete</button>
                 </div>
@@ -163,12 +163,12 @@
     <div class="modal-title">
             <button aria-label="Close" class="close" type="button" (click)="cancel()">
             </button>
-            Migrate service
+            {{'ir.migrate.title' | translate}}
         </div>
         <div class="modal-body">
             <div class="clr-col-sm-12 clr-col-md-12">
                 <div class="clr-row">
-                    <span>This migration allows you to remove the version from an existing service's MRN by assigning a new MRN that includes the version. It simplifies version management and future updates, making it easier for users to maintain and update services. The MRN below is given as an example, but you can edit it as you want.</span>
+                    <span>{{'ir.migrate.info' | translate}}</span>
                 </div>
                 <div class="clr-row">
                     <form class="clr-form">

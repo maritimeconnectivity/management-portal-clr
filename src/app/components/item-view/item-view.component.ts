@@ -1,9 +1,24 @@
+/*
+ * Copyright (c) 2025 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild } from '@angular/core';
-import { ItemType, itemTypeToString, timestampKeys } from 'src/app/common/menuType';
+import { ItemType, itemTypeToString } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
-import { FormsModule, Validators } from '@angular/forms';
-import { sortColumnForMenu } from 'src/app/common/sortMenuOrder';
-import { formatDate, JsonPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { formatDate } from '@angular/common';
 import { SharedModule } from 'src/app/common/shared/shared.module';
 import { ClarityModule, ClrDatepickerModule, ClrModal, ClrModalModule, ClrRadioModule, ClrSpinnerModule, ClrTextareaModule } from '@clr/angular';
 import { issueNewWithLocalKeys } from 'src/app/common/certificateUtil';
@@ -13,7 +28,7 @@ import { CertificateBundle } from 'src/app/common/certificateBundle';
 import { NotifierService } from 'gramli-angular-notifier';
 import { TranslateService } from '@ngx-translate/core';
 import { FileHelperService } from 'src/app/common/shared/file-helper.service';
-import { CertificateRevocation, Role } from 'src/app/backend-api/identity-registry';
+import { CertificateRevocation } from 'src/app/backend-api/identity-registry';
 import { getReasonOptionFromRevocationReason, ReasonOption } from 'src/app/common/certRevokeInfo';
 import { migrateVesselAttributes } from 'src/app/common/filterObject';
 import { ItemFormComponent } from '../item-form/item-form.component';
@@ -45,14 +60,14 @@ import { preprocessToShow } from 'src/app/common/itemPreprocessor';
 export class ItemViewComponent {
   @Input() itemType: ItemType = ItemType.None;
   @Input() item: any = {};
-  @Input() orgMrn: string = '';
-  @Input() mrnPrefix: string = 'urn:mrn:';
+  @Input() orgMrn = '';
+  @Input() mrnPrefix = 'urn:mrn:';
   @Input() instanceVersion: string | undefined = undefined;
   @Input() serial: string | undefined = undefined;
-  @Input() isLoading: boolean = true;
-  @Input() viewOnly: boolean = false;
-  @Input() noMap: boolean = false;
-  @Output() onEdit: EventEmitter<any> = new EventEmitter<any>();
+  @Input() isLoading = true;
+  @Input() viewOnly = false;
+  @Input() noMap = false;
+  @Output() edit: EventEmitter<any> = new EventEmitter<any>();
   @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
   @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
   @Output() onRefresh: EventEmitter<any> = new EventEmitter<any>();
@@ -170,8 +185,8 @@ export class ItemViewComponent {
     return revokedCerts.map((cert) => ({ ...cert, revokeReason: this.revokeReasons.filter((reason) => reason.value === cert.revokeReason)[0].title }));
   }
 
-  edit = () => {
-    this.onEdit.emit(this.item);
+  onEdit = () => {
+    this.edit.emit(this.item);
   }
 
   migrate = () => {

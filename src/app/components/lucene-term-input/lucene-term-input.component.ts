@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2025 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { CommonModule } from '@angular/common';
 import { Component, ComponentFactoryResolver, EventEmitter, Input, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -22,16 +38,16 @@ const shortid = require('shortid');
 })
 export class LuceneTermInputComponent implements LuceneComponent {
   group: LuceneComponentItem[] = [];
-  selectedItem: string = '';
-  showSelect: boolean = false;
+  selectedItem = '';
+  showSelect = false;
 
-  @Input() id: string = '';
+  @Input() id = '';
   @Input() data: { id: string, [key: string]: any } = { id: ''};
   @Input() fieldInfo: QueryFieldInfo[] = [];
-  @Output() onUpdate = new EventEmitter<any>();
-  @Output() onDelete = new EventEmitter<any>();
-  @Output() onAdd = new EventEmitter<any>();
-  @Output() onExtend = new EventEmitter<any>();
+  @Output() update = new EventEmitter<any>();
+  @Output() delete = new EventEmitter<any>();
+  @Output() add = new EventEmitter<any>();
+  @Output() extend = new EventEmitter<any>();
 
   @ViewChild('luceneComponentHost', { read: ViewContainerRef, static: true }) luceneComponentHost!: ViewContainerRef;
 
@@ -53,31 +69,31 @@ export class LuceneTermInputComponent implements LuceneComponent {
       if (componentRef.instance instanceof LuceneSingleQueryInputComponent) {
         (componentRef.instance as LuceneSingleQueryInputComponent).requireExtendBtn = false;
       }
-      componentRef.instance.onUpdate.subscribe(value => this.onEditQuery(value.id, value.data));
-      componentRef.instance.onDelete.subscribe(id => this.onDeleteById(id));
-      componentRef.instance.onExtend?.subscribe(id => this.onExtendById(id));
+      componentRef.instance.update.subscribe(value => this.onEditQuery(value.id, value.data));
+      componentRef.instance.delete.subscribe(id => this.onDeleteById(id));
+      componentRef.instance.extend?.subscribe(id => this.onExtendById(id));
     });
   }
 
-  delete(): void {
+  onDelete(): void {
     this.onDeleteById(this.id);
   }
 
   onDeleteById(id: string): void {
-    this.onDelete.emit(id);
+    this.delete.emit(id);
   }
 
   onEditQuery(id: string, data: any): void {
-    this.onUpdate.emit({id: id, data: data});
+    this.update.emit({id: id, data: data});
   }
 
   onExtendById(id: string): void {
-    this.onExtend.emit(id);
+    this.extend.emit(id);
   }
 
   addLuceneItem(event: any): void {
     this.selectedItem = event.target.value;
-    this.onAdd.emit({groupId: this.id, key: this.selectedItem});
+    this.add.emit({groupId: this.id, key: this.selectedItem});
     this.showSelect = false;
   }
 }

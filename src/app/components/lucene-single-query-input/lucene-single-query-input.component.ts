@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2025 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -39,9 +55,9 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   @Input() id: string = '';
   @Input() data: { id: string, [key: string]: any } = { id: ''};
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
-  @Output() onUpdate = new EventEmitter<any>();
-  @Output() onDelete = new EventEmitter<any>();
-  @Output() onExtend = new EventEmitter<any>();
+  @Output() update = new EventEmitter<any>();
+  @Output() delete = new EventEmitter<any>();
+  @Output() extend = new EventEmitter<any>();
 
   constructor() {
     this.options = this.fieldInfo?.map(e => e.name);
@@ -89,7 +105,7 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
     if (this.field) {
       this.data = {id: this.id, [this.field]: value};
       this.fieldValue = value;
-      this.onUpdate.emit({id: this.id, data: this.data});
+      this.update.emit({id: this.id, data: this.data});
     }
   }
 
@@ -98,14 +114,14 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
     this.field = value;
     this.valueEditable = true;
     this.data = {id: this.id, [this.field]: this.fieldValue};
-    this.onUpdate.emit({id: this.id, data: this.data});
+    this.update.emit({id: this.id, data: this.data});
   }
 
-  delete(): void {
-    this.onDelete.emit(this.id);
+  onDelete(): void {
+    this.delete.emit(this.id);
   }
 
   createExpressionWithBrackets(): void {
-    this.onExtend.emit(this.id);
+    this.extend.emit(this.id);
   }
 }

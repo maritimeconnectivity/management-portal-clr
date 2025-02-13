@@ -1,10 +1,28 @@
+/*
+ * Copyright (c) 2025 Maritime Connectivity Platform Consortium
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Component, ElementRef, EventEmitter, Input, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { LeafletDrawModule } from '@bluehalo/ngx-leaflet-draw';
 import * as L from 'leaflet';
-import { circle, circleMarker, featureGroup, FeatureGroup, latLng, latLngBounds, polygon, rectangle, tileLayer, DrawEvents } from 'leaflet';
+import { featureGroup, FeatureGroup, latLngBounds, tileLayer, DrawEvents } from 'leaflet';
 import { getGeometryCollectionFromMap } from 'src/app/common/mapToGeometry';
 import { InstanceInfo } from 'src/app/common/menuType';
+import * as turf from '@turf/turf';
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon';
 
 @Component({
   selector: 'app-input-geometry',
@@ -24,11 +42,12 @@ export class InputGeometryComponent {
   @Input() isForSearch: boolean = false;
   @Input() mapContainerHeight: number = 200;
   @Output() onGeometryChange = new EventEmitter<any>();
-  @Output() onShowBacklink = new EventEmitter<InstanceInfo>();
+  @Output() select = new EventEmitter<InstanceInfo[]>();
   @Output() onClear = new EventEmitter<any>();
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
   mapContainerHeightOffset = 120;
+  polygons: any[] = [];
 
   options = {
     layers: [
@@ -113,6 +132,11 @@ export class InputGeometryComponent {
       this.responseFeatureGroup = new L.FeatureGroup();
     }
 
+    this.geometry.forEach( (g: any) =>
+    {
+      this.polygons.push(g);
+    });
+
     this.geometry.forEach( (geometry: any, i: number) =>
     {
       if (!geometry || !geometry.coordinates || geometry.coordinates.length === 0) {
@@ -125,8 +149,19 @@ export class InputGeometryComponent {
         }
       }
       const geomLayer = L.geoJSON(geometry);
+      // for handling click event on the polygon
       geomLayer.on('click', (e: any) => {
-        this.onShowBacklink.emit(this.geometryBacklink[i]);
+        const { lat, lng } = e.latlng;
+        const point = turf.point([lng, lat]);
+        const intersected: InstanceInfo[] = [];
+        /* polygons is an array where all your polygon layers are stored */
+        this.polygons.forEach((p, i) => {
+          if (booleanPointInPolygon(point, p)) {
+            intersected.push(this.geometryBacklink[i]);
+          }
+        });
+        
+        this.select.emit(intersected);
       });
       this.responseFeatureGroup.addLayer(geomLayer);
       //*
