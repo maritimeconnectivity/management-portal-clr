@@ -55,7 +55,7 @@ export class SrMapSearchComponent {
   searchParams: SearchParameters = {};
   queryString = '';
   freetext = '';
-  orgMrn: string = "";
+  orgMrn = "";
   instances: SearchObjectResult[] = [];
   itemType = ItemType.SearchObjectResult;
   showTables = true;
@@ -63,14 +63,12 @@ export class SrMapSearchComponent {
   isLoading = false;
   allInstances: InstanceDto[] = [];
   fieldInfo = srFieldInfo;
-  selectedInstance: any = {};
+  selectedInstances: InstanceDto[] = [];
   instanceType = ItemType.Instance;
   apiBase = 'sr';
 
   constructor(
     private router: Router,
-    private secomSearchController: SECOMService,
-    private instanceControllerService: InstanceControllerService,
     private itemManagerService: ItemManagerService,
     private notifier: NotifierService,
     private translate: TranslateService,
@@ -147,6 +145,7 @@ export class SrMapSearchComponent {
     this.clearMap();
     this.onClearQueryGeometry();
     this.queryInput?.clearInputOnly();
+    this.selectedInstances = [];
   }
 
   onClearQueryGeometry = () => {
@@ -171,10 +170,13 @@ export class SrMapSearchComponent {
     }
   }
 
-  showInstanceInfo = (event: InstanceInfo) => {
-    this.itemManagerService.fetchSingleData(this.instanceType, "", event.instanceId, event.version).then((instance) => {
-      this.selectedInstance = instance;
-      this.showPanel = true;
+  showInstanceInfo = (event: InstanceInfo[]) => {
+    this.showPanel = true;
+    this.selectedInstances = [];
+    event.forEach((i) => {
+      this.itemManagerService.fetchSingleData(this.instanceType, "", i.instanceId, i.version).then((instance) => {
+        this.selectedInstances.push(instance);
+      });
     });
   }
 
