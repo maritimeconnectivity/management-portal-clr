@@ -63,7 +63,7 @@ export class SrMapSearchComponent {
   isLoading = false;
   allInstances: InstanceDto[] = [];
   fieldInfo = srFieldInfo;
-  selectedInstance: any = {};
+  selectedInstances: InstanceDto[] = [];
   instanceType = ItemType.Instance;
   apiBase = 'sr';
 
@@ -87,7 +87,6 @@ export class SrMapSearchComponent {
     // currently handling only one geometry
     this.queryGeometry = event['data']['geometries'][0];
     this.queryInput.addGeoItem();
-
     this.search(this.freetext, this.searchParams);
   }
 
@@ -146,6 +145,7 @@ export class SrMapSearchComponent {
     this.clearMap();
     this.onClearQueryGeometry();
     this.queryInput?.clearInputOnly();
+    this.selectedInstances = [];
   }
 
   onClearQueryGeometry = () => {
@@ -172,12 +172,12 @@ export class SrMapSearchComponent {
 
   showInstanceInfo = (event: InstanceInfo[]) => {
     this.showPanel = true;
-    this.allInstances = [];
-    /*
-    this.itemManagerService.fetchSingleData(this.instanceType, "", event.instanceId, event.version).then((instance) => {
-      this.selectedInstance = instance;
+    this.selectedInstances = [];
+    event.forEach((i) => {
+      this.itemManagerService.fetchSingleData(this.instanceType, "", i.instanceId, i.version).then((instance) => {
+        this.selectedInstances.push(instance);
+      });
     });
-    */
   }
 
   onEdit(event: any): void {

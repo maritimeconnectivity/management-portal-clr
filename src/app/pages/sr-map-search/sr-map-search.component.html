@@ -16,10 +16,20 @@
   #panel
 >
   <div class="side-panel-body">
-    <app-item-view [isLoading]="isLoading" [itemType]="instanceType" [item]="selectedInstance" [orgMrn]="''" [viewOnly]="true" [noMap]="true"/>
+    <clr-accordion>
+      @for(selectedInstance of selectedInstances ; track selectedInstance.id){
+        <clr-accordion-panel>
+          <clr-accordion-title>{{selectedInstance.name}}</clr-accordion-title>
+          <clr-accordion-content *clrIfExpanded>
+            <app-item-view [isLoading]="isLoading" [itemType]="instanceType" [item]="selectedInstance" [orgMrn]="''" [viewOnly]="true" [noMap]="true"/>
+            <button type="button" class="btn btn-outline-primary btn-block" (click)="moveToEditPage(selectedInstance, false)">Move to Detail</button>
+          </clr-accordion-content>
+        </clr-accordion-panel>
+      }
+    </clr-accordion>
+    
   </div>
   <div class="side-panel-footer">
-    <button type="button" class="btn btn-outline-primary" (click)="moveToEditPage(selectedInstance, false)">Move to Detail</button>
     <button type="button" class="btn btn-primary" (click)="panel.close()">Close</button>
   </div>
 </clr-side-panel>
