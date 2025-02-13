@@ -85,7 +85,11 @@
                     "description": "Under 'Administration' menu, you can see the organization list belongs to your MIR."
                 }
             }
-        }        
+        },
+        "migrate" :{
+            "title": "Migrate service",
+            "info": "This migration allows you to remove the version from an existing service's MRN by assigning a new MRN that includes the version. It simplifies version management and future updates, making it easier for users to maintain and update services. The MRN below is given as an example, but you can edit it as you want."
+        }
     },
     "sr": {
         "about": {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, SimpleChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
 
 @Component({
   selector: 'app-itemtype-chart',
@@ -23,13 +23,13 @@ import { Component, Input, SimpleChanges } from '@angular/core';
   templateUrl: './itemtype-chart.component.html',
   styleUrl: './itemtype-chart.component.css'
 })
-export class ItemtypeChartComponent {
-  @Input() itemType: string = '';
+export class ItemtypeChartComponent implements OnChanges {
+  @Input() itemType = '';
   @Input() items: any[] = [];
-  @Input() numberOfActive: number = 0;
-  @Input() numberOfRevoked: number = 0;
-  @Input() numberOfExpired: number = 0;
-  numberOfItems: number = 0;
+  @Input() numberOfActive = 0;
+  @Input() numberOfRevoked = 0;
+  @Input() numberOfExpired = 0;
+  numberOfItems = 0;
 
   ngOnChanges(changes: SimpleChanges): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
