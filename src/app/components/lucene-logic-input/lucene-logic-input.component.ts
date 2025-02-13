@@ -31,10 +31,10 @@ const shortid = require('shortid');
   styleUrl: './lucene-logic-input.component.css'
 })
 export class LuceneLogicInputComponent {
-  @Input() id: string = '';
+  @Input() id = '';
   @Input() data: { id: string, [key: string]: any } = {id: '', operator: LogicalOperator.And};
-  @Output() onUpdate = new EventEmitter<any>();
-  @Output() onDelete = new EventEmitter<any>();
+  @Output() update = new EventEmitter<any>();
+  @Output() delete = new EventEmitter<any>();
 
   constructor() {
     this.id = shortid.generate();
@@ -42,7 +42,7 @@ export class LuceneLogicInputComponent {
   }
   onSelectionChange(event: any): void {
     this.data = {id: this.id, operator: event};
-    this.onUpdate.emit({id: this.id, data: this.data});
+    this.update.emit({id: this.id, data: this.data});
   }
 
   loadComponent(): void {

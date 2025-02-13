@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, ComponentFactory, ComponentFactoryResolver, EventEmitter, Input, Output, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, ComponentFactoryResolver, EventEmitter, Input, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClarityModule, ClrAlertModule, ClrInputModule, ClrSelectModule } from '@clr/angular';
 import { LuceneComponentItem } from 'src/app/common/lucene-query/lucene-component-item';
 import { QueryFieldInfo } from 'src/app/common/lucene-query/queryFieldInfo';
-import { LuceneComponentDirective } from 'src/app/common/lucene-query/lucene-component-directive';
 import { LuceneComponent, Term } from 'src/app/common/lucene-query/lucene-component';
 import { buildQuery } from 'src/app/common/lucene-query/query-builder';
 import { LuceneLogicInputComponent } from '../lucene-logic-input/lucene-logic-input.component';
@@ -28,7 +27,6 @@ import { LuceneSingleQueryInputComponent } from '../lucene-single-query-input/lu
 import { ClarityIcons, filterGridIcon, connectIcon } from '@cds/core/icon';
 import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
 import { CommonModule } from '@angular/common';
-import { LuceneQueryOutput } from 'src/app/common/lucene-query/lucene-query-output';
 import { LuceneTermInputComponent } from '../lucene-term-input/lucene-term-input.component';
 import { LuceneGeoQueryInputComponent } from '../lucene-geo-query-input/lucene-geo-query-input.component';
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
@@ -51,13 +49,13 @@ const shortid = require('shortid');
 export class SvcSearchInputComponent {
   group: LuceneComponentItem[] = [];
   luceneTerm: Term[] = [];
-  selectedItem: string = '';
+  selectedItem = '';
   queryString = '';
-  geometryIncluded: boolean = false;
+  geometryIncluded = false;
 
-  @Input() title: string = 'Service Search';
-  @Input() btnTitle: string = 'Search';
-  @Input() orgMrn: string = '';
+  @Input() title = 'Service Search';
+  @Input() btnTitle = 'Search';
+  @Input() orgMrn = '';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
   @Output() onSearch = new EventEmitter<any>();
   @Output() onClearAll = new EventEmitter<any>();
@@ -86,10 +84,10 @@ export class SvcSearchInputComponent {
         componentRef.instance.id = term.id;
         componentRef.instance.data = { ...(term as Term).group, id: term.id }!;
         componentRef.instance.fieldInfo = this.fieldInfo;
-        componentRef.instance.onUpdate.subscribe(value => this.updateLuceneItem(value.id, value.data));
-        componentRef.instance.onDelete.subscribe(id => this.deleteLuceneItem(id));
-        componentRef.instance.onExtend?.subscribe(id => this.extendToGroup(id));
-        componentRef.instance.onAdd?.subscribe(item => this.addLuceneItemForGroup(item));
+        componentRef.instance.update.subscribe(value => this.updateLuceneItem(value.id, value.data));
+        componentRef.instance.delete.subscribe(id => this.deleteLuceneItem(id));
+        componentRef.instance.extend?.subscribe(id => this.extendToGroup(id));
+        componentRef.instance.add?.subscribe(item => this.addLuceneItemForGroup(item));
         if (componentRef.instance.generateItems) {
           componentRef.instance.generateItems(term, this.fieldInfo);
         }
@@ -103,9 +101,9 @@ export class SvcSearchInputComponent {
         componentRef.instance.id = term.id;
         componentRef.instance.data = term;
         componentRef.instance.fieldInfo = this.fieldInfo;
-        componentRef.instance.onUpdate.subscribe(value => this.updateLuceneItem(value.id, value.data));
-        componentRef.instance.onDelete.subscribe(id => this.deleteLuceneItem(id));
-        componentRef.instance.onExtend?.subscribe(id => this.extendToGroup(id));
+        componentRef.instance.update.subscribe(value => this.updateLuceneItem(value.id, value.data));
+        componentRef.instance.delete.subscribe(id => this.deleteLuceneItem(id));
+        componentRef.instance.extend?.subscribe(id => this.extendToGroup(id));
         if (!this.group.find(e => e.id === term.id)) {
           this.group.push(new LuceneComponentItem(factory.componentType, componentRef.instance.id, componentRef.instance.data, this.fieldInfo));
         }
@@ -117,9 +115,9 @@ export class SvcSearchInputComponent {
         const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
         componentRef.instance.id = shortid.generate();
         componentRef.instance.fieldInfo = this.fieldInfo;
-        componentRef.instance.onUpdate.subscribe(value => this.updateLuceneItem(value.id, value.data));
-        componentRef.instance.onDelete.subscribe(id => this.deleteLuceneItem(id));
-        componentRef.instance.onExtend?.subscribe(id => this.extendToGroup(id));
+        componentRef.instance.update.subscribe(value => this.updateLuceneItem(value.id, value.data));
+        componentRef.instance.delete.subscribe(id => this.deleteLuceneItem(id));
+        componentRef.instance.extend?.subscribe(id => this.extendToGroup(id));
         if (!this.group.find(e => e.id === componentRef.instance.id)) {
           this.group.push(new LuceneComponentItem(factory.componentType, componentRef.instance.id, componentRef.instance.data, this.fieldInfo));
         }

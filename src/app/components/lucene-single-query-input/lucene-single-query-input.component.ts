@@ -55,9 +55,9 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   @Input() id: string = '';
   @Input() data: { id: string, [key: string]: any } = { id: ''};
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
-  @Output() onUpdate = new EventEmitter<any>();
-  @Output() onDelete = new EventEmitter<any>();
-  @Output() onExtend = new EventEmitter<any>();
+  @Output() update = new EventEmitter<any>();
+  @Output() delete = new EventEmitter<any>();
+  @Output() extend = new EventEmitter<any>();
 
   constructor() {
     this.options = this.fieldInfo?.map(e => e.name);
@@ -105,7 +105,7 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
     if (this.field) {
       this.data = {id: this.id, [this.field]: value};
       this.fieldValue = value;
-      this.onUpdate.emit({id: this.id, data: this.data});
+      this.update.emit({id: this.id, data: this.data});
     }
   }
 
@@ -114,14 +114,14 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
     this.field = value;
     this.valueEditable = true;
     this.data = {id: this.id, [this.field]: this.fieldValue};
-    this.onUpdate.emit({id: this.id, data: this.data});
+    this.update.emit({id: this.id, data: this.data});
   }
 
-  delete(): void {
-    this.onDelete.emit(this.id);
+  onDelete(): void {
+    this.delete.emit(this.id);
   }
 
   createExpressionWithBrackets(): void {
-    this.onExtend.emit(this.id);
+    this.extend.emit(this.id);
   }
 }
