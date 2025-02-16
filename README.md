@@ -1,7 +1,14 @@
 # management-portal-clr
-Management portal powered by Clarity Design
+
+Management Portal is a front-end component to manage resources registered in [Maritime Identity Registry](https://github.com/maritimeconnectivity/IdentityRegistry) and [Maritime Service Registry](https://github.com/maritimeconnectivity/ServiceRegistry), the core components of [Maritime Connectivity Platform](https://maritimeconnectivity.net/).
+
+This version of Management portal is powered by [Clarity Design System](https://clarity.design/).
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.3.
+
+# Live demo
+
+You can experience a live demo from [our public demonstrator environment](https://management.maritimeconnectivity.net).
 
 # Development
 ## Requirement
@@ -11,10 +18,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 ## Build
 
