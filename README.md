@@ -74,4 +74,4 @@ Run `ng deploy --repo=%REPO_TO_DEPLOY% --cname=%URL --dir="dist/management-porta
 Currently English(en-GB) and Korean(ko-KR) are supported.
 
 ## License
-This project is licensed under the Apache 2.0 License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
