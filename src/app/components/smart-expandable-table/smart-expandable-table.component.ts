@@ -74,11 +74,9 @@ export class SmartExpandableTableComponent {
   currentPageRange = 0;
   visiblePageNumbers: number[] = [];
   elementsPerPage = 10;
-  roles: Role[] = [];
 
   constructor(private router: Router,
     private authService: AuthService,
-    private roleService: RoleControllerService,
   ) {
     this.isLoading = true;
   }
@@ -93,9 +91,6 @@ export class SmartExpandableTableComponent {
       if (this.itemType === ItemType.Instance) {
         return;
       }
-      this.roleService.getRoles(orgMrn).subscribe((roles) => {
-        this.roles = roles;
-      });
     });
   }
 
