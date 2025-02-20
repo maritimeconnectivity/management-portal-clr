@@ -44,10 +44,10 @@ export class LuceneTermInputComponent implements LuceneComponent {
   @Input() id = '';
   @Input() data: { id: string, [key: string]: any } = { id: ''};
   @Input() fieldInfo: QueryFieldInfo[] = [];
-  @Output() update = new EventEmitter<any>();
-  @Output() delete = new EventEmitter<any>();
-  @Output() add = new EventEmitter<any>();
-  @Output() extend = new EventEmitter<any>();
+  @Output() updateEvent = new EventEmitter<any>();
+  @Output() deleteEvent = new EventEmitter<any>();
+  @Output() addEvent = new EventEmitter<any>();
+  @Output() extendEvent = new EventEmitter<any>();
 
   @ViewChild('luceneComponentHost', { read: ViewContainerRef, static: true }) luceneComponentHost!: ViewContainerRef;
 
@@ -69,9 +69,9 @@ export class LuceneTermInputComponent implements LuceneComponent {
       if (componentRef.instance instanceof LuceneSingleQueryInputComponent) {
         (componentRef.instance as LuceneSingleQueryInputComponent).requireExtendBtn = false;
       }
-      componentRef.instance.update.subscribe(value => this.onEditQuery(value.id, value.data));
-      componentRef.instance.delete.subscribe(id => this.onDeleteById(id));
-      componentRef.instance.extend?.subscribe(id => this.onExtendById(id));
+      componentRef.instance.updateEvent.subscribe(value => this.onEditQuery(value.id, value.data));
+      componentRef.instance.deleteEvent.subscribe(id => this.onDeleteById(id));
+      componentRef.instance.extendEvent?.subscribe(id => this.onExtendById(id));
     });
   }
 
@@ -80,20 +80,20 @@ export class LuceneTermInputComponent implements LuceneComponent {
   }
 
   onDeleteById(id: string): void {
-    this.delete.emit(id);
+    this.deleteEvent.emit(id);
   }
 
   onEditQuery(id: string, data: any): void {
-    this.update.emit({id: id, data: data});
+    this.updateEvent.emit({id: id, data: data});
   }
 
   onExtendById(id: string): void {
-    this.extend.emit(id);
+    this.extendEvent.emit(id);
   }
 
   addLuceneItem(event: any): void {
     this.selectedItem = event.target.value;
-    this.add.emit({groupId: this.id, key: this.selectedItem});
+    this.addEvent.emit({groupId: this.id, key: this.selectedItem});
     this.showSelect = false;
   }
 }

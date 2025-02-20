@@ -56,7 +56,7 @@
         <div class="clr-form-horizontal clr-form-control clr-row">
             <label class="clr-control-label clr-col-12 clr-col-md-2">Active certificates</label>
             <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-                <app-cert-table context="active" [data]="activeCertificates" [serial]="serial" (onAdd)="openCertModal()" (onDownload)="clickDownloadBtn($event)" (onRevoke)="clickRevokeBtn($event)" />
+                <app-cert-table context="active" [data]="activeCertificates" [serial]="serial" (addEvent)="openCertModal()" (downloadEvent)="clickDownloadBtn($event)" (revokeEvent)="clickRevokeBtn($event)" />
             </div>
         </div>
         <div class="clr-form-horizontal clr-form-control clr-row">

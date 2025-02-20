@@ -37,9 +37,9 @@ export class LuceneGeoQueryInputComponent implements OnInit, LuceneComponent{
   @Input() id: string = '';
   @Input() data: { id: string, [key: string]: any } = { id: ''};
   fieldInfo?: QueryFieldInfo[] | undefined;
-  @Output() update = new EventEmitter<any>();
-  @Output() delete = new EventEmitter<any>();
-  @Output() extend = new EventEmitter<any>();
+  @Output() updateEvent = new EventEmitter<any>();
+  @Output() deleteEvent = new EventEmitter<any>();
+  @Output() extendEvent = new EventEmitter<any>();
 
   constructor() {
     this.id = 'geo';

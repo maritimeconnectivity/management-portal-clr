@@ -11,11 +11,11 @@
               </clr-alert>
         }
           <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn"
-          [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"
-          (verify)="onVerify($event)" [isVerified]="isVerified" [hasWritePermission]="hasAdminPermission"/>
+          [mrnPrefix]="mrnPrefix" (submitEvent)="submit($event)" (cancelEvent)="cancel()"
+          (verifyEvent)="onVerify($event)" [isVerified]="isVerified" [hasWritePermission]="hasAdminPermission"/>
     } @else {
     <app-item-view [isLoading]="isLoading" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"
-        (edit)="edit(item)"
-        (onRefresh)="loadItem(orgMrn)" (onMigrate)="migrate($event)" (onDelete)="deleteItem()" />
+        (editEvent)="edit(item)"
+        (refreshEvent)="loadItem(orgMrn)" (migrateEvent)="migrate($event)" (deleteEvent)="deleteItem()" />
     }
 </div>

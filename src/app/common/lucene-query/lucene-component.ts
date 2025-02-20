@@ -22,10 +22,10 @@ export interface LuceneComponent {
     id: string;
     data: Term;
     fieldInfo?: QueryFieldInfo[];
-    update: EventEmitter<any>;
-    delete: EventEmitter<any>;
-    add?: EventEmitter<any>;
-    extend?: EventEmitter<any>;
+    updateEvent: EventEmitter<any>;
+    deleteEvent: EventEmitter<any>;
+    addEvent?: EventEmitter<any>;
+    extendEvent?: EventEmitter<any>;
 
     generateItems?(data: Term, fieldInfo: QueryFieldInfo[]): void;
 }

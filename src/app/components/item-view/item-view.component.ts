@@ -67,12 +67,12 @@ export class ItemViewComponent {
   @Input() isLoading = true;
   @Input() viewOnly = false;
   @Input() noMap = false;
-  @Output() edit: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onMigrate: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onDelete: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onRefresh: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onApprove: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onDownloadCert: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() editEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() migrateEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() deleteEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() refreshEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() approveEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() downloadCertEvent: EventEmitter<any[]> = new EventEmitter<any[]>();
   @ViewChild('certModal', { static: true }) certModal: ClrModal | undefined;
   @ViewChild('revokeModal', { static: true }) revokeModal: ClrModal | undefined;
   @ViewChild('migrateModal', { static: true }) migrateModal: ClrModal | undefined;
@@ -186,22 +186,22 @@ export class ItemViewComponent {
   }
 
   onEdit = () => {
-    this.edit.emit(this.item);
+    this.editEvent.emit(this.item);
   }
 
   migrate = () => {
-    this.onMigrate.emit(this.newServiceMrn);
+    this.migrateEvent.emit(this.newServiceMrn);
   }
 
   approve = () => {
     if (this.newAdminUserForm?.isValid()) {
       this.adminUser = this.newAdminUserForm?.getFormValue();
-      this.onApprove.emit({...this.item, adminUser: this.adminUser});
+      this.approveEvent.emit({...this.item, adminUser: this.adminUser});
     }
   }
 
   deleteItem = () => {
-    this.onDelete.emit(this.item);
+    this.deleteEvent.emit(this.item);
   }
 
   openCertModal = () => {
@@ -262,7 +262,7 @@ export class ItemViewComponent {
       this.certificateService.revokeCertificate(this.itemType, this.item.mrn, this.orgMrn, cert.serialNumber, certificateRevocation, this.instanceVersion)
       .subscribe((res) => {
         this.notifier.notify('success', this.translate.instant('success.certificate.revoke'));
-        this.cancel();
+        this.onCancel();
     }, (err) => {
       this.notifier.notify('error', this.translate.instant('error.certificate.revoke'));
     })
@@ -300,27 +300,23 @@ export class ItemViewComponent {
     this.newServiceMrn = this.item.mrn + ":" + this.instanceVersion;
   }
 
-  cancel = () => {
+  onCancel = () => {
     this.certModal?.close();
     this.certModalOpened = false;
     this.revokeModal?.close();
     this.revokeModalOpened = false;
     this.migrateModal?.close();
     this.migrateModalOpened = false;
-    this.onRefresh.emit();
+    this.refreshEvent.emit();
     this.newServiceMrn = "";
     this.certificateBundle = undefined;
   }
 
-  public download() {
+  public onDownload() {
     if (this.certificateBundle) {
       this.fileHelper.downloadPemCertificate(this.certificateBundle, this.itemId);
       this.notifier.notify('success', this.translate.instant('success.certificate.chosen'));
     }
-  }
-
-  refreshData = () => {
-    this.onRefresh.emit();
   }
 
   issueFromBrowser = () => {

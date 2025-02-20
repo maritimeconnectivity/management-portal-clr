@@ -40,14 +40,14 @@ export class SmartTableComponent {
   @Input() itemType: ItemType = ItemType.Device;
   @Input() labels: {[key: string]: any} = {};
   @Input() placeholder: string = 'We couldn\'t find any data!';
-  @Input() onDownload: ((selected: any[]) => void) | undefined;
-  @Input() onDelete: ((selected: any[]) => void) | undefined;
-  @Input() onAdd: (() => void) | undefined;
+  @Input() downloadCall: ((selected: any[]) => void) | undefined;
+  @Input() deleteCall: ((selected: any[]) => void) | undefined;
+  @Input() addCall: (() => void) | undefined;
   @Input() deleteText: string = 'Delete';
   @Input() downloadText: string = 'Download';
   @Input() addText: string = 'Add';
   @Input() selectedIds: any[] = [];
-  @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
+  @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
 
   selected: any[] = [];
   detail: any = {};
@@ -73,8 +73,8 @@ export class SmartTableComponent {
   }
 
   userRowSelect = (selected: any) => {
-    if (this.onRowSelect) {
-      this.onRowSelect.emit(selected);
+    if (this.rowSelectEvent) {
+      this.rowSelectEvent.emit(selected);
     }
   }
 

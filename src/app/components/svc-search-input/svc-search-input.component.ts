@@ -57,8 +57,8 @@ export class SvcSearchInputComponent {
   @Input() btnTitle = 'Search';
   @Input() orgMrn = '';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
-  @Output() onSearch = new EventEmitter<any>();
-  @Output() onClearAll = new EventEmitter<any>();
+  @Output() searchEvent = new EventEmitter<string>();
+  @Output() clearAllEvent = new EventEmitter<any>();
 
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
   @ViewChild('luceneComponentHost', { read: ViewContainerRef, static: false }) luceneComponentHost!: ViewContainerRef;
@@ -84,10 +84,10 @@ export class SvcSearchInputComponent {
         componentRef.instance.id = term.id;
         componentRef.instance.data = { ...(term as Term).group, id: term.id }!;
         componentRef.instance.fieldInfo = this.fieldInfo;
-        componentRef.instance.update.subscribe(value => this.updateLuceneItem(value.id, value.data));
-        componentRef.instance.delete.subscribe(id => this.deleteLuceneItem(id));
-        componentRef.instance.extend?.subscribe(id => this.extendToGroup(id));
-        componentRef.instance.add?.subscribe(item => this.addLuceneItemForGroup(item));
+        componentRef.instance.updateEvent.subscribe(value => this.updateLuceneItem(value.id, value.data));
+        componentRef.instance.deleteEvent.subscribe(id => this.deleteLuceneItem(id));
+        componentRef.instance.extendEvent?.subscribe(id => this.extendToGroup(id));
+        componentRef.instance.addEvent?.subscribe(item => this.addLuceneItemForGroup(item));
         if (componentRef.instance.generateItems) {
           componentRef.instance.generateItems(term, this.fieldInfo);
         }
@@ -101,9 +101,9 @@ export class SvcSearchInputComponent {
         componentRef.instance.id = term.id;
         componentRef.instance.data = term;
         componentRef.instance.fieldInfo = this.fieldInfo;
-        componentRef.instance.update.subscribe(value => this.updateLuceneItem(value.id, value.data));
-        componentRef.instance.delete.subscribe(id => this.deleteLuceneItem(id));
-        componentRef.instance.extend?.subscribe(id => this.extendToGroup(id));
+        componentRef.instance.updateEvent.subscribe(value => this.updateLuceneItem(value.id, value.data));
+        componentRef.instance.deleteEvent.subscribe(id => this.deleteLuceneItem(id));
+        componentRef.instance.extendEvent?.subscribe(id => this.extendToGroup(id));
         if (!this.group.find(e => e.id === term.id)) {
           this.group.push(new LuceneComponentItem(factory.componentType, componentRef.instance.id, componentRef.instance.data, this.fieldInfo));
         }
@@ -115,9 +115,9 @@ export class SvcSearchInputComponent {
         const componentRef = viewContainerRef.createComponent<LuceneComponent>(factory);
         componentRef.instance.id = shortid.generate();
         componentRef.instance.fieldInfo = this.fieldInfo;
-        componentRef.instance.update.subscribe(value => this.updateLuceneItem(value.id, value.data));
-        componentRef.instance.delete.subscribe(id => this.deleteLuceneItem(id));
-        componentRef.instance.extend?.subscribe(id => this.extendToGroup(id));
+        componentRef.instance.updateEvent.subscribe(value => this.updateLuceneItem(value.id, value.data));
+        componentRef.instance.deleteEvent.subscribe(id => this.deleteLuceneItem(id));
+        componentRef.instance.extendEvent?.subscribe(id => this.extendToGroup(id));
         if (!this.group.find(e => e.id === componentRef.instance.id)) {
           this.group.push(new LuceneComponentItem(factory.componentType, componentRef.instance.id, componentRef.instance.data, this.fieldInfo));
         }
@@ -240,7 +240,7 @@ export class SvcSearchInputComponent {
   }
 
   search(): void {
-    this.onSearch.emit(this.queryString);
+    this.searchEvent.emit(this.queryString);
   }
 
   updateLuceneQuery = () => {
@@ -281,7 +281,7 @@ export class SvcSearchInputComponent {
     this.luceneTerm = [];
     this.updateLuceneQuery();
     this.loadComponent();
-    this.onClearAll.emit();
+    this.clearAllEvent.emit();
   }
 
   addLuceneItem(event: any): void {
@@ -315,6 +315,6 @@ export class SvcSearchInputComponent {
     }
     this.updateLuceneQuery();
     this.loadComponent();
-    this.onSearch.emit(this.queryString);
+    this.searchEvent.emit(this.queryString);
   }
 }

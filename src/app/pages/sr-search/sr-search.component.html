@@ -1,13 +1,13 @@
 <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
   <div class="clr-row clr-col-md-12">
-    <app-svc-search-input #queryInput [orgMrn]="orgMrn" (onSearch)="onSearch($event)" (onClearAll)="onClearAll()" style="width: 100%;"/>
+    <app-svc-search-input #queryInput [orgMrn]="orgMrn" (searchEvent)="onSearch($event)" (clearAllEvent)="onClearAll()" style="width: 100%;"/>
   </div>
     <div class="clr-row">
       <div class="clr-col-md-12">
         <app-input-geometry #map [mapContainerHeight]="400" [isEditing]="true"
-        (onGeometryChange)="onUpdateGeometry($event)" [isForSearch]="true"
+        (geometryChangeEvent)="onUpdateGeometry($event)" [isForSearch]="true"
         [geometry]="geometries" [geometryBacklink]="geometryBacklink"
-        (onClear)="onClearQueryGeometry()"/>
+        (clearEvent)="onClearQueryGeometry()"/>
           @if (isLoading) {
               <div class="spinner-view">
                   <clr-spinner>Loading</clr-spinner>

@@ -185,6 +185,7 @@ export class SrSearchComponent {
     });
   }
 
+  
   onSearch = (freetext: string) => {
     this.freetext = freetext;
     if (this.geometryMap) {

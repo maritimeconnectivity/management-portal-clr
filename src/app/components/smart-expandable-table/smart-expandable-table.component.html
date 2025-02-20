@@ -4,9 +4,9 @@
 </div>
 <div class="clr-row">
     <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-        <app-item-view [itemType]="itemType" [item]="selectedItem" (edit)="onEdit(selectedItem)"
-            (onDelete)="deleteItem(selectedItem)" (onRefresh)="refreshData()" (onMigrate)="onMigrate($event)"
-            (onApprove)="onApprove($event)" [isLoading]="false" [viewOnly]="itemType === 'searchobjectresult'" />
+        <app-item-view [itemType]="itemType" [item]="selectedItem" (editEvent)="onEdit(selectedItem)"
+            (deleteEvent)="deleteItem(selectedItem)" (refreshEvent)="refreshData()" (migrateEvent)="onMigrate($event)"
+            (approveEvent)="onApprove($event)" [isLoading]="false" [viewOnly]="itemType === 'searchobjectresult'" />
     </div>
 </div>
 } @else {

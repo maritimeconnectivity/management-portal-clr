@@ -77,11 +77,11 @@ export class ItemFormComponent {
 
   @Input() hasWritePermission = false;
 
-  @Output() onCancel: EventEmitter<any> = new EventEmitter<any>();
+  @Output() cancelEvent: EventEmitter<any> = new EventEmitter<any>();
 
-  @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
 
-  @Output() verify: EventEmitter<any> = new EventEmitter<any>();
+  @Output() verifyEvent: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild(ClrForm, { static: true }) clrForm: ClrForm | undefined;
   @ViewChild('map') geometryMap!: InputGeometryComponent;
@@ -143,7 +143,7 @@ export class ItemFormComponent {
       }
     }
     // Check if onSubmit is given
-    if (this.onSubmit.observers.length !== 0) {
+    if (this.submitEvent.observers.length !== 0) {
       this.onSubmitIsGiven = true;
     } else {
       this.onSubmitIsGiven = false;
@@ -189,7 +189,7 @@ export class ItemFormComponent {
             filteredAttributes.geometry = this.item.geometry;
           }
         }
-        this.onSubmit.emit(preprocessToUpload(filteredAttributes, this.itemType));
+        this.submitEvent.emit(preprocessToUpload(filteredAttributes, this.itemType));
       } else {
         const updated = appendUpdatedAttributes(this.item, filteredAttributes, this.columnForMenu);
         let preprocessSuccess = true;
@@ -213,7 +213,7 @@ export class ItemFormComponent {
         }
 
         if (preprocessSuccess) {
-          this.onSubmit.emit(preprocessToUpload(updated, this.itemType));
+          this.submitEvent.emit(preprocessToUpload(updated, this.itemType));
         }
       }
     }
@@ -277,7 +277,7 @@ export class ItemFormComponent {
   }
 
   cancel = () => {
-    this.onCancel.emit();
+    this.cancelEvent.emit();
   }
 
   onMrnKeyDown(event: KeyboardEvent) {
@@ -439,7 +439,7 @@ export class ItemFormComponent {
       this.notifierService.notify('error', this.translate.instant('error.form.emptyXml'));
       return;
     }
-    this.verify.emit(this.itemForm.value['instanceAsXmlName']);
+    this.verifyEvent.emit(this.itemForm.value['instanceAsXmlName']);
   }
 
 }
