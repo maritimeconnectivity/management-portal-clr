@@ -267,11 +267,8 @@ export class ListViewComponent {
     if (!user) {
       throw new Error(this.translate.instant('error.resource.noUser'));
     }
-    if (!user.permissions || user.permissions.length === 0) {
-      user.permissions = ORG_ADMIN_AT_MIR;
-    } else if (user.permissions.length > 0 && user.permissions.indexOf(ORG_ADMIN_AT_MIR) < 0) {
-      user.permissions = ',' + ORG_ADMIN_AT_MIR;
-    }
+    // Set the user's permissions to the new role
+    user.permissions = ORG_ADMIN_AT_MIR;
 		return this.itemManagerService.createUser(user, orgMrn);
 	}
 }
