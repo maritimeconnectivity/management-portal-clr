@@ -21,7 +21,7 @@
                                 } @else {
                                     <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables"
                                     [columnForMenu]="columnForMenu"
-                                    (openXmlDialogCall)="openXmlDialog($event)" (downloadDocFileCall)="downloadDocFile($event)"
+                                    (openCertModalEvent)="openXmlDialog($event)" (downloadDocFileEvent)="downloadDocFile($event)"
                                     />    
                                 }
                             </div>
@@ -34,8 +34,8 @@
                                 <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables" 
                                 [activeCertificates]="activeCertificates" [revokedCertificates]="revokedCertificates"
                                 [columnForMenu]="columnForMenu" [serial]="serial"
-                                (clickDownloadBtnCall)="clickDownloadBtn($event)" (clickRevokeBtnCall)="clickRevokeBtn($event)"
-                                (openCertModalCall)="openCertModal()"/>
+                                (downloadBtnEvent)="clickDownloadBtn($event)" (revokeBtnEvent)="clickRevokeBtn($event)"
+                                (openCertModalEvent)="openCertModal()"/>
                                 @if (itemType === 'orgcandidate') {
                                     <app-item-form #newAdminUserForm title="New administrator user" [isForNew]="true" [itemType]="userItemType" [item]="adminUser"
                                     [mrnPrefix]="adminUserMrnPrefix" />

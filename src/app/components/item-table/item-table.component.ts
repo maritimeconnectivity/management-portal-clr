@@ -41,11 +41,11 @@ export class ItemTableComponent {
   @Input() revokedCertificates: any[] = [];
   @Input() columnForMenu: {[key: string]: any} = {};
   @Input() serial: string | undefined = undefined;
-  @Output() openXmlDialogCall = new EventEmitter<any>();
-  @Output() downloadDocFileCall = new EventEmitter<any>();
-  @Output() clickRevokeBtnCall = new EventEmitter<any>();
-  @Output() clickDownloadBtnCall = new EventEmitter<any>();
-  @Output() openCertModalCall = new EventEmitter();
+  @Output() openXmlDialogEvent = new EventEmitter<any>();
+  @Output() downloadDocFileEvent = new EventEmitter<any>();
+  @Output() revokeBtnEvent = new EventEmitter<any>();
+  @Output() downloadBtnEvent = new EventEmitter<any>();
+  @Output() openCertModalEvent = new EventEmitter();
   
   isTimestampFormat(key: string): boolean {
     return timestampKeys.includes(key);
@@ -60,22 +60,22 @@ export class ItemTableComponent {
   }
 
   openXmlDialog = (event: any) => {
-    this.openXmlDialogCall.emit(event);
+    this.openXmlDialogEvent.emit(event);
   }
 
   downloadDocFile = (event: any) => {
-    this.downloadDocFileCall.emit(event);
+    this.downloadDocFileEvent.emit(event);
   }
 
   openCertModal = () => {
-    this.openCertModalCall.emit();
+    this.openCertModalEvent.emit();
   }
 
   clickRevokeBtn = (event: any) => {
-    this.clickRevokeBtnCall.emit(event);
+    this.revokeBtnEvent.emit(event);
   }
 
   clickDownloadBtn = (event: any) => {
-    this.clickDownloadBtnCall.emit(event);
+    this.downloadBtnEvent.emit(event);
   }
 }
