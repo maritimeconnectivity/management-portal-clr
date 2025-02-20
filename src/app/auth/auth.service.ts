@@ -107,12 +107,16 @@ export class AuthService {
   public async hasPermission(context: ItemType, rolesInOrg: Role[], forMyOrg = false): Promise<boolean> {
     this.protectFromEmptyToken();
     return new Promise<boolean>(async (resolve, reject) => {
-      if (!this.keycloakService.isLoggedIn())
+      if (!this.keycloakService.isLoggedIn()){
         resolve(false);
+        return ;
+      }
+        
 
       this.getUserPermission(rolesInOrg).then((permission) => {
         if (!permission) {
           resolve(false);
+          return;
         }
         if (hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin)) { // super admin
           resolve(true);
