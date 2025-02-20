@@ -5,6 +5,7 @@ import { AuthPermission, hasAdminPermissionInMIR, rolesToPermission } from './au
 import { ItemType } from '../common/menuType';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Role } from '../backend-api/identity-registry';
+import { ItemManagerService } from '../common/shared/item-manager.service';
 import RoleNameEnum = Role.RoleNameEnum;
 
 @Injectable({
@@ -14,7 +15,11 @@ export class AuthService {
   private isAuthenticatedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public isAuthenticated$: Observable<boolean> = this.isAuthenticatedSubject.asObservable();
   
-  constructor(private keycloakService: KeycloakService, private router: Router) {}
+  constructor(
+    private keycloakService: KeycloakService, 
+    private router: Router,
+    private itemManagerService: ItemManagerService
+  ) {}
 
   public async login() {
     const url = window.location;
@@ -33,6 +38,7 @@ export class AuthService {
   public async logout() {
     const url = window.location;
     await this.keycloakService.logout(url.protocol + '//' + url.host + '/login');
+    this.itemManagerService.clearRolesContext();
   }
 
   public async isAuthenticated(): Promise<boolean> {
