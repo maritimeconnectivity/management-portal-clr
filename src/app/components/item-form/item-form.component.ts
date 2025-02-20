@@ -75,11 +75,13 @@ export class ItemFormComponent {
 
   @Input() isVerified = false;
 
-  @Output() onCancel: EventEmitter<any> = new EventEmitter<any>();
+  @Input() hasWritePermission = false;
 
-  @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
+  @Output() cancelEvent: EventEmitter<any> = new EventEmitter<any>();
 
-  @Output() verify: EventEmitter<any> = new EventEmitter<any>();
+  @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
+
+  @Output() verifyEvent: EventEmitter<any> = new EventEmitter<any>();
 
   @ViewChild(ClrForm, { static: true }) clrForm: ClrForm | undefined;
   @ViewChild('map') geometryMap!: InputGeometryComponent;
@@ -99,8 +101,6 @@ export class ItemFormComponent {
   isXmlVerified = false;
 
   constructor(private formBuilder: FormBuilder,
-    private roleService: RoleControllerService,
-    private authService: AuthService,
     private notifierService: NotifierService,
     private translate: TranslateService,
     private fileHelperService: FileHelperService,
@@ -110,12 +110,8 @@ export class ItemFormComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    if (this.itemType !== ItemType.OrgCandidate) {
-      this.authService.getOrgMrn().then((orgMrn) => {
-        this.roleService.getRoles(orgMrn).subscribe((roles) => {
-          this.roles = roles;
-        });
-      });
+    if (this.itemType === ItemType.OrgCandidate) {
+      this.hasWritePermission = true;
     }
     this.prepareItem(this.itemType);
   }
@@ -147,7 +143,7 @@ export class ItemFormComponent {
       }
     }
     // Check if onSubmit is given
-    if (this.onSubmit.observers.length !== 0) {
+    if (this.submitEvent.observers.length !== 0) {
       this.onSubmitIsGiven = true;
     } else {
       this.onSubmitIsGiven = false;
@@ -193,7 +189,7 @@ export class ItemFormComponent {
             filteredAttributes.geometry = this.item.geometry;
           }
         }
-        this.onSubmit.emit(preprocessToUpload(filteredAttributes, this.itemType));
+        this.submitEvent.emit(preprocessToUpload(filteredAttributes, this.itemType));
       } else {
         const updated = appendUpdatedAttributes(this.item, filteredAttributes, this.columnForMenu);
         let preprocessSuccess = true;
@@ -217,7 +213,7 @@ export class ItemFormComponent {
         }
 
         if (preprocessSuccess) {
-          this.onSubmit.emit(preprocessToUpload(updated, this.itemType));
+          this.submitEvent.emit(preprocessToUpload(updated, this.itemType));
         }
       }
     }
@@ -281,7 +277,7 @@ export class ItemFormComponent {
   }
 
   cancel = () => {
-    this.onCancel.emit();
+    this.cancelEvent.emit();
   }
 
   onMrnKeyDown(event: KeyboardEvent) {
@@ -443,7 +439,7 @@ export class ItemFormComponent {
       this.notifierService.notify('error', this.translate.instant('error.form.emptyXml'));
       return;
     }
-    this.verify.emit(this.itemForm.value['instanceAsXmlName']);
+    this.verifyEvent.emit(this.itemForm.value['instanceAsXmlName']);
   }
 
 }

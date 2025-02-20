@@ -21,6 +21,8 @@ import { ClarityIcons, helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon } fr
 import { AuthService } from 'src/app/auth/auth.service';
 import { AppConfig } from 'src/app/app.config';
 import { loadLang } from 'src/app/common/translateHelper';
+import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
+import { Role } from 'src/app/backend-api/identity-registry';
 ClarityIcons.addIcons(helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon);
 
 @Component({
@@ -30,16 +32,15 @@ ClarityIcons.addIcons(helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon);
 })
 export class SidebarComponent {
   navGroups = MENU_ITEMS;
-  authService: AuthService;
   isSiteAdmin = false;
   hasServiceRegistry = AppConfig.HAS_SERVICE_REGISTRY;
   constructor(
     translate: TranslateService,
-    authService: AuthService
+    private authService: AuthService,
+    private itemManagerService: ItemManagerService,
   ) {
     // the lang to use, if the lang isn't available, it will use the current loader to get them
     loadLang(translate);
-    this.authService = authService;
     if (!this.hasServiceRegistry)
     {
       this.navGroups = this.navGroups.filter((group) => group.title !== 'menu.sr');
@@ -49,10 +50,12 @@ export class SidebarComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.authService.getUserRoles().then((roles) => {
-      if (roles) {
-        this.isSiteAdmin = roles.includes('ROLE_SITE_ADMIN');
-      }
+    this.authService.getOrgMrnFromToken().then((orgMrn: string) => {
+      this.itemManagerService.fetchRolesInOrg(orgMrn).then((rolesInOrg: Role[]) => {
+        this.authService.hasSiteAdminPermission(rolesInOrg).then((isSiteAdmin: boolean) => {
+          this.isSiteAdmin = isSiteAdmin;
+        });
+      });
     });
   }
 }

@@ -30,26 +30,25 @@ export class CertTableComponent {
   @Input() context: string = 'active';
   @Input() data: any[] = [];
   @Input() serial: string | undefined;
-  @Output() onAdd:EventEmitter<any> = new EventEmitter<any>();
-  @Output() onDownload:EventEmitter<any[]> = new EventEmitter<any[]>();
-  @Output() onRevoke:EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() addEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() downloadEvent: EventEmitter<any[]> = new EventEmitter<any[]>();
+  @Output() revokeEvent: EventEmitter<any[]> = new EventEmitter<any[]>();
 
   itemType: ItemType = ItemType.Certificate;
-
-  download = (selected: any[]) => {
-    this.onDownload.emit(selected);
-  }
-
-  add = () => {
-    this.onAdd.emit();
-  }
-
-  revoke = (selected: any[]) => {
-    this.onRevoke.emit(selected);
-  }
   empty = [];
-
   columnsForActive = ActiveCertificatesColumn;
   columnsForRevoked = RevokedCertificatesColumn;
+
+  onDownload = (selected: any[]) => {
+    this.downloadEvent.emit(selected);
+  }
+
+  onAdd = () => {
+    this.addEvent.emit();
+  }
+
+  onRevoke = (selected: any[]) => {
+    this.revokeEvent.emit(selected);
+  }
   
 }

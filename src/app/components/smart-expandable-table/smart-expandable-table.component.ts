@@ -42,23 +42,23 @@ export class SmartExpandableTableComponent {
   @Input() itemType: ItemType = ItemType.Device;
   @Input() labels: {[key: string]: any} | undefined = undefined;
   @Input() placeholder: string = 'We couldn\'t find any data!';
-  @Input() onDownload: ((selected: any[]) => void) | undefined;
-  @Input() onDelete: ((selected: any[]) => void) | undefined;
-  @Input() onAdd: (() => void) | undefined;
+  @Input() downloadCall: ((selected: any[]) => void) | undefined;
+  @Input() deleteCall: ((selected: any[]) => void) | undefined;
+  @Input() addCall: (() => void) | undefined;
   @Input() deleteText: string = 'Delete';
   @Input() downloadText: string = 'Download';
   @Input() addText: string = 'Add';
   @Input() totalPages: number = 0;
   @Input() totalElements: number = 0;
   @Input() getData: ((itemType: ItemType, pageNumber: number, elementsPerPage: number) => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
-  @Output() onRowSelect: EventEmitter<any> = new EventEmitter<any>();
-  @Output() onRevokeCerts: EventEmitter<any[]> = new EventEmitter();
-  @Output() onDownloadCerts: EventEmitter<any[]> = new EventEmitter();
-  @Output() onEdit: EventEmitter<any> = new EventEmitter();
-  @Output() onView: EventEmitter<any> = new EventEmitter();
-  @Output() onMigrate: EventEmitter<any> = new EventEmitter();
-  @Output() onRefresh: EventEmitter<any> = new EventEmitter();
-  @Output() onApprove: EventEmitter<any> = new EventEmitter();
+  @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
+  @Output() revokeCertsEvent: EventEmitter<any[]> = new EventEmitter();
+  @Output() downloadCertsEvent: EventEmitter<any[]> = new EventEmitter();
+  @Output() editEvent: EventEmitter<any> = new EventEmitter();
+  @Output() viewEvent: EventEmitter<any> = new EventEmitter();
+  @Output() migrateEvent: EventEmitter<any> = new EventEmitter();
+  @Output() refreshEvent: EventEmitter<any> = new EventEmitter();
+  @Output() approveEvent: EventEmitter<any> = new EventEmitter();
 
   data: any[] | undefined = undefined;
   selected: any[] = [];
@@ -74,11 +74,9 @@ export class SmartExpandableTableComponent {
   currentPageRange = 0;
   visiblePageNumbers: number[] = [];
   elementsPerPage = 10;
-  roles: Role[] = [];
 
   constructor(private router: Router,
     private authService: AuthService,
-    private roleService: RoleControllerService,
   ) {
     this.isLoading = true;
   }
@@ -89,13 +87,10 @@ export class SmartExpandableTableComponent {
 
     this.loadElementsPerPage();
 
-    this.authService.getOrgMrn().then((orgMrn) => {
+    this.authService.getOrgMrnFromToken().then((orgMrn) => {
       if (this.itemType === ItemType.Instance) {
         return;
       }
-      this.roleService.getRoles(orgMrn).subscribe((roles) => {
-        this.roles = roles;
-      });
     });
   }
 
@@ -148,7 +143,7 @@ export class SmartExpandableTableComponent {
   }
 
   // this function is for background loading of data
-  async refresh(state: ClrDatagridStateInterface) {
+  async onRefresh(state: ClrDatagridStateInterface) {
     if (!this.data) {
       this.loadData();
     }
@@ -156,11 +151,11 @@ export class SmartExpandableTableComponent {
 
   userRowSelect = (selectedItem: any) => {
     if (this.itemType === ItemType.SearchObjectResult) {
-      this.onView.emit(selectedItem);
+      this.viewEvent.emit(selectedItem);
     } else {
       this.expanded = true;
       this.selectedItem = selectedItem;
-      this.onRowSelect.emit(selectedItem);
+      this.rowSelectEvent.emit(selectedItem);
     }
   }
 
@@ -173,22 +168,22 @@ export class SmartExpandableTableComponent {
     this.data = [];
   }
 
-  edit = (selectedItem: any) => {
+  onEdit = (selectedItem: any) => {
     this.expanded = true;
     this.selectedItem = selectedItem;
-    this.onEdit.emit(selectedItem);
+    this.editEvent.emit(selectedItem);
   }
 
-  approve = (selectedItem: any) => {
-    this.onApprove.emit(selectedItem);
+  onApprove = (selectedItem: any) => {
+    this.approveEvent.emit(selectedItem);
   }
 
-  migrate = (newServiceMrn: string) => {
-    this.onMigrate.emit({... this.selectedItem, newServiceMrn: newServiceMrn});
+  onMigrate = (newServiceMrn: string) => {
+    this.migrateEvent.emit({... this.selectedItem, newServiceMrn: newServiceMrn});
   }
 
   deleteItem = (selectedItem: any) => {
-    this.onDelete?.call(this, [selectedItem]);
+    this.deleteCall?.call(this, [selectedItem]);
   }
 
   isTimestampFormat(key: string): boolean {

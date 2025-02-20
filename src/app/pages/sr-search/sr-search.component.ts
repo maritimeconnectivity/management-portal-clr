@@ -86,7 +86,7 @@ export class SrSearchComponent {
   }
 
   ngOnInit(): void {
-    this.authService.getOrgMrn().then(orgMrn => {
+    this.authService.getOrgMrnFromToken().then(orgMrn => {
       this.orgMrn = orgMrn;
     });
     this.setLabel();
@@ -185,6 +185,7 @@ export class SrSearchComponent {
     });
   }
 
+  
   onSearch = (freetext: string) => {
     this.freetext = freetext;
     if (this.geometryMap) {

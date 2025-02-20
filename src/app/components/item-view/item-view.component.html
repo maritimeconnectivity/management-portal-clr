@@ -21,7 +21,7 @@
                                 } @else {
                                     <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables"
                                     [columnForMenu]="columnForMenu"
-                                    (openXmlDialogCall)="openXmlDialog($event)" (downloadDocFileCall)="downloadDocFile($event)"
+                                    (openCertModalEvent)="openXmlDialog($event)" (downloadDocFileEvent)="downloadDocFile($event)"
                                     />    
                                 }
                             </div>
@@ -34,8 +34,8 @@
                                 <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables" 
                                 [activeCertificates]="activeCertificates" [revokedCertificates]="revokedCertificates"
                                 [columnForMenu]="columnForMenu" [serial]="serial"
-                                (clickDownloadBtnCall)="clickDownloadBtn($event)" (clickRevokeBtnCall)="clickRevokeBtn($event)"
-                                (openCertModalCall)="openCertModal()"/>
+                                (downloadBtnEvent)="clickDownloadBtn($event)" (revokeBtnEvent)="clickRevokeBtn($event)"
+                                (openCertModalEvent)="openCertModal()"/>
                                 @if (itemType === 'orgcandidate') {
                                     <app-item-form #newAdminUserForm title="New administrator user" [isForNew]="true" [itemType]="userItemType" [item]="adminUser"
                                     [mrnPrefix]="adminUserMrnPrefix" />
@@ -72,7 +72,7 @@
 
 <clr-modal #certModal class="modal" [(clrModalOpen)]="certModalOpened" clrModalSize="lg">
     <div class="modal-title">
-            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            <button aria-label="Close" class="close" type="button" (click)="onCancel()">
             </button>
             <h3 class="modal-title">Issue a new certificate</h3>
         </div>
@@ -85,14 +85,14 @@
         </div>
         
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" (click)="download()">Download certificate</button>
-            <button class="btn btn-outline" type="button" (click)="cancel()">Close</button>
+            <button class="btn btn-primary" type="button" (click)="onDownload()">Download certificate</button>
+            <button class="btn btn-outline" type="button" (click)="onCancel()">Close</button>
         </div>
 </clr-modal>
 
 <clr-modal #revokeModal class="modal" [(clrModalOpen)]="revokeModalOpened" clrModalSize="lg">
     <div class="modal-title">
-            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            <button aria-label="Close" class="close" type="button" (click)="onCancel()">
             </button>
             @if (selectedActiveCerts.length > 1) {
                 <h3 class="modal-title">Revoke {{selectedActiveCerts.length}} certificates</h3>
@@ -155,13 +155,13 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" (click)="revokeCerts(selectedActiveCerts)">Revoke</button>
-            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+            <button class="btn btn-outline" type="button" (click)="onCancel()">Cancel</button>
         </div>
 </clr-modal>
 
 <clr-modal #migrateModal class="modal" [(clrModalOpen)]="migrateModalOpened" clrModalSize="lg">
     <div class="modal-title">
-            <button aria-label="Close" class="close" type="button" (click)="cancel()">
+            <button aria-label="Close" class="close" type="button" (click)="onCancel()">
             </button>
             {{'ir.migrate.title' | translate}}
         </div>
@@ -188,13 +188,13 @@
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" (click)="migrate()">Migrate</button>
-            <button class="btn btn-outline" type="button" (click)="cancel()">Cancel</button>
+            <button class="btn btn-outline" type="button" (click)="onCancel()">Cancel</button>
         </div>
 </clr-modal>
 
 <clr-modal #xmlModal class="modal" [(clrModalOpen)]="xmlModalOpened" clrModalSize="lg">
     <div class="modal-title">
-        <button aria-label="Close" class="close" type="button" (click)="cancel()">
+        <button aria-label="Close" class="close" type="button" (click)="onCancel()">
         </button>
         XML viewer
     </div>

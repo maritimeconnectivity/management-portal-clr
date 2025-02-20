@@ -2,24 +2,24 @@
     <clr-spinner>Loading</clr-spinner>
 } @else {
     <clr-datagrid [(clrDgSelected)]="selected">
-        @if (onAdd || onDelete || onDownload) {
+        @if (addCall || deleteCall || downloadCall) {
             <clr-dg-action-bar>
-                @if (onAdd !== undefined) {
+                @if (addCall !== undefined) {
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-secondary" (click)="onAdd()"><cds-icon shape="plus"></cds-icon>
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="addCall()"><cds-icon shape="plus"></cds-icon>
                             {{ addText }}
                         </button>
                     </div>
                 }
-                @if (onDelete !== undefined && onDownload !== undefined) {
+                @if (deleteCall !== undefined && downloadCall !== undefined) {
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
-                        <button type="button" class="btn btn-sm btn-secondary" (click)="onDownload(selected)" ><cds-icon shape="download"></cds-icon> {{downloadText}}</button>
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="deleteCall(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="downloadCall(selected)" ><cds-icon shape="download"></cds-icon> {{downloadText}}</button>
                     </div>
                 }
-                @else if (onDelete !== undefined) {
+                @else if (deleteCall !== undefined) {
                     <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="deleteCall(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
                     </div>
                 }
                 

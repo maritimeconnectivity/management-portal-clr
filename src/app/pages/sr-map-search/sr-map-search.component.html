@@ -1,11 +1,11 @@
 <div class="overlay-container">
     <app-input-geometry #map [fullscreen]="true" [isEditing]="true"
-      (onGeometryChange)="onUpdateGeometry($event)" [isForSearch]="true"
+      (geometryChangeEvent)="onUpdateGeometry($event)" [isForSearch]="true"
       [geometry]="geometries" [geometryBacklink]="geometryBacklink"
-      (select)="showInstanceInfo($event)"
-      (onClear)="onClearQueryGeometry()" />
+      (selectEvent)="showInstanceInfo($event)"
+      (clearEvent)="onClearQueryGeometry()" />
     <div class="overlay">
-      <app-svc-search-input #queryInput [orgMrn]="orgMrn" (onSearch)="onSearch($event)" (onClearAll)="onClearAll()" />
+      <app-svc-search-input #queryInput [orgMrn]="orgMrn" (searchEvent)="onSearch($event)" (clearAllEvent)="onClearAll()" />
     </div>
 </div>
 

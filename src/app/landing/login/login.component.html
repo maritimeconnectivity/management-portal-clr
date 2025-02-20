@@ -112,7 +112,7 @@
                 </clr-alert>
             }
             <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item"
-            [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)"/>
+            [mrnPrefix]="mrnPrefix" (submitEvent)="submit($event)"/>
         } @else {
             <clr-alert [clrAlertType]="'success'">
                 <clr-alert-item>

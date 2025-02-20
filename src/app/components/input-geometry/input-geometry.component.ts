@@ -41,9 +41,9 @@ export class InputGeometryComponent {
   @Input() fullscreen: boolean = false;
   @Input() isForSearch: boolean = false;
   @Input() mapContainerHeight: number = 200;
-  @Output() onGeometryChange = new EventEmitter<any>();
-  @Output() select = new EventEmitter<InstanceInfo[]>();
-  @Output() onClear = new EventEmitter<any>();
+  @Output() geometryChangeEvent = new EventEmitter<any>();
+  @Output() selectEvent = new EventEmitter<InstanceInfo[]>();
+  @Output() clearEvent = new EventEmitter<any>();
   @ViewChild('map', { static: true }) mapElement: ElementRef | undefined;
   mapFitToBounds: L.LatLngBounds = latLngBounds([-50, -10], [50, 10]);
   mapContainerHeightOffset = 120;
@@ -99,13 +99,13 @@ export class InputGeometryComponent {
 
   public onDrawCreated(e: any) {
     this.drawnGroup.addLayer((e as DrawEvents.Created).layer);
-    this.onGeometryChange.emit({ fieldName: 'geometry',
+    this.geometryChangeEvent.emit({ fieldName: 'geometry',
       data: getGeometryCollectionFromMap( this.isForSearch || this.isEditing ? this.drawnGroup : this.responseFeatureGroup)});
   }
 
   public onDrawDeleted(e: any) {
     this.drawnGroup.clearLayers();
-    this.onClear.emit();
+    this.clearEvent.emit();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -161,7 +161,7 @@ export class InputGeometryComponent {
           }
         });
         
-        this.select.emit(intersected);
+        this.selectEvent.emit(intersected);
       });
       this.responseFeatureGroup.addLayer(geomLayer);
       //*

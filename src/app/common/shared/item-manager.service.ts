@@ -27,6 +27,7 @@ import { SearchObjectResult, SECOMService } from 'src/app/backend-api/secom';
   providedIn: 'root'
 })
 export class ItemManagerService {
+  private rolesContext: { [orgMrn: string]: Role[] } = {};
 
   constructor(
     private deviceService: DeviceControllerService,
@@ -77,8 +78,15 @@ export class ItemManagerService {
       totalElements: page.totalElements!};
   }
 
-  fetchRoles = async (orgMrn: string) => {
-    return await firstValueFrom(this.roleService.getRoles(orgMrn));
+  fetchRolesInOrg = async (orgMrn: string) => {
+    if (!this.rolesContext[orgMrn]) {
+      this.rolesContext[orgMrn] = await firstValueFrom(this.roleService.getRoles(orgMrn));
+    }
+    return this.rolesContext[orgMrn];
+  }
+
+  clearRolesContext = () => {
+    this.rolesContext = {};
   }
 
   fetchSingleData = async (itemType: ItemType, orgMrn: string, id: string, instanceVersion?: string): Promise<any | undefined> => {
