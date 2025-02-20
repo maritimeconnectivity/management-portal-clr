@@ -4,33 +4,33 @@
 </div>
 <div class="clr-row">
     <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
-        <app-item-view [itemType]="itemType" [item]="selectedItem" (onEdit)="edit(selectedItem)"
-            (onDelete)="deleteItem(selectedItem)" (onRefresh)="refreshData()" (onMigrate)="migrate($event)"
-            (onApprove)="approve($event)" [isLoading]="false" [viewOnly]="itemType === 'searchobjectresult'" />
+        <app-item-view [itemType]="itemType" [item]="selectedItem" (edit)="onEdit(selectedItem)"
+            (onDelete)="deleteItem(selectedItem)" (onRefresh)="refreshData()" (onMigrate)="onMigrate($event)"
+            (onApprove)="onApprove($event)" [isLoading]="false" [viewOnly]="itemType === 'searchobjectresult'" />
     </div>
 </div>
 } @else {
-<clr-datagrid [(clrDgSelected)]="selected" (clrDgRefresh)="refresh($event)" [clrDgLoading]="isLoading">
-    @if (onAdd || onDelete || onDownload) {
+<clr-datagrid [(clrDgSelected)]="selected" (clrDgRefresh)="onRefresh($event)" [clrDgLoading]="isLoading">
+    @if (addCall || deleteCall || downloadCall) {
     <clr-dg-action-bar>
-        @if (onAdd !== undefined && itemType !== 'orgcandidate') {
+        @if (addCall !== undefined && itemType !== 'orgcandidate') {
         <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-secondary" (click)="onAdd()"><cds-icon shape="plus"></cds-icon>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="addCall()"><cds-icon shape="plus"></cds-icon>
                 {{ addText }}
             </button>
         </div>
         }
-        @if (onDelete !== undefined && onDownload !== undefined) {
+        @if (deleteCall !== undefined && downloadCall !== undefined) {
         <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)"><cds-icon
+            <button type="button" class="btn btn-sm btn-secondary" (click)="deleteCall(selected)"><cds-icon
                     shape="times"></cds-icon> {{deleteText}}</button>
-            <button type="button" class="btn btn-sm btn-secondary" (click)="onDownload(selected)"><cds-icon
+            <button type="button" class="btn btn-sm btn-secondary" (click)="downloadCall(selected)"><cds-icon
                     shape="download"></cds-icon> {{downloadText}}</button>
         </div>
         }
-        @else if (onDelete !== undefined) {
+        @else if (deleteCall !== undefined) {
         <div class="btn-group">
-            <button type="button" class="btn btn-sm btn-secondary" (click)="onDelete(selected)"><cds-icon
+            <button type="button" class="btn btn-sm btn-secondary" (click)="deleteCall(selected)"><cds-icon
                     shape="times"></cds-icon> {{deleteText}}</button>
         </div>
         }

@@ -3,9 +3,9 @@
         <app-smart-expandable-table #exTable
             [itemType]="itemType" [labels]="labels" [getData]="fetchData"
             [totalPages]="totalPages" [totalElements]="totalElements"
-            [onDelete]="onDelete" [onAdd]="onAdd"
-            (onRefresh)="refreshData()" (onMigrate)="migrate($event)"
-            (onEdit)="edit($event)" (onApprove)="approve($event)"
+            [deleteCall]="onDelete" [addCall]="onAdd"
+            (refreshEvent)="refreshData()" (migrateEvent)="migrate($event)"
+            (editEvent)="edit($event)" (approveEvent)="approve($event)"
             placeholder="There is no data." />
     }
 </div>
