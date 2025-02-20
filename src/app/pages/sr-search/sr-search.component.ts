@@ -192,7 +192,6 @@ export class SrSearchComponent {
       this.geometryMap.clearMap();
     }
     this.smartTable.loadData();
-    //this.search(freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? geojsonToWKT(this.queryGeometry) : '');
   }
 
   view = (selectedItem: any) => {

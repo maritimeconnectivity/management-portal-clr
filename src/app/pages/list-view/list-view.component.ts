@@ -179,7 +179,6 @@ export class ListViewComponent {
   edit = (selectedItem: any) => {
     // user can edit for their own organization
     if (this.itemType === ItemType.Organization && selectedItem.mrn === this.orgMrn) {
-      console.log(this.rolesInOrg);
       this.authService.hasPermission(this.itemType, this.rolesInOrg, true).then((hasPermission) => {
         if (!hasPermission) {
           this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
