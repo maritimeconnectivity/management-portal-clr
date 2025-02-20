@@ -75,6 +75,8 @@ export class ItemFormComponent {
 
   @Input() isVerified = false;
 
+  @Input() hasWritePermission = false;
+
   @Output() onCancel: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() onSubmit: EventEmitter<any> = new EventEmitter<any>();
@@ -99,8 +101,6 @@ export class ItemFormComponent {
   isXmlVerified = false;
 
   constructor(private formBuilder: FormBuilder,
-    private roleService: RoleControllerService,
-    private authService: AuthService,
     private notifierService: NotifierService,
     private translate: TranslateService,
     private fileHelperService: FileHelperService,
@@ -110,12 +110,8 @@ export class ItemFormComponent {
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    if (this.itemType !== ItemType.OrgCandidate) {
-      this.authService.getOrgMrn().then((orgMrn) => {
-        this.roleService.getRoles(orgMrn).subscribe((roles) => {
-          this.roles = roles;
-        });
-      });
+    if (this.itemType === ItemType.OrgCandidate) {
+      this.hasWritePermission = true;
     }
     this.prepareItem(this.itemType);
   }

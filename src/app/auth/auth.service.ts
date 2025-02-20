@@ -4,6 +4,8 @@ import { KeycloakService } from 'keycloak-angular';
 import { AuthPermission, hasAdminPermissionInMIR, rolesToPermission } from './auth.permission';
 import { ItemType } from '../common/menuType';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Role } from '../backend-api/identity-registry';
+import RoleNameEnum = Role.RoleNameEnum;
 
 @Injectable({
   providedIn: 'root'
@@ -44,43 +46,71 @@ export class AuthService {
     return this.keycloakService.getToken();
   }
 
-  public async getOrgMrn(): Promise<string> {
+  public async getOrgMrnFromToken(): Promise<string> {
     this.protectFromEmptyToken();
     return this.keycloakService.getKeycloakInstance().tokenParsed!["org"];
   }
 
-  public async getUserName(): Promise<string> {
+  public async getUserNameFromToken(): Promise<string> {
     this.protectFromEmptyToken();
     return this.keycloakService.getKeycloakInstance().tokenParsed!["name"];
   }
 
-  public async getUserMrn(): Promise<string> {
+  public async getUserMrnFromToken(): Promise<string> {
     this.protectFromEmptyToken();
     return this.keycloakService.getKeycloakInstance().tokenParsed!["mrn"];
   }
 
-  public async getUserRoles(): Promise<string[]> {
+  public async getUserRolesFromToken(): Promise<RoleNameEnum[]> {
     this.protectFromEmptyToken();
     return this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
   }
 
-  public async getUserPermission(): Promise<AuthPermission> {
+  public async getUserPermissionsFromToken(): Promise<string[]> {
+    this.protectFromEmptyToken();
+    return this.keycloakService.getKeycloakInstance().tokenParsed!["permissions"];
+  }
+
+  public async getUserPermission(rolesInOrg: Role[]): Promise<AuthPermission> {
     this.protectFromEmptyToken();
     return new Promise<AuthPermission>(async (resolve, reject) => {
-      const roles = await this.keycloakService.getKeycloakInstance().tokenParsed!["roles"];
-      if (!roles) {
+      let roles: RoleNameEnum[] = await this.getUserRolesFromToken() || [];
+      const permissions = await this.getUserPermissionsFromToken() || [];
+      if (!roles && !permissions) {
         resolve(AuthPermission.User);
+        return ;
       }
-      resolve(rolesToPermission(roles));
+
+      roles = Array.from(new Set([...roles, ...this.convertPermissionToRoles(permissions, rolesInOrg)]));
+      const final: AuthPermission = rolesToPermission(roles);
+      resolve(final);
     });
   }
 
-  public async hasPermission(context: ItemType, forMyOrg: boolean = false): Promise<boolean> {
+  public async hasSiteAdminPermission(rolesInOrg: Role[]): Promise<boolean> {
+    this.protectFromEmptyToken();
+    return new Promise<boolean>(async (resolve, reject) => {
+      let roles = await this.getUserRolesFromToken();
+      const permissions = await this.getUserPermissionsFromToken();
+      if (!roles || !permissions) {
+        resolve(false);
+        return ;
+      }
+      if (!roles) {
+        roles = [];
+      }
+      roles = Array.from(new Set([...roles, ...this.convertPermissionToRoles(permissions, rolesInOrg)]));
+      resolve(hasAdminPermissionInMIR(rolesToPermission(roles), AuthPermission.SiteAdmin));
+    });
+  }
+
+  public async hasPermission(context: ItemType, rolesInOrg: Role[], forMyOrg = false): Promise<boolean> {
     this.protectFromEmptyToken();
     return new Promise<boolean>(async (resolve, reject) => {
       if (!this.keycloakService.isLoggedIn())
         resolve(false);
-      this.getUserPermission().then((permission) => {
+
+      this.getUserPermission(rolesInOrg).then((permission) => {
         if (!permission) {
           resolve(false);
         }
@@ -106,6 +136,16 @@ export class AuthService {
         }
       });
     });
+  }
+
+  private convertPermissionToRoles(permission: string[], rolesInOrg: Role[]): RoleNameEnum[] {
+    const roles: RoleNameEnum[] = [];
+    for (const role of rolesInOrg) {
+      if (permission.includes(role.permission)) {
+        roles.push(role.roleName as RoleNameEnum);
+      }
+    }
+    return roles;
   }
 
   private protectFromEmptyToken = () => {

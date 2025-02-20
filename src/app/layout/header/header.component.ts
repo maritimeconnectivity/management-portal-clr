@@ -45,10 +45,10 @@ export class HeaderComponent {
     public translate: TranslateService,
     private router: Router
   ) {
-    this.authService.getUserName().then((userName) => {
+    this.authService.getUserNameFromToken().then((userName) => {
       this.userName = userName;
     });
-    this.authService.getUserMrn().then((myMrn) => {
+    this.authService.getUserMrnFromToken().then((myMrn) => {
       this.myMrn = myMrn;
     });
     this.theme = loadTheme();

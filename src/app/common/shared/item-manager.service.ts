@@ -77,7 +77,7 @@ export class ItemManagerService {
       totalElements: page.totalElements!};
   }
 
-  fetchRoles = async (orgMrn: string) => {
+  fetchRolesInOrg = async (orgMrn: string) => {
     return await firstValueFrom(this.roleService.getRoles(orgMrn));
   }
 

@@ -82,7 +82,7 @@ export class DetailViewComponent {
       this.serial = queryParams['serial'];
     }
     this.parseMyUrl().then(async () => {
-      this.authService.getOrgMrn().then(orgMrn => {
+      this.authService.getOrgMrnFromToken().then(orgMrn => {
         this.orgMrn = orgMrn;
         if (this.isForNew) {
           this.mrnPrefix = getMrnPrefixFromOrgMrn(orgMrn);
@@ -91,11 +91,13 @@ export class DetailViewComponent {
         } else {
           this.loadItem(this.orgMrn);
         }
-        this.authService.hasPermission(this.itemType, orgMrn === this.id).then((hasPermission) => {
-          if (this.itemType !== ItemType.Instance) {
-            this.hasAdminPermission = hasPermission;
-          }
-        });
+        this.itemManagerService.fetchRolesInOrg(orgMrn).then((roles) => {
+          this.authService.hasPermission(this.itemType, roles, orgMrn === this.id).then((hasPermission) => {
+            if (this.itemType !== ItemType.Instance) {
+              this.hasAdminPermission = hasPermission;
+            }
+          });
+        });        
         if (this.itemType === ItemType.Instance) {
           this.apiBase = 'sr';
           this.hasAdminPermission = true;

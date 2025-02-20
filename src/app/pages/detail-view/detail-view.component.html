@@ -12,7 +12,7 @@
         }
           <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn"
           [mrnPrefix]="mrnPrefix" (onSubmit)="submit($event)" (onCancel)="cancel()"
-          (verify)="onVerify($event)" [isVerified]="isVerified"/>
+          (verify)="onVerify($event)" [isVerified]="isVerified" [hasWritePermission]="hasAdminPermission"/>
     } @else {
     <app-item-view [isLoading]="isLoading" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"
         (onEdit)="edit(item)"

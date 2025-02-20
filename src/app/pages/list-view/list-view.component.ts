@@ -52,6 +52,7 @@ export class ListViewComponent {
   totalElements = 0;
   hasAdminPermission = false;
   apiBase = 'ir';
+  rolesInOrg: Role[] = [];
   private readonly notifier: NotifierService;
 
   constructor(
@@ -69,11 +70,14 @@ export class ListViewComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.parseMyUrl().then(() => {
-      this.authService.getOrgMrn().then((orgMrn) => {
+      this.authService.getOrgMrnFromToken().then((orgMrn) => {
         this.orgMrn = orgMrn;
         this.setLabel();
-        this.authService.hasPermission(this.itemType).then((hasPermission) => {
-          this.hasAdminPermission = true;
+        this.itemManagerService.fetchRolesInOrg(this.orgMrn).then((roles: Role[]) => {
+          this.rolesInOrg = roles;
+          this.authService.hasPermission(this.itemType, roles).then((hasPermission) => {
+            this.hasAdminPermission = true;
+          });
         });
         if (this.itemType === ItemType.Instance) {
           this.apiBase = 'sr';
@@ -113,7 +117,7 @@ export class ListViewComponent {
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object) => {
     try {
       if (itemType === ItemType.Role) {
-        return await this.itemManagerService.fetchRoles(this.orgMrn);
+        return await this.itemManagerService.fetchRolesInOrg(this.orgMrn);
       }
       const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
       if (!fetchedItems) {
@@ -175,7 +179,7 @@ export class ListViewComponent {
   edit = (selectedItem: any) => {
     // user can edit for their own organization
     if (this.itemType === ItemType.Organization && selectedItem.mrn === this.orgMrn) {
-      this.authService.hasPermission(this.itemType, true).then((hasPermission) => {
+      this.authService.hasPermission(this.itemType, this.rolesInOrg, true).then((hasPermission) => {
         if (!hasPermission) {
           this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
           return ;

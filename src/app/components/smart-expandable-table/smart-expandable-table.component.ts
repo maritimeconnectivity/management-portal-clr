@@ -89,7 +89,7 @@ export class SmartExpandableTableComponent {
 
     this.loadElementsPerPage();
 
-    this.authService.getOrgMrn().then((orgMrn) => {
+    this.authService.getOrgMrnFromToken().then((orgMrn) => {
       if (this.itemType === ItemType.Instance) {
         return;
       }

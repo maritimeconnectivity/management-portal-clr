@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.authService.getOrgMrn().then(mrn => {
+        this.authService.getOrgMrnFromToken().then(mrn => {
             this.orgMrn = mrn;
             this.isLoading = false;
         });

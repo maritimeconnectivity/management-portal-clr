@@ -115,7 +115,7 @@ export class ItemViewComponent {
       this.revokeReasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as CertificateRevocation.RevocationReasonEnum));
     }
     this.revokeReasons.sort((a, b) => a.value.localeCompare(b.value));
-    authService.getOrgMrn().then((orgMrn) => {
+    authService.getOrgMrnFromToken().then((orgMrn) => {
       this.orgMrn = orgMrn;
     });
   }
