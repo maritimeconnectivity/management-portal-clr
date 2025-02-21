@@ -174,7 +174,7 @@ export class DetailViewComponent {
       },
       err => {
         this.notifierService.notify('error',
-          this.translate.instant('error.resource.creationFailed') + err.error.message);
+          this.translate.instant('error.resource.creationFailed') + ' : ' + err.error.message);
         this.isLoading = false;
       },
       () => this.isLoading = false
@@ -196,7 +196,7 @@ export class DetailViewComponent {
       },
       err => {
         this.notifierService.notify('error',
-          this.translate.instant('error.resource.updateFailed') + err.error.message);
+          this.translate.instant('error.resource.updateFailed') + ' : ' + err.error.message);
         this.isLoading = false;
       }
     );
@@ -222,7 +222,7 @@ export class DetailViewComponent {
             this.notifier.notify('success', this.translate.instant('success.xml.update'));
           },
           err => {
-            this.notifier.notify('error', this.translate.instant('error.xml.update') + err.error.message);
+            this.notifier.notify('error', this.translate.instant('error.xml.update') + ' : ' + err.error.message);
           });
       }
       
@@ -262,7 +262,7 @@ export class DetailViewComponent {
         this.loadItem(this.orgMrn);
       },
       err => {
-        this.notifier.notify('error', this.translate.instant('error.resource.migrate') + err.error.message);
+        this.notifier.notify('error', this.translate.instant('error.resource.migrate')  + ' : '+ err.error.message);
       });
   }
 
