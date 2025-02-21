@@ -77,75 +77,47 @@ export class AuthService {
     return this.keycloakService.getKeycloakInstance().tokenParsed!["permissions"];
   }
 
-  public async getUserPermission(rolesInOrg: Role[]): Promise<AuthPermission> {
-    this.protectFromEmptyToken();
-    return new Promise<AuthPermission>(async (resolve, reject) => {
-      let roles: RoleNameEnum[] = await this.getUserRolesFromToken() || [];
-      const permissions = await this.getUserPermissionsFromToken() || [];
-      if (!roles && !permissions) {
-        resolve(AuthPermission.User);
-        return ;
-      }
-
-      roles = Array.from(new Set([...roles, ...this.convertPermissionToRoles(permissions, rolesInOrg)]));
-      const final: AuthPermission = rolesToPermission(roles);
-      resolve(final);
-    });
+  public getUserPermission(rolesInOrg: RoleNameEnum[]): AuthPermission {
+    if (!rolesInOrg || rolesInOrg.length === 0) {
+      return AuthPermission.User;
+    }
+    return rolesToPermission(rolesInOrg);
   }
 
-  public async hasSiteAdminPermission(rolesInOrg: Role[]): Promise<boolean> {
-    this.protectFromEmptyToken();
-    return new Promise<boolean>(async (resolve, reject) => {
-      let roles = await this.getUserRolesFromToken();
-      const permissions = await this.getUserPermissionsFromToken();
-      if (!roles || !permissions) {
-        resolve(false);
-        return ;
-      }
-      if (!roles) {
-        roles = [];
-      }
-      roles = Array.from(new Set([...roles, ...this.convertPermissionToRoles(permissions, rolesInOrg)]));
-      resolve(hasAdminPermissionInMIR(rolesToPermission(roles), AuthPermission.SiteAdmin));
-    });
+  public hasSiteAdminPermission(rolesInOrg: RoleNameEnum[]): boolean {
+    return hasAdminPermissionInMIR(rolesToPermission(rolesInOrg), AuthPermission.SiteAdmin);
   }
 
-  public async hasPermission(context: ItemType, rolesInOrg: Role[], forMyOrg = false): Promise<boolean> {
+  public hasPermission(context: ItemType, rolesInOrg: RoleNameEnum[], forMyOrg = false): boolean {
     this.protectFromEmptyToken();
-    return new Promise<boolean>(async (resolve, reject) => {
-      if (!this.keycloakService.isLoggedIn()){
-        resolve(false);
-        return ;
-      }
-        
-
-      this.getUserPermission(rolesInOrg).then((permission) => {
-        if (!permission) {
-          resolve(false);
-          return;
-        }
-        if (hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin)) { // super admin
-          resolve(true);
-        } else if (context === ItemType.User) {
-          resolve(hasAdminPermissionInMIR(permission, AuthPermission.UserAdmin));
-        } else if (context === ItemType.Device) {
-          resolve(hasAdminPermissionInMIR(permission, AuthPermission.DeviceAdmin));
-        } else if (context === ItemType.Vessel) {
-          resolve(hasAdminPermissionInMIR(permission, AuthPermission.VesselAdmin));
-        } else if (context === ItemType.MMS) {
-          resolve(hasAdminPermissionInMIR(permission, AuthPermission.MMSAdmin));
-        } else if (context === ItemType.Service) {
-          resolve(hasAdminPermissionInMIR(permission, AuthPermission.ServiceAdmin));
-        } else if (forMyOrg && context === ItemType.Organization || context === ItemType.Role) {
-          // for my own organization management
-          resolve(hasAdminPermissionInMIR(permission, AuthPermission.OrgAdmin));
-        } else if (context === ItemType.Organization) {
-          resolve(hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin));
-        } else {
-          resolve(false);
-        }
-      });
-    });
+    if (!this.keycloakService.isLoggedIn()){
+      return false;
+    }
+    
+    const permission = this.getUserPermission(rolesInOrg);
+    if (!permission) {
+      return false;
+    }
+    if (hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin)) { // super admin
+      return true;
+    } else if (context === ItemType.User) {
+      return (hasAdminPermissionInMIR(permission, AuthPermission.UserAdmin));
+    } else if (context === ItemType.Device) {
+      return (hasAdminPermissionInMIR(permission, AuthPermission.DeviceAdmin));
+    } else if (context === ItemType.Vessel) {
+      return (hasAdminPermissionInMIR(permission, AuthPermission.VesselAdmin));
+    } else if (context === ItemType.MMS) {
+      return (hasAdminPermissionInMIR(permission, AuthPermission.MMSAdmin));
+    } else if (context === ItemType.Service) {
+      return (hasAdminPermissionInMIR(permission, AuthPermission.ServiceAdmin));
+    } else if (forMyOrg && context === ItemType.Organization || context === ItemType.Role) {
+      // for my own organization management
+      return (hasAdminPermissionInMIR(permission, AuthPermission.OrgAdmin));
+    } else if (context === ItemType.Organization) {
+      return (hasAdminPermissionInMIR(permission, AuthPermission.SiteAdmin));
+    } else {
+      return false;
+    }
   }
 
   private convertPermissionToRoles(permission: string[], rolesInOrg: Role[]): RoleNameEnum[] {

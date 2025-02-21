@@ -24,6 +24,7 @@ import { loadLang } from 'src/app/common/translateHelper';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { Role } from 'src/app/backend-api/identity-registry';
 ClarityIcons.addIcons(helpInfoIcon, lockIcon, layersIcon, networkGlobeIcon);
+import RoleNameEnum = Role.RoleNameEnum;
 
 @Component({
   selector: 'mp-sidebar',
@@ -51,10 +52,8 @@ export class SidebarComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.authService.getOrgMrnFromToken().then((orgMrn: string) => {
-      this.itemManagerService.fetchRolesInOrg(orgMrn).then((rolesInOrg: Role[]) => {
-        this.authService.hasSiteAdminPermission(rolesInOrg).then((isSiteAdmin: boolean) => {
-          this.isSiteAdmin = isSiteAdmin;
-        });
+      this.itemManagerService.fetchRolesInOrg(orgMrn).then((rolesInOrg: RoleNameEnum[]) => {
+        this.isSiteAdmin = this.authService.hasSiteAdminPermission(rolesInOrg);
       });
     });
   }

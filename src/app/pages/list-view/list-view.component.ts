@@ -29,6 +29,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
+import RoleNameEnum = Role.RoleNameEnum;
 
 @Component({
   selector: 'app-list-view',
@@ -52,7 +53,6 @@ export class ListViewComponent {
   totalElements = 0;
   hasAdminPermission = false;
   apiBase = 'ir';
-  rolesInOrg: Role[] = [];
   private readonly notifier: NotifierService;
 
   constructor(
@@ -73,11 +73,8 @@ export class ListViewComponent {
       this.authService.getOrgMrnFromToken().then((orgMrn) => {
         this.orgMrn = orgMrn;
         this.setLabel();
-        this.itemManagerService.fetchRolesInOrg(this.orgMrn).then((roles: Role[]) => {
-          this.rolesInOrg = roles;
-          this.authService.hasPermission(this.itemType, roles).then((hasPermission) => {
-            this.hasAdminPermission = true;
-          });
+        this.itemManagerService.fetchRolesInOrg(this.orgMrn).then((roles: RoleNameEnum[]) => {
+          this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles);
         });
         if (this.itemType === ItemType.Instance) {
           this.apiBase = 'sr';
@@ -117,7 +114,7 @@ export class ListViewComponent {
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object) => {
     try {
       if (itemType === ItemType.Role) {
-        return await this.itemManagerService.fetchRolesInOrg(this.orgMrn);
+        return await this.itemManagerService.fetchListOfRoles(this.orgMrn);
       }
       const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
       if (!fetchedItems) {
@@ -179,14 +176,11 @@ export class ListViewComponent {
   edit = (selectedItem: any) => {
     // user can edit for their own organization
     if (this.itemType === ItemType.Organization && selectedItem.mrn === this.orgMrn) {
-      this.authService.hasPermission(this.itemType, this.rolesInOrg, true).then((hasPermission) => {
-        if (!hasPermission) {
-          this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
-          return ;
-        }
-        this.moveToEditPage(selectedItem);
-      });
-      return ;
+      if (!this.hasAdminPermission) {
+        this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
+        return ;
+      }
+      this.moveToEditPage(selectedItem);
     }
     if (!this.hasAdminPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
