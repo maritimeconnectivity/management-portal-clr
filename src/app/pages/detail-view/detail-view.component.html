@@ -11,7 +11,7 @@
               </clr-alert>
         }
           <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn"
-          [mrnPrefix]="mrnPrefix" (submitEvent)="submit($event)" (cancelEvent)="cancel()"
+          [mrnPrefix]="mrnPrefix" (submitEvent)="submit($event)" (cancelEvent)="cancel()" [roles]="roles"
           (verifyEvent)="onVerify($event)" [isVerified]="isVerified" [hasWritePermission]="hasAdminPermission"/>
     } @else {
     <app-item-view [isLoading]="isLoading" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"

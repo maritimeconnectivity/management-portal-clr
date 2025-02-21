@@ -79,11 +79,11 @@ export class ItemManagerService {
       totalElements: page.totalElements!};
   }
 
-  fetchListOfRoles = async (orgMrn: string) => {
+  fetchAllRolesInOrg = async (orgMrn: string) => {
     return await firstValueFrom(this.roleService.getRoles(orgMrn));
   }
 
-  fetchRolesInOrg = async (orgMrn: string) => {
+  fetchMyRolesInOrg = async (orgMrn: string) => {
     if (this.rolesInOrg.length === 0) {
       const roles = await firstValueFrom(this.roleService.getMyRole(orgMrn));
       this.rolesInOrg = roles.map(role => role as RoleNameEnum);

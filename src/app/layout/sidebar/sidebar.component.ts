@@ -52,7 +52,7 @@ export class SidebarComponent {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.authService.getOrgMrnFromToken().then((orgMrn: string) => {
-      this.itemManagerService.fetchRolesInOrg(orgMrn).then((rolesInOrg: RoleNameEnum[]) => {
+      this.itemManagerService.fetchMyRolesInOrg(orgMrn).then((rolesInOrg: RoleNameEnum[]) => {
         this.isSiteAdmin = this.authService.hasSiteAdminPermission(rolesInOrg);
       });
     });

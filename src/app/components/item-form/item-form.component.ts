@@ -77,6 +77,8 @@ export class ItemFormComponent {
 
   @Input() hasWritePermission = false;
 
+  @Input() roles: Role[] = [];
+
   @Output() cancelEvent: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
@@ -91,7 +93,6 @@ export class ItemFormComponent {
   itemForm: FormGroup = new FormGroup({});
   columnForMenu: { [key: string]: any } = {};
   isEditing = false;
-  roles: Role[] = [];
   id = '';
   onSubmitIsGiven = true;
   docToBeDeleted: DocDto | undefined;

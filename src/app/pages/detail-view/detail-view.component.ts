@@ -30,6 +30,8 @@ import { mustIncludePatternValidator } from 'src/app/common/mustIncludeValidator
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { loadLang } from 'src/app/common/translateHelper';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { Role } from 'src/app/backend-api/identity-registry';
+
 
 @Component({
   selector: 'app-detail-view',
@@ -58,6 +60,7 @@ export class DetailViewComponent {
   serial = '';
   apiBase = 'ir';
   isVerified = false;
+  roles: Role[] = [];
   private readonly notifier: NotifierService;
 
   constructor(private route: ActivatedRoute,
@@ -91,14 +94,19 @@ export class DetailViewComponent {
         } else {
           this.loadItem(this.orgMrn);
         }
-        this.itemManagerService.fetchRolesInOrg(orgMrn).then((roles) => {
+        this.itemManagerService.fetchMyRolesInOrg(orgMrn).then((roles) => {
           if (this.itemType !== ItemType.Instance) {
             this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles, orgMrn === this.id);
           }
-        });        
+        });
         if (this.itemType === ItemType.Instance) {
           this.apiBase = 'sr';
           this.hasAdminPermission = true;
+        }
+        if (this.isEditing) {
+          this.itemManagerService.fetchAllRolesInOrg(orgMrn).then((roles) => {
+            this.roles = roles;
+          });
         }
       }
       );
