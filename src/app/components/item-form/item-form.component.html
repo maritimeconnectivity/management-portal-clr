@@ -23,27 +23,39 @@
               *ngFor="let menu of columnForMenu | keyvalue : sortColumnForMenu"
             >
               @if (menu.key === 'mrn'){
-                <clr-input-container *ngIf="!isXmlEditorEnabled">
-                  <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
-                  <input
-                    clrInput
-                    [type]="menu.value.type"
-                    [formControlName]="menu.key"
-                    [required]="menu.value.required === true"
-                    [placeholder]="mrnPrefix"
-                    (ngModelChange)="onMrnChange($event)"
-                    (keydown)="onMrnKeyDown($event)"
-                    [style.width.px]="400"
-                  />
-                  <clr-control-helper>{{
-                    menu.value.description
-                  }}</clr-control-helper>
-                  @if (menu.value.error){
-                  <clr-control-error>{{ menu.value.error }}</clr-control-error>
-                  } @else {
-                  <clr-control-error>Please enter a value</clr-control-error>
-                  }
-                </clr-input-container>
+                @if (menu.value.immutable && !isForNew) {
+                  <div class="clr-form-control clr-form-control-disabled ng-star-inserted clr-row">
+                    <label class="clr-control-label clr-col-12 clr-col-md-2">{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
+                    <div class="clr-control-container clr-col-md-10 clr-col-12">
+                      <div class="clr-input-wrapper">
+                        <!-- to show disabled input-->
+                        <input type="text" placeholder="clarity_admin" value="{{item[menu.key]}}" disabled="" class="clr-input" style="width: 400px;">
+                      </div>
+                    </div>
+                  </div>
+                } @else {
+                  <clr-input-container *ngIf="!isXmlEditorEnabled">
+                    <label>{{ menu.value.title }} {{ menu.value.required ? '*' : ''}}</label>
+                    <input
+                      clrInput
+                      [type]="menu.value.type"
+                      [formControlName]="menu.key"
+                      [required]="menu.value.required === true"
+                      [placeholder]="mrnPrefix"
+                      (ngModelChange)="onMrnChange($event)"
+                      (keydown)="onMrnKeyDown($event)"
+                      [style.width.px]="400"
+                    />
+                    <clr-control-helper>{{
+                      menu.value.description
+                    }}</clr-control-helper>
+                    @if (menu.value.error){
+                    <clr-control-error>{{ menu.value.error }}</clr-control-error>
+                    } @else {
+                    <clr-control-error>Please enter a value</clr-control-error>
+                    }
+                  </clr-input-container>
+                }
               } @else if (menu.value.type === 'stringArray'){
                 <!-- array element handling -->
                     @if (menu.value.options) {
