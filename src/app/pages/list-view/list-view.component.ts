@@ -73,7 +73,7 @@ export class ListViewComponent {
       this.authService.getOrgMrnFromToken().then((orgMrn) => {
         this.orgMrn = orgMrn;
         this.setLabel();
-        this.itemManagerService.fetchRolesInOrg(this.orgMrn).then((roles: RoleNameEnum[]) => {
+        this.itemManagerService.fetchMyRolesInOrg(this.orgMrn).then((roles: RoleNameEnum[]) => {
           this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles);
         });
         if (this.itemType === ItemType.Instance) {
@@ -114,7 +114,7 @@ export class ListViewComponent {
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object) => {
     try {
       if (itemType === ItemType.Role) {
-        return await this.itemManagerService.fetchListOfRoles(this.orgMrn);
+        return await this.itemManagerService.fetchAllRolesInOrg(this.orgMrn);
       }
       const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
       if (!fetchedItems) {
