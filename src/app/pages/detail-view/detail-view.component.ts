@@ -92,11 +92,9 @@ export class DetailViewComponent {
           this.loadItem(this.orgMrn);
         }
         this.itemManagerService.fetchRolesInOrg(orgMrn).then((roles) => {
-          this.authService.hasPermission(this.itemType, roles, orgMrn === this.id).then((hasPermission) => {
-            if (this.itemType !== ItemType.Instance) {
-              this.hasAdminPermission = hasPermission;
-            }
-          });
+          if (this.itemType !== ItemType.Instance) {
+            this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles, orgMrn === this.id);
+          }
         });        
         if (this.itemType === ItemType.Instance) {
           this.apiBase = 'sr';
