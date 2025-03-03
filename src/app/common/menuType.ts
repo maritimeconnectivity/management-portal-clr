@@ -61,6 +61,11 @@ export enum MrnAttributeInMSR {
   Design = 'implementsServiceDesign',
 }
 
+export enum MCPComponentContext {
+  MIR = 'MIR',
+  MSR = 'MSR',
+}
+
 /**
  * scope of MCP entity types
  */
