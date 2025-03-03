@@ -17,7 +17,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DeviceControllerService, OrganizationControllerService, Role, RoleControllerService, ServiceControllerService, ServicePatch, User, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
-import { ItemType } from 'src/app/common/menuType';
+import { ItemType, MCPComponentContext } from 'src/app/common/menuType';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
 import { ClarityModule } from '@clr/angular';
@@ -73,12 +73,15 @@ export class ListViewComponent {
       this.authService.getOrgMrnFromToken().then((orgMrn) => {
         this.orgMrn = orgMrn;
         this.setLabel();
-        this.itemManagerService.fetchMyRolesInOrg(this.orgMrn).then((roles: RoleNameEnum[]) => {
-          this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles);
-        });
+        let mcpContext = MCPComponentContext.MIR;
         if (this.itemType === ItemType.Instance) {
           this.apiBase = 'sr';
+          mcpContext = MCPComponentContext.MSR;
         }
+        this.itemManagerService.fetchMyRolesInOrg(this.orgMrn).then((roles: RoleNameEnum[]) => {
+          this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles, mcpContext);
+        });
+        
       });
     });
   }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { AuthPermission, hasAdminPermissionInMIR, rolesToPermission } from './auth.permission';
-import { ItemType } from '../common/menuType';
+import { ItemType, MCPComponentContext } from '../common/menuType';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Role } from '../backend-api/identity-registry';
 import { ItemManagerService } from '../common/shared/item-manager.service';
@@ -88,8 +88,12 @@ export class AuthService {
     return hasAdminPermissionInMIR(rolesToPermission(rolesInOrg), AuthPermission.SiteAdmin);
   }
 
-  public hasPermission(context: ItemType, rolesInOrg: RoleNameEnum[], forMyOrg = false): boolean {
+  public hasPermission(context: ItemType, rolesInOrg: RoleNameEnum[], mcpcontext: MCPComponentContext, forMyOrg = false): boolean {
     this.protectFromEmptyToken();
+    if (mcpcontext === MCPComponentContext.MSR) {
+      return true;
+    }
+
     if (!this.keycloakService.isLoggedIn()){
       return false;
     }

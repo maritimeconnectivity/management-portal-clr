@@ -24,7 +24,7 @@ import { NotifierService } from 'gramli-angular-notifier';
 import { catchError, firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { InstanceDto, XmlDto } from 'src/app/backend-api/service-registry';
-import { ItemType } from 'src/app/common/menuType';
+import { ItemType, MCPComponentContext } from 'src/app/common/menuType';
 import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
 import { mustIncludePatternValidator } from 'src/app/common/mustIncludeValidator';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
@@ -94,15 +94,16 @@ export class DetailViewComponent {
         } else {
           this.loadItem(this.orgMrn);
         }
-        this.itemManagerService.fetchMyRolesInOrg(orgMrn).then((roles) => {
-          if (this.itemType !== ItemType.Instance) {
-            this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles, orgMrn === this.id);
-          }
-        });
+
+        let mcpContext = MCPComponentContext.MIR;
         if (this.itemType === ItemType.Instance) {
           this.apiBase = 'sr';
-          this.hasAdminPermission = true;
+          mcpContext = MCPComponentContext.MSR;
         }
+
+        this.itemManagerService.fetchMyRolesInOrg(orgMrn).then((roles) => { 
+          this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles, mcpContext, orgMrn === this.id);
+        });
         if (this.isEditing) {
           this.itemManagerService.fetchAllRolesInOrg(orgMrn).then((roles) => {
             this.roles = roles;
