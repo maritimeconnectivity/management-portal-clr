@@ -38,7 +38,7 @@
                                 (openCertModalEvent)="openCertModal()"/>
                                 @if (itemType === 'orgcandidate') {
                                     <app-item-form #newAdminUserForm title="New administrator user" [isForNew]="true" [itemType]="userItemType" [item]="adminUser"
-                                    [mrnPrefix]="adminUserMrnPrefix" />
+                                    [mrnPrefix]="adminUserMrnPrefix" [keysToFilter]="['permissions']" />
                                 }
                             }
                         }
