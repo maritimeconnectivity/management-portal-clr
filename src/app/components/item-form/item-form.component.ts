@@ -79,6 +79,8 @@ export class ItemFormComponent {
 
   @Input() roles: Role[] = [];
 
+  @Input() keysToFilter: string[] = [];
+
   @Output() cancelEvent: EventEmitter<any> = new EventEmitter<any>();
 
   @Output() submitEvent: EventEmitter<any> = new EventEmitter<any>();
@@ -305,6 +307,9 @@ export class ItemFormComponent {
   setForm = () => {
     let formElements: { [key: string]: any } = {};
     Object.entries(ColumnForResource[this.itemType.toString()]).map(([key, value]) => {
+      if (this.keysToFilter.length > 0 && this.keysToFilter.includes(key)) {
+        return;
+      }
       if (!value.visibleFrom)
         return;
       if (value.visibleFrom && !value.visibleFrom.includes(this.viewContext))
