@@ -3,7 +3,7 @@
         <app-smart-expandable-table #exTable
             [itemType]="itemType" [labels]="labels" [getData]="fetchData"
             [totalPages]="totalPages" [totalElements]="totalElements"
-            [deleteCall]="onDelete" [addCall]="onAdd"
+            [deleteCall]="onDelete" [addCall]="onAdd" [hasEditPermission]="hasEditPermission"
             (refreshEvent)="refreshData()" (migrateEvent)="migrate($event)"
             (editEvent)="edit($event)" (approveEvent)="approve($event)"
             placeholder="There is no data." />

@@ -51,7 +51,7 @@ export class ListViewComponent {
   viewContext = 'list';
   totalPages = 0;
   totalElements = 0;
-  hasAdminPermission = false;
+  hasEditPermission = false;
   apiBase = 'ir';
   private readonly notifier: NotifierService;
 
@@ -79,7 +79,7 @@ export class ListViewComponent {
           mcpContext = MCPComponentContext.MSR;
         }
         this.itemManagerService.fetchMyRolesInOrg(this.orgMrn).then((roles: RoleNameEnum[]) => {
-          this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles, mcpContext);
+          this.hasEditPermission = this.authService.hasPermission(this.itemType, roles, mcpContext);
         });
         
       });
@@ -144,7 +144,7 @@ export class ListViewComponent {
 
     if (selected.length === 0) {
       this.notifier.notify('error', this.translate.instant('error.selection.noSelection'));
-    } else if (!this.hasAdminPermission) {
+    } else if (!this.hasEditPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
       await selected.forEach(async (item) => {
@@ -165,7 +165,7 @@ export class ListViewComponent {
   }
 
   onAdd = () => {
-    if (!this.hasAdminPermission) {
+    if (!this.hasEditPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
       this.router.navigateByUrl('/pages/' + this.apiBase + '/'+this.itemType+'/new');
@@ -179,13 +179,13 @@ export class ListViewComponent {
   edit = (selectedItem: any) => {
     // user can edit for their own organization
     if (this.itemType === ItemType.Organization && selectedItem.mrn === this.orgMrn) {
-      if (!this.hasAdminPermission) {
+      if (!this.hasEditPermission) {
         this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
         return ;
       }
       this.moveToEditPage(selectedItem);
     }
-    if (!this.hasAdminPermission) {
+    if (!this.hasEditPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return ;
     } 
