@@ -21,6 +21,10 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-secondary" (click)="deleteCall(selected)" ><cds-icon shape="times"></cds-icon> {{deleteText}}</button>
                     </div>
+                } @else if (downloadCall !== undefined) {
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-secondary" (click)="downloadCall(selected)" ><cds-icon shape="download"></cds-icon> {{downloadText}}</button>
+                    </div>
                 }
                 
             </clr-dg-action-bar>

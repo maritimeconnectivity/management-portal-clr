@@ -3,7 +3,7 @@
         <button class="btn btn-sm btn-secondary" (click)="back()">To list</button>
     </div>
     @if (isEditing) {
-        @if (!hasAdminPermission) {
+        @if (!hasEditPermission) {
             <clr-alert [clrAlertType]="'warning'">
                 <clr-alert-item>
                   <span class="alert-text">You don't have a permission to edit.</span>
@@ -12,10 +12,10 @@
         }
           <app-item-form [isForNew]="isForNew" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn"
           [mrnPrefix]="mrnPrefix" (submitEvent)="submit($event)" (cancelEvent)="cancel()" [roles]="roles"
-          (verifyEvent)="onVerify($event)" [isVerified]="isVerified" [hasWritePermission]="hasAdminPermission"/>
+          (verifyEvent)="onVerify($event)" [isVerified]="isVerified" [hasEditPermission]="hasEditPermission"/>
     } @else {
     <app-item-view [isLoading]="isLoading" [itemType]="itemType" [item]="item" [orgMrn]="orgMrn" [mrnPrefix]="mrnPrefix" [serial]="serial"
-        (editEvent)="edit(item)"
+        (editEvent)="edit(item)" [hasEditPermission]="hasEditPermission"
         (refreshEvent)="loadItem(orgMrn)" (migrateEvent)="migrate($event)" (deleteEvent)="deleteItem()" />
     }
 </div>

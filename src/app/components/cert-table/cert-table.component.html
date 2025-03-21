@@ -1,7 +1,14 @@
 @if (context === 'active') {
-    <app-smart-table [labels]="columnsForActive" [data]="data" [selectedIds]="[serial]" [deleteCall]="onRevoke" deleteText="Revoke" [downloadCall]="onDownload" [addCall]="onAdd"
+    @if (hasEditPermission) {
+        <app-smart-table [labels]="columnsForActive" [data]="data" [selectedIds]="[serial]" [deleteCall]="onRevoke" deleteText="Revoke" [downloadCall]="onDownload" [addCall]="onAdd"
         placeholder="There is no issued certificate."
         [itemType]="itemType"></app-smart-table>
+    } @else {
+        <app-smart-table [labels]="columnsForActive" [data]="data" [selectedIds]="[serial]" [downloadCall]="onDownload"
+        placeholder="There is no issued certificate."
+        [itemType]="itemType"></app-smart-table>
+    }
+    
 } @else if (context === 'revoked') {
     <app-smart-table [labels]="columnsForRevoked" [data]="data" placeholder="There is no revoked certificate."
         [itemType]="itemType"></app-smart-table>

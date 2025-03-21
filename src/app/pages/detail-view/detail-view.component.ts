@@ -56,7 +56,7 @@ export class DetailViewComponent {
   isLoading = true;
   isForNew = false;
   item: any = {};
-  hasAdminPermission = false;
+  hasEditPermission = false;
   serial = '';
   apiBase = 'ir';
   isVerified = false;
@@ -102,7 +102,7 @@ export class DetailViewComponent {
         }
 
         this.itemManagerService.fetchMyRolesInOrg(orgMrn).then((roles) => { 
-          this.hasAdminPermission = this.authService.hasPermission(this.itemType, roles, mcpContext, orgMrn === this.id);
+          this.hasEditPermission = this.authService.hasPermission(this.itemType, roles, mcpContext, orgMrn === this.id);
         });
         if (this.isEditing) {
           this.itemManagerService.fetchAllRolesInOrg(orgMrn).then((roles) => {
@@ -146,7 +146,7 @@ export class DetailViewComponent {
   }
 
   edit = (item: any) => {
-    if (!this.hasAdminPermission) {
+    if (!this.hasEditPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return;
     }
@@ -159,7 +159,7 @@ export class DetailViewComponent {
   }
 
   submit = (item: any) => {
-    if (!this.hasAdminPermission) {
+    if (!this.hasEditPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return;
     }
@@ -268,7 +268,7 @@ export class DetailViewComponent {
   }
 
   deleteItem = () => {
-    if (!this.hasAdminPermission) {
+    if (!this.hasEditPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
       return;
     }

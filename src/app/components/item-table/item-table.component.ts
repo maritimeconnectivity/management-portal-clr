@@ -41,6 +41,7 @@ export class ItemTableComponent {
   @Input() revokedCertificates: any[] = [];
   @Input() columnForMenu: {[key: string]: any} = {};
   @Input() serial: string | undefined = undefined;
+  @Input() hasEditPermission: boolean = false;
   @Output() openXmlDialogEvent = new EventEmitter<any>();
   @Output() downloadDocFileEvent = new EventEmitter<any>();
   @Output() revokeBtnEvent = new EventEmitter<any>();

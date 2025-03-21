@@ -67,6 +67,7 @@ export class ItemViewComponent {
   @Input() isLoading = true;
   @Input() viewOnly = false;
   @Input() noMap = false;
+  @Input() hasEditPermission = false;
   @Output() editEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() migrateEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() deleteEvent: EventEmitter<any> = new EventEmitter<any>();
