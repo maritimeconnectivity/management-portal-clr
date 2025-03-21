@@ -33,7 +33,7 @@
                             } @else {
                                 <app-item-table [item]="item" [itemType]="itemType" [showCertTables]="showCertTables" 
                                 [activeCertificates]="activeCertificates" [revokedCertificates]="revokedCertificates"
-                                [columnForMenu]="columnForMenu" [serial]="serial"
+                                [columnForMenu]="columnForMenu" [serial]="serial" [hasEditPermission]="hasEditPermission"
                                 (downloadBtnEvent)="clickDownloadBtn($event)" (revokeBtnEvent)="clickRevokeBtn($event)"
                                 (openCertModalEvent)="openCertModal()"/>
                                 @if (itemType === 'orgcandidate') {

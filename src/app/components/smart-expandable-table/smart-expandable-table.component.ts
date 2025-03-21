@@ -50,6 +50,7 @@ export class SmartExpandableTableComponent {
   @Input() addText: string = 'Add';
   @Input() totalPages: number = 0;
   @Input() totalElements: number = 0;
+  @Input() hasEditPermission: boolean = false;
   @Input() getData: ((itemType: ItemType, pageNumber: number, elementsPerPage: number) => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
   @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() revokeCertsEvent: EventEmitter<any[]> = new EventEmitter();

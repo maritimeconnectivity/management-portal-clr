@@ -6,7 +6,7 @@
     <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
         <app-item-view [itemType]="itemType" [item]="selectedItem" (editEvent)="onEdit(selectedItem)"
             (deleteEvent)="deleteItem(selectedItem)" (refreshEvent)="refreshData()" (migrateEvent)="onMigrate($event)"
-            (approveEvent)="onApprove($event)" [isLoading]="false" [viewOnly]="itemType === 'searchobjectresult'" />
+            (approveEvent)="onApprove($event)" [isLoading]="false" [viewOnly]="itemType === 'searchobjectresult'" [hasEditPermission]="hasEditPermission" />
     </div>
 </div>
 } @else {

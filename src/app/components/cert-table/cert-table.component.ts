@@ -30,6 +30,7 @@ export class CertTableComponent {
   @Input() context: string = 'active';
   @Input() data: any[] = [];
   @Input() serial: string | undefined;
+  @Input() hasEditPermission: boolean = false;
   @Output() addEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() downloadEvent: EventEmitter<any[]> = new EventEmitter<any[]>();
   @Output() revokeEvent: EventEmitter<any[]> = new EventEmitter<any[]>();
