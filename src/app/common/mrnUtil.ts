@@ -18,3 +18,7 @@ export const getMrnPrefixFromOrgMrn = (orgMrn: string): string => {
     const list = orgMrn.split(':');
     return list.slice(0,3).join(':')+':entity:'+list.slice(4,6).join(':')+":";
 }
+
+export const isUserEditingTheirOwnData = (userMrn: string, mrnInToken: string): boolean => {
+    return userMrn === mrnInToken;
+}

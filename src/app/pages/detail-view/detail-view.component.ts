@@ -25,7 +25,7 @@ import { catchError, firstValueFrom, Observable, of, throwError } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { InstanceDto, XmlDto } from 'src/app/backend-api/service-registry';
 import { ItemType, MCPComponentContext } from 'src/app/common/menuType';
-import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
+import { getMrnPrefixFromOrgMrn, isUserEditingTheirOwnData } from 'src/app/common/mrnUtil';
 import { mustIncludePatternValidator } from 'src/app/common/mustIncludeValidator';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { loadLang } from 'src/app/common/translateHelper';
@@ -103,6 +103,12 @@ export class DetailViewComponent {
 
         this.itemManagerService.fetchMyRolesInOrg(orgMrn).then((roles) => { 
           this.hasEditPermission = this.authService.hasPermission(this.itemType, roles, mcpContext, orgMrn === this.id);
+          // user can't edit their own data
+          // if (this.itemType === ItemType.User && !this.hasEditPermission) {
+          //   this.authService.getUserMrnFromToken().then((mrn) => {
+          //     this.hasEditPermission = isUserEditingTheirOwnData(this.id, mrn);
+          //   });
+          // }
         });
         if (this.isEditing) {
           this.itemManagerService.fetchAllRolesInOrg(orgMrn).then((roles) => {

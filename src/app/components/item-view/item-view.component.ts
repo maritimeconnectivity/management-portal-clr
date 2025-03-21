@@ -32,11 +32,12 @@ import { CertificateRevocation } from 'src/app/backend-api/identity-registry';
 import { getReasonOptionFromRevocationReason, ReasonOption } from 'src/app/common/certRevokeInfo';
 import { migrateVesselAttributes } from 'src/app/common/filterObject';
 import { ItemFormComponent } from '../item-form/item-form.component';
-import { getMrnPrefixFromOrgMrn } from 'src/app/common/mrnUtil';
+import { getMrnPrefixFromOrgMrn, isUserEditingTheirOwnData } from 'src/app/common/mrnUtil';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 import { ItemTableComponent } from "../item-table/item-table.component";
 import { InputGeometryComponent } from '../input-geometry/input-geometry.component';
 import { preprocessToShow } from 'src/app/common/itemPreprocessor';
+import { loadLang } from 'src/app/common/translateHelper';
 
 @Component({
   selector: 'app-item-view',
@@ -109,7 +110,7 @@ export class ItemViewComponent {
     private translate: TranslateService,
     private notifier: NotifierService,
     private fileHelper: FileHelperService,
-    authService: AuthService,
+    private authService: AuthService,
     @Inject(LOCALE_ID) public locale: string,
   ) {
     for (const reason in CertificateRevocation.RevocationReasonEnum) {
@@ -119,6 +120,8 @@ export class ItemViewComponent {
     authService.getOrgMrnFromToken().then((orgMrn) => {
       this.orgMrn = orgMrn;
     });
+
+    loadLang(translate);
   }
 
   ngOnChanges(simpleChange: any) {
@@ -126,6 +129,16 @@ export class ItemViewComponent {
       return;
 
     this.item = simpleChange.item.currentValue && simpleChange.item.currentValue;
+
+    // give permission when user access their own profile
+    if (this.itemType === ItemType.User && !this.hasEditPermission) {
+      this.authService.getUserMrnFromToken().then((userMrn) => {
+        if (isUserEditingTheirOwnData(this.item.mrn, userMrn)) {
+          this.hasEditPermission = true;
+        }
+      });
+    }
+
     if (this.item && this.itemType === ItemType.Role) {
       this.itemId = this.item.id;
       this.setForm();

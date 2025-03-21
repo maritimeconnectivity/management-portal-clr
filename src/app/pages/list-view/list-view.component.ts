@@ -30,6 +30,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import RoleNameEnum = Role.RoleNameEnum;
+import { isUserEditingTheirOwnData } from 'src/app/common/mrnUtil';
 
 @Component({
   selector: 'app-list-view',
@@ -52,6 +53,7 @@ export class ListViewComponent {
   totalPages = 0;
   totalElements = 0;
   hasEditPermission = false;
+  currentUserMrn = '';
   apiBase = 'ir';
   private readonly notifier: NotifierService;
 
@@ -81,7 +83,11 @@ export class ListViewComponent {
         this.itemManagerService.fetchMyRolesInOrg(this.orgMrn).then((roles: RoleNameEnum[]) => {
           this.hasEditPermission = this.authService.hasPermission(this.itemType, roles, mcpContext);
         });
-        
+
+        // fetch user's own MRN from token and store it
+        // this.authService.getUserMrnFromToken().then((userMrn) => {
+        //   this.currentUserMrn = userMrn;
+        // });
       });
     });
   }
@@ -185,11 +191,17 @@ export class ListViewComponent {
       }
       this.moveToEditPage(selectedItem);
     }
-    if (!this.hasEditPermission) {
-      this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
-      return ;
-    } 
-    this.moveToEditPage(selectedItem);
+    // user can edit for their own profile
+    // else if (this.itemType === ItemType.User && isUserEditingTheirOwnData(selectedItem.mrn, this.currentUserMrn)) {
+    //   this.moveToEditPage(selectedItem);
+    // } 
+    else {
+      if (!this.hasEditPermission) {
+        this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
+        return ;
+      } 
+      this.moveToEditPage(selectedItem);
+    }
   }
 
   view = (selectedItem: any) => {
