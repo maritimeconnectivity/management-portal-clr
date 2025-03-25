@@ -209,7 +209,7 @@
     "error": {
         "selection": {
             "noSelection": "You need to select at least one item",
-            "wrongtype": "You choose wrong type"
+            "notMigrated": "You need to migrate the service first"
         },
         "form": {
             "invalid": "Please fill in all required fields",

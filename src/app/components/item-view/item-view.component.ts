@@ -220,7 +220,7 @@ export class ItemViewComponent {
 
   openCertModal = () => {
     if (this.itemType === ItemType.Service && this.instanceVersion) {
-      this.notifier.notify('error', this.translate.instant('error.selection.wrongtype'));
+      this.notifier.notify('error', this.translate.instant('error.selection.notMigrated'));
       return ;
     }
     this.certModal?.open();
@@ -297,7 +297,7 @@ export class ItemViewComponent {
 
   clickRevokeBtn = (selected: any[]) => {
     if (this.itemType === ItemType.Service && this.instanceVersion) {
-      this.notifier.notify('error', this.translate.instant('error.selection.wrongtype'));
+      this.notifier.notify('error', this.translate.instant('error.selection.notMigrated'));
       return ;
     }
     if (selected.length === 0) {

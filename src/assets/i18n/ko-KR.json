@@ -204,7 +204,7 @@
     "error": {
         "selection": {
             "noSelection": "선택된 항목이 없습니다",
-            "wrongType": "잘못된 유형의 항목이 선택되었습니다"
+            "notMigrated": "마이그레이션이 필요합니다"
         },
         "form": {
             "invalid": "잘못된 입력값이 있습니다",
