@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild } from '@angular/core';
+import {Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild, OnChanges, OnInit} from '@angular/core';
 import { ItemType, itemTypeToString } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { FormsModule } from '@angular/forms';
@@ -58,7 +58,7 @@ import { loadLang } from 'src/app/common/translateHelper';
   templateUrl: './item-view.component.html',
   styleUrl: './item-view.component.css'
 })
-export class ItemViewComponent {
+export class ItemViewComponent implements OnChanges {
   @Input() itemType: ItemType = ItemType.None;
   @Input() item: any = {};
   @Input() orgMrn = '';
@@ -82,7 +82,7 @@ export class ItemViewComponent {
   @ViewChild(ItemFormComponent) newAdminUserForm: ItemFormComponent | undefined;
 
   viewContext = 'detail';
-  columnForMenu: {[key: string]: any} = {};
+  columnForMenu: Record<string, any> = {};
   itemId = "";
   activeCertificates: any[] = [];
   revokedCertificates: any[] = [];
@@ -228,7 +228,7 @@ export class ItemViewComponent {
     this.issue();
   }
 
-  openXmlDialog = (xml: any, isEditing: boolean = false) => {
+  openXmlDialog = (xml: any, isEditing = false) => {
     this.xmlModalOpened = true;
     this.xmlModal?.open();
     this.xmlContent = xml.content;
@@ -240,16 +240,16 @@ export class ItemViewComponent {
 
   downloadFile(filename: string, type: string, data: string) {
     // decode base64 string, remove space for IE compatibility
-    var binary = atob(data.replace(/\s/g, ''));
-    var len = binary.length;
-    var buffer = new ArrayBuffer(len);
-    var view = new Uint8Array(buffer);
-    for (var i = 0; i < len; i++) {
+    const binary = atob(data.replace(/\s/g, ''));
+    const len = binary.length;
+    const buffer = new ArrayBuffer(len);
+    const view = new Uint8Array(buffer);
+    for (let i = 0; i < len; i++) {
         view[i] = binary.charCodeAt(i);
     }
 
-    var blob = new Blob([view], {type: type});
-    var elem = window.document.createElement('a');
+    const blob = new Blob([view], {type: type});
+    const elem = window.document.createElement('a');
     elem.href = window.URL.createObjectURL(blob);
     elem.download = filename;
     document.body.appendChild(elem);
@@ -258,7 +258,7 @@ export class ItemViewComponent {
 }
 
   issue = () => {
-    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser, this.instanceVersion).then((cert: CertificateBundle | undefined) => {
+    issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser).then((cert: CertificateBundle | undefined) => {
       this.certificateBundle = cert;
       this.notifier.notify('success', this.translate.instant('success.certificate.issue'));
     });
@@ -271,7 +271,7 @@ export class ItemViewComponent {
       revokedAt: this.revokeAt,
       revocationReason: this.revokeReason?.value!,
     };
-    
+
     selected.forEach((cert) => {
       this.certificateService.revokeCertificate(this.itemType, this.item.mrn, this.orgMrn, cert.serialNumber, certificateRevocation, this.instanceVersion)
       .subscribe((res) => {
@@ -340,7 +340,7 @@ export class ItemViewComponent {
   issueManualKeystore = () => {
     this.fromBrowser = false;
   }
-  
+
   getItemTypeTitle = (itemType: ItemType) => {
     return itemTypeToString(itemType);
   }
