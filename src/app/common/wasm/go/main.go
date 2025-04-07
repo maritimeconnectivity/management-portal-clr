@@ -93,7 +93,7 @@ func createCsrWrapper() js.Func {
 
 				// Extract public key
 				pubKey := privKey.Public()
-				rawPubKey, err := x509.MarshalPKIXPublicKey(&pubKey)
+				rawPubKey, err := x509.MarshalPKIXPublicKey(pubKey.(*ecdsa.PublicKey))
 				if err != nil {
 					errorObject := errorConstructor.New(err.Error())
 					reject.Invoke(errorObject)
