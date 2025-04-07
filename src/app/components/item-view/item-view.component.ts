@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild, OnChanges, OnInit} from '@angular/core';
+import {Component, EventEmitter, Inject, Input, LOCALE_ID, Output, ViewChild, OnChanges} from '@angular/core';
 import { ItemType, itemTypeToString } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { FormsModule } from '@angular/forms';

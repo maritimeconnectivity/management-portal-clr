@@ -17,8 +17,6 @@
 import {ItemType} from "./menuType";
 import {CertificateService} from "./shared/certificate.service";
 import {CertificateBundle} from "./certificateBundle";
-import {createCsr, createPKCS12Keystore} from "./wasm/main.wasm";
-
 
 export const issueNewWithLocalKeys = async (
     certificateService: CertificateService,

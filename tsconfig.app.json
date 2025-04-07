@@ -3,7 +3,9 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": []
+    "types": [
+      "golang-wasm-exec"
+    ],
   },
   "files": [
     "src/main.ts"

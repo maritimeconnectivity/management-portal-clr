@@ -54,7 +54,6 @@
     "rxjs": "~7.8.0",
     "shortid": "^2.2.16",
     "tslib": "^2.3.0",
-    "wkt": "link:@types/@terraformer/wkt",
     "zone.js": "^0.14.10"
   },
   "devDependencies": {

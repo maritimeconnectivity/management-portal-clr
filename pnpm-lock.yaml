@@ -110,9 +110,6 @@ importers:
       tslib:
         specifier: ^2.3.0
         version: 2.7.0
-      wkt:
-        specifier: link:@types/@terraformer/wkt
-        version: link:@types/@terraformer/wkt
       zone.js:
         specifier: ^0.14.10
         version: 0.14.10

@@ -6,7 +6,7 @@
  * @property publicKeyPem PEM encoded public key
  * @property csr PEM encoded CSR
  */
-export interface CsrResult {
+interface CsrResult {
     privateKeyPem: string;
     rawPrivateKey: Uint8Array;
     publicKeyPem: string;
@@ -19,7 +19,7 @@ export interface CsrResult {
  * @property keystore DER encoded PKCS#12 keystore
  * @property password the generated password of the keystore
  */
-export interface KeystoreResult {
+interface KeystoreResult {
     keystore: Uint8Array;
     password: string;
 }
