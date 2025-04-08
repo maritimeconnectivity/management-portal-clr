@@ -11,9 +11,15 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 You can experience a live demo from [our public demonstrator environment](https://management.maritimeconnectivity.net).
 
 # Development
-## Requirement
-- node v20.17.0
-- pnpm v8.15.4
+## Requirements
+- node v20.17.0+
+- pnpm v9.7.0+
+- Go 1.24+
+
+## Building the Go WASM module
+The Go WASM module, which is used for generating public/private key-pairs, certificate signing request and PKCS#12 keystores, can be built by running `pnpm run build:go`.
+
+This needs to be done before performing any of the following actions.
 
 ## Development server
 
