@@ -1,6 +1,6 @@
 module webcrypto-test
 
-go 1.24
+go 1.24.1
 
 require software.sslmate.com/src/go-pkcs12 v0.5.0
 
