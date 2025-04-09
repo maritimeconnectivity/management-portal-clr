@@ -13,6 +13,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:go": "cd go && GOOS=js GOARCH=wasm go build -o ../src/assets/wasm/main.wasm && cp $(go env GOROOT)/lib/wasm/wasm_exec.js ../src/assets/js/wasm_exec.js",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
@@ -50,13 +51,9 @@
     "leaflet": "^1.9.4",
     "leaflet-draw": "^1.0.2",
     "lucene-query-string-builder": "^1.0.8",
-    "pkijs": "^3.2.4",
-    "pvtsutils": "^1.3.5",
-    "pvutils": "^1.1.3",
     "rxjs": "~7.8.0",
     "shortid": "^2.2.16",
     "tslib": "^2.3.0",
-    "wkt": "link:@types/@terraformer/wkt",
     "zone.js": "^0.14.10"
   },
   "devDependencies": {
@@ -67,6 +64,7 @@
     "@types/d3-shape": "^3.1.6",
     "@types/file-saver": "^2.0.7",
     "@types/geojson": "^7946.0.14",
+    "@types/golang-wasm-exec": "^1.15.2",
     "@types/jasmine": "~4.3.0",
     "@types/leaflet": "^1.9.14",
     "@types/leaflet-draw": "^1.0.11",

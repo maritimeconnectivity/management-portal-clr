@@ -1,0 +1,32 @@
+name: Build project
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24
+          cache-dependency-path: ./go/go.sum
+
+      - name: build
+        run: |
+          pnpm install
+          pnpm run build:go
+          pnpm run build

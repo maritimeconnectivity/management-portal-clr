@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import 'src/assets/js/wasm_exec.js';
 
 @Component({
-  selector: 'app-root',
-  template: '<router-outlet></router-outlet><notifier-container></notifier-container>',
-  styleUrls: ['./app.component.css']
+    selector: 'app-root',
+    template: '<router-outlet></router-outlet><notifier-container></notifier-container>',
+    styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'management-portal-clr';
+export class AppComponent implements OnInit {
+    title = 'management-portal-clr';
+
+    ngOnInit() {
+        const go = new Go();
+        WebAssembly.instantiateStreaming(fetch(window.location.origin + "/assets/wasm/main.wasm"), go.importObject)
+            .then(result => {
+                console.log("Loaded WASM");
+                go.run(result.instance).then(() => console.log("Finished"));
+            });
+    }
 }
