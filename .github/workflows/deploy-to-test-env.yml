@@ -1,4 +1,4 @@
-name: NodeJS with Webpack
+name: Deploy with Webpack
 
 on:
   push:
@@ -9,24 +9,31 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - uses: pnpm/action-setup@v4
-      with:
-        version: 9
-        
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: 18.x
-        cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
-    - name: Build
-      env:
-        GITHUB_TOKEN: ${{ secrets.PAT }}
-      run: |
-        pnpm install
-        pnpm install -g @angular/cli
-        git config --global user.name "GhPages Deploy Bot"
-        git config --global user.email "jinki+gh_deploy@dmc.international"
-        ng deploy -c test --repo=https://github.com/maritimeconnectivity/test-management-portal-pages --cname=test-management.maritimeconnectivity.net --dir="dist/management-portal-clr"
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'pnpm'
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.24
+          cache-dependency-path: ./go/go.sum
+
+      - name: Build
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
+        run: |
+          pnpm install
+          pnpm install -g @angular/cli
+          git config --global user.name "GhPages Deploy Bot"
+          git config --global user.email "jinki+gh_deploy@dmc.international"
+          pnpm run build:go
+          ng deploy -c test --repo=https://github.com/maritimeconnectivity/test-management-portal-pages --cname=test-management.maritimeconnectivity.net --dir="dist/management-portal-clr"
