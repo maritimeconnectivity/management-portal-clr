@@ -62,6 +62,7 @@ You can use configuration by using `-c %CONF_NAME%`. Building with test configur
 
 ## Build
 
+You need to build the Go WASM module first to proceed.
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
 ## Running unit tests
@@ -72,8 +73,9 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## GitHub deployment
+## GitHub Pages deployment
 
+You need to build the Go WASM module first to proceed.
 Run `ng deploy --repo=%REPO_TO_DEPLOY% --cname=%URL --dir="dist/management-portal-clr"` for GitHub Pages deployment
 
 ## Localization support
