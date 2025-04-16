@@ -88,6 +88,10 @@ export class AuthService {
     return hasAdminPermissionInMIR(rolesToPermission(rolesInOrg), AuthPermission.SiteAdmin);
   }
 
+  public hasApproveOrgPermission(rolesInOrg: RoleNameEnum[]): boolean {
+    return hasAdminPermissionInMIR(rolesToPermission(rolesInOrg), AuthPermission.ApproveOrg);
+  }
+
   public hasPermission(context: ItemType, rolesInOrg: RoleNameEnum[], mcpcontext: MCPComponentContext, forMyOrg = false): boolean {
     this.protectFromEmptyToken();
     if (mcpcontext === MCPComponentContext.MSR) {

@@ -53,7 +53,7 @@ export class SidebarComponent {
     //Add 'implements OnInit' to the class.
     this.authService.getOrgMrnFromToken().then((orgMrn: string) => {
       this.itemManagerService.fetchMyRolesInOrg(orgMrn).then((rolesInOrg: RoleNameEnum[]) => {
-        this.isSiteAdmin = this.authService.hasSiteAdminPermission(rolesInOrg);
+        this.isSiteAdmin = this.authService.hasSiteAdminPermission(rolesInOrg) || this.authService.hasApproveOrgPermission(rolesInOrg);
       });
     });
   }

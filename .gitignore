@@ -130,3 +130,5 @@ dist
 .pnp.*
 
 .angular/cache
+src/assets/wasm/main.wasm
+src/assets/js/wasm_exec.js
