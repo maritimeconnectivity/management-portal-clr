@@ -216,6 +216,9 @@
             "invalidmrn": "Please enter a valid MRN",
             "requiremigrate" :"You need to migrate the service first"
         },
+        "user": {
+            "emailConflict": "The email address is already in use for organization"
+        },
         "xml" :{
             "emptyXml": "The XML form is empty",
             "invalidXml": "The XML format is invalid according to G1128",

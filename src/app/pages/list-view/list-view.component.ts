@@ -254,17 +254,17 @@ export class ListViewComponent {
                 this.router.navigateByUrl('/pages/' + this.apiBase + '/organization');
               },
               err => {
-                this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.userCreation') + err.error?.message);
+                this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.userCreation') + ": " + err.error?.message);
               }
             );
           },
           err => {
-            this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.roleCreation') + err.error?.message);
+            this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.roleCreation') + ": " + err.error?.message);
           });
         
       },
       err => {
-        this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.general') + err.error?.message);
+        this.notifier.notify('error', this.translate.instant('error.resource.approveOrganization.general') + ": " + err.error?.message);
       });
   }
 
