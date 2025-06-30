@@ -210,12 +210,6 @@ export class ItemViewComponent implements OnChanges {
   approve = () => {
     if (this.newAdminUserForm?.isValid()) {
       this.adminUser = this.newAdminUserForm?.getFormValue();
-      // if the admin user's email conflicts with the org email, show error
-      if (this.item.email === this.adminUser.email) {
-        this.notifier.notify('error', this.translate.instant('error.user.emailConflict'));
-        return;
-      }
-
       this.approveEvent.emit({...this.item, adminUser: this.adminUser});
     }
   }
