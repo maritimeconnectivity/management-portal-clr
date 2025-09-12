@@ -37,7 +37,7 @@ export class FileHelperService {
 
     public downloadPemCertificate(certificateBundle: CertificateBundle, entityName: string) {
         try {
-            const nameNoSpacesOrColons = entityName.replaceAll(/(\s|:)/, '_');
+            const nameNoSpacesOrColons = entityName.replaceAll(/(\s|:)/g, '_');
 
             const zip = new JSZip();
             zip.file("Certificate_" + nameNoSpacesOrColons + ".pem", certificateBundle.certificate!);
