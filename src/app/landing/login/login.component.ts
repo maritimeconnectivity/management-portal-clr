@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Injectable, ViewChild } from '@angular/core';
-import { KeycloakService } from 'keycloak-angular';
+import { Component, ViewChild } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
 import {NgIf} from "@angular/common";
 import { ClrAlert, ClrAlertModule, ClrDropdownModule, ClrModal, ClrModalModule, ClrSelectModule, ClrWizard, ClrWizardModule } from '@clr/angular';
@@ -56,6 +55,7 @@ export class LoginComponent {
   footerName = AppConfig.FOOTER_NAME;
   environmentName = AppConfig.ENVIRONMENT_NAME.toUpperCase();
   serviceProviderName = AppConfig.MP_NAME;
+  serviceYear = AppConfig.MP_YEAR ?? new Date().getFullYear();
   currentLang = "en-GB";
   currentLangName = "English";
   loggedIn = false;
