@@ -38,6 +38,7 @@ export class AppConfig {
     static MP_CONTACT: string;
     static MP_VERSION: string;
     static MP_NAME: string;
+    static MP_YEAR: string;
     static FOOTER_NAME: string;
     static FOOTER_LINK: string;
     static LOGO_IMG: string;
@@ -61,6 +62,7 @@ export class AppConfig {
         AppConfig.TERMS_OF_USE = environment.termsOfUse;
         AppConfig.MP_CONTACT = environment.mpContact;
         AppConfig.MP_VERSION = mpVersion;
+        AppConfig.MP_YEAR = environment.mpYear;
         AppConfig.FOOTER_NAME = environment.footerName;
         AppConfig.FOOTER_LINK = environment.footerLink;
         AppConfig.LOGO_IMG = environment.logoImg;
