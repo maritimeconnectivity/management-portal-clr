@@ -185,14 +185,15 @@ export class SrSearchComponent {
     });
   }
 
-  
-  onSearch = (freetext: string) => {
-    this.freetext = freetext;
+
+  onSearch = (payload: { scope: 'local' | 'global'; queryString: string }) => {
+    this.freetext = payload.queryString;
     if (this.geometryMap) {
       this.geometryMap.clearMap();
     }
     this.smartTable.loadData();
   }
+
 
   view = (selectedItem: any) => {
     this.itemManagerService.fetchSingleData(this.instanceType, this.orgMrn, selectedItem.instanceId, selectedItem.version).then((instance) => {

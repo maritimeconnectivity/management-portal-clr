@@ -52,12 +52,13 @@ export class SvcSearchInputComponent {
   selectedItem = '';
   queryString = '';
   geometryIncluded = false;
+  scope: 'local' | 'global' = 'local';
 
   @Input() title = 'Service Search';
   @Input() btnTitle = 'Search';
   @Input() orgMrn = '';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
-  @Output() searchEvent = new EventEmitter<string>();
+  @Output() searchEvent = new EventEmitter<{ scope: 'local' | 'global'; queryString: string }>();
   @Output() clearAllEvent = new EventEmitter<any>();
 
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
@@ -240,8 +241,14 @@ export class SvcSearchInputComponent {
   }
 
   search(): void {
-    this.searchEvent.emit(this.queryString);
+    this.searchEvent.emit({
+      scope: this.scope,
+      queryString: this.queryString,
+    });
   }
+
+
+
 
   updateLuceneQuery = () => {
     this.queryString = buildQuery(this.luceneTerm);
@@ -315,6 +322,9 @@ export class SvcSearchInputComponent {
     }
     this.updateLuceneQuery();
     this.loadComponent();
-    this.searchEvent.emit(this.queryString);
+    this.searchEvent.emit({
+      scope: this.scope,
+      queryString: this.queryString,
+    });
   }
 }

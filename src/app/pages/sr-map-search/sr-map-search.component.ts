@@ -101,9 +101,9 @@ export class SrMapSearchComponent {
     return queryObject;
   }
 
-  onSearch = (freetext: string) => {
-    this.freetext = freetext;
-    this.search(freetext, this.searchParams);
+   onSearch = (payload: { scope: 'local' | 'global'; queryString: string }) => {
+    this.freetext = payload.queryString;
+    this.search(this.freetext, this.searchParams);
   }
 
   search = async (freetext: string, searchParams?: SearchParameters) => {
