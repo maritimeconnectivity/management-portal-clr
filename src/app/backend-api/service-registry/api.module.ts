@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 
 import { DocControllerService } from './api/docController.service';
 import { InstanceControllerService } from './api/instanceController.service';
-import { LedgerRequestControllerService } from './api/ledgerRequestController.service';
 import { XmlControllerService } from './api/xmlController.service';
 
 @NgModule({
@@ -15,7 +14,6 @@ import { XmlControllerService } from './api/xmlController.service';
   providers: [
     DocControllerService,
     InstanceControllerService,
-    LedgerRequestControllerService,
     XmlControllerService ]
 })
 export class ApiModule {
