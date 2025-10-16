@@ -11,11 +11,11 @@
  */
 
 export interface DocDto { 
-    id?: any;
-    name: any;
-    comment?: any;
-    mimetype: any;
-    filecontent: any;
-    filecontentContentType?: any;
-    instanceId?: any;
+    id?: number;
+    name: string;
+    comment?: string;
+    mimetype: string;
+    filecontent: string;
+    filecontentContentType?: string;
+    instanceId?: number;
 }

@@ -14,28 +14,68 @@ import { Geometry } from './geometry';
 import { XmlDto } from './xmlDto';
 
 export interface InstanceDto { 
-    id?: any;
-    name: any;
-    version: any;
-    publishedAt?: any;
-    lastUpdatedAt?: any;
-    comment: any;
+    id?: number;
+    name: string;
+    version: string;
+    publishedAt?: Date;
+    lastUpdatedAt?: Date;
+    comment: string;
     geometry?: Geometry;
-    geometryContentType?: any;
-    instanceId: any;
-    keywords?: any;
-    status: any;
-    organizationId?: any;
-    unlocode?: any;
-    endpointUri?: any;
-    statusEndpointUri?: any;
-    mmsi?: any;
-    imo?: any;
-    serviceTypes?: any;
-    dataProductType?: any;
+    geometryContentType?: string;
+    instanceId: string;
+    keywords?: Array<string>;
+    status: InstanceDto.StatusEnum;
+    organizationId?: string;
+    unlocode?: Array<string>;
+    endpointUri?: string;
+    statusEndpointUri?: string;
+    mmsi?: string;
+    imo?: string;
+    serviceTypes?: Array<string>;
+    dataProductType?: Array<InstanceDto.DataProductTypeEnum>;
     instanceAsXml?: XmlDto;
     instanceAsDoc?: DocDto;
-    docIds?: any;
-    implementsServiceDesigns?: any;
-    designsServiceSpecifications?: any;
+    docIds?: Array<number>;
+    implementsServiceDesigns?: { [key: string]: string; };
+    designsServiceSpecifications?: { [key: string]: string; };
+}
+export namespace InstanceDto {
+    export type StatusEnum = 'PROVISIONAL' | 'RELEASED' | 'DEPRECATED' | 'DELETED';
+    export const StatusEnum = {
+        PROVISIONAL: 'PROVISIONAL' as StatusEnum,
+        RELEASED: 'RELEASED' as StatusEnum,
+        DEPRECATED: 'DEPRECATED' as StatusEnum,
+        DELETED: 'DELETED' as StatusEnum
+    };
+    export type DataProductTypeEnum = 'OTHER' | 'S57' | 'S101' | 'S102' | 'S104' | 'S111' | 'S122' | 'S123' | 'S124' | 'S125' | 'S126' | 'S127' | 'S128' | 'S129' | 'S131' | 'S201' | 'S210' | 'S211' | 'S212' | 'S401' | 'S402' | 'S411' | 'S412' | 'S413' | 'S414' | 'S421' | 'RTZ' | 'EPC';
+    export const DataProductTypeEnum = {
+        OTHER: 'OTHER' as DataProductTypeEnum,
+        S57: 'S57' as DataProductTypeEnum,
+        S101: 'S101' as DataProductTypeEnum,
+        S102: 'S102' as DataProductTypeEnum,
+        S104: 'S104' as DataProductTypeEnum,
+        S111: 'S111' as DataProductTypeEnum,
+        S122: 'S122' as DataProductTypeEnum,
+        S123: 'S123' as DataProductTypeEnum,
+        S124: 'S124' as DataProductTypeEnum,
+        S125: 'S125' as DataProductTypeEnum,
+        S126: 'S126' as DataProductTypeEnum,
+        S127: 'S127' as DataProductTypeEnum,
+        S128: 'S128' as DataProductTypeEnum,
+        S129: 'S129' as DataProductTypeEnum,
+        S131: 'S131' as DataProductTypeEnum,
+        S201: 'S201' as DataProductTypeEnum,
+        S210: 'S210' as DataProductTypeEnum,
+        S211: 'S211' as DataProductTypeEnum,
+        S212: 'S212' as DataProductTypeEnum,
+        S401: 'S401' as DataProductTypeEnum,
+        S402: 'S402' as DataProductTypeEnum,
+        S411: 'S411' as DataProductTypeEnum,
+        S412: 'S412' as DataProductTypeEnum,
+        S413: 'S413' as DataProductTypeEnum,
+        S414: 'S414' as DataProductTypeEnum,
+        S421: 'S421' as DataProductTypeEnum,
+        RTZ: 'RTZ' as DataProductTypeEnum,
+        EPC: 'EPC' as DataProductTypeEnum
+    };
 }

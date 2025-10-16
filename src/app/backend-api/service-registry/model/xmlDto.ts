@@ -11,9 +11,9 @@
  */
 
 export interface XmlDto { 
-    id?: any;
-    name: any;
-    comment?: any;
-    content: any;
-    contentContentType?: any;
+    id?: number;
+    name: string;
+    comment?: string;
+    content: string;
+    contentContentType?: string;
 }

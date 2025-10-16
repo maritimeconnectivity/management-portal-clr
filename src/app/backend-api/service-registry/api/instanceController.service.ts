@@ -109,10 +109,10 @@ export class InstanceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteInstance(id: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteInstance(id: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteInstance(id: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteInstance(id: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteInstance(id: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteInstance(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteInstance(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteInstance(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteInstance.');
@@ -149,10 +149,10 @@ export class InstanceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInstance(id: any, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
-    public getInstance(id: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
-    public getInstance(id: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
-    public getInstance(id: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInstance(id: number, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
+    public getInstance(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
+    public getInstance(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
+    public getInstance(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getInstance.');
@@ -191,10 +191,10 @@ export class InstanceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInstanceByMRNAndVersion(mrn: any, version: any, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
-    public getInstanceByMRNAndVersion(mrn: any, version: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
-    public getInstanceByMRNAndVersion(mrn: any, version: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
-    public getInstanceByMRNAndVersion(mrn: any, version: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
+    public getInstanceByMRNAndVersion(mrn: string, version: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (mrn === null || mrn === undefined) {
             throw new Error('Required parameter mrn was null or undefined when calling getInstanceByMRNAndVersion.');
@@ -238,10 +238,10 @@ export class InstanceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInstances(page?: any, size?: any, sort?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getInstances(page?: any, size?: any, sort?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getInstances(page?: any, size?: any, sort?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getInstances(page?: any, size?: any, sort?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInstances(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<InstanceDto>>;
+    public getInstances(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<InstanceDto>>>;
+    public getInstances(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<InstanceDto>>>;
+    public getInstances(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 
@@ -253,8 +253,10 @@ export class InstanceControllerService {
         if (size !== undefined && size !== null) {
             queryParameters = queryParameters.set('size', <any>size);
         }
-        if (sort !== undefined && sort !== null) {
-            queryParameters = queryParameters.set('sort', <any>sort);
+        if (sort) {
+            sort.forEach((element) => {
+                queryParameters = queryParameters.append('sort', <any>element);
+            })
         }
 
         let headers = this.defaultHeaders;
@@ -272,7 +274,7 @@ export class InstanceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/instances`,
+        return this.httpClient.request<Array<InstanceDto>>('get',`${this.basePath}/api/instances`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -290,10 +292,10 @@ export class InstanceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getInstancesByMRN(mrn: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getInstancesByMRN(mrn: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getInstancesByMRN(mrn: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getInstancesByMRN(mrn: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getInstancesByMRN(mrn: string, observe?: 'body', reportProgress?: boolean): Observable<Array<InstanceDto>>;
+    public getInstancesByMRN(mrn: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<InstanceDto>>>;
+    public getInstancesByMRN(mrn: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<InstanceDto>>>;
+    public getInstancesByMRN(mrn: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (mrn === null || mrn === undefined) {
             throw new Error('Required parameter mrn was null or undefined when calling getInstancesByMRN.');
@@ -314,7 +316,7 @@ export class InstanceControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/instances/mrn/${encodeURIComponent(String(mrn))}`,
+        return this.httpClient.request<Array<InstanceDto>>('get',`${this.basePath}/api/instances/mrn/${encodeURIComponent(String(mrn))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -332,10 +334,10 @@ export class InstanceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateInstance(body: InstanceDto, id: any, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
-    public updateInstance(body: InstanceDto, id: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
-    public updateInstance(body: InstanceDto, id: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
-    public updateInstance(body: InstanceDto, id: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateInstance(body: InstanceDto, id: number, observe?: 'body', reportProgress?: boolean): Observable<InstanceDto>;
+    public updateInstance(body: InstanceDto, id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<InstanceDto>>;
+    public updateInstance(body: InstanceDto, id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<InstanceDto>>;
+    public updateInstance(body: InstanceDto, id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling updateInstance.');
@@ -384,10 +386,10 @@ export class InstanceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateInstanceStatus(id: any, status: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public updateInstanceStatus(id: any, status: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public updateInstanceStatus(id: any, status: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public updateInstanceStatus(id: any, status: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateInstanceStatus(id: number, status: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public updateInstanceStatus(id: number, status: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public updateInstanceStatus(id: number, status: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public updateInstanceStatus(id: number, status: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateInstanceStatus.');

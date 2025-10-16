@@ -109,10 +109,10 @@ export class DocControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteDoc(id: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public deleteDoc(id: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public deleteDoc(id: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public deleteDoc(id: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public deleteDoc(id: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public deleteDoc(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public deleteDoc(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public deleteDoc(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling deleteDoc.');
@@ -149,10 +149,10 @@ export class DocControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDoc(id: any, observe?: 'body', reportProgress?: boolean): Observable<DocDto>;
-    public getDoc(id: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DocDto>>;
-    public getDoc(id: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DocDto>>;
-    public getDoc(id: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDoc(id: number, observe?: 'body', reportProgress?: boolean): Observable<DocDto>;
+    public getDoc(id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DocDto>>;
+    public getDoc(id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DocDto>>;
+    public getDoc(id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling getDoc.');
@@ -192,10 +192,10 @@ export class DocControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDocs(page?: any, size?: any, sort?: any, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public getDocs(page?: any, size?: any, sort?: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public getDocs(page?: any, size?: any, sort?: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public getDocs(page?: any, size?: any, sort?: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDocs(page?: number, size?: number, sort?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<Array<DocDto>>;
+    public getDocs(page?: number, size?: number, sort?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<DocDto>>>;
+    public getDocs(page?: number, size?: number, sort?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<DocDto>>>;
+    public getDocs(page?: number, size?: number, sort?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
 
@@ -207,8 +207,10 @@ export class DocControllerService {
         if (size !== undefined && size !== null) {
             queryParameters = queryParameters.set('size', <any>size);
         }
-        if (sort !== undefined && sort !== null) {
-            queryParameters = queryParameters.set('sort', <any>sort);
+        if (sort) {
+            sort.forEach((element) => {
+                queryParameters = queryParameters.append('sort', <any>element);
+            })
         }
 
         let headers = this.defaultHeaders;
@@ -226,7 +228,7 @@ export class DocControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<any>('get',`${this.basePath}/api/docs`,
+        return this.httpClient.request<Array<DocDto>>('get',`${this.basePath}/api/docs`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -245,10 +247,10 @@ export class DocControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateDoc(body: DocDto, id: any, observe?: 'body', reportProgress?: boolean): Observable<DocDto>;
-    public updateDoc(body: DocDto, id: any, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DocDto>>;
-    public updateDoc(body: DocDto, id: any, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DocDto>>;
-    public updateDoc(body: DocDto, id: any, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public updateDoc(body: DocDto, id: number, observe?: 'body', reportProgress?: boolean): Observable<DocDto>;
+    public updateDoc(body: DocDto, id: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<DocDto>>;
+    public updateDoc(body: DocDto, id: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<DocDto>>;
+    public updateDoc(body: DocDto, id: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling updateDoc.');

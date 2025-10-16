@@ -12,10 +12,10 @@
 import { Type } from './type';
 
 export interface PrecisionModel { 
-    scale?: any;
+    scale?: number;
     type?: Type;
-    floating?: any;
-    maximumSignificantDigits?: any;
-    offsetX?: any;
-    offsetY?: any;
+    floating?: boolean;
+    maximumSignificantDigits?: number;
+    offsetX?: number;
+    offsetY?: number;
 }

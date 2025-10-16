@@ -11,9 +11,9 @@
  */
 
 export interface Coordinate { 
-    x?: any;
-    y?: any;
-    z?: any;
-    m?: any;
+    x?: number;
+    y?: number;
+    z?: number;
+    m?: number;
     coordinate?: any;
 }
