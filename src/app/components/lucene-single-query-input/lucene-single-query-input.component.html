@@ -32,11 +32,11 @@
                     <input clrInput [disabled]="!selectedItem" [value]="fieldValue" name="input" (input)="onEdit($event)"/>
                 </clr-input-container>
             }
-            @if (requireExtendBtn){
-                <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="createExpressionWithBrackets()">
-                    <cds-icon shape="code"></cds-icon>
-                </button>
-            }
+<!--            @if (requireExtendBtn){-->
+<!--                <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="createExpressionWithBrackets()">-->
+<!--                    <cds-icon shape="code"></cds-icon>-->
+<!--                </button>-->
+<!--            }-->
             @if (requireCloseBtn) {
                 <button type="button" class="custom-close-btn" style="margin-left: auto; background: none; border: none; cursor: pointer;" (click)="onDelete()">
                     <cds-icon shape="times"></cds-icon>
