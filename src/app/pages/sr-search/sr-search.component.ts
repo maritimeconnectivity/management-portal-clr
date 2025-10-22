@@ -43,7 +43,6 @@ import { loadLang } from 'src/app/common/translateHelper';
     ComponentsModule,
     ClarityModule,
     SvcSearchInputComponent,
-    ItemTableComponent,
 ],
   templateUrl: './sr-search.component.html',
   styleUrl: './sr-search.component.css'
@@ -107,7 +106,8 @@ export class SrSearchComponent {
 
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
     try {
-      const secomSearchParam = this.buildSearchParam(this.freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : ''); //geojsonToWKT(this.queryGeometry) : '');
+      console.debug("Call fetch data with params:", this.searchParams, this.queryGeometry);
+      const secomSearchParam = this.buildSearchParam(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : ''); //geojsonToWKT(this.queryGeometry) : '');
       if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
         return [];
       }
@@ -139,16 +139,21 @@ export class SrSearchComponent {
     }
   }
 
-  buildSearchParam = (freetext: string, searchParams?: SearchParameters, geojsonString?: string): object => {
-    const queryObject: any = { freetext: freetext };
-    if (searchParams) {
+  buildSearchParam = (searchParams: SearchParameters, geojsonString?: string): object => {
+    const queryObject: any = {};
+
+    // Only add the query section if it has data
+    if (searchParams && Object.keys(searchParams).length > 0) {
       queryObject["query"] = searchParams;
     }
+
+    // Add geometry only if provided
     if (geojsonString) {
       queryObject["geometry"] = geojsonString;
     }
+
     return queryObject;
-  }
+  };
 
   onUpdateGeometry = (event: any) => {
     // currently handling only one geometry
@@ -168,9 +173,9 @@ export class SrSearchComponent {
     this.geometryMap.clearMap();
   }
 
-  search = (freetext: string, searchParams?: SearchParameters, geojsonString?: string) => {
+  search = (searchParams: SearchParameters, geojsonString?: string) => {
     this.isLoading = true;
-    const queryObject = this.buildSearchParam(freetext, searchParams, geojsonString);
+    const queryObject = this.buildSearchParam(searchParams, geojsonString);
     this.secomSearchController.search(queryObject).subscribe(res => {
       this.instances = res.services;
       this.refreshData(this.instances);
@@ -187,6 +192,9 @@ export class SrSearchComponent {
 
 
   onSearch = (payload: { scope: 'local' | 'global'; searchParams: SearchParameters }) => {
+    console.debug("onsearch called with params:", payload);
+
+    this.searchParams = payload.searchParams;
     if (this.geometryMap) {
       this.geometryMap.clearMap();
     }
