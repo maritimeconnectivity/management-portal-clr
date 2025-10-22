@@ -18,7 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { SearchFilterObject } from '../model/searchFilterObject';
-import { ResponseSearchObject } from '../model/responseSearchObject';
+import { SearchResult } from '../model/searchResult';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -66,9 +66,9 @@ export class SECOMService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean): Observable<ResponseSearchObject>;
-    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ResponseSearchObject>>;
-    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ResponseSearchObject>>;
+    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean): Observable<SearchResult>;
+    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResult>>;
+    public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResult>>;
     public search(body?: SearchFilterObject, page?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
@@ -102,7 +102,7 @@ export class SECOMService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<ResponseSearchObject>('post',`${this.basePath}/api/secom/v1/searchService`,
+        return this.httpClient.request<SearchResult>('post',`${this.basePath}/api/secom/v2/searchService`,
             {
                 body: body,
                 params: queryParameters,

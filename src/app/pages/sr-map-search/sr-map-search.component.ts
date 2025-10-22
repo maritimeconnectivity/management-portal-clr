@@ -53,7 +53,6 @@ export class SrMapSearchComponent {
   geometries: any[] = [];
   geometryBacklink: InstanceInfo[] = [];
   searchParams: SearchParameters = {};
-  queryString = '';
   freetext = '';
   orgMrn = "";
   instances: SearchObjectResult[] = [];
@@ -87,37 +86,35 @@ export class SrMapSearchComponent {
     // currently handling only one geometry
     this.queryGeometry = event['data']['geometries'][0];
     this.queryInput.addGeoItem();
-    this.search(this.freetext, this.searchParams);
+    this.search(this.searchParams);
   }
 
-  buildSearchParam = (freetext: string, searchParams?: SearchParameters, geojsonString?: string): object => {
-    const queryObject: any = { freetext: freetext };
-    if (searchParams) {
+  buildSearchParam = (searchParams: SearchParameters, geojsonString?: string): object => {
+    const queryObject: any = {};
+
+    // Only add the query section if it has data
+    if (searchParams && Object.keys(searchParams).length > 0) {
       queryObject["query"] = searchParams;
     }
+
+    // Add geometry only if provided
     if (geojsonString) {
       queryObject["geometry"] = geojsonString;
     }
+
     return queryObject;
-  }
+  };
 
-   onSearch = (payload: { scope: 'local' | 'global'; queryString: string }) => {
-    this.freetext = payload.queryString;
+  onSearch = (payload: {
+    scope: 'local' | 'global';
+    searchParams: SearchParameters;
+  }) => {
+    this.searchParams = payload.searchParams;
+    this.search(this.searchParams);
+  };
 
-
-    console.debug("Params are")
-
-    console.debug(this.searchParams);
-
-    console.debug("Freetext is")
-
-    console.debug(this.freetext);
-
-    this.search(this.freetext, this.searchParams);
-  }
-
-  search = async (freetext: string, searchParams?: SearchParameters) => {
-    const secomSearchParam = this.buildSearchParam(this.freetext, this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : ''); //geojsonToWKT(this.queryGeometry) : '');
+  search = async (searchParams: SearchParameters) => {
+    const secomSearchParam = this.buildSearchParam(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : ''); //geojsonToWKT(this.queryGeometry) : '');
       if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
         return;
       }
@@ -145,12 +142,6 @@ export class SrMapSearchComponent {
   }
 
 
-  onQueryStringChanged = (event: any) => {
-    this.queryString = event.target.value;
-    if (this.queryString.length === 0) {
-      this.clearAll();
-    }
-  }
 
   clearAll = () => {
     this.searchParams = {};

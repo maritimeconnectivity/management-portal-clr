@@ -11,6 +11,6 @@
  */
 import { SearchObjectResult } from './searchObjectResult';
 
-export interface ResponseSearchObject { 
-    searchServiceResult: Array<SearchObjectResult>
+export interface SearchResult {
+    services: Array<SearchObjectResult>
 }

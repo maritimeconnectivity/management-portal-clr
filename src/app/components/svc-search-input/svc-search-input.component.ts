@@ -29,6 +29,7 @@ import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-
 import { CommonModule } from '@angular/common';
 import { LuceneTermInputComponent } from '../lucene-term-input/lucene-term-input.component';
 import { LuceneGeoQueryInputComponent } from '../lucene-geo-query-input/lucene-geo-query-input.component';
+import {SearchParameters} from "../../backend-api/secom";
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
 
@@ -53,12 +54,16 @@ export class SvcSearchInputComponent {
   queryString = '';
   geometryIncluded = false;
   scope: 'local' | 'global' = 'local';
+  lastBuiltParams: SearchParameters = {};
 
   @Input() title = 'Service Search';
   @Input() btnTitle = 'Search';
   @Input() orgMrn = '';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
-  @Output() searchEvent = new EventEmitter<{ scope: 'local' | 'global'; queryString: string }>();
+  @Output() searchEvent = new EventEmitter<{
+    scope: 'local' | 'global';
+    searchParams: SearchParameters;
+  }>();
   @Output() clearAllEvent = new EventEmitter<any>();
 
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
@@ -72,6 +77,43 @@ export class SvcSearchInputComponent {
       this.loadComponent();
     }
   }
+
+
+  private lusceneToSearchParams(terms: Term[], allowedKeys: Set<string>): SearchParameters {
+    const out: SearchParameters = {};
+
+    const stripQuotes = (s: string) =>
+        (s?.startsWith('"') && s.endsWith('"')) ? s.slice(1, -1) : s;
+
+    const walk = (arr: Term[]) => {
+      for (const t of arr) {
+        // recurse into groups
+        if (t.group && t.group.length) {
+          walk(t.group);
+          continue;
+        }
+        // skip operators
+        if ((t as any).operator !== undefined) continue;
+
+        // copy allowed field(s) from this term object
+        for (const k of Object.keys(t)) {
+          if (k === 'id') continue;
+          if (!allowedKeys.has(k)) continue;
+
+          const raw = (t as any)[k];
+          if (raw == null || raw === '') continue;
+
+          const val = stripQuotes(String(raw));
+          const existing = (out as any)[k];
+          (out as any)[k] = existing ? `${existing} ${val}` : val;
+        }
+      }
+    };
+
+    walk(terms);
+    return out;
+  }
+
 
   loadComponent() {
     const viewContainerRef = this.luceneComponentHost;
@@ -243,7 +285,7 @@ export class SvcSearchInputComponent {
   search(): void {
     this.searchEvent.emit({
       scope: this.scope,
-      queryString: this.queryString,
+      searchParams: this.lastBuiltParams,
     });
   }
 
@@ -251,25 +293,18 @@ export class SvcSearchInputComponent {
 
 
   updateLuceneQuery = () => {
-    this.queryString = buildQuery(this.luceneTerm);
-    // flattening data array for SearchParameters
-    let data: Record<string, any> = {};
-    this.luceneTerm.forEach((e: { [key: string]: any }) => {
-      if (Object.keys(e).length &&
-        Object.keys(e).pop() !== 'operator') {
-        const key = Object.keys(e).pop();
-        if (key) {
-          data[key] = e[key];
-        }
-      }
-    });
-    this.luceneQueryStringInput.nativeElement.value = this.queryString;
-
-    // get rid of " to convert it to the freetext
-    if (this.queryString && this.queryString.length > 0) {
-      this.queryString = this.queryString.split('"').join('');
+    // (Optional) keep building the Lucene string purely for display in the input
+    this.queryString = buildQuery(this.luceneTerm) || '';
+    if (this.luceneQueryStringInput) {
+      this.luceneQueryStringInput.nativeElement.value = this.queryString;
     }
+
+    // Build SearchParameters from luceneTerm
+    const allowed = new Set(this.fieldInfo.map(f => f.value));
+    this.lastBuiltParams = this.lusceneToSearchParams(this.luceneTerm, allowed);
+
   }
+
 
   onQueryStringChanged = (event: any) => {
     this.queryString = event.target.value;
@@ -324,7 +359,7 @@ export class SvcSearchInputComponent {
     this.loadComponent();
     this.searchEvent.emit({
       scope: this.scope,
-      queryString: this.queryString,
+      searchParams: this.lastBuiltParams,
     });
   }
 }

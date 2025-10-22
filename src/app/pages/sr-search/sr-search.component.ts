@@ -172,7 +172,7 @@ export class SrSearchComponent {
     this.isLoading = true;
     const queryObject = this.buildSearchParam(freetext, searchParams, geojsonString);
     this.secomSearchController.search(queryObject).subscribe(res => {
-      this.instances = res.searchServiceResult;
+      this.instances = res.services;
       this.refreshData(this.instances);
       this.isLoading = false;
       this.geometries = [];
@@ -186,12 +186,11 @@ export class SrSearchComponent {
   }
 
 
-  onSearch = (payload: { scope: 'local' | 'global'; queryString: string }) => {
-    this.freetext = payload.queryString;
+  onSearch = (payload: { scope: 'local' | 'global'; searchParams: SearchParameters }) => {
     if (this.geometryMap) {
       this.geometryMap.clearMap();
     }
-    console.debug("Noermal search with freetext:", this.freetext);
+    console.debug("Noermal search with params:", this.searchParams);
     this.smartTable.loadData();
   }
 
