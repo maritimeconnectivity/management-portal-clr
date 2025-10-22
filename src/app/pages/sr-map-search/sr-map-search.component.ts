@@ -103,6 +103,16 @@ export class SrMapSearchComponent {
 
    onSearch = (payload: { scope: 'local' | 'global'; queryString: string }) => {
     this.freetext = payload.queryString;
+
+
+    console.debug("Params are")
+
+    console.debug(this.searchParams);
+
+    console.debug("Freetext is")
+
+    console.debug(this.freetext);
+
     this.search(this.freetext, this.searchParams);
   }
 
@@ -124,6 +134,8 @@ export class SrMapSearchComponent {
       }
       this.geometries = [];
       this.geometryBacklink = [];
+
+      console.log("Fetched number of items: " + fetchedItems.data?.length);
       fetchedItems.data?.forEach(i =>
         {
           this.geometries.push(i.geometry);

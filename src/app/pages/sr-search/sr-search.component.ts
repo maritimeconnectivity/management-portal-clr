@@ -191,6 +191,7 @@ export class SrSearchComponent {
     if (this.geometryMap) {
       this.geometryMap.clearMap();
     }
+    console.debug("Noermal search with freetext:", this.freetext);
     this.smartTable.loadData();
   }
 
