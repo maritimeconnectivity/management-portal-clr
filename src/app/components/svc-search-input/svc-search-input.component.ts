@@ -208,7 +208,6 @@ export class SvcSearchInputComponent {
   addTermToGroup(terms: Term[], groupId: string, key: string): Term[] {
     for (const term of terms) {
       if (term.id === groupId) {
-        term.group?.push({ id: shortid.generate(), 'operator': LogicalOperator.And });
         term.group?.push({ id: shortid.generate(), [key]: '' });
       }
   
@@ -221,7 +220,6 @@ export class SvcSearchInputComponent {
 
   addTerm(terms: Term[], target: Term): Term[] {
     if (terms.length > 0) {
-      terms.push({ id: shortid.generate(), 'operator': LogicalOperator.And });
     }
     terms.push(target);
     return terms;
@@ -273,7 +271,7 @@ export class SvcSearchInputComponent {
 
       // first inject new component into the lucene term.
       this.luceneTerm = this.luceneTerm.map(term => term.id === termToBeExchanged.id ?
-        { id: shortid.generate(), group: [{ ...termToBeExchanged, id: id }, { id: shortid.generate(), operator: LogicalOperator.Or }, { ...termToBeExchanged, id: shortid.generate() }] } : term);
+        { id: shortid.generate(), group: [{ ...termToBeExchanged, id: id }, { id: shortid.generate() }, { ...termToBeExchanged, id: shortid.generate() }] } : term);
 
       // second remove the old component from the group
       this.group = this.group.filter(e => e.id !== id);
