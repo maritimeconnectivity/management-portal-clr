@@ -20,13 +20,12 @@ export interface SearchParameters {
     specificationId?: string;
     designId?: string;
     instanceId?: string;
+    organizationId?: string;
     mmsi?: string;
     imo?: string;
     serviceType?: string;
     unlocode?: string;
     endpointUri?: string;
-    page?: number;
-    pageSize?: number;
 }
 export namespace SearchParameters {
     export type DataProductTypeEnum = 'OTHER' | 'S57' | 'S101' | 'S102' | 'S104' | 'S111' | 'S122' | 'S123' | 'S124' | 'S125' | 'S126' | 'S127' | 'S128' | 'S129' | 'S131' | 'S210' | 'S211' | 'S212' | 'S401' | 'S402' | 'S411' | 'S412' | 'S413' | 'S414' | 'S421' | 'RTZ' | 'EPC';
