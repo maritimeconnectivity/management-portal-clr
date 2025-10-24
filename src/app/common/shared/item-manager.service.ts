@@ -44,7 +44,6 @@ export class ItemManagerService {
 
   fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject): Promise<FetchedItems> => {
     let page;
-    console.log('Fetching data for', itemType, 'Page:', pageNumber, 'Elements per page:', elementsPerPage);
 
     if(itemType === ItemType.Instance) {
       page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage, [], 'response'));
@@ -55,7 +54,6 @@ export class ItemManagerService {
 
 
     } else if(itemType === ItemType.SearchObjectResult && secomSearchFilterobj) {
-
 
       page = await firstValueFrom(this.secomService.search(secomSearchFilterobj, pageNumber, elementsPerPage, 'response'));
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;

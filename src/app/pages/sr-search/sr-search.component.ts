@@ -18,7 +18,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { InputGeometryComponent } from "../../components/input-geometry/input-geometry.component";
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SvcSearchInputComponent } from "../../components/svc-search-input/svc-search-input.component";
-import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
+import {SearchFilterObject, SearchObjectResult, SearchParameters, SECOMService} from 'src/app/backend-api/secom';
 import { InstanceInfo, ItemType } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
@@ -72,6 +72,7 @@ export class SrSearchComponent {
   showPanel = false;
   selectedInstance: any = {};
   instanceType = ItemType.Instance;
+  localOnly : boolean = true;
 
   constructor(
     private router: Router,
@@ -107,14 +108,14 @@ export class SrSearchComponent {
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
     try {
       console.debug("Call fetch data with params:", this.searchParams, this.queryGeometry);
-      const secomSearchParam = this.buildSearchParam(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : ''); //geojsonToWKT(this.queryGeometry) : '');
+      const secomSearchFilterObj = this.buildSearchFilterObject(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : '', this.localOnly); //geojsonToWKT(this.queryGeometry) : '');
       if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
         return [];
       }
       // a bit of hack to deal with the fact that the search service does not support total number of elements....
       let fetchedItems;
       try {
-        fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchParam);
+        fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchFilterObj);
       } catch (error) {
         console.error('Error fetching items:', error);
         this.notifier.notify('error.search.general', (error as any).message);
@@ -139,20 +140,23 @@ export class SrSearchComponent {
     }
   }
 
-  buildSearchParam = (searchParams: SearchParameters, geojsonString?: string): object => {
-    const queryObject: any = {};
+  buildSearchFilterObject = (searchParams: SearchParameters, geojsonString?: string, localOnly? : boolean): object => {
+    let searchFilterObj: SearchFilterObject = {
+    };
 
     // Only add the query section if it has data
     if (searchParams && Object.keys(searchParams).length > 0) {
-      queryObject["query"] = searchParams;
+      searchFilterObj.query = searchParams;
     }
 
     // Add geometry only if provided
     if (geojsonString) {
-      queryObject["geometry"] = geojsonString;
+      searchFilterObj.geometry = geojsonString;
     }
 
-    return queryObject;
+    searchFilterObj.localOnly = localOnly;
+
+    return searchFilterObj;
   };
 
   onUpdateGeometry = (event: any) => {
@@ -175,7 +179,7 @@ export class SrSearchComponent {
 
   search = (searchParams: SearchParameters, geojsonString?: string) => {
     this.isLoading = true;
-    const queryObject = this.buildSearchParam(searchParams, geojsonString);
+    const queryObject = this.buildSearchFilterObject(searchParams, geojsonString, this.localOnly);
     this.secomSearchController.search(queryObject).subscribe(res => {
       this.instances = res.services;
       this.refreshData(this.instances);
@@ -198,7 +202,14 @@ export class SrSearchComponent {
     if (this.geometryMap) {
       this.geometryMap.clearMap();
     }
-    console.debug("Noermal search with params:", this.searchParams);
+
+    if (payload.scope === 'global') {
+      this.localOnly = false;
+    } else {
+      this.localOnly = true;
+    }
+
+
     this.smartTable.loadData();
   }
 
