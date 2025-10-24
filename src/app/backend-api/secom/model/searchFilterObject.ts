@@ -12,7 +12,8 @@
 import { SearchParameters } from './searchParameters';
 
 export interface SearchFilterObject { 
-    query?: SearchParameters;
-    geometry?: string;
-    freetext?: string;
+    query: SearchParameters;
+    geometry: string;
+    includeXml: string;
+    localOnly: boolean;
 }
