@@ -14,7 +14,7 @@ export interface SearchParameters {
     name?: string;
     status?: string;
     version?: string;
-    keywords?: string;
+    keywords?: string[];
     description?: string;
     dataProductType?: SearchParameters.DataProductTypeEnum;
     specificationId?: string;

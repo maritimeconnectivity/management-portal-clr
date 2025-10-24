@@ -21,7 +21,7 @@ import { Device, DeviceControllerService, Organization, OrganizationControllerSe
 import { preprocess } from '../itemPreprocessor';
 import { InstanceControllerService, InstanceDto, XmlControllerService, XmlDto } from 'src/app/backend-api/service-registry';
 import { FetchedItems } from '../fetchedItems';
-import { SearchObjectResult, SECOMService } from 'src/app/backend-api/secom';
+import {SearchFilterObject, SearchObjectResult, SearchParameters, SECOMService} from 'src/app/backend-api/secom';
 
 import RoleNameEnum = Role.RoleNameEnum;
 @Injectable({
@@ -42,8 +42,10 @@ export class ItemManagerService {
     private xmlService: XmlControllerService,
   ) { }
 
-  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchParam?: object): Promise<FetchedItems> => {
+  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject): Promise<FetchedItems> => {
     let page;
+    console.log('Fetching data for', itemType, 'Page:', pageNumber, 'Elements per page:', elementsPerPage);
+
     if(itemType === ItemType.Instance) {
       page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage, [], 'response'));
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 0;
@@ -52,8 +54,10 @@ export class ItemManagerService {
         totalElements};
 
 
-    } else if(itemType === ItemType.SearchObjectResult && secomSearchParam) {
-      page = await firstValueFrom(this.secomService.search(secomSearchParam, pageNumber, elementsPerPage, 'response'));
+    } else if(itemType === ItemType.SearchObjectResult && secomSearchFilterobj) {
+
+
+      page = await firstValueFrom(this.secomService.search(secomSearchFilterobj, pageNumber, elementsPerPage, 'response'));
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
       return { data: (page.body?.services! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),

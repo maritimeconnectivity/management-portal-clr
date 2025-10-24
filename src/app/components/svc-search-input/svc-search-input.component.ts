@@ -103,9 +103,19 @@ export class SvcSearchInputComponent {
           const raw = (t as any)[k];
           if (raw == null || raw === '') continue;
 
-          const val = stripQuotes(String(raw));
-          const existing = (out as any)[k];
-          (out as any)[k] = existing ? `${existing} ${val}` : val;
+          const val = stripQuotes(String(raw)).trim();
+
+          if (k === 'keywords') {
+            const items = val.split(/[\s,]+/).filter(Boolean);
+            const existing = (out as any)[k] || [];
+            (out as any)[k] = Array.isArray(existing)
+                ? [...existing, ...items]
+                : items;
+          } else {
+            // default: treat as simple string
+            const existing = (out as any)[k];
+            (out as any)[k] = existing ? `${existing} ${val}` : val;
+          }
         }
       }
     };

@@ -18,7 +18,7 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { InputGeometryComponent } from "../../components/input-geometry/input-geometry.component";
 import { ComponentsModule } from 'src/app/components/components.module';
 import { SvcSearchInputComponent } from "../../components/svc-search-input/svc-search-input.component";
-import { SearchObjectResult, SearchParameters, SECOMService } from 'src/app/backend-api/secom';
+import {SearchFilterObject, SearchObjectResult, SearchParameters, SECOMService} from 'src/app/backend-api/secom';
 import { InstanceInfo, ItemType } from 'src/app/common/menuType';
 import { ColumnForResource } from 'src/app/common/columnForMenu';
 import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
@@ -65,6 +65,7 @@ export class SrMapSearchComponent {
   selectedInstances: InstanceDto[] = [];
   instanceType = ItemType.Instance;
   apiBase = 'sr';
+  localOnly : boolean = true;
 
   constructor(
     private router: Router,
@@ -82,27 +83,32 @@ export class SrMapSearchComponent {
       });
   }
 
+
+
   onUpdateGeometry = (event: any) => {
     // currently handling only one geometry
     this.queryGeometry = event['data']['geometries'][0];
     this.queryInput.addGeoItem();
-    this.search(this.searchParams);
+    this.search(this.searchParams, this.localOnly);
   }
 
-  buildSearchParam = (searchParams: SearchParameters, geojsonString?: string): object => {
-    const queryObject: any = {};
+  buildSearchFilterObject = (searchParams: SearchParameters, geojsonString?: string, localOnly? : boolean): object => {
+    let searchFilterObj: SearchFilterObject = {
+    };
 
     // Only add the query section if it has data
     if (searchParams && Object.keys(searchParams).length > 0) {
-      queryObject["query"] = searchParams;
+      searchFilterObj.query = searchParams;
     }
 
     // Add geometry only if provided
     if (geojsonString) {
-      queryObject["geometry"] = geojsonString;
+      searchFilterObj.geometry = geojsonString;
     }
 
-    return queryObject;
+    searchFilterObj.localOnly = localOnly;
+
+    return searchFilterObj;
   };
 
   onSearch = (payload: {
@@ -110,17 +116,26 @@ export class SrMapSearchComponent {
     searchParams: SearchParameters;
   }) => {
     this.searchParams = payload.searchParams;
-    this.search(this.searchParams);
+
+    if (payload.scope === 'global') {
+        this.localOnly = false;
+    } else {
+        this.localOnly = true;
+    }
+
+    console.log(this.localOnly);
+    this.search(this.searchParams, this.localOnly);
   };
 
-  search = async (searchParams: SearchParameters) => {
-    const secomSearchParam = this.buildSearchParam(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : ''); //geojsonToWKT(this.queryGeometry) : '');
+  search = async (searchParams: SearchParameters, localOnly : boolean) => {
+
+    const secomSearchFilterObj = this.buildSearchFilterObject(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : '', localOnly); //geojsonToWKT(this.queryGeometry) : '');
       if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
         return;
       }
     let fetchedItems;
       try {
-        fetchedItems = await this.itemManagerService.fetchListOfData(ItemType.SearchObjectResult, "", 0, 100, secomSearchParam);
+        fetchedItems = await this.itemManagerService.fetchListOfData(ItemType.SearchObjectResult, "", 0, 100, secomSearchFilterObj);
       } catch (error) {
         console.error('Error fetching items:', error);
         this.notifier.notify('error.search.general', (error as any).message);
