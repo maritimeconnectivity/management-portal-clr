@@ -105,7 +105,7 @@ export class SrSearchComponent {
       }, {} as {[key: string]: any});
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam? : object, xactId? : string, ) => {
     console.log("Fetch data list sr search component");
     try {
       console.debug("Call fetch data with params:", this.searchParams, this.queryGeometry);

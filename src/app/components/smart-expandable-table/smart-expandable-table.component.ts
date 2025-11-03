@@ -50,7 +50,7 @@ export class SmartExpandableTableComponent {
   @Input() totalPages: number = 0;
   @Input() totalElements: number = 0;
   @Input() hasEditPermission: boolean = false;
-  @Input() getData: ((itemType: ItemType, pageNumber: number, elementsPerPage: number, xactId? : string, secomSearchParam?: object)
+  @Input() getData: ((itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object, xactId? : string)
       => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
   @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() revokeCertsEvent: EventEmitter<any[]> = new EventEmitter();
@@ -136,7 +136,7 @@ export class SmartExpandableTableComponent {
   }
 
   async loadData(pageNumber: number = this.currentPageNumber, xactId? : string) {
-    this.data = await this.getData(this.itemType, pageNumber, this.elementsPerPage, xactId) || [];
+    this.data = await this.getData(this.itemType, pageNumber, this.elementsPerPage) || [];
     if (pageNumber !== this.currentPageNumber) {
       this.currentPageNumber = pageNumber;
     }

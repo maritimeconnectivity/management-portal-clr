@@ -120,13 +120,13 @@ export class ListViewComponent {
       }, {} as {[key: string]: any});
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, xactId? : string, secomSearchParam?: object) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object) => {
     console.log("Fetch data list view");
     try {
       if (itemType === ItemType.Role) {
         return await this.itemManagerService.fetchAllRolesInOrg(this.orgMrn);
       }
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam, xactId);
+      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
       if (!fetchedItems) {
         return [];
       }
