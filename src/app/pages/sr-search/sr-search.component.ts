@@ -61,7 +61,7 @@ export class SrSearchComponent {
   totalPages = 0;
   totalElements = 0;
   itemType = ItemType.SearchObjectResult;
-  instances: SearchObjectResult[] = [];
+  instances: Array<SearchObjectResult> | undefined = [];
   showTables = true;
   contextForAttributes = 'list';
   isLoading = false;
@@ -143,7 +143,7 @@ export class SrSearchComponent {
     }
   }
 
-  buildSearchFilterObject = (searchParams: SearchParameters, geojsonString?: string, localOnly? : boolean): object => {
+  buildSearchFilterObject = (searchParams: SearchParameters, geojsonString?: string, localOnly? : boolean): SearchFilterObject => {
     let searchFilterObj: SearchFilterObject = {
     };
 
@@ -157,7 +157,9 @@ export class SrSearchComponent {
       searchFilterObj.geometry = geojsonString;
     }
 
-    searchFilterObj.localOnly = localOnly;
+    if (searchFilterObj.query) {
+      searchFilterObj.query.localOnly = localOnly;
+    }
 
     return searchFilterObj;
   };
@@ -191,8 +193,8 @@ export class SrSearchComponent {
       this.geometryBacklink = [];
       this.instances?.forEach(i =>
         {
-          this.geometries.push(i.geometry);
-          this.geometryBacklink.push({instanceId: i.instanceId, name: i.name, version: i.version});
+          this.geometries.push(i.coverageArea);
+          this.geometryBacklink.push(<InstanceInfo>{instanceId: i.instanceId, name: i.name, version: i.version});
         });
     });
   }

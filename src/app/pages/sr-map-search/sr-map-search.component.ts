@@ -106,7 +106,9 @@ export class SrMapSearchComponent {
       searchFilterObj.geometry = geojsonString;
     }
 
-    searchFilterObj.localOnly = localOnly;
+    if (searchFilterObj.query) {
+      searchFilterObj.query.localOnly = localOnly;
+    }
 
     return searchFilterObj;
   };

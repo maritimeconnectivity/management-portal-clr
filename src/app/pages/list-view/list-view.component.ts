@@ -125,7 +125,7 @@ export class ListViewComponent {
       if (itemType === ItemType.Role) {
         return await this.itemManagerService.fetchAllRolesInOrg(this.orgMrn);
       }
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam);
+      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, secomSearchParam, xactId);
       if (!fetchedItems) {
         return [];
       }

@@ -42,7 +42,7 @@ export class ItemManagerService {
     private xmlService: XmlControllerService,
   ) { }
 
-  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject): Promise<FetchedItems> => {
+  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject, xactId? : string): Promise<FetchedItems> => {
     let page;
 
     if(itemType === ItemType.Instance) {
@@ -55,7 +55,16 @@ export class ItemManagerService {
 
     } else if(itemType === ItemType.SearchObjectResult && secomSearchFilterobj) {
 
-      page = await firstValueFrom(this.secomService.search(secomSearchFilterobj, pageNumber, elementsPerPage, 'response'));
+      page = await firstValueFrom(this.secomService.search(secomSearchFilterobj, 'response'));
+      const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
+      return { data: (page.body?.services! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
+        totalPages: Math.ceil( totalElements / elementsPerPage),
+        totalElements};
+
+      // Case: we want to call retrievereults with xactId only
+    } else if(itemType === ItemType.SearchObjectResult && xactId) {
+
+      page = await firstValueFrom(this.secomService.v2RetrieveResultsTransactionIdGet(xactId, 'response'));
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
       return { data: (page.body?.services! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
