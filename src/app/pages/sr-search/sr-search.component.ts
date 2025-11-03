@@ -108,19 +108,30 @@ export class SrSearchComponent {
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam? : object, xactId? : string, ) => {
     console.log("Fetch data list sr search component");
     try {
-      console.debug("Call fetch data with params:", this.searchParams, this.queryGeometry);
-      const secomSearchFilterObj = this.buildSearchFilterObject(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : '', this.localOnly); //geojsonToWKT(this.queryGeometry) : '');
-      if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
-        return [];
-      }
-      // a bit of hack to deal with the fact that the search service does not support total number of elements....
       let fetchedItems;
-      try {
-        fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchFilterObj);
-      } catch (error) {
-        console.error('Error fetching items:', error);
-        this.notifier.notify('error.search.general', (error as any).message);
-        return [];
+      if (xactId) {
+        try {
+          fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, undefined, xactId);
+        } catch (error) {
+          console.error('Error fetching items:', error);
+          this.notifier.notify('error.search.general', (error as any).message);
+          return [];
+        }
+      } else {
+        console.debug("Call fetch data with params:", this.searchParams, this.queryGeometry);
+        const secomSearchFilterObj = this.buildSearchFilterObject(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : '', this.localOnly); //geojsonToWKT(this.queryGeometry) : '');
+        if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
+          return [];
+        }
+        // a bit of hack to deal with the fact that the search service does not support total number of elements....
+
+        try {
+          fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchFilterObj, xactId);
+        } catch (error) {
+          console.error('Error fetching items:', error);
+          this.notifier.notify('error.search.general', (error as any).message);
+          return [];
+        }
       }
       if (!fetchedItems) {
         return [];
@@ -139,8 +150,8 @@ export class SrSearchComponent {
         });
 
       //If globalsearch spawn three events that will fire
-      const xActId = fetchedItems.transactionId;
-      if (xActId && !this.localOnly) { this.scheduleGlobalSearchCalls(xActId);}
+      const newXActId = fetchedItems.transactionId;
+      if (newXActId && !this.localOnly && !xactId) { this.scheduleGlobalSearchCalls(newXActId);}
 
 
 
@@ -157,7 +168,8 @@ export class SrSearchComponent {
   private scheduleGlobalSearchCalls(transactionId: string): void {
     [3, 6, 10].forEach(seconds => {
       setTimeout(() => {
-       console.log("Call retreive results for xact id:", transactionId, " after ", seconds, " seconds");
+        console.log("Call retreive results for xact id:", transactionId, " after ", seconds, " seconds");
+        this.smartTable.loadData(undefined, transactionId);
       }, seconds * 1000);
     });
   }
@@ -234,9 +246,7 @@ export class SrSearchComponent {
       this.localOnly = true;
     }
 
-    var id = "12435"; // Just a dummy to force reload
-
-;    this.smartTable.loadData(undefined, id);
+;    this.smartTable.loadData(undefined);
   }
 
 

@@ -136,7 +136,7 @@ export class SmartExpandableTableComponent {
   }
 
   async loadData(pageNumber: number = this.currentPageNumber, xactId? : string) {
-    this.data = await this.getData(this.itemType, pageNumber, this.elementsPerPage) || [];
+    this.data = await this.getData(this.itemType, pageNumber, this.elementsPerPage, undefined, xactId) || [];
     if (pageNumber !== this.currentPageNumber) {
       this.currentPageNumber = pageNumber;
     }

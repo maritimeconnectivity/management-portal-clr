@@ -67,12 +67,21 @@ export class ItemManagerService {
 
       // Case: we want to call retrievereults with xactId only
     } else if(itemType === ItemType.SearchObjectResult && xactId) {
+      page = await firstValueFrom(
+          this.secomService.v2RetrieveResultsTransactionIdGet(xactId, 'response')
+      );
 
-      page = await firstValueFrom(this.secomService.v2RetrieveResultsTransactionIdGet(xactId, 'response'));
-      const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
-      return { data: (page.body?.services! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
-        totalPages: Math.ceil( totalElements / elementsPerPage),
-        totalElements};
+      const services = (page.body?.services ?? []) as SearchObjectResult[];
+
+      const totalHeader = page.headers.get('X-Total-Count');
+      const totalElements =
+          (totalHeader ? parseInt(totalHeader, 10) : services.length) || 0;
+
+      return {
+        data: services.map(i => preprocess(i, itemType)),
+        totalPages: Math.ceil(totalElements / elementsPerPage || 1),
+        totalElements,
+      };
 
 
     } else if (itemType === ItemType.Device) {
