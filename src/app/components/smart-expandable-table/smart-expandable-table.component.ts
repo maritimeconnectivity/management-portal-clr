@@ -33,7 +33,6 @@ import { SvcSearchInputComponent } from '../svc-search-input/svc-search-input.co
     ClarityModule,
     ClrDatagridModule,
     ItemViewComponent,
-    SvcSearchInputComponent,
 ],
   templateUrl: './smart-expandable-table.component.html',
   styleUrl: './smart-expandable-table.component.css'
@@ -51,7 +50,8 @@ export class SmartExpandableTableComponent {
   @Input() totalPages: number = 0;
   @Input() totalElements: number = 0;
   @Input() hasEditPermission: boolean = false;
-  @Input() getData: ((itemType: ItemType, pageNumber: number, elementsPerPage: number) => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
+  @Input() getData: ((itemType: ItemType, pageNumber: number, elementsPerPage: number, xactId? : string, secomSearchParam?: object)
+      => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
   @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() revokeCertsEvent: EventEmitter<any[]> = new EventEmitter();
   @Output() downloadCertsEvent: EventEmitter<any[]> = new EventEmitter();
@@ -135,8 +135,8 @@ export class SmartExpandableTableComponent {
     this.updateVisiblePageNumbers();
   }
 
-  async loadData(pageNumber: number = this.currentPageNumber) {
-    this.data = await this.getData(this.itemType, pageNumber, this.elementsPerPage) || [];
+  async loadData(pageNumber: number = this.currentPageNumber, xactId? : string) {
+    this.data = await this.getData(this.itemType, pageNumber, this.elementsPerPage, xactId) || [];
     if (pageNumber !== this.currentPageNumber) {
       this.currentPageNumber = pageNumber;
     }

@@ -120,7 +120,7 @@ export class ListViewComponent {
       }, {} as {[key: string]: any});
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, xactId? : string, secomSearchParam?: object) => {
     try {
       if (itemType === ItemType.Role) {
         return await this.itemManagerService.fetchAllRolesInOrg(this.orgMrn);

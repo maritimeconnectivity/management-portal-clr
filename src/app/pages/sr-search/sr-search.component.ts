@@ -124,6 +124,9 @@ export class SrSearchComponent {
       if (!fetchedItems) {
         return [];
       }
+
+      console.log('fetchedItems:', fetchedItems);
+
       this.totalPages = fetchedItems.totalPages!;
       this.totalElements = fetchedItems.totalElements!;
       this.geometries = [];
@@ -209,8 +212,9 @@ export class SrSearchComponent {
       this.localOnly = true;
     }
 
+    var id = "12435"; // Just a dummy to force reload
 
-    this.smartTable.loadData();
+;    this.smartTable.loadData(undefined, id);
   }
 
 
