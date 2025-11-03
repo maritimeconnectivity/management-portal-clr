@@ -56,10 +56,14 @@ export class ItemManagerService {
     } else if(itemType === ItemType.SearchObjectResult && secomSearchFilterobj) {
 
       page = await firstValueFrom(this.secomService.search(secomSearchFilterobj, 'response'));
+
+      const newXactId = page.body?.transactionId ?? undefined;
+
+
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
       return { data: (page.body?.services! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
-        totalElements};
+        totalElements, transactionId : newXactId};
 
       // Case: we want to call retrievereults with xactId only
     } else if(itemType === ItemType.SearchObjectResult && xactId) {

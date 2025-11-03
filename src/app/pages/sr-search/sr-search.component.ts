@@ -106,6 +106,7 @@ export class SrSearchComponent {
   };
 
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
+    console.log("Fetch data list sr search component");
     try {
       console.debug("Call fetch data with params:", this.searchParams, this.queryGeometry);
       const secomSearchFilterObj = this.buildSearchFilterObject(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : '', this.localOnly); //geojsonToWKT(this.queryGeometry) : '');
@@ -136,12 +137,31 @@ export class SrSearchComponent {
           this.geometries.push(i.geometry);
           this.geometryBacklink.push({instanceId: i.instanceId, name: i.name, version: i.version});
         });
+
+      //If globalsearch spawn three events that will fire
+      const xActId = fetchedItems.transactionId;
+      if (xActId && !this.localOnly) { this.scheduleGlobalSearchCalls(xActId);}
+
+
+
+
       return fetchedItems.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       return [];
     }
+
+
   }
+
+  private scheduleGlobalSearchCalls(transactionId: string): void {
+    [3, 6, 10].forEach(seconds => {
+      setTimeout(() => {
+       console.log("Call retreive results for xact id:", transactionId, " after ", seconds, " seconds");
+      }, seconds * 1000);
+    });
+  }
+
 
   buildSearchFilterObject = (searchParams: SearchParameters, geojsonString?: string, localOnly? : boolean): SearchFilterObject => {
     let searchFilterObj: SearchFilterObject = {
