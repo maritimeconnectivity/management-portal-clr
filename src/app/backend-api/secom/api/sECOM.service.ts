@@ -29,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class SECOMService {
 
-    protected basePath = '/';
+    protected basePath = '';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -89,7 +89,7 @@ export class SECOMService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<SearchResult>('get',`${this.basePath}/v2/retrieveResults/${encodeURIComponent(String(transactionId))}`,
+        return this.httpClient.request<SearchResult>('get',`${this.basePath}/api/secom/v2/retrieveResults/${encodeURIComponent(String(transactionId))}`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -219,7 +219,7 @@ export class SECOMService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<SearchResult>('get',`${this.basePath}/v2/searchService`,
+        return this.httpClient.request<SearchResult>('get',`${this.basePath}/api/secom/v2/searchService`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -263,7 +263,8 @@ export class SECOMService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<SearchResult>('post',`${this.basePath}/v2/searchService`,
+        console.log('Base path is:', this.basePath);
+        return this.httpClient.request<SearchResult>('post',`${this.basePath}/api/secom/v2/searchService`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
