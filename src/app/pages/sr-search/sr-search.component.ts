@@ -278,6 +278,7 @@ export class SrSearchComponent {
       this.localOnly = false;
     } else {
       this.localOnly = true;
+      this.clearGlobalSearchTimers();
     }
 
 ;    this.smartTable.loadData(undefined);
