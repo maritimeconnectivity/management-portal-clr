@@ -1,7 +1,7 @@
 <div class="clr-col-lg-12 clr-col-md-8 clr-col-12">
   <div class="clr-row clr-col-md-12">
     <app-svc-search-input #queryInput [orgMrn]="orgMrn" (searchEvent)="onSearch($event)" (clearAllEvent)="onClearAll()"
-                          [isLoadingGlobal]="globalSearchInProgress" style="width: 100%;"/>
+                          [isLoadingGlobal]="globalSearchInProgress" [errorMessage]="errorMessage" style="width: 100%;"/>
   </div>
     <div class="clr-row">
       <div class="clr-col-md-12">

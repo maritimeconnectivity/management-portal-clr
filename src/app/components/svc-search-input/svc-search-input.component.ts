@@ -30,6 +30,7 @@ import { CommonModule } from '@angular/common';
 import { LuceneTermInputComponent } from '../lucene-term-input/lucene-term-input.component';
 import { LuceneGeoQueryInputComponent } from '../lucene-geo-query-input/lucene-geo-query-input.component';
 import {SearchParameters} from "../../backend-api/secom";
+import { SimpleChanges, OnChanges } from '@angular/core';
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
 
@@ -65,6 +66,7 @@ export class SvcSearchInputComponent {
     scope: 'local' | 'global';
     searchParams: SearchParameters;
   }>();
+  @Input() errorMessage: string | null = null;
   @Output() clearAllEvent = new EventEmitter<any>();
 
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
@@ -78,7 +80,6 @@ export class SvcSearchInputComponent {
       this.loadComponent();
     }
   }
-
 
   private lusceneToSearchParams(terms: Term[], allowedKeys: Set<string>): SearchParameters {
     const out: SearchParameters = {};

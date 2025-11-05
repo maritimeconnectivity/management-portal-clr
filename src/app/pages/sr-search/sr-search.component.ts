@@ -76,6 +76,7 @@ export class SrSearchComponent {
   globalSearchInProgress : boolean = false;
   remainingGlobalSearchCalls : number = 0;
   burstTimeouts: Array<ReturnType<typeof setTimeout>> = [];
+  errorMessage: string | null = null;
 
   constructor(
     private router: Router,
@@ -132,6 +133,7 @@ export class SrSearchComponent {
           fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, undefined, xactId);
         } catch (error) {
           console.error('Error fetching items:', error);
+          this.errorMessage = 'Failed to fetch search results. Please try again.';
           this.notifier.notify('error.search.general', (error as any).message);
           return [];
         }
@@ -233,7 +235,6 @@ export class SrSearchComponent {
   onUpdateGeometry = (event: any) => {
     // currently handling only one geometry
     this.queryGeometry = event['data']['geometries'][0];
-    this.smartTable.loadData();
     this.queryInput.addGeoItem();
   }
 
@@ -265,9 +266,17 @@ export class SrSearchComponent {
     });
   }
 
+  setErrorMsg(msg: string): string {
+    return msg;
+  }
 
   onSearch = (payload: { scope: 'local' | 'global'; searchParams: SearchParameters }) => {
-    console.debug("onsearch called with params:", payload);
+    //Check empty params
+    if (Object.keys(payload.searchParams).length === 0) {
+        this.errorMessage = 'Please add at least one search parameter before searching.';
+        return;
+    }
+    this.errorMessage = null;
 
     this.searchParams = payload.searchParams;
     if (this.geometryMap) {
@@ -281,7 +290,7 @@ export class SrSearchComponent {
       this.clearGlobalSearchTimers();
     }
 
-;    this.smartTable.loadData(undefined);
+    this.smartTable.loadData(undefined);
   }
 
 
