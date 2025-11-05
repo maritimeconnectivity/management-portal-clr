@@ -302,6 +302,8 @@ export class SrSearchComponent {
 
   onClear = () => {
     this.clearAll();
+
+    this.clearGlobalSearchTimers();
   }
 
   clearAll = () => {
