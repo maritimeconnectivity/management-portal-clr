@@ -73,6 +73,9 @@ export class SrSearchComponent {
   selectedInstance: any = {};
   instanceType = ItemType.Instance;
   localOnly : boolean = true;
+  globalSearchInProgress : boolean = false;
+  remainingGlobalSearchCalls : number = 0;
+  burstTimeouts: Array<ReturnType<typeof setTimeout>> = [];
 
   constructor(
     private router: Router,
@@ -91,6 +94,21 @@ export class SrSearchComponent {
     });
     this.setLabel();
   }
+
+  ngOnDestroy(): void {
+    this.clearGlobalSearchTimers();
+  }
+
+
+  private clearGlobalSearchTimers(): void {
+    this.burstTimeouts.forEach(id => clearTimeout(id));
+    this.burstTimeouts = [];
+    this.remainingGlobalSearchCalls = 0;
+    this.globalSearchInProgress = false;
+  }
+
+
+
 
   setLabel = () => {
     this.labels = this.filterVisibleForList(ColumnForResource[this.itemType.toString()]);
@@ -166,13 +184,29 @@ export class SrSearchComponent {
   }
 
   private scheduleGlobalSearchCalls(transactionId: string): void {
+    // reset any existing timers / state
+    this.clearGlobalSearchTimers();
+
+    this.globalSearchInProgress = true;
+    this.remainingGlobalSearchCalls = 3; // 3, 6, 10 seconds
+
     [3, 6, 10].forEach(seconds => {
-      setTimeout(() => {
-        console.log("Call retreive results for xact id:", transactionId, " after ", seconds, " seconds");
-        this.smartTable.loadData(undefined, transactionId);
+      const id = setTimeout(async () => {
+        try {
+          await this.smartTable.loadData(undefined, transactionId);
+        } catch (error) {
+            console.error('Error during global search polling:', error);
+        } finally {
+          this.remainingGlobalSearchCalls--;
+          if (this.remainingGlobalSearchCalls <= 0) {
+            this.globalSearchInProgress = false;
+          }
+        }
       }, seconds * 1000);
+      this.burstTimeouts.push(id);
     });
   }
+
 
 
   buildSearchFilterObject = (searchParams: SearchParameters, geojsonString?: string, localOnly? : boolean): SearchFilterObject => {

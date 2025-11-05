@@ -60,6 +60,7 @@ export class SvcSearchInputComponent {
   @Input() btnTitle = 'Search';
   @Input() orgMrn = '';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
+  @Input() isLoadingGlobal: boolean = false;
   @Output() searchEvent = new EventEmitter<{
     scope: 'local' | 'global';
     searchParams: SearchParameters;

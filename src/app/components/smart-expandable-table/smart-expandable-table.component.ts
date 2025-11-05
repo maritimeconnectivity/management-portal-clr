@@ -135,13 +135,23 @@ export class SmartExpandableTableComponent {
     this.updateVisiblePageNumbers();
   }
 
-  async loadData(pageNumber: number = this.currentPageNumber, xactId? : string) {
-    this.data = await this.getData(this.itemType, pageNumber, this.elementsPerPage, undefined, xactId) || [];
+  async loadData(pageNumber: number = this.currentPageNumber, xactId?: string) {
+    const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage, undefined, xactId) || [];
+
+    // If this is a follow-up retrieveResults call, append instead of overwrite
+    if (xactId && this.data && this.data.length) {
+      // naive merge, no de-duplication
+      this.data = [...this.data, ...newRows];
+    } else {
+      this.data = newRows;
+    }
+
     if (pageNumber !== this.currentPageNumber) {
       this.currentPageNumber = pageNumber;
     }
     this.isLoading = false;
   }
+
 
   // this function is for background loading of data
   async onRefresh(state: ClrDatagridStateInterface) {
