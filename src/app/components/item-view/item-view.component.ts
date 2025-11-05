@@ -244,8 +244,7 @@ export class ItemViewComponent implements OnChanges {
             this.notifier.notify('error', this.translate.instant('error.selection.notMigrated'));
             return;
         }
-        this.certModal?.open();
-        this.certModalOpened = true;
+
         this.issue();
     }
 
@@ -281,6 +280,8 @@ export class ItemViewComponent implements OnChanges {
     issue = () => {
         issueNewWithLocalKeys(this.certificateService!, this.itemType, this.itemId, this.orgMrn, this.fromBrowser).then((cert: CertificateBundle | undefined) => {
             this.certificateBundle = cert;
+            this.certModal?.open();
+            this.certModalOpened = true;
             this.notifier.notify('success', this.translate.instant('success.certificate.issue'));
         });
     }
