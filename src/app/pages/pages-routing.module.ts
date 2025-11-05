@@ -111,10 +111,10 @@ const routes: Routes = [
       path: 'sr/instance/:id/:instanceVersion',
       component: DetailViewComponent,
     },
-    {
-      path: 'sr/mapsearch',
-      component: SrMapSearchComponent,
-    },
+    // {
+    //   path: 'sr/mapsearch',
+    //   component: SrMapSearchComponent,
+    // },
     {
       path: 'sr/search',
       component: SrSearchComponent,

@@ -102,11 +102,11 @@ export const MENU_ITEMS: MenuItem[] = [
         link: '/pages/sr/search',
         group: 'mysr'
       },
-      {
-        title: 'menu.sr.search.map',
-        link: '/pages/sr/mapsearch',
-        group: 'mysr'
-      },
+      // {
+      //   title: 'menu.sr.search.map',
+      //   link: '/pages/sr/mapsearch',
+      //   group: 'mysr'
+      // },
       {
         title: 'menu.sr.instances',
         link: '/pages/sr/instance',
