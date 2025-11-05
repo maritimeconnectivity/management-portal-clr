@@ -1,17 +1,18 @@
 @if (context === 'active') {
+    @let placeHolder = "There are no active certificates.";
     @if (hasEditPermission) {
-        <app-smart-table [labels]="columnsForActive" [data]="data" [selectedIds]="[serial]" [deleteCall]="onRevoke" deleteText="Revoke" [downloadCall]="onDownload" [addCall]="onAdd"
-        placeholder="There is no issued certificate."
-        [itemType]="itemType"></app-smart-table>
+        <app-smart-table [labels]="columnsForActive" [data]="data" [selectedIds]="[serial]" [deleteCall]="onRevoke"
+                         deleteText="Revoke" [downloadCall]="onDownload" [addCall]="onAdd"
+                         placeholder="{{ placeHolder }}"
+                         [itemType]="itemType"></app-smart-table>
     } @else {
         <app-smart-table [labels]="columnsForActive" [data]="data" [selectedIds]="[serial]" [downloadCall]="onDownload"
-        placeholder="There is no issued certificate."
-        [itemType]="itemType"></app-smart-table>
+                         placeholder="{{ placeHolder }}"
+                         [itemType]="itemType"></app-smart-table>
     }
-    
 } @else if (context === 'revoked') {
-    <app-smart-table [labels]="columnsForRevoked" [data]="data" placeholder="There is no revoked certificate."
-        [itemType]="itemType"></app-smart-table>
+    <app-smart-table [labels]="columnsForRevoked" [data]="data" placeholder="There are no revoked certificates."
+                     [itemType]="itemType"></app-smart-table>
 } @else {
-    <h1>The given context is wrong! : {{context}}</h1>
+    <h1>The given context is wrong! : {{ context }}</h1>
 }
