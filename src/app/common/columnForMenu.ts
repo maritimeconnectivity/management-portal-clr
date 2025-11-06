@@ -1201,6 +1201,11 @@ export const ColumnForResource: {[key: string]: object} = {
       title: "Geometry",
       type: "object",
       visibleFrom: []
+    },
+    sourceMSR: {
+        title: "Source MSR",
+        type: "string",
+        visibleFrom: ["detail", "list", "edit", "edit-new"],
     }
   },
   newOrganization: {
