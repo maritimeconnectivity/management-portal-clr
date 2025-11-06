@@ -132,3 +132,7 @@ dist
 .angular/cache
 src/assets/wasm/main.wasm
 src/assets/js/wasm_exec.js
+
+
+# MAC OS files
+.DS_Store
