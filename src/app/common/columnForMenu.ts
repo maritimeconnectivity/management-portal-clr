@@ -1123,7 +1123,7 @@ export const ColumnForResource: {[key: string]: object} = {
     },
     dataProductType: {
       title: "Data product type",
-      type: "stringArray",
+      type: "string",
       options: [
         {
           title: 'S-57 Electronic Navigational Chart (ENC)',
@@ -1235,7 +1235,7 @@ export const ColumnForResource: {[key: string]: object} = {
         },
       ],
       description: "Data product type defined in IEC 63173-2 SECOM standard",
-      visibleFrom: ["edit", "edit-new", "detail"]
+      visibleFrom: [ "detail", "edit", "edit-new"]
     },
     organizationId: {
       title: "Organization ID",

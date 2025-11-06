@@ -14,26 +14,25 @@
  * limitations under the License.
  */
 
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { InputGeometryComponent } from "../../components/input-geometry/input-geometry.component";
-import { ComponentsModule } from 'src/app/components/components.module';
-import { SvcSearchInputComponent } from "../../components/svc-search-input/svc-search-input.component";
+import {Component, ViewChild} from '@angular/core';
+import {InputGeometryComponent} from "../../components/input-geometry/input-geometry.component";
+import {ComponentsModule} from 'src/app/components/components.module';
+import {SvcSearchInputComponent} from "../../components/svc-search-input/svc-search-input.component";
 import {SearchFilterObject, SearchObjectResult, SearchParameters, SECOMService} from 'src/app/backend-api/secom';
-import { InstanceInfo, ItemType } from 'src/app/common/menuType';
-import { ColumnForResource } from 'src/app/common/columnForMenu';
-import { InstanceControllerService, InstanceDto } from 'src/app/backend-api/service-registry';
-import { LuceneQueryOutput } from 'src/app/common/lucene-query/lucene-query-output';
-import { Router } from '@angular/router';
-import { geojsonToWKT } from '@terraformer/wkt';
-import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-info';
-import { ItemTableComponent } from 'src/app/components/item-table/item-table.component';
-import { ClarityModule } from '@clr/angular';
-import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
-import { SmartExpandableTableComponent } from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
-import { NotifierService } from 'gramli-angular-notifier';
-import { TranslateService } from '@ngx-translate/core';
-import { AuthService } from 'src/app/auth/auth.service';
-import { loadLang } from 'src/app/common/translateHelper';
+import {InstanceInfo, ItemType} from 'src/app/common/menuType';
+import {ColumnForResource} from 'src/app/common/columnForMenu';
+import {InstanceDto} from 'src/app/backend-api/service-registry';
+import {Router} from '@angular/router';
+import {srFieldInfo} from 'src/app/common/lucene-query/service-registry-field-info';
+import {ClarityModule} from '@clr/angular';
+import {ItemManagerService} from 'src/app/common/shared/item-manager.service';
+import {
+  SmartExpandableTableComponent
+} from 'src/app/components/smart-expandable-table/smart-expandable-table.component';
+import {NotifierService} from 'gramli-angular-notifier';
+import {TranslateService} from '@ngx-translate/core';
+import {AuthService} from 'src/app/auth/auth.service';
+import {loadLang} from 'src/app/common/translateHelper';
 
 @Component({
   selector: 'app-sr-search',
@@ -77,6 +76,7 @@ export class SrSearchComponent {
   remainingGlobalSearchCalls : number = 0;
   burstTimeouts: Array<ReturnType<typeof setTimeout>> = [];
   errorMessage: string | null = null;
+  selectedInstanceIsLocal = false;
 
   constructor(
     private router: Router,
@@ -271,6 +271,9 @@ export class SrSearchComponent {
   }
 
   onSearch = (payload: { scope: 'local' | 'global'; searchParams: SearchParameters }) => {
+
+    console.log("org mrn is ", this.orgMrn);
+
     //Check empty params
     if (Object.keys(payload.searchParams).length === 0) {
         this.errorMessage = 'Please add at least one search parameter before searching.';
@@ -295,11 +298,40 @@ export class SrSearchComponent {
 
 
   view = (selectedItem: any) => {
-    // show the search result itself
-    this.instanceType = ItemType.SearchObjectResult;
-    this.selectedInstance = selectedItem;
-    this.showPanel = true;
-  }
+
+    console.log("VIEW!!!")
+
+    this.itemManagerService
+        .fetchSingleData(
+            ItemType.Instance,
+            this.orgMrn,
+            selectedItem.instanceId,
+            selectedItem.version
+        )
+        .then((instance) => {
+          if (!instance || Object.keys(instance).length === 0) {
+            console.log('Instance fetch returned empty – treating as remote');
+            this.selectedInstance = selectedItem;
+            this.selectedInstanceIsLocal = false;
+            this.instanceType = ItemType.SearchObjectResult
+          } else {
+            // Found in local MSR
+            this.selectedInstance = instance;
+            this.selectedInstanceIsLocal = true;
+            this.instanceType = ItemType.Instance;
+          }
+          this.showPanel = true;
+        })
+        .catch((err) => {
+          console.warn('Error fetching instance locally – treating as remote', err);
+          this.selectedInstance = selectedItem;
+          this.selectedInstanceIsLocal = false;
+          this.showPanel = true;
+        });
+
+  };
+
+
 
 
   moveToEditPage = (selectedItem: any, forEdit: boolean = true) => {
