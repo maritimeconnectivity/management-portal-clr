@@ -295,11 +295,12 @@ export class SrSearchComponent {
 
 
   view = (selectedItem: any) => {
-    this.itemManagerService.fetchSingleData(this.instanceType, this.orgMrn, selectedItem.instanceId, selectedItem.version).then((instance) => {
-      this.selectedInstance = instance;
-      this.showPanel = true;
-    });
+    // show the search result itself
+    this.instanceType = ItemType.SearchObjectResult;
+    this.selectedInstance = selectedItem;
+    this.showPanel = true;
   }
+
 
   moveToEditPage = (selectedItem: any, forEdit: boolean = true) => {
     const url = '/pages/' + this.apiBase + '/'+ItemType.Instance+'/'+selectedItem.instanceId + '/' + selectedItem.version;
