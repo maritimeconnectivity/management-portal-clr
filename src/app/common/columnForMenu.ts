@@ -1125,12 +1125,117 @@ export const ColumnForResource: {[key: string]: object} = {
       title: "Data product type",
       type: "stringArray",
       options: [
-        { title: "S-57 Electronic Navigational Chart (ENC)", value: "S57" },
-        { title: "S-101 Electronic Navigational Chart (ENC)", value: "S101" },
-        { title: "S-102 Bathymetric Surface", value: "S102" }
+        {
+          title: 'S-57 Electronic Navigational Chart (ENC)',
+          value: 'S57',
+        },
+        {
+          title: 'S-101 Electronic Navigational Chart (ENC)',
+          value: 'S101',
+        },
+        {
+          title: 'S-102 Bathymetric Surface',
+          value: 'S102',
+        },
+        {
+          title: 'S-104 Water Level Information for Surface Navigation',
+          value: 'S104',
+        },
+        {
+          title: 'S-111 Surface Currents',
+          value: 'S111',
+        },
+        {
+          title: 'S-122 Marine Protected Areas (MPAs)',
+          value: 'S122',
+        },
+        {
+          title: 'S-123 Marine Radio Services',
+          value: 'S123',
+        },
+        {
+          title: 'S-124 Navigational Warnings',
+          value: 'S124',
+        },
+        {
+          title: 'S-125 Marine Navigational Services',
+          value: 'S125',
+        },
+        {
+          title: 'S-126 Marine Physical Environment',
+          value: 'S126',
+        },
+        {
+          title: 'S-127 Marine Traffic Management',
+          value: 'S127',
+        },
+        {
+          title: 'S-128 Catalogue of Nautical Products',
+          value: 'S128',
+        },
+        {
+          title: 'S-129 Under Keel Clearance Management (UKCM)',
+          value: 'S129',
+        },
+        {
+          title: 'S-131 Marine Harbour Infrastructure',
+          value: 'S131',
+        },
+        {
+          title: 'S-210 Inter-VTS Exchange Format',
+          value: 'S210',
+        },
+        {
+          title: 'S-211 Port Call Message Format',
+          value: 'S211',
+        },
+        {
+          title: 'S-212 VTS Digital Information Service',
+          value: 'S212',
+        },
+        {
+          title: 'S-401 Inland ENC',
+          value: 'S401',
+        },
+        {
+          title: 'S-402 Bathymetric Contour Overlay for Inland ENC',
+          value: 'S402',
+        },
+        {
+          title: 'S-411 Sea Ice Information',
+          value: 'S411',
+        },
+        {
+          title: 'S-412 Weather Overlay',
+          value: 'S412',
+        },
+        {
+          title: 'S-413 Marine Weather Conditions',
+          value: 'S413',
+        },
+        {
+          title: 'S-414 Marine Weather Observations',
+          value: 'S414',
+        },
+        {
+          title: 'S-421 Route Plan',
+          value: 'S421',
+        },
+        {
+          title: 'Route Plan',
+          value: 'RTZ',
+        },
+        {
+          title: 'Electronic Port Clearance',
+          value: 'EPC',
+        },
+        {
+          title: 'Other data types not covered in this table',
+          value: 'OTHER',
+        },
       ],
       description: "Data product type defined in IEC 63173-2 SECOM standard",
-      visibleFrom: ["edit", "edit-new"]
+      visibleFrom: ["edit", "edit-new", "detail"]
     },
     organizationId: {
       title: "Organization ID",
