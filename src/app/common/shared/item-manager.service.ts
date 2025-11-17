@@ -61,6 +61,9 @@ export class ItemManagerService {
 
 
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
+
+      console.log("Total elements from header: ", page.body?.services!.length);
+
       return { data: (page.body?.services! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
         totalElements, transactionId : newXactId};
