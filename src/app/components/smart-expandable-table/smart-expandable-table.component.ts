@@ -70,6 +70,8 @@ export class SmartExpandableTableComponent {
   labelKeys: string[] = [];
   labelTitles: string[] = [];
   isLoading: boolean = false;
+  hasFetched: boolean = false;
+  defaultLoaded: boolean = false;
   pageNumbers: number[] = [];
   currentPageNumber = 0;
   currentPageRange = 0;
@@ -138,6 +140,10 @@ export class SmartExpandableTableComponent {
   async loadData(pageNumber: number = this.currentPageNumber, xactId?: string) {
     const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage, undefined, xactId) || [];
 
+
+    if (this.defaultLoaded && newRows.length === 0) {
+      this.placeholder = "Search returned no data";   // <-- override message
+    }
     // If this is a follow-up retrieveResults call, append instead of overwrite
     if (xactId && this.data && this.data.length) {
       // naive merge, no de-duplication
@@ -150,6 +156,7 @@ export class SmartExpandableTableComponent {
       this.currentPageNumber = pageNumber;
     }
     this.isLoading = false;
+    this.defaultLoaded = true;
   }
 
 
