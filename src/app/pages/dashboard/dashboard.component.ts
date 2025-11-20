@@ -23,6 +23,7 @@ import {ItemtypeOverviewComponent} from 'src/app/components/itemtype-overview/it
 import {AuthService} from 'src/app/auth/auth.service';
 import {ItemManagerService} from "../../common/shared/item-manager.service";
 import {NgIf} from "@angular/common";
+import {AppConfig} from "../../app.config";
 
 @Component({
     selector: 'app-dashboard',
@@ -38,6 +39,7 @@ export class DashboardComponent implements OnInit {
     labelValues?: LabelValueModel[];
     orgMrn = "";
     msrAvailable: boolean = true;
+    mirAvailable: boolean = true;
 
     constructor(private organizationService: OrganizationControllerService,
         private authService: AuthService,
@@ -51,10 +53,16 @@ export class DashboardComponent implements OnInit {
             this.orgMrn = mrn;
             this.isLoading = false;
             this.checkMsrConnection()
+            this.checkMirConnection()
         });
     }
 
     private async checkMsrConnection(): Promise<void> {
         this.msrAvailable = await this.itemManagerService.checkMsrAvailability();
+    }
+
+    private async checkMirConnection(): Promise<void> {
+        const checkPath = AppConfig.IR_BASE_PATH + '/v3/api-docs'
+        this.mirAvailable = await this.itemManagerService.checkMirAvailability(checkPath);
     }
 }

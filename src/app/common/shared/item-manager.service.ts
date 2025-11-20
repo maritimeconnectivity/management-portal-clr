@@ -30,12 +30,13 @@ import {
 } from 'src/app/backend-api/secom';
 
 import RoleNameEnum = Role.RoleNameEnum;
-import {HttpResponse} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 @Injectable({
   providedIn: 'root'
 })
 export class ItemManagerService {
   private rolesInOrg : RoleNameEnum[] = [];
+  public defaultHeaders = new HttpHeaders();
 
   constructor(
     private deviceService: DeviceControllerService,
@@ -48,6 +49,7 @@ export class ItemManagerService {
     private secomService: SECOMService,
     private xmlService: XmlControllerService,
     private pingService: PingService,
+    private http: HttpClient
   ) { }
 
   checkMsrAvailability = async (): Promise<boolean> => {
@@ -63,7 +65,27 @@ export class ItemManagerService {
     }
   }
 
-  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject, xactId? : string): Promise<FetchedItems> => {
+//Checks API availability through the OpenAPI spec
+async checkMirAvailability(url: string): Promise<boolean> {
+  try {
+    const headers = this.defaultHeaders.set('Accept', '*/*');
+
+    const response = await firstValueFrom(
+        this.http.get<any>(url, { headers, withCredentials: false })
+    );
+
+    return !!(response?.info?.version);
+  } catch (error) {
+    return false;
+  }
+}
+
+
+
+
+
+
+fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject, xactId? : string): Promise<FetchedItems> => {
     let page;
 
     if(itemType === ItemType.Instance) {

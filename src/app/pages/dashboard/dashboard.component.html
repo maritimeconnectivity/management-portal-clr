@@ -1,8 +1,22 @@
 <h1>{{title}}</h1>
 
-<h3>Service Registry Connection Status</h3>
+<h3>Connection Status</h3>
+<h4>Service Registry</h4>
 
 <div class="status-line" *ngIf="msrAvailable; else notConnected">
+    <cds-icon shape="check-circle" class="is-success" size="24"></cds-icon>
+    <span class="status-text success">Connected</span>
+</div>
+
+<ng-template #notConnected>
+    <div class="status-line">
+        <cds-icon shape="error-standard" class="is-error" size="24"></cds-icon>
+        <span class="status-text error">Currently unavailable</span>
+    </div>
+</ng-template>
+
+<h4>Identity Registry</h4>
+<div class="status-line" *ngIf="mirAvailable; else notConnected">
     <cds-icon shape="check-circle" class="is-success" size="24"></cds-icon>
     <span class="status-text success">Connected</span>
 </div>
