@@ -3,7 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { ServiceService } from './api/service.service';
+import { PingService } from './api/ping.service';
 import { SECOMService } from './api/sECOM.service';
 
 @NgModule({
@@ -11,7 +11,7 @@ import { SECOMService } from './api/sECOM.service';
   declarations: [],
   exports:      [],
   providers: [
-    ServiceService,
+    PingService,
     SECOMService ]
 })
 export class ApiModule {

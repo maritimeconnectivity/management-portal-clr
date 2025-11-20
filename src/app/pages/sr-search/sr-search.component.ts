@@ -74,6 +74,7 @@ export class SrSearchComponent {
   burstTimeouts: Array<ReturnType<typeof setTimeout>> = [];
   errorMessage: string | null = null;
   selectedInstanceIsLocal = false;
+  msrAvailable: boolean = true;
 
   constructor(
     private router: Router,
@@ -90,6 +91,7 @@ export class SrSearchComponent {
     this.authService.getOrgMrnFromToken().then(orgMrn => {
       this.orgMrn = orgMrn;
     });
+    this.checkMsrConnection()
     this.setLabel();
   }
 
@@ -106,7 +108,16 @@ export class SrSearchComponent {
   }
 
 
+  private async checkMsrConnection(): Promise<void> {
+    const msrConnected = await this.itemManagerService.checkMsrAvailability();
+    if (msrConnected) {
+      this.msrAvailable = true;
+    } else {
+        this.msrAvailable = false;
+        this.notifier.notify('warning.msr.unavailable', 'Maritime Service Registry is currently unavailable. Please try again later.');
+    }
 
+  }
 
   setLabel = () => {
     this.labels = this.filterVisibleForList(ColumnForResource[this.itemType.toString()]);

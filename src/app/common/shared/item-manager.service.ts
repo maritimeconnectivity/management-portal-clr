@@ -21,9 +21,16 @@ import { Device, DeviceControllerService, Organization, OrganizationControllerSe
 import { preprocess } from '../itemPreprocessor';
 import { InstanceControllerService, InstanceDto, XmlControllerService, XmlDto } from 'src/app/backend-api/service-registry';
 import { FetchedItems } from '../fetchedItems';
-import {SearchFilterObject, SearchObjectResult, SearchParameters, SECOMService} from 'src/app/backend-api/secom';
+import {
+  PingService,
+  SearchFilterObject,
+  SearchObjectResult,
+  SearchParameters,
+  SECOMService
+} from 'src/app/backend-api/secom';
 
 import RoleNameEnum = Role.RoleNameEnum;
+import {HttpResponse} from "@angular/common/http";
 @Injectable({
   providedIn: 'root'
 })
@@ -40,7 +47,21 @@ export class ItemManagerService {
     private instanceService: InstanceControllerService,
     private secomService: SECOMService,
     private xmlService: XmlControllerService,
+    private pingService: PingService,
   ) { }
+
+  checkMsrAvailability = async (): Promise<boolean> => {
+    try {
+      const res: HttpResponse<any> = await firstValueFrom(
+          this.pingService.v2PingGet('response')
+      );
+        console.log("stauts code from ping msr: ", res.status);
+        return res.status === 200;
+    } catch (e) {
+        console.error('MSR not available:', e);
+        return false;
+    }
+  }
 
   fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject, xactId? : string): Promise<FetchedItems> => {
     let page;

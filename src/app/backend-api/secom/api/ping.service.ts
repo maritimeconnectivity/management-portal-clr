@@ -24,7 +24,7 @@ import { Configuration }                                     from '../configurat
 
 
 @Injectable()
-export class ServiceService {
+export class PingService {
 
     protected basePath = '/';
     public defaultHeaders = new HttpHeaders();
@@ -81,7 +81,7 @@ export class ServiceService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<InlineResponse200>('get',`${this.basePath}/v2/ping`,
+        return this.httpClient.request<InlineResponse200>('get',`${this.basePath}/api/secom/v2/ping`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
