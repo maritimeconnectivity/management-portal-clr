@@ -61,10 +61,7 @@ export class SrSearchComponent {
   totalElements = 0;
   itemType = ItemType.SearchObjectResult;
   instances: Array<SearchObjectResult> | undefined = [];
-  showTables = true;
-  contextForAttributes = 'list';
   isLoading = false;
-  settings = {};
   allInstances: InstanceDto[] = [];
   fieldInfo = srFieldInfo;
   apiBase = 'sr';
