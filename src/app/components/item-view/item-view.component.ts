@@ -228,6 +228,10 @@ export class ItemViewComponent implements OnChanges {
         this.migrateEvent.emit(this.newServiceMrn);
     }
 
+    inputChanged = (event: Event) => {
+        this.newServiceMrn = (<HTMLTextAreaElement>event.target).value;
+    }
+
     approve = () => {
         if (this.newAdminUserForm?.isValid()) {
             this.adminUser = this.newAdminUserForm?.getFormValue();

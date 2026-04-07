@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-declare const fetch: Function
 import {environment} from '../environments/environment';
-import { mpVersion } from './common/version';
+import {mpVersion} from './common/version';
 
 export class AppConfig {
     static OIDC_BASE_PATH: string;
@@ -43,7 +42,39 @@ export class AppConfig {
     static FOOTER_LINK: string;
     static LOGO_IMG: string;
 
-    public static _initialize() {
+    public static async _initialize() {
+        try {
+            const res = await fetch('/assets/config.json');
+            const config = await res.json();
+            AppConfig.IR_BASE_PATH = config.irBasePath.replace(/\/$/, '');
+            AppConfig.SR_BASE_PATH = config.hasServiceRegistry ? config.srBasePath.replace(/\/$/, '') : '';
+            AppConfig.ENVIRONMENT_TITLE = config.environmentTitle;
+            AppConfig.IDP_NAMESPACE = config.idpNamespace;
+            AppConfig.HAS_SERVICE_REGISTRY = config.hasServiceRegistry;
+            AppConfig.OIDC_BASE_PATH = config.oidcBasePath.replace(/\/$/, '');
+            AppConfig.ENVIRONMENT_NAME = config.environmentName;
+            AppConfig.IR_PROVIDER = config.irProvider;
+            AppConfig.IR_CONTACT = config.irContact;
+            AppConfig.SR_PROVIDER = config.srProvider;
+            AppConfig.SR_CONTACT = config.srContact;
+            AppConfig.HAS_MSR_LEDGER = config.hasMSRLedger;
+            AppConfig.LEDGER_PATH = config.hasMSRLedger ? config.ledgerPath : '';
+            AppConfig.MP_PROVIDER = config.mpProvider;
+            AppConfig.MP_NAME = config.mpName;
+            AppConfig.TERMS_OF_USE = config.termsOfUse;
+            AppConfig.MP_CONTACT = config.mpContact;
+            AppConfig.MP_VERSION = mpVersion;
+            AppConfig.MP_YEAR = config.mpYear;
+            AppConfig.FOOTER_NAME = config.footerName;
+            AppConfig.FOOTER_LINK = config.footerLink;
+            AppConfig.LOGO_IMG = config.logoImg;
+        } catch (error) {
+            console.log("No config.json could be loaded, falling back to use built in config:", error);
+            this.useDefaultConfig();
+        }
+    }
+
+    private static useDefaultConfig() {
         AppConfig.IR_BASE_PATH = environment.irBasePath.replace(/\/$/, '');
         AppConfig.SR_BASE_PATH = environment.hasServiceRegistry ? environment.srBasePath.replace(/\/$/, '') : '';
         AppConfig.ENVIRONMENT_TITLE = environment.environmentTitle;
@@ -68,5 +99,3 @@ export class AppConfig {
         AppConfig.LOGO_IMG = environment.logoImg;
     }
 }
-
-AppConfig._initialize();
