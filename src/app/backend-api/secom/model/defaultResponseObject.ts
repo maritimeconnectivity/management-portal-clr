@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface DefaultResponseObject extends null<String, any> { 
+export interface DefaultResponseObject {
   [key: string]: any;
 
 

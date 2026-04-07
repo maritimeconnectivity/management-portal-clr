@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface EnvelopeUpdateServiceObject extends null<String, any> { 
+export interface EnvelopeUpdateServiceObject {
   [key: string]: any;
 
 

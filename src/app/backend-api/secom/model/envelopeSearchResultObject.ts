@@ -13,7 +13,7 @@
 /**
  * The envelope object for search result
  */
-export interface EnvelopeSearchResultObject extends null<String, any> { 
+export interface EnvelopeSearchResultObject {
   [key: string]: any;
 
 

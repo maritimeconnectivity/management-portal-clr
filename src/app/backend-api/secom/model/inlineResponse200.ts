@@ -10,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface InlineResponse200 extends null<String, any> { 
+export interface InlineResponse200 {
   [key: string]: any;
 
 

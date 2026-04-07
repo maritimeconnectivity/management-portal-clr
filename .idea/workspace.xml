@@ -4,33 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="Status of the Identity registry shown on front page">
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/api.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/api/api.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api/ping.service.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api/sECOM.service.ts" beforeDir="false" />
+    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="Starting point with new API defs">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/encoder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/encoder.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/crs.ts" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/defaultResponseObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/defaultResponseObject.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeSearchResultObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeSearchResultObject.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeUpdateServiceObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeUpdateServiceObject.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/inlineResponse200.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/inlineResponse200.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/models.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/organization.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/properties.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchFilterObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchFilterObject.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchMessageObject.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchObjectResult.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchParameters.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchParameters.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchResult.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchResult.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/secomDataProductTypeEnum.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/updateServiceObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/updateServiceObject.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/common/shared/item-manager.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/shared/item-manager.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/list-view/list-view.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/list-view/list-view.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/pages-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/pages-routing.module.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-map-search/sr-map-search.component.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-map-search/sr-map-search.component.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-map-search/sr-map-search.component.spec.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-map-search/sr-map-search.component.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -172,7 +152,7 @@
       <workItem from="1765267937160" duration="1199000" />
       <workItem from="1765291933129" duration="1398000" />
       <workItem from="1775566110591" duration="5961000" />
-      <workItem from="1775572891111" duration="1044000" />
+      <workItem from="1775572891111" duration="1258000" />
     </task>
     <task id="LOCAL-00001" summary="Update API definitions and fix issue where serviceType has changed name and type to serviceTypes">
       <option name="closed" value="true" />
@@ -446,7 +426,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763646486855</updated>
     </task>
-    <option name="localTasksCounter" value="35" />
+    <task id="LOCAL-00035" summary="Starting point with new API defs">
+      <option name="closed" value="true" />
+      <created>1775573977208</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1775573977208</updated>
+    </task>
+    <option name="localTasksCounter" value="36" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -476,7 +464,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update SearchFilterObject to conform to SECOM V2 def" />
     <MESSAGE value="Correct use of SecomSearchFilterObj to allow for global search upon user selecting this option in the UI" />
     <MESSAGE value="Update regular search type to correctly use a SearchFilterObject and set the localOnly parameter as intended" />
     <MESSAGE value="Pass xactId param to allow for retrieve results" />
@@ -501,7 +488,8 @@
     <MESSAGE value="Implement UI status for when the backend MSR is unavailable" />
     <MESSAGE value="Add MSR status check to frontend" />
     <MESSAGE value="Status of the Identity registry shown on front page" />
-    <option name="LAST_COMMIT_MESSAGE" value="Status of the Identity registry shown on front page" />
+    <MESSAGE value="Starting point with new API defs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Starting point with new API defs" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
