@@ -1,6 +1,6 @@
 /**
- * MSR Interface definitions
- * Compliant with IEC 63173-2:2025 SECOM version 2
+ * SECOM Service discovery interface
+ * Compliant with SECOM IEC 63173-2 v2.0
  *
  * OpenAPI spec version: v2
  * 
@@ -9,22 +9,58 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { MaritimeServiceType } from './maritimeServiceType';
+import { ServiceInstanceStatus } from './serviceInstanceStatus';
 
 export interface SearchParameters { 
+    /**
+     * Name of service.
+     */
     name?: string;
-    status?: string;
+    status?: ServiceInstanceStatus;
+    /**
+     * Version number of the instance. Semantic versioning should be preferred.
+     */
     version?: string;
+    /**
+     * A JSON array of keyword strings, e.g. [\"navigation\", \"warning\", \"navWarn\", \"s-124\"].
+     */
     keywords?: Array<string>;
+    /**
+     * Human-readable description of service.
+     */
     description?: string;
+    /**
+     * A JSON array of strings that define the datatypes.
+     */
+    dataProductType?: Array<string>;
+    /**
+     * The MRN of the service specification.
+     */
     specificationId?: string;
+    /**
+     * The MRN of the service design.
+     */
     designId?: string;
+    /**
+     * The MRN of the service instance.
+     */
     instanceId?: string;
-    organisationId?: string;
-    mmsi?: string;
-    imo?: string;
-    serviceType?: string;
-    unlocode?: string;
+    /**
+     * MMSI number for a ship
+     */
+    mmsi?: number;
+    /**
+     * IMO number for a ship
+     */
+    imo?: number;
+    serviceType?: MaritimeServiceType;
+    /**
+     * An array of UN/LOCODEs that describe the coverage area of the service.
+     */
+    unlocode?: Array<string>;
+    /**
+     * The endpoint of the service. The format and completeness of the endpoint depend on the endpoint type.
+     */
     endpointUri?: string;
-    dataProductType?: string;
-    localOnly?: boolean;
 }

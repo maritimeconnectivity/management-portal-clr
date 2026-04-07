@@ -10,7 +10,10 @@
  * Do not edit the class manually.
  */
 
-export interface InlineResponse200 extends null<String, any> { 
+/**
+ * The envelope object for search result
+ */
+export interface EnvelopeSearchResultObject extends null<String, any> { 
   [key: string]: any;
 
 

@@ -1,6 +1,6 @@
 /**
- * MSR Interface definitions
- * Compliant with IEC 63173-2:2025 SECOM version 2
+ * SECOM Service discovery interface
+ * Compliant with SECOM IEC 63173-2 v2.0
  *
  * OpenAPI spec version: v2
  * 
@@ -9,10 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { SearchParameters } from './searchParameters';
+import { EnvelopeSearchFilterObject } from './envelopeSearchFilterObject';
 
 export interface SearchFilterObject { 
-    query?: SearchParameters;
-    geometry?: string;
-    includeXml?: boolean;
+    envelope: EnvelopeSearchFilterObject;
+    /**
+     * The signature of the EnvelopeObject in HEX format without whitespace or linebreaks
+     */
+    envelopeSignature: string;
 }

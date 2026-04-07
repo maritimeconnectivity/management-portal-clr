@@ -1,5 +1,5 @@
-export * from './ping.service';
-import { PingService } from './ping.service';
-export * from './sECOM.service';
-import { SECOMService } from './sECOM.service';
-export const APIS = [PingService, SECOMService];
+export * from './service.service';
+import { ServiceService } from './service.service';
+export * from './serviceRegistry.service';
+import { ServiceRegistryService } from './serviceRegistry.service';
+export const APIS = [ServiceService, ServiceRegistryService];

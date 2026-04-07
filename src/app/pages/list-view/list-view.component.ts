@@ -31,6 +31,7 @@ import { ORG_ADMIN_AT_MIR } from 'src/app/common/variables';
 import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import RoleNameEnum = Role.RoleNameEnum;
 import { isUserEditingTheirOwnData } from 'src/app/common/mrnUtil';
+import { SearchFilterObject } from 'src/app/backend-api/secom';
 
 @Component({
   selector: 'app-list-view',
@@ -120,7 +121,7 @@ export class ListViewComponent {
       }, {} as {[key: string]: any});
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: SearchFilterObject) => {
     console.log("Fetch data list view");
     try {
       if (itemType === ItemType.Role) {

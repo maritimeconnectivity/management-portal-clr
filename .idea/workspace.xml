@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="Status of the Identity registry shown on front page">
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/api.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/api/api.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api/ping.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api/sECOM.service.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/encoder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/encoder.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/crs.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/defaultResponseObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/defaultResponseObject.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/inlineResponse200.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/inlineResponse200.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/models.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/models.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/organization.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/properties.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchFilterObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchFilterObject.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchMessageObject.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchObjectResult.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchParameters.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchParameters.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchResult.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/searchResult.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/secomDataProductTypeEnum.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/updateServiceObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/updateServiceObject.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/common/shared/item-manager.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/shared/item-manager.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/list-view/list-view.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/list-view/list-view.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/pages-routing.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/pages-routing.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-map-search/sr-map-search.component.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-map-search/sr-map-search.component.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-map-search/sr-map-search.component.spec.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-map-search/sr-map-search.component.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.3.darwin-arm64" />
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;jakob22r&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:maritimeconnectivity/management-portal-clr.git&quot;,
+    &quot;accountId&quot;: &quot;913723f6-7ee3-4889-ae35-7cd28c9ea905&quot;
+  }
+}</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider">{
+  &quot;isMigrated&quot;: true
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="32PKQzgD8DwaxeHjn6SVyGmZsf4" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "git-widget-placeholder": "g1191-msr",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "last_opened_file_path": "/Users/dmc-jakob/Documents/management-portal-clr",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.Angular CLI Server.executor": "Run",
+    "npm.test.executor": "Run",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "ts.external.directory.path": "/Users/dmc-jakob/Documents/management-portal-clr/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/app/backend-api/service-registry" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.Angular CLI Server">
+    <configuration name="Angular Application" type="JavascriptDebugType" uri="http://localhost:4200">
+      <method v="2" />
+    </configuration>
+    <configuration name="Angular CLI Server" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <configuration name="test" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="test" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.test" />
+        <item itemvalue="npm.test" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.28293.39" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.28293.39" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="StructureViewState">
+    <option name="selectedTab" value="Logical" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="" />
+      <created>1757316754958</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1757316754958</updated>
+      <workItem from="1757316755992" duration="2523000" />
+      <workItem from="1757485871295" duration="4021000" />
+      <workItem from="1760612944680" duration="11048000" />
+      <workItem from="1761112727488" duration="19245000" />
+      <workItem from="1761295451058" duration="13549000" />
+      <workItem from="1762158568179" duration="10540000" />
+      <workItem from="1762174560519" duration="8000" />
+      <workItem from="1762175373466" duration="4477000" />
+      <workItem from="1762180662064" duration="3317000" />
+      <workItem from="1762342345713" duration="8068000" />
+      <workItem from="1762419659450" duration="12812000" />
+      <workItem from="1763370132818" duration="4375000" />
+      <workItem from="1763634918169" duration="9980000" />
+      <workItem from="1764058088627" duration="599000" />
+      <workItem from="1764070370640" duration="598000" />
+      <workItem from="1764668257546" duration="598000" />
+      <workItem from="1765267937160" duration="1199000" />
+      <workItem from="1765291933129" duration="1398000" />
+      <workItem from="1775566110591" duration="5961000" />
+      <workItem from="1775572891111" duration="1044000" />
+    </task>
+    <task id="LOCAL-00001" summary="Update API definitions and fix issue where serviceType has changed name and type to serviceTypes">
+      <option name="closed" value="true" />
+      <created>1760616538636</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1760616538636</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Downgrade to API 3.0.0 instead of 3.1.0 bcs apparently there is an issue where all type defs become &quot;any&quot; loosing important type information when using swagger code gen on 3.1.0.&#10;This is a known issue">
+      <option name="closed" value="true" />
+      <created>1760617423104</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1760617423104</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Extend definitions to allow propagation of indicator whether the search is local or global">
+      <option name="closed" value="true" />
+      <created>1760621480046</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1760621480046</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Add debug statmeents">
+      <option name="closed" value="true" />
+      <created>1761119686796</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1761119686796</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Conform to SECOM V2">
+      <option name="closed" value="true" />
+      <created>1761130592688</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1761130592688</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Update s.t. search is performed according to SECOM V2">
+      <option name="closed" value="true" />
+      <created>1761134751244</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1761134751244</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Update to SECOM 2 compliant search API for the Normal non map-search">
+      <option name="closed" value="true" />
+      <created>1761135405361</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1761135405361</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Block button that allowed nested expressions with boolan logic">
+      <option name="closed" value="true" />
+      <created>1761137729674</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1761137729674</updated>
+    </task>
+    <task id="LOCAL-00009" summary="No nested query strycture">
+      <option name="closed" value="true" />
+      <created>1761140341265</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1761140341265</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Update SearchFilterObject to conform to SECOM V2 def">
+      <option name="closed" value="true" />
+      <created>1761298004089</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1761298004089</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Correct use of SecomSearchFilterObj to allow for global search upon user selecting this option in the UI">
+      <option name="closed" value="true" />
+      <created>1761302530786</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1761302530786</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Update regular search type to correctly use a SearchFilterObject and set the localOnly parameter as intended">
+      <option name="closed" value="true" />
+      <created>1761303523684</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1761303523684</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Pass xactId param to allow for retrieve results">
+      <option name="closed" value="true" />
+      <created>1762164481263</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1762164481263</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Upgrade to V2 secom client">
+      <option name="closed" value="true" />
+      <created>1762172644411</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1762172644411</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Add additional autogenerated definitions">
+      <option name="closed" value="true" />
+      <created>1762176843368</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1762176843368</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Spawn three events for calling RetreiveResults">
+      <option name="closed" value="true" />
+      <created>1762179035918</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1762179035918</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Remove invcorrect param from list-view component">
+      <option name="closed" value="true" />
+      <created>1762179553024</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1762179553024</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Global search results correctly returned">
+      <option name="closed" value="true" />
+      <created>1762182318149</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1762182318149</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Add clr-inline spinner when conducting global search">
+      <option name="closed" value="true" />
+      <created>1762345159851</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1762345159851</updated>
+    </task>
+    <task id="LOCAL-00020" summary="UI will stop ongoing global search, if the user changes search type to a local search">
+      <option name="closed" value="true" />
+      <created>1762345289320</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1762345289320</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Clear all will also clear ongoing Global Searches">
+      <option name="closed" value="true" />
+      <created>1762345369828</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1762345369828</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Print error message when attempting to search for a gemotry with no query parameters">
+      <option name="closed" value="true" />
+      <created>1762351086519</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1762351086519</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Disable map search as the &quot;search&quot; interfaces encompasses all functionality required for searching">
+      <option name="closed" value="true" />
+      <created>1762352909766</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1762352909766</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Ignore Mac .DS Store">
+      <option name="closed" value="true" />
+      <created>1762421514622</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1762421514622</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Add SourceMSR to visible fields in the list view. This allows users of global search to easily identify the originating MSR">
+      <option name="closed" value="true" />
+      <created>1762429142446</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1762429142446</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Show result details by parsing SearchObjectResults instead of attempting a local fetch">
+      <option name="closed" value="true" />
+      <created>1762429692654</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1762429692654</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Add missing data product types to searchObjectResults">
+      <option name="closed" value="true" />
+      <created>1762430230426</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1762430230426</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Correct display of dataProductType when fetching global results">
+      <option name="closed" value="true" />
+      <created>1762436339727</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1762436339727</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Display message when search returns no data. Creates more responsive UI">
+      <option name="closed" value="true" />
+      <created>1763374570875</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1763374570875</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Change UI message">
+      <option name="closed" value="true" />
+      <created>1763375055409</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1763375055409</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Delete unusded attreibutes">
+      <option name="closed" value="true" />
+      <created>1763639636223</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1763639636223</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Implement UI status for when the backend MSR is unavailable">
+      <option name="closed" value="true" />
+      <created>1763642983767</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1763642983767</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Add MSR status check to frontend">
+      <option name="closed" value="true" />
+      <created>1763644144051</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1763644144051</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Status of the Identity registry shown on front page">
+      <option name="closed" value="true" />
+      <created>1763646486855</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1763646486855</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="g1191-msr" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Update SearchFilterObject to conform to SECOM V2 def" />
+    <MESSAGE value="Correct use of SecomSearchFilterObj to allow for global search upon user selecting this option in the UI" />
+    <MESSAGE value="Update regular search type to correctly use a SearchFilterObject and set the localOnly parameter as intended" />
+    <MESSAGE value="Pass xactId param to allow for retrieve results" />
+    <MESSAGE value="Upgrade to V2 secom client" />
+    <MESSAGE value="Add additional autogenerated definitions" />
+    <MESSAGE value="Spawn three events for calling RetreiveResults" />
+    <MESSAGE value="Remove invcorrect param from list-view component" />
+    <MESSAGE value="Global search results correctly returned" />
+    <MESSAGE value="Add clr-inline spinner when conducting global search" />
+    <MESSAGE value="UI will stop ongoing global search, if the user changes search type to a local search" />
+    <MESSAGE value="Clear all will also clear ongoing Global Searches" />
+    <MESSAGE value="Print error message when attempting to search for a gemotry with no query parameters" />
+    <MESSAGE value="Disable map search as the &quot;search&quot; interfaces encompasses all functionality required for searching" />
+    <MESSAGE value="Ignore Mac .DS Store" />
+    <MESSAGE value="Add SourceMSR to visible fields in the list view. This allows users of global search to easily identify the originating MSR" />
+    <MESSAGE value="Show result details by parsing SearchObjectResults instead of attempting a local fetch" />
+    <MESSAGE value="Add missing data product types to searchObjectResults" />
+    <MESSAGE value="Correct display of dataProductType when fetching global results" />
+    <MESSAGE value="Display message when search returns no data. Creates more responsive UI" />
+    <MESSAGE value="Change UI message" />
+    <MESSAGE value="Delete unusded attreibutes" />
+    <MESSAGE value="Implement UI status for when the backend MSR is unavailable" />
+    <MESSAGE value="Add MSR status check to frontend" />
+    <MESSAGE value="Status of the Identity registry shown on front page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Status of the Identity registry shown on front page" />
+  </component>
+  <component name="VgoProject">
+    <settings-migrated>true</settings-migrated>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts</url>
+          <line>14</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
+  </component>
+</project>

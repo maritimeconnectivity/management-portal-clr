@@ -24,7 +24,6 @@ import { SrGuideComponent } from './sr-guide/sr-guide.component';
 import { ListViewComponent } from './list-view/list-view.component';
 import { DetailViewComponent } from './detail-view/detail-view.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { SrMapSearchComponent } from './sr-map-search/sr-map-search.component';
 
 const routes: Routes = [
   {

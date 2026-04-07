@@ -18,7 +18,7 @@ import {Component, ViewChild} from '@angular/core';
 import {InputGeometryComponent} from "../../components/input-geometry/input-geometry.component";
 import {ComponentsModule} from 'src/app/components/components.module';
 import {SvcSearchInputComponent} from "../../components/svc-search-input/svc-search-input.component";
-import {SearchFilterObject, SearchObjectResult, SearchParameters, SECOMService} from 'src/app/backend-api/secom';
+import {SearchFilterObject, SearchResult, SearchParameters, EnvelopeSearchFilterObject, EnvelopeSearchResultObject, ServiceInstanceObject, ServiceRegistryService} from 'src/app/backend-api/secom';
 import {InstanceInfo, ItemType} from 'src/app/common/menuType';
 import {ColumnForResource} from 'src/app/common/columnForMenu';
 import {InstanceDto} from 'src/app/backend-api/service-registry';
@@ -60,7 +60,7 @@ export class SrSearchComponent {
   totalPages = 0;
   totalElements = 0;
   itemType = ItemType.SearchObjectResult;
-  instances: Array<SearchObjectResult> | undefined = [];
+  instances: Array<ServiceInstanceObject> | undefined = [];
   isLoading = false;
   allInstances: InstanceDto[] = [];
   fieldInfo = srFieldInfo;
@@ -78,7 +78,7 @@ export class SrSearchComponent {
 
   constructor(
     private router: Router,
-    private secomSearchController: SECOMService,
+    private secomSearchController: ServiceRegistryService,
     private itemManagerService: ItemManagerService,
     private notifier: NotifierService,
     private translate: TranslateService,
@@ -220,23 +220,31 @@ export class SrSearchComponent {
 
 
   buildSearchFilterObject = (searchParams: SearchParameters, geojsonString?: string, localOnly? : boolean): SearchFilterObject => {
-    let searchFilterObj: SearchFilterObject = {
+    let envelopeSearchFilterObj: EnvelopeSearchFilterObject = {
+      envelopeSignatureCertificate: [],
+      envelopeRootCertificateThumbprint: '',
+      envelopeSignatureTime: new Date()
     };
 
     // Only add the query section if it has data
     if (searchParams && Object.keys(searchParams).length > 0) {
-      searchFilterObj.query = searchParams;
+      envelopeSearchFilterObj.query = searchParams;
     }
 
     // Add geometry only if provided
     if (geojsonString) {
-      searchFilterObj.geometry = geojsonString;
+      envelopeSearchFilterObj.geometry = geojsonString;
     }
 
-    if (searchFilterObj.query) {
-      searchFilterObj.query.localOnly = localOnly;
+    if (envelopeSearchFilterObj.query) {
+      envelopeSearchFilterObj.localOnly = localOnly;
     }
 
+
+    let searchFilterObj : SearchFilterObject = {
+      envelope: envelopeSearchFilterObj,
+      envelopeSignature: ""
+    };
     return searchFilterObj;
   };
 
@@ -260,8 +268,8 @@ export class SrSearchComponent {
   search = (searchParams: SearchParameters, geojsonString?: string) => {
     this.isLoading = true;
     const queryObject = this.buildSearchFilterObject(searchParams, geojsonString, this.localOnly);
-    this.secomSearchController.search(queryObject).subscribe(res => {
-      this.instances = res.services;
+    this.secomSearchController.v2SearchServicePost(queryObject).subscribe((res: SearchResult) => {
+      this.instances = res.envelope['serviceInstance'];
       this.refreshData(this.instances);
       this.isLoading = false;
       this.geometries = [];

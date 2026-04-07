@@ -14,23 +14,43 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { ItemType } from '../menuType';
-import { firstValueFrom, Observable } from 'rxjs';
-import { Device, DeviceControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, ServicePatch, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
-import { preprocess } from '../itemPreprocessor';
-import { InstanceControllerService, InstanceDto, XmlControllerService, XmlDto } from 'src/app/backend-api/service-registry';
-import { FetchedItems } from '../fetchedItems';
+import {Injectable} from '@angular/core';
+import {ItemType} from '../menuType';
+import {firstValueFrom, Observable} from 'rxjs';
 import {
-  PingService,
+  Device,
+  DeviceControllerService,
+  Organization,
+  OrganizationControllerService,
+  Role,
+  RoleControllerService,
+  Service,
+  ServiceControllerService,
+  ServicePatch,
+  User,
+  UserControllerService,
+  Vessel,
+  VesselControllerService
+} from 'src/app/backend-api/identity-registry';
+import {preprocess} from '../itemPreprocessor';
+import {
+  InstanceControllerService,
+  InstanceDto,
+  XmlControllerService,
+  XmlDto
+} from 'src/app/backend-api/service-registry';
+import {FetchedItems} from '../fetchedItems';
+import {
+  EnvelopeRetrieveResultObject,
+  RetrieveResultObject,
   SearchFilterObject,
-  SearchObjectResult,
-  SearchParameters,
-  SECOMService
+  ServiceInstanceObject,
+  ServiceRegistryService,
+  ServiceService
 } from 'src/app/backend-api/secom';
-
-import RoleNameEnum = Role.RoleNameEnum;
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
+import RoleNameEnum = Role.RoleNameEnum;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -46,9 +66,9 @@ export class ItemManagerService {
     private vesselService: VesselControllerService,
     private roleService: RoleControllerService,
     private instanceService: InstanceControllerService,
-    private secomService: SECOMService,
+    private secomService: ServiceRegistryService,
     private xmlService: XmlControllerService,
-    private pingService: PingService,
+    private pingService: ServiceService,
     private http: HttpClient
   ) { }
 
@@ -98,26 +118,30 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
 
     } else if(itemType === ItemType.SearchObjectResult && secomSearchFilterobj) {
 
-      page = await firstValueFrom(this.secomService.search(secomSearchFilterobj, 'response'));
+      page = await firstValueFrom(this.secomService.v2SearchServicePost(secomSearchFilterobj, 'response'));
 
-      const newXactId = page.body?.transactionId ?? undefined;
+      const newXactId = page.body?.envelope['transactionId'] ?? undefined;
 
 
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
 
-      console.log("Total elements from header: ", page.body?.services!.length);
+      console.log("Total elements from header: ", page.body?.envelope['serviceInstance']!.length);
 
-      return { data: (page.body?.services! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
+      return { data: (page.body?.envelope['serviceInstance']! as ServiceInstanceObject[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
         totalElements, transactionId : newXactId};
 
       // Case: we want to call retrievereults with xactId only
     } else if(itemType === ItemType.SearchObjectResult && xactId) {
+
+      const retrieveResultObj = this.buildRetrieveResultObject(xactId);
+
+
       page = await firstValueFrom(
-          this.secomService.v2RetrieveResultsTransactionIdGet(xactId, 'response')
+          this.secomService.v2RetrieveResultPost(retrieveResultObj, 'response')
       );
 
-      const services = (page.body?.services ?? []) as SearchObjectResult[];
+      const services = (page.body?.envelope['serviceInstance']) as ServiceInstanceObject[];
 
       const totalHeader = page.headers.get('X-Total-Count');
       const totalElements =
@@ -292,4 +316,21 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
   updateXml = (xmlDto: XmlDto, id: number) => {
     return this.xmlService.updateXml(xmlDto, id);
   }
+
+  buildRetrieveResultObject = (transactionId: string): RetrieveResultObject => {
+    let envelopeRetrieveResultObject: EnvelopeRetrieveResultObject = {
+        transactionId: transactionId,
+      envelopeSignatureCertificate: [],
+      envelopeRootCertificateThumbprint: '',
+      envelopeSignatureTime: new Date()
+    };
+
+
+    return {
+      envelope: envelopeRetrieveResultObject,
+      envelopeSignature: ""
+    };
+  };
+
+
 }

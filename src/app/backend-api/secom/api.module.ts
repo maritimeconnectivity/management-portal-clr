@@ -3,16 +3,16 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { PingService } from './api/ping.service';
-import { SECOMService } from './api/sECOM.service';
+import { ServiceService } from './api/service.service';
+import { ServiceRegistryService } from './api/serviceRegistry.service';
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
   providers: [
-    PingService,
-    SECOMService ]
+    ServiceService,
+    ServiceRegistryService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

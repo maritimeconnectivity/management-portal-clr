@@ -1,7 +1,6 @@
-// @ts-ignore
 /**
- * MSR Interface definitions
- * Compliant with IEC 63173-2:2025 SECOM version 2
+ * SECOM Service discovery interface
+ * Compliant with SECOM IEC 63173-2 v2.0
  *
  * OpenAPI spec version: v2
  * 
@@ -11,7 +10,7 @@
  * Do not edit the class manually.
  */
 
-export interface DefaultResponseObject {
+export interface DefaultResponseObject extends null<String, any> { 
   [key: string]: any;
 
 

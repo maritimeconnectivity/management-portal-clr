@@ -9,15 +9,12 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { EnvelopeSearchResultObject } from './envelopeSearchResultObject';
+import { EnvelopeUploadSearchResultObject } from './envelopeUploadSearchResultObject';
 
-/**
- * Information output from Service Registry search
- */
-export interface SearchResult { 
-    envelope: EnvelopeSearchResultObject;
+export interface UploadSearchResultObject { 
+    envelope: EnvelopeUploadSearchResultObject;
     /**
-     * The signature of the EnvelopeSearchResultObject in HEX format without whitespace or linebreaks
+     * The signature of the EnvelopeObject in HEX format without whitespace or linebreaks
      */
     envelopeSignature: string;
 }

@@ -1,6 +1,6 @@
 /**
- * MSR Interface definitions
- * Compliant with IEC 63173-2:2025 SECOM version 2
+ * SECOM Service discovery interface
+ * Compliant with SECOM IEC 63173-2 v2.0
  *
  * OpenAPI spec version: v2
  * 
@@ -24,9 +24,9 @@ import { Configuration }                                     from '../configurat
 
 
 @Injectable()
-export class PingService {
+export class ServiceService {
 
-    protected basePath = '/';
+    protected basePath = 'http://localhost:8444/api/secom';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -81,7 +81,7 @@ export class PingService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<InlineResponse200>('get',`${this.basePath}/api/secom/v2/ping`,
+        return this.httpClient.request<InlineResponse200>('get',`${this.basePath}/v2/ping`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

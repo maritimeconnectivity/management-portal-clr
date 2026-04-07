@@ -1,6 +1,6 @@
 /**
- * MSR Interface definitions
- * Compliant with IEC 63173-2:2025 SECOM version 2
+ * SECOM Service discovery interface
+ * Compliant with SECOM IEC 63173-2 v2.0
  *
  * OpenAPI spec version: v2
  * 
@@ -9,9 +9,9 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { Properties } from './properties';
 
-export interface Crs { 
-    type?: string;
-    properties?: Properties;
+export interface EnvelopeUpdateServiceObject extends null<String, any> { 
+  [key: string]: any;
+
+
 }
