@@ -42,6 +42,7 @@ import {NotifierService} from 'gramli-angular-notifier';
 import {TranslateService} from '@ngx-translate/core';
 import {AuthService} from 'src/app/auth/auth.service';
 import {loadLang} from 'src/app/common/translateHelper';
+import {SecomSearchMapperService} from "../../common/shared/secomMapper.service";
 
 @Component({
   selector: 'app-sr-search',
@@ -92,6 +93,7 @@ export class SrSearchComponent {
     private notifier: NotifierService,
     private translate: TranslateService,
     private authService: AuthService,
+    private secomSearchMapper: SecomSearchMapperService
   ) {
     loadLang(translate);
   }
@@ -145,22 +147,15 @@ export class SrSearchComponent {
     console.log("Fetch data list sr search component");
     try {
       let fetchedItems;
-      // if (xactId) {
-      //   try {
-      //     fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, undefined);
-      //   } catch (error) {
-      //     console.error('Error fetching items:', error);
-      //     this.errorMessage = 'Failed to fetch search results. Please try again.';
-      //     this.notifier.notify('error.search.general', (error as any).message);
-      //     return [];
-      //   }
-      // } else {
-        console.debug("Call fetch data with params:", this.searchParams, this.queryGeometry);
-        const secomSearchFilterObj = this.buildSearchFilterObject(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : '', this.localOnly); //geojsonToWKT(this.queryGeometry) : '');
-        if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
-          return [];
-        }
-        // a bit of hack to deal with the fact that the search service does not support total number of elements....
+
+      //Construct the actual SECOM Request object
+      const secomSearchFilterObj = this.secomSearchMapper.toSearchFilterObject({
+        scope: this.localOnly,
+        searchParams: this.searchParams,
+        geometry: Object.keys(this.queryGeometry).length > 0
+            ? JSON.stringify(this.queryGeometry)
+            : undefined,
+      });
 
         try {
           fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchFilterObj);
@@ -227,34 +222,6 @@ export class SrSearchComponent {
 
 
 
-  buildSearchFilterObject = (searchParams: SearchParameters, geojsonString?: string, localOnly? : boolean): SearchFilterObject => {
-    let envelopeSearchFilterObj: EnvelopeSearchFilterObject = {
-      envelopeSignatureCertificate: [],
-      envelopeRootCertificateThumbprint: '',
-      envelopeSignatureTime: new Date()
-    };
-
-    // Only add the query section if it has data
-    if (searchParams && Object.keys(searchParams).length > 0) {
-      envelopeSearchFilterObj.query = searchParams;
-    }
-
-    // Add geometry only if provided
-    if (geojsonString) {
-      envelopeSearchFilterObj.geometry = geojsonString;
-    }
-
-    if (envelopeSearchFilterObj.query) {
-      envelopeSearchFilterObj.localOnly = localOnly;
-    }
-
-
-    let searchFilterObj : SearchFilterObject = {
-      envelope: envelopeSearchFilterObj,
-      envelopeSignature: ""
-    };
-    return searchFilterObj;
-  };
 
   onUpdateGeometry = (event: any) => {
     // currently handling only one geometry
@@ -273,30 +240,8 @@ export class SrSearchComponent {
     this.geometryMap.clearMap();
   }
 
-  search = (searchParams: SearchParameters, geojsonString?: string) => {
-    this.isLoading = true;
-    const queryObject = this.buildSearchFilterObject(searchParams, geojsonString, this.localOnly);
-    this.secomSearchController.v2SearchServicePost(queryObject).subscribe((res: SearchResult) => {
-      this.instances = res.envelope['serviceInstance'];
-      this.refreshData(this.instances);
-      this.isLoading = false;
-      this.geometries = [];
-      this.geometryBacklink = [];
-      this.instances?.forEach(i =>
-        {
-          this.geometries.push(i.coverageArea);
-          this.geometryBacklink.push(<InstanceInfo>{instanceId: i.instanceId, name: i.name, version: i.version});
-        });
-    });
-  }
-
-  setErrorMsg(msg: string): string {
-    return msg;
-  }
 
   onSearch = (payload: { scope: 'local' | 'global'; searchParams: SearchParameters }) => {
-
-    console.log("org mrn is ", this.orgMrn);
 
     //Check empty params
     if (Object.keys(payload.searchParams).length === 0) {

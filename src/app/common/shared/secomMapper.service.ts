@@ -6,7 +6,7 @@ import {
 } from 'src/app/backend-api/secom';
 
 export interface SecomSearchRequest {
-    scope: 'local' | 'global';
+    scope: boolean;
     searchParams: SearchParameters;
     geometry?: string;
 }
@@ -25,7 +25,7 @@ export class SecomSearchMapperService {
 
         if (request.searchParams && Object.keys(request.searchParams).length > 0) {
             envelope.query = request.searchParams;
-            envelope.localOnly = request.scope === 'local';
+            envelope.localOnly = request.scope;
         }
 
         if (request.geometry) {
