@@ -25,6 +25,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
 import { ComponentsModule } from '../components.module';
 import { SvcSearchInputComponent } from '../svc-search-input/svc-search-input.component';
+import {RetrieveResultObject, SearchFilterObject} from "../../backend-api/secom";
 
 @Component({
   selector: 'app-smart-expandable-table',
@@ -50,8 +51,14 @@ export class SmartExpandableTableComponent {
   @Input() totalPages: number = 0;
   @Input() totalElements: number = 0;
   @Input() hasEditPermission: boolean = false;
-  @Input() getData: ((itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam?: object, xactId? : string)
-      => Promise<any[] | undefined>) = (itemType: ItemType) => new Promise((resolve, reject) => resolve([]));
+  @Input() getData: (
+      itemType: ItemType,
+      pageNumber: number,
+      elementsPerPage: number,
+      searchFilterObject?: SearchFilterObject,
+      secomRetrieveResult?: RetrieveResultObject
+  ) => Promise<any[] | undefined> = async () => [];
+
   @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
   @Output() revokeCertsEvent: EventEmitter<any[]> = new EventEmitter();
   @Output() downloadCertsEvent: EventEmitter<any[]> = new EventEmitter();
@@ -138,7 +145,7 @@ export class SmartExpandableTableComponent {
   }
 
   async loadData(pageNumber: number = this.currentPageNumber, xactId?: string) {
-    const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage, undefined, xactId) || [];
+    const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage, undefined, undefined) || [];
 
 
     if (this.defaultLoaded && newRows.length === 0) {

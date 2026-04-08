@@ -18,7 +18,16 @@ import {Component, ViewChild} from '@angular/core';
 import {InputGeometryComponent} from "../../components/input-geometry/input-geometry.component";
 import {ComponentsModule} from 'src/app/components/components.module';
 import {SvcSearchInputComponent} from "../../components/svc-search-input/svc-search-input.component";
-import {SearchFilterObject, SearchResult, SearchParameters, EnvelopeSearchFilterObject, EnvelopeSearchResultObject, ServiceInstanceObject, ServiceRegistryService} from 'src/app/backend-api/secom';
+import {
+  SearchFilterObject,
+  SearchResult,
+  SearchParameters,
+  EnvelopeSearchFilterObject,
+  EnvelopeSearchResultObject,
+  ServiceInstanceObject,
+  ServiceRegistryService,
+  RetrieveResultObject
+} from 'src/app/backend-api/secom';
 import {InstanceInfo, ItemType} from 'src/app/common/menuType';
 import {ColumnForResource} from 'src/app/common/columnForMenu';
 import {InstanceDto} from 'src/app/backend-api/service-registry';
@@ -132,20 +141,20 @@ export class SrSearchComponent {
       }, {} as {[key: string]: any});
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchParam? : object, xactId? : string, ) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchFilter? : SearchFilterObject, retrieveResultObject? : RetrieveResultObject, ) => {
     console.log("Fetch data list sr search component");
     try {
       let fetchedItems;
-      if (xactId) {
-        try {
-          fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, undefined, xactId);
-        } catch (error) {
-          console.error('Error fetching items:', error);
-          this.errorMessage = 'Failed to fetch search results. Please try again.';
-          this.notifier.notify('error.search.general', (error as any).message);
-          return [];
-        }
-      } else {
+      // if (xactId) {
+      //   try {
+      //     fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, undefined);
+      //   } catch (error) {
+      //     console.error('Error fetching items:', error);
+      //     this.errorMessage = 'Failed to fetch search results. Please try again.';
+      //     this.notifier.notify('error.search.general', (error as any).message);
+      //     return [];
+      //   }
+      // } else {
         console.debug("Call fetch data with params:", this.searchParams, this.queryGeometry);
         const secomSearchFilterObj = this.buildSearchFilterObject(this.searchParams, Object.keys(this.queryGeometry).length > 0 ? JSON.stringify(this.queryGeometry) : '', this.localOnly); //geojsonToWKT(this.queryGeometry) : '');
         if (this.freetext === '' && Object.keys(this.searchParams).length === 0 && Object.keys(this.queryGeometry).length === 0) {
@@ -154,13 +163,12 @@ export class SrSearchComponent {
         // a bit of hack to deal with the fact that the search service does not support total number of elements....
 
         try {
-          fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchFilterObj, xactId);
+          fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchFilterObj);
         } catch (error) {
           console.error('Error fetching items:', error);
           this.notifier.notify('error.search.general', (error as any).message);
           return [];
         }
-      }
       if (!fetchedItems) {
         return [];
       }
@@ -179,7 +187,7 @@ export class SrSearchComponent {
 
       //If globalsearch spawn three events that will fire
       const newXActId = fetchedItems.transactionId;
-      if (newXActId && !this.localOnly && !xactId) { this.scheduleGlobalSearchCalls(newXActId);}
+      if (newXActId && !this.localOnly) { this.scheduleGlobalSearchCalls(newXActId);}
 
 
 

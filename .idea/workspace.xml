@@ -4,18 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="Starting point with new API defs">
+    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="Fix knows issue with interfaces">
+      <change afterPath="$PROJECT_DIR$/.idea/go.imports.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/eslint.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/encoder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/encoder.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/defaultResponseObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/defaultResponseObject.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeSearchResultObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeSearchResultObject.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeUpdateServiceObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeUpdateServiceObject.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/inlineResponse200.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/inlineResponse200.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/management-portal-clr.iml" beforeDir="false" afterPath="$PROJECT_DIR$/management-portal-clr.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/identity-registry/configuration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/identity-registry/configuration.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api/serviceRegistry.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/api/serviceRegistry.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/components/smart-expandable-table/smart-expandable-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/smart-expandable-table/smart-expandable-table.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/list-view/list-view.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/list-view/list-view.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/Users/dmc-jakob/Documents/management-portal-clr" value="32PKQzgD8DwaxeHjn6SVyGmZsf4" />
+    </persistenceIdMap>
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="328" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.3.darwin-arm64" />
   <component name="Git.Settings">
@@ -42,6 +57,10 @@
   <component name="KubernetesApiProvider">{
   &quot;isMigrated&quot;: true
 }</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -53,32 +72,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "git-widget-placeholder": "g1191-msr",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "/Users/dmc-jakob/Documents/management-portal-clr",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "pnpm",
-    "npm.Angular CLI Server.executor": "Run",
-    "npm.test.executor": "Run",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "ts.external.directory.path": "/Users/dmc-jakob/Documents/management-portal-clr/node_modules/typescript/lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;g1191-msr&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/dmc-jakob/Documents/management-portal-clr&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;npm.Angular CLI Server.executor&quot;: &quot;Run&quot;,
+    &quot;npm.test.executor&quot;: &quot;Run&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.eslint&quot;,
+    &quot;settings.editor.splitter.proportion&quot;: &quot;0.30928627&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/dmc-jakob/Documents/management-portal-clr/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/app/backend-api/service-registry" />
@@ -118,8 +147,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.28293.39" />
-        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.28293.39" />
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.29188.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-IU-251.29188.11" />
       </set>
     </attachedChunks>
   </component>
@@ -152,7 +181,11 @@
       <workItem from="1765267937160" duration="1199000" />
       <workItem from="1765291933129" duration="1398000" />
       <workItem from="1775566110591" duration="5961000" />
-      <workItem from="1775572891111" duration="1258000" />
+      <workItem from="1775572891111" duration="1312000" />
+      <workItem from="1775633534489" duration="2221000" />
+      <workItem from="1775638858893" duration="727000" />
+      <workItem from="1775639672702" duration="11813000" />
+      <workItem from="1775654063024" duration="2287000" />
     </task>
     <task id="LOCAL-00001" summary="Update API definitions and fix issue where serviceType has changed name and type to serviceTypes">
       <option name="closed" value="true" />
@@ -434,7 +467,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775573977208</updated>
     </task>
-    <option name="localTasksCounter" value="36" />
+    <task id="LOCAL-00036" summary="Fix knows issue with interfaces">
+      <option name="closed" value="true" />
+      <created>1775574178785</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1775574178785</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -464,7 +505,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Correct use of SecomSearchFilterObj to allow for global search upon user selecting this option in the UI" />
     <MESSAGE value="Update regular search type to correctly use a SearchFilterObject and set the localOnly parameter as intended" />
     <MESSAGE value="Pass xactId param to allow for retrieve results" />
     <MESSAGE value="Upgrade to V2 secom client" />
@@ -489,10 +529,8 @@
     <MESSAGE value="Add MSR status check to frontend" />
     <MESSAGE value="Status of the Identity registry shown on front page" />
     <MESSAGE value="Starting point with new API defs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Starting point with new API defs" />
-  </component>
-  <component name="VgoProject">
-    <settings-migrated>true</settings-migrated>
+    <MESSAGE value="Fix knows issue with interfaces" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix knows issue with interfaces" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -504,6 +542,10 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
