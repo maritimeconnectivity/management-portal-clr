@@ -20,10 +20,7 @@ import {ComponentsModule} from 'src/app/components/components.module';
 import {SvcSearchInputComponent} from "../../components/svc-search-input/svc-search-input.component";
 import {
   SearchFilterObject,
-  SearchResult,
   SearchParameters,
-  EnvelopeSearchFilterObject,
-  EnvelopeSearchResultObject,
   ServiceInstanceObject,
   ServiceRegistryService,
   RetrieveResultObject
@@ -70,10 +67,8 @@ export class SrSearchComponent {
   totalPages = 0;
   totalElements = 0;
   itemType = ItemType.SearchObjectResult;
-  instances: Array<ServiceInstanceObject> | undefined = [];
   isLoading = false;
   allInstances: InstanceDto[] = [];
-  fieldInfo = srFieldInfo;
   apiBase = 'sr';
   showPanel = false;
   selectedInstance: any = {};
@@ -88,7 +83,6 @@ export class SrSearchComponent {
 
   constructor(
     private router: Router,
-    private secomSearchController: ServiceRegistryService,
     private itemManagerService: ItemManagerService,
     private notifier: NotifierService,
     private translate: TranslateService,
@@ -110,14 +104,12 @@ export class SrSearchComponent {
     this.clearGlobalSearchTimers();
   }
 
-
   private clearGlobalSearchTimers(): void {
     this.burstTimeouts.forEach(id => clearTimeout(id));
     this.burstTimeouts = [];
     this.remainingGlobalSearchCalls = 0;
     this.globalSearchInProgress = false;
   }
-
 
   private async checkMsrConnection(): Promise<void> {
     const msrConnected = await this.itemManagerService.checkMsrAvailability();
@@ -143,7 +135,7 @@ export class SrSearchComponent {
       }, {} as {[key: string]: any});
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, secomSearchFilter? : SearchFilterObject, retrieveResultObject? : RetrieveResultObject, ) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
     console.log("Fetch data list sr search component");
     try {
       let fetchedItems;
@@ -221,8 +213,6 @@ export class SrSearchComponent {
   }
 
 
-
-
   onUpdateGeometry = (event: any) => {
     // currently handling only one geometry
     this.queryGeometry = event['data']['geometries'][0];
@@ -261,15 +251,11 @@ export class SrSearchComponent {
       this.localOnly = true;
       this.clearGlobalSearchTimers();
     }
-
     this.smartTable.loadData(undefined);
   }
 
 
   view = (selectedItem: any) => {
-
-    console.log("VIEW!!!")
-
     this.itemManagerService
         .fetchSingleData(
             ItemType.Instance,
@@ -297,11 +283,7 @@ export class SrSearchComponent {
           this.selectedInstanceIsLocal = false;
           this.showPanel = true;
         });
-
   };
-
-
-
 
   moveToEditPage = (selectedItem: any, forEdit: boolean = true) => {
     const url = '/pages/' + this.apiBase + '/'+ItemType.Instance+'/'+selectedItem.instanceId + '/' + selectedItem.version;

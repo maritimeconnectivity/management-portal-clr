@@ -55,8 +55,6 @@ export class SmartExpandableTableComponent {
       itemType: ItemType,
       pageNumber: number,
       elementsPerPage: number,
-      searchFilterObject?: SearchFilterObject,
-      secomRetrieveResult?: RetrieveResultObject
   ) => Promise<any[] | undefined> = async () => [];
 
   @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
@@ -145,7 +143,7 @@ export class SmartExpandableTableComponent {
   }
 
   async loadData(pageNumber: number = this.currentPageNumber, xactId?: string) {
-    const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage, undefined, undefined) || [];
+    const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage) || [];
 
 
     if (this.defaultLoaded && newRows.length === 0) {
