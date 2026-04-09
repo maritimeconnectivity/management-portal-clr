@@ -58,17 +58,43 @@ export class SecomSigningService {
     }
 
     private toBytes(esfo: EnvelopeSearchFilterObject): Uint8Array {
-
-        var cert = this.signingMaterial.bundle.certificate
+        const cert = this.signingMaterial.bundle.certificate;
         if (!cert) {
             throw new Error('No certificate found');
         }
 
+        const thumbprint = this.signingMaterial.rootCertificateThumbprint;
+        if (!thumbprint) {
+            throw new Error('No root certificate thumbprint found');
+        }
+
+        const query = esfo.query;
+        const serializedQuery = query
+            ? [
+                query.name ?? '',
+                query.status != null ? String(query.status) : '',
+                query.version ?? '',
+                query.keywords?.join(',') ?? '',
+                query.description ?? '',
+                query.dataProductType?.join(',') ?? '',
+                query.specificationId ?? '',
+                query.designId ?? '',
+                query.instanceId ?? '',
+                query.mmsi != null ? String(query.mmsi) : '',
+                query.imo != null ? String(query.imo) : '',
+                query.serviceType != null ? String(query.serviceType) : '',
+                query.unlocode?.join(',') ?? '',
+                query.endpointUri ?? '',
+            ].join('.')
+            : '';
+
         const csv = [
-            "[",
             this.toMinifiedPem(cert),
-            "]"
-        ].join(".")
+            thumbprint,
+            esfo.envelopeSignatureTime.toString(),
+            esfo.localOnly == null ? true : esfo.localOnly,
+            serializedQuery,
+        ].join('.');
 
         return new TextEncoder().encode(csv);
     }
