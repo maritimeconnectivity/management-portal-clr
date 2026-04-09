@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { sign } from 'crypto.subtle';
 import {
     EnvelopeSearchFilterObject,
     SearchFilterObject,
@@ -38,27 +37,40 @@ export class SecomSigningService {
         return this.ssp.getSigningMaterial();
     }
 
-    signSearchFilterObject(
+    async signSearchFilterObject(
         sfo: SearchFilterObject,
-    ): SearchFilterObject {
+    ): Promise<SearchFilterObject> {
         const sm: SigningMaterial = this.ssp.getSigningMaterial();
-
         const envelope = sfo.envelope as EnvelopeSearchFilterObject;
-
         const bytes = this.toBytes(envelope);
 
+        const algorithm: EcdsaParams = {
+            name: 'ECDSA',
+            hash: 'SHA-384',
+        };
 
+        if (!sm.bundle.privateKey) {
+            throw new Error('No private key found');
+        }
 
-        // TODO
-        // @ts-ignore
-        const signature = crypto.subtle.sign(null, null, null);
+        const pk = this.pemToCryptoKey(sm.bundle.privateKey);
+        const sigBuf = await crypto.subtle.sign(algorithm, pk, bytes);
 
+        const signatureBytes = new Uint8Array(sigBuf);
+        const signatureHex = Array.from(
+            signatureBytes,
+            byte => byte.toString(16).padStart(2, '0'),
+        ).join('');
 
-        //Returns the SearchFilterObject with the signature
         return {
             envelope,
-            envelopeSignature: '',
+            envelopeSignature: signatureHex,
         };
+    }
+
+    private pemToCryptoKey(pem : string) : CryptoKey {
+
+        throw new Error('Not implemented');
     }
 
 
