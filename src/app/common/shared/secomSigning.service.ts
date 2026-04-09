@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { sign } from 'crypto.subtle';
 import {
     EnvelopeSearchFilterObject,
     SearchFilterObject,
@@ -43,6 +44,14 @@ export class SecomSigningService {
         const sm: SigningMaterial = this.ssp.getSigningMaterial();
 
         const envelope = sfo.envelope as EnvelopeSearchFilterObject;
+
+        const bytes = this.toBytes(envelope);
+
+
+
+        // TODO
+        // @ts-ignore
+        const signature = crypto.subtle.sign(null, null, null);
 
 
         //Returns the SearchFilterObject with the signature
