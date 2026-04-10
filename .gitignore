@@ -136,3 +136,7 @@ src/assets/js/wasm_exec.js
 
 # MAC OS files
 .DS_Store
+
+# Jetbrains files
+.ai
+.idea
