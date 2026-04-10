@@ -16,24 +16,11 @@ interface EncryptedBlob {
 })
 export class SignatureProviderService {
 
-    private db: IDBDatabase | undefined;
-
     constructor(
         private certificateService: CertificateService,
         private authService: AuthService
     ) {
-        const dbRequest = window.indexedDB.open("certificates_db", 1);
 
-        dbRequest.onsuccess = (event) => {
-            this.db = (event.target as IDBOpenDBRequest).result;
-        }
-
-        dbRequest.onupgradeneeded = (event) => {
-            this.db = (event.target as IDBOpenDBRequest).result;
-
-            const objectStore = this.db.createObjectStore("certificates", {keyPath: "id", autoIncrement: true});
-            objectStore.createIndex("mrn", "mrn", {unique: true});
-        }
     }
 
     public async getCertificate(): Promise<CertificateBundle | null> {
@@ -64,6 +51,51 @@ export class SignatureProviderService {
             }
             return null;
         }
+
+        const db = await this.getDB();
+        const objectStore = db
+            .transaction(["certificates"], "readonly")
+            .objectStore("certificates");
+
+        const blob = await new Promise<EncryptedBlob | null>((resolve) => {
+            const request = objectStore.get(ownMrn);
+
+            request.onerror = () => resolve(null);
+            request.onsuccess = () => {
+                const result = request.result as EncryptedBlob;
+                resolve(result);
+            }
+        });
+
+        if (blob) {
+            return await this.decryptBundle(blob, publicKeyCredential);
+        }
+        return null;
+    }
+
+    private async getDB(): Promise<IDBDatabase> {
+        return new Promise<IDBDatabase>((resolve, reject) => {
+            const dbRequest = window.indexedDB.open("certificates_db", 1);
+
+            dbRequest.onsuccess = (event) => {
+                const db = (event.target as IDBOpenDBRequest).result;
+                resolve(db);
+            }
+
+            dbRequest.onupgradeneeded = (event) => {
+                const db = (event.target as IDBOpenDBRequest).result;
+
+                const objectStore = db.createObjectStore("certificates", {keyPath: "id", autoIncrement: true});
+                objectStore.createIndex("mrn", "mrn", {unique: true});
+
+                resolve(db);
+            }
+
+            dbRequest.onerror = () => {
+                reject(new Error("Could not connect to DB"));
+            }
+        });
+
     }
 
     private async createPublicKeyCredential(challenge: Buffer): Promise<PublicKeyCredential | null> {
@@ -97,7 +129,44 @@ export class SignatureProviderService {
         }) as PublicKeyCredential;
     }
 
-    private async storeCertificate(certBundle: CertificateBundle, publicKeyCredential: PublicKeyCredential, ownMrn: string) {
+    private async storeCertificate(certBundle: CertificateBundle, publicKeyCredential: PublicKeyCredential, ownMrn: string): Promise<void> {
+        const blob = await this.encryptBundle(certBundle, publicKeyCredential);
+
+        const db = await this.getDB();
+        const objectStore = db
+            .transaction(["certificates"], "readwrite")
+            .objectStore("certificates");
+
+        return new Promise((resolve, reject) => {
+            const request = objectStore.add(blob, ownMrn);
+            request.onsuccess = () => resolve();
+            request.onerror = () => {
+                reject("Could not store certificate in DB");
+            }
+        });
+    }
+
+    private async decryptBundle(encryptedBlob: EncryptedBlob, publicKeyCredential: PublicKeyCredential): Promise<CertificateBundle> {
+        const salt = encryptedBlob.salt;
+        const iv = encryptedBlob.iv;
+        const blob = encryptedBlob.blob;
+
+        const encryptionKey = await this.getEncryptionKey(publicKeyCredential, salt);
+        const decrypted = await window.crypto.subtle.decrypt(
+            {
+                name: "AES-GCM",
+                iv
+            },
+            encryptionKey,
+            blob
+        );
+
+        const utf8Decoder = new TextDecoder("utf-8");
+        const bundleString = utf8Decoder.decode(decrypted);
+        return JSON.parse(bundleString);
+    }
+
+    private async encryptBundle(certBundle: CertificateBundle, publicKeyCredential: PublicKeyCredential) {
         const salt = window.crypto.getRandomValues(new Uint8Array(16));
 
         const bundleJson = JSON.stringify(certBundle);
@@ -119,22 +188,7 @@ export class SignatureProviderService {
             iv,
             blob: encrypted
         }
-
-        if (!this.db) {
-            return Promise.reject(new Error("IndexedDB is not available"));
-        }
-
-        const objectStore = this.db
-            .transaction(["certificates"], "readwrite")
-            .objectStore("certificates");
-        const request = objectStore.add(blob, ownMrn);
-
-        return new Promise((resolve, reject) => {
-           request.onsuccess = () => resolve;
-           request.onerror = () => {
-               reject("Could not store certificate in DB");
-           }
-        });
+        return blob;
     }
 
     private async getEncryptionKey(publicKeyCredential: PublicKeyCredential, salt: Uint8Array): Promise<CryptoKey> {
