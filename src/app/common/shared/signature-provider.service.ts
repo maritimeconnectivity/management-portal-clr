@@ -8,13 +8,15 @@ import {CertificateBundle} from "../certificateBundle";
 interface EncryptedBlob {
     salt: Uint8Array,
     iv: Uint8Array,
-    blob: ArrayBuffer
+    blob: Uint8Array
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class SignatureProviderService {
+
+    private textEncoder = new TextEncoder();
 
     constructor(
         private certificateService: CertificateService,
@@ -25,16 +27,42 @@ export class SignatureProviderService {
 
     public async getCertificate(): Promise<CertificateBundle | null> {
         const ownMrn = await this.authService.getUserMrnFromToken();
-        const challenge = Buffer.from(ownMrn, "utf-8");
+        const challenge = this.textEncoder.encode(ownMrn);
 
-        let publicKeyCredential = await navigator.credentials.get({
-            publicKey: {
-                challenge,
-                timeout: 60000
-            }
-        }) as PublicKeyCredential | null;
+        let publicKeyCredential;
+        try {
+            publicKeyCredential = (await navigator.credentials.get({
+                publicKey: {
+                    challenge,
+                    rpId: window.location.hostname,
+                    timeout: 60000
+                }
+            })) as PublicKeyCredential;
+        } catch (e) {
+            console.error(e);
+        }
 
         if (!publicKeyCredential) {
+            try {
+                await this.createPublicKeyCredential(challenge);
+            } catch (e) {
+                console.error("Failure:", e);
+                return null;
+            }
+
+            try {
+                publicKeyCredential = (await navigator.credentials.get({
+                    publicKey: {
+                        challenge,
+                        rpId: window.location.hostname,
+                        timeout: 60000
+                    }
+                })) as PublicKeyCredential;
+            } catch (e) {
+                console.error(e);
+                return null;
+            }
+
             const certBundle = await issueNewWithLocalKeys(
                 this.certificateService,
                 ItemType.User,
@@ -42,11 +70,12 @@ export class SignatureProviderService {
                 await this.authService.getOrgMrnFromToken(),
                 false
             );
-
             if (certBundle) {
-                publicKeyCredential = (await this.createPublicKeyCredential(challenge))!;
-
-                await this.storeCertificate(certBundle, publicKeyCredential, ownMrn);
+                try {
+                    await this.storeCertificate(certBundle, publicKeyCredential, ownMrn);
+                } catch (e) {
+                    console.error(e);
+                }
                 return certBundle;
             }
             return null;
@@ -63,6 +92,7 @@ export class SignatureProviderService {
             request.onerror = () => resolve(null);
             request.onsuccess = () => {
                 const result = request.result as EncryptedBlob;
+                console.log(result);
                 resolve(result);
             }
         });
@@ -85,10 +115,7 @@ export class SignatureProviderService {
             dbRequest.onupgradeneeded = (event) => {
                 const db = (event.target as IDBOpenDBRequest).result;
 
-                const objectStore = db.createObjectStore("certificates", {keyPath: "id", autoIncrement: true});
-                objectStore.createIndex("mrn", "mrn", {unique: true});
-
-                resolve(db);
+                db.createObjectStore("certificates");
             }
 
             dbRequest.onerror = () => {
@@ -98,48 +125,39 @@ export class SignatureProviderService {
 
     }
 
-    private async createPublicKeyCredential(challenge: Buffer): Promise<PublicKeyCredential | null> {
-        return await navigator.credentials.create({
+    private async createPublicKeyCredential(challenge: ArrayBuffer): Promise<void> {
+        await navigator.credentials.create({
             publicKey: {
                 challenge,
-                rp: {
-                    name: window.location.hostname,
-                    id: window.location.hostname
-                },
+                rp: {id: window.location.hostname, name: "ACME Corporation"},
                 user: {
-                    id: Buffer.from(self.crypto.randomUUID()),
-                    name: "MCP Management Portal",
-                    displayName: "MCP Management Portal"
+                    id: new Uint8Array([79, 252, 83, 72, 214, 7, 89, 26]),
+                    name: "jamiedoe",
+                    displayName: "Jamie Doe",
                 },
-                pubKeyCredParams: [
-                    {
-                        type: "public-key",
-                        alg: -257 // RS256
-                    }
-                ],
-                timeout: 60000,
-                attestation: "none",
+                pubKeyCredParams: [{type: "public-key", alg: -7}],
                 authenticatorSelection: {
-                    authenticatorAttachment: "platform",
-                    userVerification: "required",
-                    residentKey: "required",
-                    requireResidentKey: true
+                    residentKey: "preferred"
                 }
             }
-        }) as PublicKeyCredential;
+        });
     }
 
-    private async storeCertificate(certBundle: CertificateBundle, publicKeyCredential: PublicKeyCredential, ownMrn: string): Promise<void> {
+    private async storeCertificate(certBundle: CertificateBundle, publicKeyCredential: PublicKeyCredential, ownMrn: string): Promise<boolean> {
         const blob = await this.encryptBundle(certBundle, publicKeyCredential);
+        console.log(blob);
 
         const db = await this.getDB();
         const objectStore = db
             .transaction(["certificates"], "readwrite")
             .objectStore("certificates");
 
-        return new Promise((resolve, reject) => {
+        return new Promise<boolean>((resolve, reject) => {
             const request = objectStore.add(blob, ownMrn);
-            request.onsuccess = () => resolve();
+            request.onsuccess = () => {
+                console.log("Successfully stored certificate");
+                resolve(true);
+            }
             request.onerror = () => {
                 reject("Could not store certificate in DB");
             }
@@ -170,7 +188,7 @@ export class SignatureProviderService {
         const salt = window.crypto.getRandomValues(new Uint8Array(16));
 
         const bundleJson = JSON.stringify(certBundle);
-        const bundleBuffer = Buffer.from(bundleJson, "utf-8");
+        const bundleBuffer = this.textEncoder.encode(bundleJson);
 
         const iv = window.crypto.getRandomValues(new Uint8Array(12));
         const encryptionKey = await this.getEncryptionKey(publicKeyCredential, salt);
@@ -186,16 +204,16 @@ export class SignatureProviderService {
         const blob: EncryptedBlob = {
             salt,
             iv,
-            blob: encrypted
+            blob: new Uint8Array(encrypted)
         }
         return blob;
     }
 
     private async getEncryptionKey(publicKeyCredential: PublicKeyCredential, salt: Uint8Array): Promise<CryptoKey> {
-        const passKeySignature = Buffer.from((publicKeyCredential.response as AuthenticatorAssertionResponse).signature).toString("hex");
+        const passKeySignature = Array.from(new Uint8Array((publicKeyCredential.response as AuthenticatorAssertionResponse).signature), byte => byte.toString(16)).join("");
         const keyMaterial = await window.crypto.subtle.importKey(
             "raw",
-            Buffer.from(passKeySignature),
+            this.textEncoder.encode(passKeySignature),
             "PBKDF2",
             false,
             ["deriveBits", "deriveKey"]
