@@ -14,7 +14,6 @@ export interface SigningMaterial {
 @Injectable({
     providedIn: 'root',
 })
-
 export class SecomSignerProvider {
     private signingMaterial?: SigningMaterial;
 
@@ -65,7 +64,7 @@ export class SecomSigningService {
             throw new Error('No private key found');
         }
 
-        const pk = this.pemToCryptoKey(sm.bundle.privateKey);
+        const pk = await this.pemToCryptoKey(sm.bundle.privateKey);
         const sigBuf = await crypto.subtle.sign(algorithm, pk, bytes);
 
         const signatureBytes = new Uint8Array(sigBuf);
@@ -82,9 +81,29 @@ export class SecomSigningService {
         };
     }
 
-    private pemToCryptoKey(pem : string) : CryptoKey {
+    private async pemToCryptoKey(pem: string): Promise<CryptoKey> {
+        const pemContents = pem
+            .replace('-----BEGIN PRIVATE KEY-----', '')
+            .replace('-----END PRIVATE KEY-----', '')
+            .replace(/\s+/g, '');
 
-        throw new Error('Not implemented');
+        const binaryDerString = atob(pemContents);
+        const binaryDer = new Uint8Array(binaryDerString.length);
+
+        for (let i = 0; i < binaryDerString.length; i++) {
+            binaryDer[i] = binaryDerString.charCodeAt(i);
+        }
+
+        return crypto.subtle.importKey(
+            'pkcs8',
+            binaryDer.buffer,
+            {
+                name: 'ECDSA',
+                namedCurve: 'P-384',
+            },
+            false,
+            ['sign'],
+        );
     }
 
 

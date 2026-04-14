@@ -47,6 +47,7 @@ import {InputGeometryComponent} from '../input-geometry/input-geometry.component
 import {preprocessToShow} from 'src/app/common/itemPreprocessor';
 import {loadLang} from 'src/app/common/translateHelper';
 import {ItemManagerService} from "../../common/shared/item-manager.service";
+import {SecomSignerProvider, SigningMaterial} from "../../common/shared/secomSigning.service";
 
 @Component({
     selector: 'app-item-view',
@@ -123,6 +124,12 @@ export class ItemViewComponent implements OnChanges {
                 private itemManagerService: ItemManagerService,
                 @Inject(LOCALE_ID) public locale: string,
     ) {
+
+
+
+
+
+
         for (const reason in CertificateRevocation.RevocationReasonEnum) {
             this.revokeReasons.push(getReasonOptionFromRevocationReason(reason.toLocaleLowerCase() as CertificateRevocation.RevocationReasonEnum));
         }
@@ -370,4 +377,5 @@ export class ItemViewComponent implements OnChanges {
     getItemTypeTitle = (itemType: ItemType) => {
         return itemTypeToString(itemType);
     }
+
 }
