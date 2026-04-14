@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import {
     EnvelopeSearchFilterObject,
     SearchFilterObject,
-    SearchParameters,
 } from 'src/app/backend-api/secom';
 import {CertificateBundle} from "../certificateBundle";
 
@@ -17,9 +16,22 @@ export interface SigningMaterial {
 })
 
 export class SecomSignerProvider {
-     getSigningMaterial(): SigningMaterial {
-        // fetch Olivers code
-        throw new Error('Not implemented');
+    private signingMaterial?: SigningMaterial;
+
+    setSigningMaterial(signingMaterial: SigningMaterial): void {
+        this.signingMaterial = signingMaterial;
+    }
+
+    getSigningMaterial(): SigningMaterial {
+        if (!this.signingMaterial) {
+            throw new Error('Signing material has not been set');
+        }
+
+        return this.signingMaterial;
+    }
+
+    clearSigningMaterial(): void {
+        this.signingMaterial = undefined;
     }
 }
 
