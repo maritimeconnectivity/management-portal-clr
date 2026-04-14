@@ -50,6 +50,7 @@ import {
 } from 'src/app/backend-api/secom';
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import RoleNameEnum = Role.RoleNameEnum;
+import {SecomSigningService} from "./secomSigning.service";
 
 @Injectable({
   providedIn: 'root'
@@ -69,7 +70,8 @@ export class ItemManagerService {
     private secomService: ServiceRegistryService,
     private xmlService: XmlControllerService,
     private pingService: ServiceService,
-    private http: HttpClient
+    private http: HttpClient,
+    private secomSigningService : SecomSigningService
   ) { }
 
   checkMsrAvailability = async (): Promise<boolean> => {
@@ -118,7 +120,10 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
 
     } else if(itemType === ItemType.SearchObjectResult && secomSearchFilterobj) {
 
-      page = await firstValueFrom(this.secomService.v2SearchServicePost(secomSearchFilterobj, 'response'));
+      //Signing
+      const signedRequest : SearchFilterObject = await this.secomSigningService.signSearchFilterObject(secomSearchFilterobj)
+
+      page = await firstValueFrom(this.secomService.v2SearchServicePost(signedRequest, 'response'));
 
       const newXactId = page.body?.envelope['transactionId'] ?? undefined;
 

@@ -62,6 +62,8 @@ export class SecomSigningService {
             byte => byte.toString(16).padStart(2, '0'),
         ).join('');
 
+        console.log('Signature: ' + signatureHex);
+
         return {
             envelope,
             envelopeSignature: signatureHex,
