@@ -140,3 +140,4 @@ src/assets/js/wasm_exec.js
 # Jetbrains files
 .ai
 .idea
+*.iml
