@@ -4,18 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="Fix knows issue with interfaces">
-      <change afterPath="$PROJECT_DIR$/.idea/go.imports.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLinters/eslint.xml" afterDir="false" />
+    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="Updated structure for signingSerivce">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/management-portal-clr.iml" beforeDir="false" afterPath="$PROJECT_DIR$/management-portal-clr.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/identity-registry/configuration.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/identity-registry/configuration.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/api/serviceRegistry.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/api/serviceRegistry.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/components/smart-expandable-table/smart-expandable-table.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/components/smart-expandable-table/smart-expandable-table.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/list-view/list-view.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/list-view/list-view.component.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeSearchFilterObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeSearchFilterObject.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/common/shared/item-manager.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/shared/item-manager.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/common/shared/secomMapper.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/shared/secomMapper.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/common/shared/secomSigning.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/shared/secomSigning.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -29,8 +25,15 @@
     </persistenceIdMap>
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="328" />
+    <option name="cachedIndexableFilesCount" value="330" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="GOROOT" url="file://$USER_HOME$/go/pkg/mod/golang.org/toolchain@v0.0.1-go1.24.3.darwin-arm64" />
   <component name="Git.Settings">
@@ -61,6 +64,9 @@
     <commands />
     <urls />
   </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
   </component>
@@ -72,42 +78,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;g1191-msr&quot;,
-    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
-    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/dmc-jakob/Documents/management-portal-clr&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
-    &quot;npm.Angular CLI Server.executor&quot;: &quot;Run&quot;,
-    &quot;npm.test.executor&quot;: &quot;Run&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.linters.eslint&quot;,
-    &quot;settings.editor.splitter.proportion&quot;: &quot;0.30928627&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;/Users/dmc-jakob/Documents/management-portal-clr/node_modules/typescript/lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "g1191-msr",
+    "git.auto.fetch.suggestion.counter": "1",
+    "go.import.settings.migrated": "true",
+    "go.sdk.automatically.set": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/dmc-jakob/Documents/management-portal-clr",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "pnpm",
+    "npm.Angular CLI Server.executor": "Run",
+    "npm.test.executor": "Run",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "settings.javascript.linters.eslint",
+    "settings.editor.splitter.proportion": "0.30928627",
+    "ts.external.directory.path": "/Users/dmc-jakob/Documents/management-portal-clr/node_modules/typescript/lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/app/backend-api/service-registry" />
@@ -185,7 +192,12 @@
       <workItem from="1775633534489" duration="2221000" />
       <workItem from="1775638858893" duration="727000" />
       <workItem from="1775639672702" duration="11813000" />
-      <workItem from="1775654063024" duration="2287000" />
+      <workItem from="1775654063024" duration="4578000" />
+      <workItem from="1775719278582" duration="15475000" />
+      <workItem from="1776146946600" duration="4512000" />
+      <workItem from="1776326368971" duration="1792000" />
+      <workItem from="1776392294089" duration="1307000" />
+      <workItem from="1776755240320" duration="11868000" />
     </task>
     <task id="LOCAL-00001" summary="Update API definitions and fix issue where serviceType has changed name and type to serviceTypes">
       <option name="closed" value="true" />
@@ -475,7 +487,103 @@
       <option name="project" value="LOCAL" />
       <updated>1775574178785</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="A somewhat stable version that actually assemles the correct payload">
+      <option name="closed" value="true" />
+      <created>1775656790572</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1775656790572</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Mapper to go from UI DTO to actual SECOM Objects">
+      <option name="closed" value="true" />
+      <created>1775657701472</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1775657701472</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Refactor to use SecomMapper and removal of obsolete code">
+      <option name="closed" value="true" />
+      <created>1775658171091</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1775658171091</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Minor cleanup of older dependencies">
+      <option name="closed" value="true" />
+      <created>1775659010175</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1775659010175</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Proper handling og sig times and sample values">
+      <option name="closed" value="true" />
+      <created>1775724102707</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1775724102707</updated>
+    </task>
+    <task id="LOCAL-00042" summary="First draft on SecomSigningService implementation">
+      <option name="closed" value="true" />
+      <created>1775737294433</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1775737294433</updated>
+    </task>
+    <task id="LOCAL-00043" summary="Fix formatting err of tobytes method">
+      <option name="closed" value="true" />
+      <created>1775739579487</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1775739579487</updated>
+    </task>
+    <task id="LOCAL-00044" summary="Setup placeholder for sign">
+      <option name="closed" value="true" />
+      <created>1775740331265</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1775740331265</updated>
+    </task>
+    <task id="LOCAL-00045" summary="Secom signing service correctly converts byte arr to hex string upon generating signature">
+      <option name="closed" value="true" />
+      <created>1775742261316</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1775742261316</updated>
+    </task>
+    <task id="LOCAL-00046" summary="Add proper call to secomSigningService in the item-manager service before the actual API call">
+      <option name="closed" value="true" />
+      <created>1776148177548</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1776148177548</updated>
+    </task>
+    <task id="LOCAL-00047" summary="Export class SecomSignerProvider">
+      <option name="closed" value="true" />
+      <created>1776148935319</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1776148935319</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Updated structure for signingSerivce">
+      <option name="closed" value="true" />
+      <created>1776151059265</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1776151059265</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -505,18 +613,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update regular search type to correctly use a SearchFilterObject and set the localOnly parameter as intended" />
-    <MESSAGE value="Pass xactId param to allow for retrieve results" />
-    <MESSAGE value="Upgrade to V2 secom client" />
-    <MESSAGE value="Add additional autogenerated definitions" />
-    <MESSAGE value="Spawn three events for calling RetreiveResults" />
-    <MESSAGE value="Remove invcorrect param from list-view component" />
-    <MESSAGE value="Global search results correctly returned" />
-    <MESSAGE value="Add clr-inline spinner when conducting global search" />
-    <MESSAGE value="UI will stop ongoing global search, if the user changes search type to a local search" />
-    <MESSAGE value="Clear all will also clear ongoing Global Searches" />
-    <MESSAGE value="Print error message when attempting to search for a gemotry with no query parameters" />
-    <MESSAGE value="Disable map search as the &quot;search&quot; interfaces encompasses all functionality required for searching" />
     <MESSAGE value="Ignore Mac .DS Store" />
     <MESSAGE value="Add SourceMSR to visible fields in the list view. This allows users of global search to easily identify the originating MSR" />
     <MESSAGE value="Show result details by parsing SearchObjectResults instead of attempting a local fetch" />
@@ -530,18 +626,19 @@
     <MESSAGE value="Status of the Identity registry shown on front page" />
     <MESSAGE value="Starting point with new API defs" />
     <MESSAGE value="Fix knows issue with interfaces" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix knows issue with interfaces" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/app/pages/sr-search/sr-search.component.ts</url>
-          <line>14</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="A somewhat stable version that actually assemles the correct payload" />
+    <MESSAGE value="Mapper to go from UI DTO to actual SECOM Objects" />
+    <MESSAGE value="Refactor to use SecomMapper and removal of obsolete code" />
+    <MESSAGE value="Minor cleanup of older dependencies" />
+    <MESSAGE value="Proper handling og sig times and sample values" />
+    <MESSAGE value="First draft on SecomSigningService implementation" />
+    <MESSAGE value="Fix formatting err of tobytes method" />
+    <MESSAGE value="Setup placeholder for sign" />
+    <MESSAGE value="Secom signing service correctly converts byte arr to hex string upon generating signature" />
+    <MESSAGE value="Add proper call to secomSigningService in the item-manager service before the actual API call" />
+    <MESSAGE value="Export class SecomSignerProvider" />
+    <MESSAGE value="Updated structure for signingSerivce" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated structure for signingSerivce" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

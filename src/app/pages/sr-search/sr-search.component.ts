@@ -231,6 +231,8 @@ export class SrSearchComponent {
   }
 
 
+
+
   onSearch = (payload: { scope: 'local' | 'global'; searchParams: SearchParameters }) => {
 
     //Check empty params

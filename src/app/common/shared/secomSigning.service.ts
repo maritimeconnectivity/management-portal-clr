@@ -4,6 +4,7 @@ import {
     SearchFilterObject,
 } from 'src/app/backend-api/secom';
 import {CertificateBundle} from "../certificateBundle";
+import format from 'ecdsa-sig-formatter'
 
 
 export interface SigningMaterial {
@@ -53,7 +54,13 @@ export class SecomSigningService {
     ): Promise<SearchFilterObject> {
         const sm: SigningMaterial = this.ssp.getSigningMaterial();
         const envelope = sfo.envelope as EnvelopeSearchFilterObject;
+
+
         const bytes = this.toBytes(envelope);
+
+        console.log("BYTES ARE ", bytes)
+
+        console.log('\n\n')
 
         const algorithm: EcdsaParams = {
             name: 'ECDSA',
@@ -67,9 +74,14 @@ export class SecomSigningService {
         const pk = await this.pemToCryptoKey(sm.bundle.privateKey);
         const sigBuf = await crypto.subtle.sign(algorithm, pk, bytes);
 
-        const signatureBytes = new Uint8Array(sigBuf);
+        const raw = new Uint8Array(sigBuf);
+        const jose = this.toBase64Url(raw);
+
+        const derSignature = format.joseToDer(jose, 'ES384');
+        const derBytes = new Uint8Array(derSignature);
+
         const signatureHex = Array.from(
-            signatureBytes,
+            derBytes,
             byte => byte.toString(16).padStart(2, '0'),
         ).join('');
 
@@ -108,8 +120,13 @@ export class SecomSigningService {
 
 
     private toMinifiedPem(pem : string) : string {
-        return pem.replace(/[\r\n]+/g, '');
+        return pem
+            .replace('-----BEGIN CERTIFICATE-----', '')
+            .replace('-----END CERTIFICATE-----', '')
+            .replace(/[\r\n\s]+/g, '');
     }
+
+
 
     private toBytes(esfo: EnvelopeSearchFilterObject): Uint8Array {
         const cert = this.signingMaterial.bundle.certificate;
@@ -122,35 +139,107 @@ export class SecomSigningService {
             throw new Error('No root certificate thumbprint found');
         }
 
-        const query = esfo.query;
-        const serializedQuery = query
-            ? [
-                query.name ?? '',
-                query.status != null ? String(query.status) : '',
-                query.version ?? '',
-                query.keywords?.join(',') ?? '',
-                query.description ?? '',
-                query.dataProductType?.join(',') ?? '',
-                query.specificationId ?? '',
-                query.designId ?? '',
-                query.instanceId ?? '',
-                query.mmsi != null ? String(query.mmsi) : '',
-                query.imo != null ? String(query.imo) : '',
-                query.serviceType != null ? String(query.serviceType) : '',
-                query.unlocode?.join(',') ?? '',
-                query.endpointUri ?? '',
-            ].join('.')
-            : '';
+        const signatureReference = String((esfo as any).envelopeSignatureReference ?? 'sha384').toLowerCase();
 
-        const csv = [
-            this.toMinifiedPem(cert),
-            thumbprint,
-            esfo.envelopeSignatureTime.toString(),
-            esfo.localOnly == null ? true : esfo.localOnly,
-            serializedQuery,
-        ].join('.');
+        // Only if there is a query
+        const queryPayload = this.serializeQueryPayload(esfo.query ?? {});
+        const geometryPayload = esfo.geometry ?? '';
+        const localOnlyPayload = String(esfo.localOnly ?? true).toLowerCase();
 
-        return new TextEncoder().encode(csv);
+        const certPayload = `[${this.toMinifiedPem(cert)}]`;
+        const timestampPayload = this.toUnixTimestampSeconds(esfo.envelopeSignatureTime);
+
+        const payload =
+            queryPayload +
+            '.' +
+            geometryPayload +
+            '.' +
+            localOnlyPayload +
+            '.' +
+            certPayload +
+            '.' +
+            thumbprint +
+            '.' +
+            timestampPayload +
+            '.' +
+            signatureReference;
+
+        return new TextEncoder().encode(payload);
+    }
+
+    private serializeQueryPayload(query: EnvelopeSearchFilterObject['query']): string {
+        const q = query ?? {};
+
+        let payload = '';
+
+        payload += q.name ?? '';
+        payload += '.';
+
+        payload += q.status ?? '';
+        payload += '.';
+
+        payload += q.version ? q.version.toLowerCase() : '';
+        payload += '.';
+
+        if (q.keywords && q.keywords.length > 0) {
+            for (const keyword of q.keywords) {
+                payload += keyword.toLowerCase() + '.';
+            }
+        } else {
+            payload += '.';
+        }
+
+        payload += q.description ? q.description.toLowerCase() : '';
+        payload += '.';
+
+        if (q.dataProductType && q.dataProductType.length > 0) {
+            payload += q.dataProductType[0].toLowerCase();
+        }
+        payload += '.';
+
+        payload += q.specificationId ? q.specificationId.toLowerCase() : '';
+        payload += '.';
+
+        payload += q.designId ? q.designId.toLowerCase() : '';
+        payload += '.';
+
+        payload += q.instanceId ? q.instanceId.toLowerCase() : '';
+        payload += '.';
+
+        payload += q.mmsi != null ? String(q.mmsi).toLowerCase() : '';
+        payload += '.';
+
+        payload += q.imo != null ? String(q.imo).toLowerCase() : '';
+        payload += '.';
+
+        payload += q.serviceType ? String(q.serviceType).toLowerCase() : '';
+        payload += '.';
+
+        if (q.unlocode && q.unlocode.length > 0) {
+            payload += q.unlocode[0].toLowerCase();
+        }
+        payload += '.';
+
+        payload += q.endpointUri ? q.endpointUri.toLowerCase() : '';
+
+        return payload;
+    }
+
+    private toUnixTimestampSeconds(value: unknown): string {
+        const date = value instanceof Date ? value : new Date(String(value));
+        return String(Math.floor(date.getTime() / 1000));
+    }
+
+    private toBase64Url(bytes: Uint8Array): string {
+        let binary = '';
+        for (const b of bytes) {
+            binary += String.fromCharCode(b);
+        }
+
+        return btoa(binary)
+            .replace(/\+/g, '-')
+            .replace(/\//g, '_')
+            .replace(/=+$/, '');
     }
 
 }

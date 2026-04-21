@@ -123,6 +123,10 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
       //Signing
       const signedRequest : SearchFilterObject = await this.secomSigningService.signSearchFilterObject(secomSearchFilterobj)
 
+      console.log("Sedning search filter OBJ\n\n")
+      console.log(secomSearchFilterobj)
+      console.log("\n\n\n")
+
       page = await firstValueFrom(this.secomService.v2SearchServicePost(signedRequest, 'response'));
 
       const newXactId = page.body?.envelope['transactionId'] ?? undefined;
