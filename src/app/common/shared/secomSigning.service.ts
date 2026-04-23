@@ -49,9 +49,74 @@ export class SecomSigningService {
         return this.ssp.getSigningMaterial();
     }
 
-    async signSearchFilterObject(
-        sfo: SearchFilterObject,
-    ): Promise<SearchFilterObject> {
+
+    async signRetrieveResultsObject(
+        rro: RetrieveResultsObject,
+    ): Promise<RetrieveResultsObject> {
+        const sm: SigningMaterial = this.ssp.getSigningMaterial();
+        const envelope = rro.envelope as EnvelopeRetrieveResultsObject;
+
+        const bytes = this.toBytesRetrieveResults(envelope);
+
+        const algorithm: EcdsaParams = {
+            name: 'ECDSA',
+            hash: 'SHA-384',
+        };
+
+        if (!sm.bundle.privateKey) {
+            throw new Error('No private key found');
+        }
+
+        const pk = await this.pemToCryptoKey(sm.bundle.privateKey);
+        const sigBuf = await crypto.subtle.sign(algorithm, pk, bytes);
+
+        const raw = new Uint8Array(sigBuf);
+        const jose = this.toBase64Url(raw);
+
+        const derSignature = format.joseToDer(jose, 'ES384');
+        const derBytes = new Uint8Array(derSignature);
+
+        const signatureHex = Array.from(
+            derBytes,
+            byte => byte.toString(16).padStart(2, '0'),
+        ).join('');
+
+        return {
+            envelope,
+            envelopeSignature: signatureHex,
+        };
+    }
+
+    private toBytesRetrieveResults(erro: EnvelopeRetrieveResultsObject): Uint8Array {
+        const cert = this.signingMaterial.bundle.certificate;
+        if (!cert) {
+            throw new Error('No certificate found');
+        }
+
+        const thumbprint = this.signingMaterial.rootCertificateThumbprint;
+        if (!thumbprint) {
+            throw new Error('No root certificate thumbprint found');
+        }
+
+        const signatureReference = String((erro as any).envelopeSignatureReference ?? 'sha384').toLowerCase();
+
+        const certs = this.toMinifiedPemList(cert);
+        const certPayload = `[${certs.join(', ')}]`;
+        const timestampPayload = this.toUnixTimestampSeconds(erro.envelopeSignatureTime);
+    
+        const payload =
+            certPayload +
+            '.' +
+            thumbprint +
+            '.' +
+            timestampPayload +
+            '.' +
+            signatureReference;
+
+    
+        return new TextEncoder().encode(payload);
+    }
+    async signSearchFilterObject(sfo: SearchFilterObject): Promise<SearchFilterObject> {
         const sm: SigningMaterial = this.ssp.getSigningMaterial();
         const envelope = sfo.envelope as EnvelopeSearchFilterObject;
 
