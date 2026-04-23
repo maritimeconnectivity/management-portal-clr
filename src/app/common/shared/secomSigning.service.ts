@@ -119,11 +119,19 @@ export class SecomSigningService {
     }
 
 
-    private toMinifiedPem(pem : string) : string {
-        return pem
-            .replace('-----BEGIN CERTIFICATE-----', '')
-            .replace('-----END CERTIFICATE-----', '')
-            .replace(/[\r\n\s]+/g, '');
+    private toMinifiedPemList(pemBundle: string): string[] {
+        const matches = pemBundle.match(/-----BEGIN CERTIFICATE-----[\s\S]*?-----END CERTIFICATE-----/g);
+
+        if (!matches) {
+            return [];
+        }
+
+        return matches.map(cert =>
+            cert
+                .replace('-----BEGIN CERTIFICATE-----', '')
+                .replace('-----END CERTIFICATE-----', '')
+                .replace(/[\r\n\s]+/g, '')
+        );
     }
 
 
@@ -146,7 +154,8 @@ export class SecomSigningService {
         const geometryPayload = esfo.geometry ?? '';
         const localOnlyPayload = String(esfo.localOnly ?? true).toLowerCase();
 
-        const certPayload = `[${this.toMinifiedPem(cert)}]`;
+        const certs = this.toMinifiedPemList(cert);
+        const certPayload = `[${certs.join(', ')}]`;
         const timestampPayload = this.toUnixTimestampSeconds(esfo.envelopeSignatureTime);
 
         const payload =

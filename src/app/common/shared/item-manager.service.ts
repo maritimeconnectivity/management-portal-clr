@@ -107,7 +107,7 @@ async checkMirAvailability(url: string): Promise<boolean> {
 
 
 
-fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject, xactId? : string): Promise<FetchedItems> => {
+fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject, secomRetrieveResultsobj? : RetrieveResultObject): Promise<FetchedItems> => {
     let page;
 
     if(itemType === ItemType.Instance) {
@@ -123,10 +123,6 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
       //Signing
       const signedRequest : SearchFilterObject = await this.secomSigningService.signSearchFilterObject(secomSearchFilterobj)
 
-      console.log("Sedning search filter OBJ\n\n")
-      console.log(secomSearchFilterobj)
-      console.log("\n\n\n")
-
       page = await firstValueFrom(this.secomService.v2SearchServicePost(signedRequest, 'response'));
 
       const newXactId = page.body?.envelope['transactionId'] ?? undefined;
@@ -141,13 +137,11 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
         totalElements, transactionId : newXactId};
 
       // Case: we want to call retrievereults with xactId only
-    } else if(itemType === ItemType.SearchObjectResult && xactId) {
-
-      const retrieveResultObj = this.buildRetrieveResultObject(xactId);
-
+    } else if(itemType === ItemType.SearchObjectResult && secomRetrieveResultsobj?.envelope.transactionId) {
+      console.log("RETRIEVE RESULT POST xact ", secomRetrieveResultsobj?.envelope.transactionId)
 
       page = await firstValueFrom(
-          this.secomService.v2RetrieveResultPost(retrieveResultObj, 'response')
+          this.secomService.v2RetrieveResultPost(secomRetrieveResultsobj, 'response')
       );
 
       const services = (page.body?.envelope['serviceInstance']) as ServiceInstanceObject[];
@@ -326,20 +320,6 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
     return this.xmlService.updateXml(xmlDto, id);
   }
 
-  buildRetrieveResultObject = (transactionId: string): RetrieveResultObject => {
-    let envelopeRetrieveResultObject: EnvelopeRetrieveResultObject = {
-        transactionId: transactionId,
-      envelopeSignatureCertificate: [],
-      envelopeRootCertificateThumbprint: '',
-      envelopeSignatureTime: new Date()
-    };
-
-
-    return {
-      envelope: envelopeRetrieveResultObject,
-      envelopeSignature: ""
-    };
-  };
 
 
 }

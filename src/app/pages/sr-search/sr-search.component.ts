@@ -40,6 +40,7 @@ import {
     SignatureProviderErrorCode,
     CertificateProviderService
 } from "../../common/shared/certificate-provider.service";
+import {SecomSignerProvider} from "../../common/shared/secomSigning.service";
 
 @Component({
     selector: 'app-sr-search',
@@ -90,7 +91,8 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
         private translate: TranslateService,
         private authService: AuthService,
         private secomSearchMapper: SecomSearchMapperService,
-        private signatureServiceProvider: CertificateProviderService
+        private signatureServiceProvider: CertificateProviderService,
+        private ssp: SecomSignerProvider
     ) {
         loadLang(translate);
     }
@@ -109,7 +111,12 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private initializeCertificate(): void {
         this.signatureServiceProvider.getCertificate(this.requestCertificatePassword.bind(this))
-            .then(cert => console.log(cert))
+            .then(cert => this.ssp.setSigningMaterial(
+                {
+                    bundle: cert!,
+                    rootCertificateThumbprint: "a12d3d634ce384187b1a04ab5dd9c754fb6f2400dbdf561f0cf51793bc0d539b"
+                }
+            ))
             .catch(error => {
                 if (error instanceof SignatureProviderError && error.code === SignatureProviderErrorCode.PasswordCancelled) {
                     this.notifier.notify(
@@ -179,27 +186,52 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
             }, {} as Record<string, any>);
     };
 
-    fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number) => {
-        console.log("Fetch data list sr search component");
+
+    fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, xactId: string | undefined) => {
         try {
             let fetchedItems;
 
-            //Construct the actual SECOM Request object
-            const secomSearchFilterObj = this.secomSearchMapper.toSearchFilterObject({
-                scope: this.localOnly,
-                searchParams: this.searchParams,
-                geometry: Object.keys(this.queryGeometry).length > 0
-                    ? JSON.stringify(this.queryGeometry)
-                    : undefined,
-            });
+            console.log(this.ssp.getSigningMaterial().bundle.certificate!)
+            const minifiedPem = this.toMinifiedPemList(this.ssp.getSigningMaterial().bundle.certificate!);
 
-            try {
-                fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchFilterObj);
-            } catch (error) {
-                console.error('Error fetching items:', error);
-                this.notifier.notify('error.search.general', (error as any).message);
-                return [];
+            // Regular search service call
+            if (!xactId) {
+                const secomSearchFilterObj = this.secomSearchMapper.toSearchFilterObject({
+                    scope: this.localOnly,
+                    searchParams: this.searchParams,
+                    geometry: Object.keys(this.queryGeometry).length > 0
+                        ? JSON.stringify(this.queryGeometry)
+                        : undefined,
+                    certificates: minifiedPem,
+                    thumbprint: this.ssp.getSigningMaterial().rootCertificateThumbprint
+                });
+
+                try {
+                    fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, secomSearchFilterObj);
+                } catch (error) {
+                    console.error('Error fetching items:', error);
+                    this.notifier.notify('error.search.general', (error as any).message);
+                    return [];
+                }
+            } else {
+                console.log("Calling Retrieve Results")
+                const secomRetrieveResultsObj = this.secomSearchMapper.toRetrieveResultsObj({
+                    xactId: xactId,
+                    certificates: minifiedPem,
+                    thumbprint: this.ssp.getSigningMaterial().rootCertificateThumbprint
+                })
+
+                try {
+                    fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, 100, undefined, secomRetrieveResultsObj);
+                } catch (error) {
+                    console.error('Error fetching items:', error);
+                    this.notifier.notify('error.search.general', (error as any).message);
+                    return [];
+                }
             }
+
+            //Construct the actual SECOM Request object
+
             if (!fetchedItems) {
                 return [];
             }
@@ -219,6 +251,7 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
             const newXActId = fetchedItems.transactionId;
             if (newXActId && !this.localOnly) {
                 this.scheduleGlobalSearchCalls(newXActId);
+                console.log("Schedule global search calls");
             }
 
 
@@ -229,6 +262,21 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
 
 
+    }
+
+    private toMinifiedPemList(pemBundle: string): string[] {
+        const matches = pemBundle.match(/-----BEGIN CERTIFICATE-----[\s\S]*?-----END CERTIFICATE-----/g);
+
+        if (!matches) {
+            return [];
+        }
+
+        return matches.map(cert =>
+            cert
+                .replace('-----BEGIN CERTIFICATE-----', '')
+                .replace('-----END CERTIFICATE-----', '')
+                .replace(/[\r\n\s]+/g, '')
+        );
     }
 
     private scheduleGlobalSearchCalls(transactionId: string): void {
@@ -277,8 +325,6 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
 
   onSearch = (payload: { scope: 'local' | 'global'; searchParams: SearchParameters }) => {
-    onSearch = (payload: { scope: 'local' | 'global'; searchParams: SearchParameters }) => {
-
         //Check empty params
         if (Object.keys(payload.searchParams).length === 0) {
             this.errorMessage = 'Please add at least one search parameter before searching.';

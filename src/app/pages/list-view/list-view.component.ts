@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild, OnInit } from '@angular/core';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { DeviceControllerService, OrganizationControllerService, Role, RoleControllerService, ServiceControllerService, ServicePatch, User, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { ItemType, MCPComponentContext } from 'src/app/common/menuType';
@@ -44,12 +44,12 @@ import {RetrieveResultObject, SearchFilterObject} from 'src/app/backend-api/seco
   styleUrl: './list-view.component.css'
 })
 
-export class ListViewComponent {
+export class ListViewComponent implements OnInit {
   @ViewChild(SmartExpandableTableComponent) exTable!: SmartExpandableTableComponent;
   @Input() itemType: ItemType = ItemType.None;
-  orgMrn: string = "";
+  orgMrn = "";
   data: any[] = [];
-  labels: {[key: string]: any} = {};
+  labels: Record<string, any> = {};
   viewContext = 'list';
   totalPages = 0;
   totalElements = 0;
@@ -112,22 +112,22 @@ export class ListViewComponent {
     });
   }
 
-  filterVisibleForList = (item: {[key: string]: any}) => {
+  filterVisibleForList = (item: Record<string, any>) => {
     return Object.keys(item)
       .filter(key => item[key]?.visibleFrom?.includes('list'))
       .reduce((result, key) => {
         result[key] = item[key];
         return result;
-      }, {} as {[key: string]: any});
+      }, {} as Record<string, any>);
   };
 
-  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, searchFilterObject?: SearchFilterObject, secomRetrieveResults?: RetrieveResultObject) => {
+  fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, xactId: string | undefined ) => {
     console.log("Fetch data list view");
     try {
       if (itemType === ItemType.Role) {
         return await this.itemManagerService.fetchAllRolesInOrg(this.orgMrn);
       }
-      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, searchFilterObject);
+      const fetchedItems = await this.itemManagerService.fetchListOfData(itemType, this.orgMrn, pageNumber, elementsPerPage, undefined);
       if (!fetchedItems) {
         return [];
       }
@@ -210,7 +210,7 @@ export class ListViewComponent {
     this.moveToEditPage(selectedItem, false);
   }
 
-  moveToEditPage = (selectedItem: any, forEdit: boolean = true) => {
+  moveToEditPage = (selectedItem: any, forEdit = true) => {
     let url = '';
     if (this.itemType === ItemType.Role) {
       url = '/pages/' + this.apiBase + '/'+this.itemType+'/'+selectedItem.id;

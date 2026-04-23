@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, SimpleChanges, OnInit, OnChanges } from '@angular/core';
 import { ClarityModule, ClrDatagridModule, ClrDatagridStateInterface } from '@clr/angular';
 import { ItemType, itemTypeToString, timestampKeys } from 'src/app/common/menuType';
 import { ItemViewComponent } from "../item-view/item-view.component";
@@ -38,45 +38,46 @@ import {RetrieveResultObject, SearchFilterObject} from "../../backend-api/secom"
   templateUrl: './smart-expandable-table.component.html',
   styleUrl: './smart-expandable-table.component.css'
 })
-export class SmartExpandableTableComponent {
+export class SmartExpandableTableComponent implements OnInit, OnChanges {
   @Input() itemType: ItemType = ItemType.Device;
-  @Input() labels: {[key: string]: any} | undefined = undefined;
-  @Input() placeholder: string = 'We couldn\'t find any data!';
+  @Input() labels: Record<string, any> | undefined = undefined;
+  @Input() placeholder = 'We couldn\'t find any data!';
   @Input() downloadCall: ((selected: any[]) => void) | undefined;
   @Input() deleteCall: ((selected: any[]) => void) | undefined;
   @Input() addCall: (() => void) | undefined;
-  @Input() deleteText: string = 'Delete';
-  @Input() downloadText: string = 'Download';
-  @Input() addText: string = 'Add';
-  @Input() totalPages: number = 0;
-  @Input() totalElements: number = 0;
-  @Input() hasEditPermission: boolean = false;
+  @Input() deleteText = 'Delete';
+  @Input() downloadText = 'Download';
+  @Input() addText = 'Add';
+  @Input() totalPages = 0;
+  @Input() totalElements = 0;
+  @Input() hasEditPermission = false;
   @Input() getData: (
       itemType: ItemType,
       pageNumber: number,
       elementsPerPage: number,
+      xactId: string | undefined
   ) => Promise<any[] | undefined> = async () => [];
 
   @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
-  @Output() revokeCertsEvent: EventEmitter<any[]> = new EventEmitter();
-  @Output() downloadCertsEvent: EventEmitter<any[]> = new EventEmitter();
-  @Output() editEvent: EventEmitter<any> = new EventEmitter();
-  @Output() viewEvent: EventEmitter<any> = new EventEmitter();
-  @Output() migrateEvent: EventEmitter<any> = new EventEmitter();
-  @Output() refreshEvent: EventEmitter<any> = new EventEmitter();
-  @Output() approveEvent: EventEmitter<any> = new EventEmitter();
+  @Output() revokeCertsEvent = new EventEmitter<any[]>();
+  @Output() downloadCertsEvent = new EventEmitter<any[]>();
+  @Output() editEvent = new EventEmitter<any>();
+  @Output() viewEvent = new EventEmitter<any>();
+  @Output() migrateEvent = new EventEmitter<any>();
+  @Output() refreshEvent = new EventEmitter<any>();
+  @Output() approveEvent = new EventEmitter<any>();
 
   data: any[] | undefined = undefined;
   selected: any[] = [];
   detail: any = {};
   selectedItem : any = {};
-  expanded: boolean = false;
-  detailView: boolean = false;
+  expanded = false;
+  detailView = false;
   labelKeys: string[] = [];
   labelTitles: string[] = [];
-  isLoading: boolean = false;
-  hasFetched: boolean = false;
-  defaultLoaded: boolean = false;
+  isLoading = false;
+  hasFetched = false;
+  defaultLoaded = false;
   pageNumbers: number[] = [];
   currentPageNumber = 0;
   currentPageRange = 0;
@@ -143,7 +144,7 @@ export class SmartExpandableTableComponent {
   }
 
   async loadData(pageNumber: number = this.currentPageNumber, xactId?: string) {
-    const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage) || [];
+    const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage, xactId) || [];
 
 
     if (this.defaultLoaded && newRows.length === 0) {

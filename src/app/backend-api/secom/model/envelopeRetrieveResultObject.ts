@@ -30,4 +30,5 @@ export interface EnvelopeRetrieveResultObject {
      * Time stamp when the envelope is signed
      */
     envelopeSignatureTime: Date;
+
 }
