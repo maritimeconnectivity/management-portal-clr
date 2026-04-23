@@ -138,7 +138,6 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
 
       // Case: we want to call retrievereults with xactId only
     } else if(itemType === ItemType.SearchObjectResult && secomRetrieveResultsobj?.envelope.transactionId) {
-      console.log("RETRIEVE RESULT POST xact ", secomRetrieveResultsobj?.envelope.transactionId)
 
       page = await firstValueFrom(
           this.secomService.v2RetrieveResultPost(secomRetrieveResultsobj, 'response')

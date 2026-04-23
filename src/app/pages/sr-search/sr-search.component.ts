@@ -191,7 +191,6 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
         try {
             let fetchedItems;
 
-            console.log(this.ssp.getSigningMaterial().bundle.certificate!)
             const minifiedPem = this.toMinifiedPemList(this.ssp.getSigningMaterial().bundle.certificate!);
 
             // Regular search service call
@@ -214,7 +213,6 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
                     return [];
                 }
             } else {
-                console.log("Calling Retrieve Results")
                 const secomRetrieveResultsObj = this.secomSearchMapper.toRetrieveResultsObj({
                     xactId: xactId,
                     certificates: minifiedPem,
@@ -236,8 +234,6 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
                 return [];
             }
 
-            console.log('fetchedItems:', fetchedItems);
-
             this.totalPages = fetchedItems.totalPages!;
             this.totalElements = fetchedItems.totalElements!;
             this.geometries = [];
@@ -251,7 +247,6 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
             const newXActId = fetchedItems.transactionId;
             if (newXActId && !this.localOnly) {
                 this.scheduleGlobalSearchCalls(newXActId);
-                console.log("Schedule global search calls");
             }
 
 

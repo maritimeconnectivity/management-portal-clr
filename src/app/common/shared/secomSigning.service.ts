@@ -58,10 +58,6 @@ export class SecomSigningService {
 
         const bytes = this.toBytes(envelope);
 
-        console.log("BYTES ARE ", bytes)
-
-        console.log('\n\n')
-
         const algorithm: EcdsaParams = {
             name: 'ECDSA',
             hash: 'SHA-384',
@@ -85,7 +81,6 @@ export class SecomSigningService {
             byte => byte.toString(16).padStart(2, '0'),
         ).join('');
 
-        console.log('Signature: ' + signatureHex);
 
         return {
             envelope,

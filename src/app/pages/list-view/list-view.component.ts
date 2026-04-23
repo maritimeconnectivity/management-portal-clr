@@ -122,7 +122,6 @@ export class ListViewComponent implements OnInit {
   };
 
   fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, xactId: string | undefined ) => {
-    console.log("Fetch data list view");
     try {
       if (itemType === ItemType.Role) {
         return await this.itemManagerService.fetchAllRolesInOrg(this.orgMrn);
