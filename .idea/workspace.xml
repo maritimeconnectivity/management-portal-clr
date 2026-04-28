@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="Remove console.log statements">
+    <list default="true" id="af34e86e-49dc-4370-982e-e5f34bd41c7a" name="Changes" comment="WS fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeSearchFilterObject.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/backend-api/secom/model/envelopeSearchFilterObject.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/common/columnForMenu.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/columnForMenu.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/common/shared/item-manager.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/shared/item-manager.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/common/shared/secomMapper.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/shared/secomMapper.service.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/common/shared/secomSigning.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/common/shared/secomSigning.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -204,31 +200,7 @@
       <workItem from="1776931248917" duration="11797000" />
       <workItem from="1776957417606" duration="15000" />
       <workItem from="1776957439203" duration="461000" />
-      <workItem from="1777372098747" duration="1866000" />
-    </task>
-    <task id="LOCAL-00003" summary="Extend definitions to allow propagation of indicator whether the search is local or global">
-      <option name="closed" value="true" />
-      <created>1760621480046</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1760621480046</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Add debug statmeents">
-      <option name="closed" value="true" />
-      <created>1761119686796</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1761119686796</updated>
-    </task>
-    <task id="LOCAL-00005" summary="Conform to SECOM V2">
-      <option name="closed" value="true" />
-      <created>1761130592688</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1761130592688</updated>
+      <workItem from="1777372098747" duration="3988000" />
     </task>
     <task id="LOCAL-00006" summary="Update s.t. search is performed according to SECOM V2">
       <option name="closed" value="true" />
@@ -598,7 +570,31 @@
       <option name="project" value="LOCAL" />
       <updated>1776950516828</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Bug fix to allow multiple source msrs to be renderes">
+      <option name="closed" value="true" />
+      <created>1777378774424</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1777378774424</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Proper handling of signed requests">
+      <option name="closed" value="true" />
+      <created>1777378813709</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1777378813709</updated>
+    </task>
+    <task id="LOCAL-00054" summary="WS fixes">
+      <option name="closed" value="true" />
+      <created>1777378826346</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1777378826346</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -628,9 +624,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add missing data product types to searchObjectResults" />
-    <MESSAGE value="Correct display of dataProductType when fetching global results" />
-    <MESSAGE value="Display message when search returns no data. Creates more responsive UI" />
     <MESSAGE value="Change UI message" />
     <MESSAGE value="Delete unusded attreibutes" />
     <MESSAGE value="Implement UI status for when the backend MSR is unavailable" />
@@ -653,7 +646,10 @@
     <MESSAGE value="Correct send/recv of global search calls" />
     <MESSAGE value="Remove console.log statements" />
     <MESSAGE value="OK" />
-    <option name="LAST_COMMIT_MESSAGE" value="OK" />
+    <MESSAGE value="Bug fix to allow multiple source msrs to be renderes" />
+    <MESSAGE value="Proper handling of signed requests" />
+    <MESSAGE value="WS fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="WS fixes" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -229,6 +229,7 @@ export class SecomSigningService {
             '.' +
             timestampPayload;
 
+        console.log('Signing payload:', payload);
         return new TextEncoder().encode(payload);
     }
 
@@ -247,12 +248,14 @@ export class SecomSigningService {
         payload += '.';
 
         if (q.keywords && q.keywords.length > 0) {
+            payload += '['
             for (const keyword of q.keywords) {
-                payload += keyword.toLowerCase() + '.';
+                payload += keyword.toLowerCase()
             }
-        } else {
-            payload += '.';
+            payload += ']'
         }
+        payload += '.';
+
 
         payload += q.description ? q.description.toLowerCase() : '';
         payload += '.';
