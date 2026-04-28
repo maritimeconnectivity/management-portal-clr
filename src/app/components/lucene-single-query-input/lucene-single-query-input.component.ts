@@ -41,18 +41,18 @@ ClarityIcons.addIcons(codeIcon);
 
 export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent {
   options: string[] = [];
-  selectedItem: string = '';
-  selectedOption: string = '';
-  field: string = '';
-  fieldValue: string = '';
-  valueEditable: boolean = false;
-  value: string = '';
+  selectedItem = '';
+  selectedOption = '';
+  field = '';
+  fieldValue = '';
+  valueEditable = false;
+  value = '';
   selectOptions: { title: string, value: string }[] = [];
 
-  @Input() requireCloseBtn: boolean = true;
-  @Input() requireExtendBtn: boolean = true;
-  @Input() requireInfo: boolean = false;
-  @Input() id: string = '';
+  @Input() requireCloseBtn = true;
+  @Input() requireExtendBtn = true;
+  @Input() requireInfo = false;
+  @Input() id = '';
   @Input() data: { id: string, [key: string]: any } = { id: ''};
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
   @Output() updateEvent = new EventEmitter<any>();
@@ -74,19 +74,19 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   }
 
   applyData() {
+    this.selectOptions = [];
+
     if (this.fieldInfo) {
       this.selectedItem = this.getFilteredKey(this.data).pop()!;
       this.field = this.selectedItem;
       this.fieldValue = this.data[this.selectedItem] ? this.data[this.selectedItem] : '';
       this.selectedOption = this.fieldValue;
+
       if (this.selectedItem.length > 0) {
         const filtered = Object.entries(ColumnForResource[ItemType.Instance.toString()]).filter(([key, value]) => {
-          if (key === this.selectedItem && value.options) {
-            return value;
-          } else {
-            return null; 
-          }
+          return key === this.selectedItem && value.options;
         });
+
         if (filtered.length > 0) {
           this.selectOptions = filtered.pop()![1].options;
         }
@@ -110,11 +110,28 @@ export class LuceneSingleQueryInputComponent implements OnInit, LuceneComponent 
   }
 
   onSelectionChange(event: any): void {
-    const value = event.target.value;
-    this.field = value;
-    this.valueEditable = true;
-    this.data = {id: this.id, [this.field]: this.fieldValue};
-    this.updateEvent.emit({id: this.id, data: this.data});
+    this.field = event.target.value;
+
+    this.fieldValue = '';
+    this.selectedOption = '';
+    this.selectOptions = [];
+
+    const columns = ColumnForResource[ItemType.Instance.toString()] as Record<string, any>;
+    const options = columns[this.field]?.options;
+
+    if (options) {
+      this.selectOptions = options;
+    }
+
+    this.data = {
+      id: this.id,
+      [this.field]: ''
+    };
+
+    this.updateEvent.emit({
+      id: this.id,
+      data: this.data
+    });
   }
 
   onDelete(): void {
