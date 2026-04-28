@@ -30,7 +30,6 @@ export class SecomSearchMapperService {
             envelopeSignatureCertificate: request.certificates,
             envelopeRootCertificateThumbprint: request.thumbprint,
             envelopeSignatureTime: new Date(),
-            envelopeSignatureReference: 'sha384'
         };
 
         const d = new Date();

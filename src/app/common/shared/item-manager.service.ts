@@ -139,8 +139,10 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
       // Case: we want to call retrievereults with xactId only
     } else if(itemType === ItemType.SearchObjectResult && secomRetrieveResultsobj?.envelope.transactionId) {
 
+      const signedRequest : RetrieveResultObject = await this.secomSigningService.signRetrieveResultObject(secomRetrieveResultsobj)
+
       page = await firstValueFrom(
-          this.secomService.v2RetrieveResultPost(secomRetrieveResultsobj, 'response')
+          this.secomService.v2RetrieveResultPost(signedRequest, 'response')
       );
 
       const services = (page.body?.envelope['serviceInstance']) as ServiceInstanceObject[];

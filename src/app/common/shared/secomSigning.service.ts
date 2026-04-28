@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
-    EnvelopeSearchFilterObject,
+    EnvelopeRetrieveResultObject,
+    EnvelopeSearchFilterObject, RetrieveResultObject,
     SearchFilterObject,
 } from 'src/app/backend-api/secom';
 import {CertificateBundle} from "../certificateBundle";
@@ -50,13 +51,12 @@ export class SecomSigningService {
     }
 
 
-    async signRetrieveResultsObject(
-        rro: RetrieveResultsObject,
-    ): Promise<RetrieveResultsObject> {
+    async signRetrieveResultObject(rro: RetrieveResultObject): Promise<RetrieveResultObject> {
         const sm: SigningMaterial = this.ssp.getSigningMaterial();
-        const envelope = rro.envelope as EnvelopeRetrieveResultsObject;
+        const envelope = rro.envelope as EnvelopeRetrieveResultObject;
 
-        const bytes = this.toBytesRetrieveResults(envelope);
+
+        const bytes = this.toBytesRetrieveResult(envelope);
 
         const algorithm: EcdsaParams = {
             name: 'ECDSA',
@@ -87,35 +87,35 @@ export class SecomSigningService {
         };
     }
 
-    private toBytesRetrieveResults(erro: EnvelopeRetrieveResultsObject): Uint8Array {
+    private toBytesRetrieveResult(erro: EnvelopeRetrieveResultObject): Uint8Array {
         const cert = this.signingMaterial.bundle.certificate;
         if (!cert) {
             throw new Error('No certificate found');
         }
-
         const thumbprint = this.signingMaterial.rootCertificateThumbprint;
         if (!thumbprint) {
             throw new Error('No root certificate thumbprint found');
         }
 
-        const signatureReference = String((erro as any).envelopeSignatureReference ?? 'sha384').toLowerCase();
+        const transactionIdPayload = erro.transactionId
 
         const certs = this.toMinifiedPemList(cert);
         const certPayload = `[${certs.join(', ')}]`;
         const timestampPayload = this.toUnixTimestampSeconds(erro.envelopeSignatureTime);
-    
+
         const payload =
+            transactionIdPayload +
+            '.' +
             certPayload +
             '.' +
             thumbprint +
             '.' +
-            timestampPayload +
-            '.' +
-            signatureReference;
+            timestampPayload;
 
-    
         return new TextEncoder().encode(payload);
     }
+
+
     async signSearchFilterObject(sfo: SearchFilterObject): Promise<SearchFilterObject> {
         const sm: SigningMaterial = this.ssp.getSigningMaterial();
         const envelope = sfo.envelope as EnvelopeSearchFilterObject;
@@ -207,8 +207,6 @@ export class SecomSigningService {
             throw new Error('No root certificate thumbprint found');
         }
 
-        const signatureReference = String((esfo as any).envelopeSignatureReference ?? 'sha384').toLowerCase();
-
         // Only if there is a query
         const queryPayload = this.serializeQueryPayload(esfo.query ?? {});
         const geometryPayload = esfo.geometry ?? '';
@@ -229,9 +227,7 @@ export class SecomSigningService {
             '.' +
             thumbprint +
             '.' +
-            timestampPayload +
-            '.' +
-            signatureReference;
+            timestampPayload;
 
         return new TextEncoder().encode(payload);
     }
