@@ -229,7 +229,6 @@ export class SecomSigningService {
             '.' +
             timestampPayload;
 
-        console.log('Signing payload:', payload);
         return new TextEncoder().encode(payload);
     }
 
