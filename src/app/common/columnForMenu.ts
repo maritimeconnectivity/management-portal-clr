@@ -20,7 +20,7 @@ import { convertTime } from './timeConverter';
 /**
  * a json format for both ngx-smart-table and ngx-editable-form articulating how the corresponding interface should work
  */
-export const ColumnForResource: {[key: string]: object} = {
+export const ColumnForResource: Record<string, object> = {
   device: {
     id: {
       title: 'ID',
@@ -1307,9 +1307,9 @@ export const ColumnForResource: {[key: string]: object} = {
       type: "object",
       visibleFrom: []
     },
-    sourceMSR: {
+    sourceMSRs: {
         title: "Source MSR",
-        type: "string",
+        type: "stringArray",
         visibleFrom: ["detail", "list", "edit", "edit-new"],
     }
   },

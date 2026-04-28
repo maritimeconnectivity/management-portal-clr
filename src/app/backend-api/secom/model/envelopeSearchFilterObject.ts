@@ -33,6 +33,4 @@ export interface EnvelopeSearchFilterObject {
      * Time stamp when the envelope is signed
      */
     envelopeSignatureTime: Date;
-
-    envelopeSignatureReference: string;
 }
