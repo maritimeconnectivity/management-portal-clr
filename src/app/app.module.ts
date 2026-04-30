@@ -59,7 +59,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         }),
         SECOMApiModule.forRoot(() => {
             return new Configuration({
-                basePath: AppConfig.SR_BASE_PATH,
+                basePath: AppConfig.SR_BASE_PATH + "/api/secom",
             })
         }),
         KeycloakAngularModule,
