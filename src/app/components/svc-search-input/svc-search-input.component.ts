@@ -30,7 +30,7 @@ import { CommonModule } from '@angular/common';
 import { LuceneTermInputComponent } from '../lucene-term-input/lucene-term-input.component';
 import { LuceneGeoQueryInputComponent } from '../lucene-geo-query-input/lucene-geo-query-input.component';
 import {SearchParameters} from "../../backend-api/secom";
-import { SimpleChanges, OnChanges } from '@angular/core';
+import { SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
 
@@ -48,7 +48,7 @@ const shortid = require('shortid');
   templateUrl: './svc-search-input.component.html',
   styleUrl: './svc-search-input.component.css'
 })
-export class SvcSearchInputComponent {
+export class SvcSearchInputComponent implements AfterViewInit {
   group: LuceneComponentItem[] = [];
   luceneTerm: Term[] = [];
   selectedItem = '';
@@ -57,11 +57,11 @@ export class SvcSearchInputComponent {
   scope: 'local' | 'global' = 'local';
   lastBuiltParams: SearchParameters = {};
 
-  @Input() title = 'Service Search';
+  @Input() title = 'Service Search (SECOM Version 2)';
   @Input() btnTitle = 'Search';
   @Input() orgMrn = '';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
-  @Input() isLoadingGlobal: boolean = false;
+  @Input() isLoadingGlobal = false;
   @Output() searchEvent = new EventEmitter<{
     scope: 'local' | 'global';
     searchParams: SearchParameters;

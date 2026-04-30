@@ -25,12 +25,12 @@
             <clr-radio-container>
                 <clr-radio-wrapper>
                     <input clrRadio type="radio" name="scope" [(ngModel)]="scope" value="local" />
-                    <label>Local</label>
+                    <label>Local MSR only</label>
                 </clr-radio-wrapper>
 
                 <clr-radio-wrapper>
                     <input clrRadio type="radio" name="scope" [(ngModel)]="scope" value="global" />
-                    <label>Global</label>
+                    <label>Global (Includes other MSRs)</label>
                 </clr-radio-wrapper>
             </clr-radio-container>
             <div class="loading-indicator" *ngIf="isLoadingGlobal">
