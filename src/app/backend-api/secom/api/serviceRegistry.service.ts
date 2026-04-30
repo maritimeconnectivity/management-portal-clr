@@ -38,13 +38,13 @@ export class ServiceRegistryService {
     public configuration = new Configuration();
 
     constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-        // if (basePath) {
-        //     this.basePath = basePath;
-        // }
-        // if (configuration) {
-        //     this.configuration = configuration;
-        //     this.basePath = basePath || configuration.basePath || this.basePath;
-        // }
+        if (basePath) {
+            this.basePath = basePath;
+        }
+        if (configuration) {
+            this.configuration = configuration;
+            this.basePath = basePath || configuration.basePath || this.basePath;
+        }
     }
 
     /**
