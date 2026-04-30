@@ -38,4 +38,5 @@ export const environment = {
   footerLink: 'https://maritimeconnectivity.net',
   logoImg: 'assets/images/logo.svg',
   loginBgImg: '',
+  rootCertificateThumbprint: 'a12d3d634ce384187b1a04ab5dd9c754fb6f2400dbdf561f0cf51793bc0d539b'
 };
