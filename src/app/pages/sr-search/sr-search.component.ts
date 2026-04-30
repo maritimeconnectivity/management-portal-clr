@@ -41,6 +41,7 @@ import {
     CertificateProviderService
 } from "../../common/shared/certificate-provider.service";
 import {SecomSignerProvider} from "../../common/shared/secomSigning.service";
+import {AppConfig} from "../../app.config";
 
 @Component({
     selector: 'app-sr-search',
@@ -114,7 +115,7 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
             .then(cert => this.ssp.setSigningMaterial(
                 {
                     bundle: cert!,
-                    rootCertificateThumbprint: "a12d3d634ce384187b1a04ab5dd9c754fb6f2400dbdf561f0cf51793bc0d539b"
+                    rootCertificateThumbprint: AppConfig.ROOT_CERT_TP
                 }
             ))
             .catch(error => {

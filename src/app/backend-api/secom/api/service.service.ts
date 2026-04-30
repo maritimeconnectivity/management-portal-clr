@@ -77,11 +77,17 @@ export class ServiceService {
             headers = headers.set('Accept', httpHeaderAcceptSelected);
         }
 
+        const normalized = this.basePath
+            .replace(/\/api\/secom/g, "")
+            .replace(/([^:]\/)\/+/g, "$1"); // avoid double slashes (but keep https://)
+
+        const url = `${normalized}/v2/ping`;
+
         // to determine the Content-Type header
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<InlineResponse200>('get',`${this.basePath}/v2/ping`,
+        return this.httpClient.request<InlineResponse200>('get',url,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -33,8 +33,9 @@ export const environment = {
   idpNamespace: 'mcc',
   environmentName: 'public-demonstrator',
   mpName: 'MCC MCP Testbed',
-  mpYear: '2025',
+  mpYear: '2026',
   footerName: 'Maritime Connectivity Platform Consortium',
   footerLink: 'https://maritimeconnectivity.net',
   logoImg: 'assets/images/logo.svg',
+  rootCertificateThumbprint: 'ec1938782d8c8c228bc214d19fbf1e65e2db689675d4e4f27e2f6fbedcefd8db'
 };
