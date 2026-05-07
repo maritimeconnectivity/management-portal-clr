@@ -243,51 +243,51 @@ export class SecomSigningService {
         payload += q.status ?? '';
         payload += '.';
 
-        payload += q.version ? q.version.toLowerCase() : '';
+        payload += q.version ? q.version : '';
         payload += '.';
 
         if (q.keywords && q.keywords.length > 0) {
             payload += '['
             for (const keyword of q.keywords) {
-                payload += keyword.toLowerCase()
+                payload += keyword
             }
             payload += ']'
         }
         payload += '.';
 
 
-        payload += q.description ? q.description.toLowerCase() : '';
+        payload += q.description ? q.description : '';
         payload += '.';
 
         if (q.dataProductType && q.dataProductType.length > 0) {
-            payload += q.dataProductType[0].toLowerCase();
+            payload += q.dataProductType[0];
         }
         payload += '.';
 
-        payload += q.specificationId ? q.specificationId.toLowerCase() : '';
+        payload += q.specificationId ? q.specificationId : '';
         payload += '.';
 
-        payload += q.designId ? q.designId.toLowerCase() : '';
+        payload += q.designId ? q.designId : '';
         payload += '.';
 
-        payload += q.instanceId ? q.instanceId.toLowerCase() : '';
+        payload += q.instanceId ? q.instanceId : '';
         payload += '.';
 
-        payload += q.mmsi != null ? String(q.mmsi).toLowerCase() : '';
+        payload += q.mmsi != null ? String(q.mmsi) : '';
         payload += '.';
 
-        payload += q.imo != null ? String(q.imo).toLowerCase() : '';
+        payload += q.imo != null ? String(q.imo) : '';
         payload += '.';
 
-        payload += q.serviceType ? String(q.serviceType).toLowerCase() : '';
+        payload += q.serviceType ? String(q.serviceType) : '';
         payload += '.';
 
         if (q.unlocode && q.unlocode.length > 0) {
-            payload += q.unlocode[0].toLowerCase();
+            payload += q.unlocode[0];
         }
         payload += '.';
 
-        payload += q.endpointUri ? q.endpointUri.toLowerCase() : '';
+        payload += q.endpointUri ? q.endpointUri : '';
 
         return payload;
     }
