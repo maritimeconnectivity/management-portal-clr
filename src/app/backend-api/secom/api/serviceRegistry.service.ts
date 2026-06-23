@@ -167,10 +167,14 @@ export class ServiceRegistryService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public v2RetrieveResultPost(body?: RetrieveResultObject, observe?: 'body', reportProgress?: boolean): Observable<SearchResult>;
-    public v2RetrieveResultPost(body?: RetrieveResultObject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResult>>;
-    public v2RetrieveResultPost(body?: RetrieveResultObject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResult>>;
-    public v2RetrieveResultPost(body?: RetrieveResultObject, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public v2RetrieveResultPost(transactionId: string, body?: RetrieveResultObject, observe?: 'body', reportProgress?: boolean): Observable<SearchResult>;
+    public v2RetrieveResultPost(transactionId: string, body?: RetrieveResultObject, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<SearchResult>>;
+    public v2RetrieveResultPost(transactionId: string, body?: RetrieveResultObject, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<SearchResult>>;
+    public v2RetrieveResultPost(transactionId: string, body?: RetrieveResultObject, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (transactionId === null || transactionId === undefined) {
+            throw new Error('Required parameter transactionId was null or undefined when calling v2RetrieveResultTransactionIdPost.');
+        }
 
 
         let headers = this.defaultHeaders;
@@ -193,7 +197,7 @@ export class ServiceRegistryService {
             headers = headers.set('Content-Type', httpContentTypeSelected);
         }
 
-        return this.httpClient.request<SearchResult>('post',`${this.basePath}/v2/retrieveResult`,
+        return this.httpClient.request<SearchResult>('post',`${this.basePath}/v2/retrieveResult/${encodeURIComponent(String(transactionId))}`,
             {
                 body: body,
                 withCredentials: this.configuration.withCredentials,
@@ -203,6 +207,7 @@ export class ServiceRegistryService {
             }
         );
     }
+
 
     /**
      * This operation searches for service using REST method GET. If no parameters given, a complete list of local services is given in result.

@@ -41,7 +41,6 @@ import {
 } from 'src/app/backend-api/service-registry';
 import {FetchedItems} from '../fetchedItems';
 import {
-  EnvelopeRetrieveResultObject,
   RetrieveResultObject,
   SearchFilterObject,
   ServiceInstanceObject,
@@ -141,8 +140,10 @@ fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number,
 
       const signedRequest : RetrieveResultObject = await this.secomSigningService.signRetrieveResultObject(secomRetrieveResultsobj)
 
+      const transactionId = secomRetrieveResultsobj.envelope.transactionId;
+
       page = await firstValueFrom(
-          this.secomService.v2RetrieveResultPost(signedRequest, 'response')
+          this.secomService.v2RetrieveResultPost(transactionId, signedRequest, 'response')
       );
 
       const services = (page.body?.envelope['serviceInstance']) as ServiceInstanceObject[];
