@@ -31,8 +31,16 @@ import { LuceneTermInputComponent } from '../lucene-term-input/lucene-term-input
 import { LuceneGeoQueryInputComponent } from '../lucene-geo-query-input/lucene-geo-query-input.component';
 import {SearchParameters} from "../../backend-api/secom";
 import { SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
+import { ServiceInstanceStatus } from '../../backend-api/secom';
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
+
+const statusMap: Record<string, ServiceInstanceStatus> = {
+  PROVISIONAL: ServiceInstanceStatus.PROVISIONAL,
+  RELEASED: ServiceInstanceStatus.RELEASED,
+  DEPRECATED: ServiceInstanceStatus.DEPRECATED,
+  DELETED: ServiceInstanceStatus.DELETED,
+}
 
 @Component({
   selector: 'app-svc-search-input',
@@ -75,6 +83,9 @@ export class SvcSearchInputComponent implements AfterViewInit {
   constructor(private resolver: ComponentFactoryResolver) {
   }
 
+
+
+
   ngAfterViewInit() {
     if (this.luceneComponentHost) {
       this.loadComponent();
@@ -82,6 +93,14 @@ export class SvcSearchInputComponent implements AfterViewInit {
   }
 
   private lusceneToSearchParams(terms: Term[], allowedKeys: Set<string>): SearchParameters {
+    const statusMap: Record<string, ServiceInstanceStatus> = {
+      PROVISIONAL: ServiceInstanceStatus.PROVISIONAL,
+      RELEASED: ServiceInstanceStatus.RELEASED,
+      DEPRECATED: ServiceInstanceStatus.DEPRECATED,
+      DELETED: ServiceInstanceStatus.DELETED,
+    };
+
+
     const out: SearchParameters = {};
 
     const stripQuotes = (s: string) =>
@@ -106,6 +125,18 @@ export class SvcSearchInputComponent implements AfterViewInit {
           if (raw == null || raw === '') continue;
 
           const val = stripQuotes(String(raw)).trim();
+
+          if (k === 'status') {
+            const statusMap: Record<string, ServiceInstanceStatus> = {
+              PROVISIONAL: ServiceInstanceStatus.PROVISIONAL,
+              RELEASED: ServiceInstanceStatus.RELEASED,
+              DEPRECATED: ServiceInstanceStatus.DEPRECATED,
+              DELETED: ServiceInstanceStatus.DELETED,
+            };
+
+            (out as any)[k] = statusMap[val];
+            continue;
+          }
 
           if (k === 'keywords') {
             const items = val.split(/[\s,]+/).filter(Boolean);

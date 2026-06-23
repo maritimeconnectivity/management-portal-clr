@@ -13,11 +13,9 @@
 /**
  * Service Instance Status, One of Provisional(0), Released(1), Deprecated(2), Deleted(3)
  */
-export type ServiceInstanceStatus = 'PROVISIONAL' | 'RELEASED' | 'DEPRECATED' | 'DELETED';
-
-export const ServiceInstanceStatus = {
-    PROVISIONAL: 'PROVISIONAL' as ServiceInstanceStatus,
-    RELEASED: 'RELEASED' as ServiceInstanceStatus,
-    DEPRECATED: 'DEPRECATED' as ServiceInstanceStatus,
-    DELETED: 'DELETED' as ServiceInstanceStatus
-};
+export enum ServiceInstanceStatus {
+    PROVISIONAL = 0,
+    RELEASED = 1,
+    DEPRECATED = 2,
+    DELETED = 3
+}
