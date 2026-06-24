@@ -190,6 +190,15 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     fetchData = async (itemType: ItemType, pageNumber: number, elementsPerPage: number, xactId: string | undefined) => {
         try {
+
+            // A guard to prevent empty searches for calling the API as this will result in 400
+            const hasSearchParams = Object.keys(this.searchParams).length > 0;
+            const hasGeometry = Object.keys(this.queryGeometry).length > 0;
+
+            if (!xactId && !hasSearchParams && !hasGeometry) {
+                return [];
+            }
+
             let fetchedItems;
 
             const minifiedPem = this.toMinifiedPemList(this.ssp.getSigningMaterial().bundle.certificate!);
