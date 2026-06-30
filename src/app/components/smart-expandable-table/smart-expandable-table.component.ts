@@ -22,10 +22,7 @@ import { convertTime } from 'src/app/common/timeConverter';
 import { ItemFormComponent } from "../item-form/item-form.component";
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Role, RoleControllerService } from 'src/app/backend-api/identity-registry';
-import { ComponentsModule } from '../components.module';
-import { SvcSearchInputComponent } from '../svc-search-input/svc-search-input.component';
-import {RetrieveResultObject, SearchFilterObject} from "../../backend-api/secom";
+import { ServiceInstanceStatus } from '../../backend-api/secom'
 
 @Component({
   selector: 'app-smart-expandable-table',
@@ -70,7 +67,7 @@ export class SmartExpandableTableComponent implements OnInit, OnChanges {
   data: any[] | undefined = undefined;
   selected: any[] = [];
   detail: any = {};
-  selectedItem : any = {};
+  selectedItem: any = {};
   expanded = false;
   detailView = false;
   labelKeys: string[] = [];
@@ -85,7 +82,7 @@ export class SmartExpandableTableComponent implements OnInit, OnChanges {
   elementsPerPage = 10;
 
   constructor(private router: Router,
-    private authService: AuthService,
+              private authService: AuthService,
   ) {
     this.isLoading = true;
   }
@@ -116,21 +113,21 @@ export class SmartExpandableTableComponent implements OnInit, OnChanges {
       this.labelKeys = Object.keys(this.labels!);
       this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
     }
-    
+
     // apply updates of total pages for pagination
     if (changes['totalPages']) {
-      this.pageNumbers = Array(this.totalPages).fill(0).map((x,i)=>i);
+      this.pageNumbers = Array(this.totalPages).fill(0).map((x, i) => i);
     }
     this.updateVisiblePageNumbers();
-    
+
   }
 
   updateVisiblePageNumbers() {
     const startPage = this.currentPageRange * this.elementsPerPage;
     const endPage = Math.min(startPage + this.elementsPerPage, this.totalPages);
     this.visiblePageNumbers = Array.from(
-      { length: endPage - startPage },
-      (_, index) => startPage + index
+        {length: endPage - startPage},
+        (_, index) => startPage + index
     );
   }
 
@@ -203,7 +200,7 @@ export class SmartExpandableTableComponent implements OnInit, OnChanges {
   }
 
   onMigrate = (newServiceMrn: string) => {
-    this.migrateEvent.emit({... this.selectedItem, newServiceMrn: newServiceMrn});
+    this.migrateEvent.emit({...this.selectedItem, newServiceMrn: newServiceMrn});
   }
 
   deleteItem = (selectedItem: any) => {
@@ -221,10 +218,10 @@ export class SmartExpandableTableComponent implements OnInit, OnChanges {
   refreshData = () => {
     this.loadData().then(() => {
       if (this.selectedItem && this.selectedItem.mrn) {
-        const updatedItem = this.data?.find(item => 
-          this.itemType === ItemType.Service ? item.mrn === this.selectedItem.mrn && item.instanceVersion === this.selectedItem.instanceVersion :
-            this.itemType === ItemType.Role ? item.id === this.selectedItem.id :
-              item.mrn === this.selectedItem.mrn);
+        const updatedItem = this.data?.find(item =>
+            this.itemType === ItemType.Service ? item.mrn === this.selectedItem.mrn && item.instanceVersion === this.selectedItem.instanceVersion :
+                this.itemType === ItemType.Role ? item.id === this.selectedItem.id :
+                    item.mrn === this.selectedItem.mrn);
         if (updatedItem) {
           this.selectedItem = updatedItem;
         }
@@ -246,4 +243,13 @@ export class SmartExpandableTableComponent implements OnInit, OnChanges {
   getItemTypeTitle = (itemType: ItemType) => {
     return itemTypeToString(itemType);
   }
+
+  getDisplayValue(key: string, value: any): any {
+    if (key === 'status') {
+      return ServiceInstanceStatus[value] ?? value;
+    }
+
+    return value;
+  }
+
 }
