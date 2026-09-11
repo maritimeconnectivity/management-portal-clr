@@ -784,102 +784,102 @@ export const ColumnForResource: Record<string, object> = {
       options: [
         {
           title: 'S-57 Electronic Navigational Chart (ENC)',
-          value: 'S57',
+          value: 'S-57',
         },
         {
           title: 'S-101 Electronic Navigational Chart (ENC)',
-          value: 'S101',
+          value: 'S-101',
         },
         {
           title: 'S-102 Bathymetric Surface',
-          value: 'S102',
+          value: 'S-102',
         },
         {
           title: 'S-104 Water Level Information for Surface Navigation',
-          value: 'S104',
+          value: 'S-104',
         },
         {
           title: 'S-111 Surface Currents',
-          value: 'S111',
+          value: 'S-111',
         },
         {
           title: 'S-122 Marine Protected Areas (MPAs)',
-          value: 'S122',
+          value: 'S-122',
         },
         {
           title: 'S-123 Marine Radio Services',
-          value: 'S123',
+          value: 'S-123',
         },
         {
           title: 'S-124 Navigational Warnings',
-          value: 'S124',
+          value: 'S-124',
         },
         {
           title: 'S-125 Marine Navigational Services',
-          value: 'S125',
+          value: 'S-125',
         },
         {
           title: 'S-126 Marine Physical Environment',
-          value: 'S126',
+          value: 'S-126',
         },
         {
           title: 'S-127 Marine Traffic Management',
-          value: 'S127',
+          value: 'S-127',
         },
         {
           title: 'S-128 Catalogue of Nautical Products',
-          value: 'S128',
+          value: 'S-128',
         },
         {
           title: 'S-129 Under Keel Clearance Management (UKCM)',
-          value: 'S129',
+          value: 'S-129',
         },
         {
           title: 'S-131 Marine Harbour Infrastructure',
-          value: 'S131',
+          value: 'S-131',
         },
         {
           title: 'S-210 Inter-VTS Exchange Format',
-          value: 'S210',
+          value: 'S-210',
         },
         {
           title: 'S-211 Port Call Message Format',
-          value: 'S211',
+          value: 'S-211',
         },
         {
           title: 'S-212 VTS Digital Information Service',
-          value: 'S212',
+          value: 'S-212',
         },
         {
           title: 'S-401 Inland ENC',
-          value: 'S401',
+          value: 'S-401',
         },
         {
           title: 'S-402 Bathymetric Contour Overlay for Inland ENC',
-          value: 'S402',
+          value: 'S-402',
         },
         {
           title: 'S-411 Sea Ice Information',
-          value: 'S411',
+          value: 'S-411',
         },
         {
           title: 'S-412 Weather Overlay',
-          value: 'S412',
+          value: 'S-412',
         },
         {
           title: 'S-413 Marine Weather Conditions',
-          value: 'S413',
+          value: 'S-413',
         },
         {
           title: 'S-414 Marine Weather Observations',
-          value: 'S414',
+          value: 'S-414',
         },
         {
           title: 'S-421 Route Plan',
-          value: 'S421',
+          value: 'S-421',
         },
         {
-          title: 'Route Plan',
+          title: 'RTZ Route Plan',
           value: 'RTZ',
         },
         {
@@ -1131,95 +1131,95 @@ export const ColumnForResource: Record<string, object> = {
         },
         {
           title: 'S-101 Electronic Navigational Chart (ENC)',
-          value: 'S101',
+          value: 'S-101',
         },
         {
           title: 'S-102 Bathymetric Surface',
-          value: 'S102',
+          value: 'S-102',
         },
         {
           title: 'S-104 Water Level Information for Surface Navigation',
-          value: 'S104',
+          value: 'S-104',
         },
         {
           title: 'S-111 Surface Currents',
-          value: 'S111',
+          value: 'S-111',
         },
         {
           title: 'S-122 Marine Protected Areas (MPAs)',
-          value: 'S122',
+          value: 'S-122',
         },
         {
           title: 'S-123 Marine Radio Services',
-          value: 'S123',
+          value: 'S-123',
         },
         {
           title: 'S-124 Navigational Warnings',
-          value: 'S124',
+          value: 'S-124',
         },
         {
           title: 'S-125 Marine Navigational Services',
-          value: 'S125',
+          value: 'S-125',
         },
         {
           title: 'S-126 Marine Physical Environment',
-          value: 'S126',
+          value: 'S-126',
         },
         {
           title: 'S-127 Marine Traffic Management',
-          value: 'S127',
+          value: 'S-127',
         },
         {
           title: 'S-128 Catalogue of Nautical Products',
-          value: 'S128',
+          value: 'S-128',
         },
         {
           title: 'S-129 Under Keel Clearance Management (UKCM)',
-          value: 'S129',
+          value: 'S-129',
         },
         {
           title: 'S-131 Marine Harbour Infrastructure',
-          value: 'S131',
+          value: 'S-131',
         },
         {
           title: 'S-210 Inter-VTS Exchange Format',
-          value: 'S210',
+          value: 'S-210',
         },
         {
           title: 'S-211 Port Call Message Format',
-          value: 'S211',
+          value: 'S-211',
         },
         {
           title: 'S-212 VTS Digital Information Service',
-          value: 'S212',
+          value: 'S-212',
         },
         {
           title: 'S-401 Inland ENC',
-          value: 'S401',
+          value: 'S-401',
         },
         {
           title: 'S-402 Bathymetric Contour Overlay for Inland ENC',
-          value: 'S402',
+          value: 'S-402',
         },
         {
           title: 'S-411 Sea Ice Information',
-          value: 'S411',
+          value: 'S-411',
         },
         {
           title: 'S-412 Weather Overlay',
-          value: 'S412',
+          value: 'S-412',
         },
         {
           title: 'S-413 Marine Weather Conditions',
-          value: 'S413',
+          value: 'S-413',
         },
         {
           title: 'S-414 Marine Weather Observations',
-          value: 'S414',
+          value: 'S-414',
         },
         {
           title: 'S-421 Route Plan',
-          value: 'S421',
+          value: 'S-421',
         },
         {
           title: 'Route Plan',

@@ -9,11 +9,11 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { DocDto } from './docDto';
-import { Geometry } from './geometry';
-import { XmlDto } from './xmlDto';
+import {DocDto} from './docDto';
+import {Geometry} from './geometry';
+import {XmlDto} from './xmlDto';
 
-export interface InstanceDto { 
+export interface InstanceDto {
     id?: number;
     name: string;
     version: string;
@@ -39,6 +39,7 @@ export interface InstanceDto {
     implementsServiceDesigns?: { [key: string]: string; };
     designsServiceSpecifications?: { [key: string]: string; };
 }
+
 export namespace InstanceDto {
     export type StatusEnum = 'PROVISIONAL' | 'RELEASED' | 'DEPRECATED' | 'DELETED';
     export const StatusEnum = {
@@ -47,34 +48,62 @@ export namespace InstanceDto {
         DEPRECATED: 'DEPRECATED' as StatusEnum,
         DELETED: 'DELETED' as StatusEnum
     };
-    export type DataProductTypeEnum = 'OTHER' | 'S57' | 'S101' | 'S102' | 'S104' | 'S111' | 'S122' | 'S123' | 'S124' | 'S125' | 'S126' | 'S127' | 'S128' | 'S129' | 'S131' | 'S201' | 'S210' | 'S211' | 'S212' | 'S401' | 'S402' | 'S411' | 'S412' | 'S413' | 'S414' | 'S421' | 'RTZ' | 'EPC';
+    export type DataProductTypeEnum =
+        'OTHER'
+        | 'S-57'
+        | 'S-101'
+        | 'S-102'
+        | 'S-104'
+        | 'S-111'
+        | 'S-122'
+        | 'S-123'
+        | 'S-124'
+        | 'S-125'
+        | 'S-126'
+        | 'S-127'
+        | 'S-128'
+        | 'S-129'
+        | 'S-131'
+        | 'S-201'
+        | 'S-210'
+        | 'S-211'
+        | 'S-212'
+        | 'S-401'
+        | 'S-402'
+        | 'S-411'
+        | 'S-412'
+        | 'S-413'
+        | 'S-414'
+        | 'S-421'
+        | 'RTZ'
+        | 'EPC';
     export const DataProductTypeEnum = {
         OTHER: 'OTHER' as DataProductTypeEnum,
-        S57: 'S57' as DataProductTypeEnum,
-        S101: 'S101' as DataProductTypeEnum,
-        S102: 'S102' as DataProductTypeEnum,
-        S104: 'S104' as DataProductTypeEnum,
-        S111: 'S111' as DataProductTypeEnum,
-        S122: 'S122' as DataProductTypeEnum,
-        S123: 'S123' as DataProductTypeEnum,
-        S124: 'S124' as DataProductTypeEnum,
-        S125: 'S125' as DataProductTypeEnum,
-        S126: 'S126' as DataProductTypeEnum,
-        S127: 'S127' as DataProductTypeEnum,
-        S128: 'S128' as DataProductTypeEnum,
-        S129: 'S129' as DataProductTypeEnum,
-        S131: 'S131' as DataProductTypeEnum,
-        S201: 'S201' as DataProductTypeEnum,
-        S210: 'S210' as DataProductTypeEnum,
-        S211: 'S211' as DataProductTypeEnum,
-        S212: 'S212' as DataProductTypeEnum,
-        S401: 'S401' as DataProductTypeEnum,
-        S402: 'S402' as DataProductTypeEnum,
-        S411: 'S411' as DataProductTypeEnum,
-        S412: 'S412' as DataProductTypeEnum,
-        S413: 'S413' as DataProductTypeEnum,
-        S414: 'S414' as DataProductTypeEnum,
-        S421: 'S421' as DataProductTypeEnum,
+        S57: 'S-57' as DataProductTypeEnum,
+        S101: 'S-101' as DataProductTypeEnum,
+        S102: 'S-102' as DataProductTypeEnum,
+        S104: 'S-104' as DataProductTypeEnum,
+        S111: 'S-111' as DataProductTypeEnum,
+        S122: 'S-122' as DataProductTypeEnum,
+        S123: 'S-123' as DataProductTypeEnum,
+        S124: 'S-124' as DataProductTypeEnum,
+        S125: 'S-125' as DataProductTypeEnum,
+        S126: 'S-126' as DataProductTypeEnum,
+        S127: 'S-127' as DataProductTypeEnum,
+        S128: 'S-128' as DataProductTypeEnum,
+        S129: 'S-129' as DataProductTypeEnum,
+        S131: 'S-131' as DataProductTypeEnum,
+        S201: 'S-201' as DataProductTypeEnum,
+        S210: 'S-210' as DataProductTypeEnum,
+        S211: 'S-211' as DataProductTypeEnum,
+        S212: 'S-212' as DataProductTypeEnum,
+        S401: 'S-401' as DataProductTypeEnum,
+        S402: 'S-402' as DataProductTypeEnum,
+        S411: 'S-411' as DataProductTypeEnum,
+        S412: 'S-412' as DataProductTypeEnum,
+        S413: 'S-413' as DataProductTypeEnum,
+        S414: 'S-414' as DataProductTypeEnum,
+        S421: 'S-421' as DataProductTypeEnum,
         RTZ: 'RTZ' as DataProductTypeEnum,
         EPC: 'EPC' as DataProductTypeEnum
     };
