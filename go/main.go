@@ -23,8 +23,9 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"software.sslmate.com/src/go-pkcs12"
 	"syscall/js"
+
+	"software.sslmate.com/src/go-pkcs12"
 )
 
 func createCsrWrapper() js.Func {
