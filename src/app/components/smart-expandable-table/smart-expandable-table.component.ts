@@ -14,242 +14,243 @@
  * limitations under the License.
  */
 
-import { Component, EventEmitter, Input, Output, SimpleChanges, OnInit, OnChanges } from '@angular/core';
-import { ClarityModule, ClrDatagridModule, ClrDatagridStateInterface } from '@clr/angular';
-import { ItemType, itemTypeToString, timestampKeys } from 'src/app/common/menuType';
-import { ItemViewComponent } from "../item-view/item-view.component";
-import { convertTime } from 'src/app/common/timeConverter';
-import { ItemFormComponent } from "../item-form/item-form.component";
-import { Router } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth.service';
-import { ServiceInstanceStatus } from '../../backend-api/secom'
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
+import {ClarityModule, ClrDatagridModule, ClrDatagridStateInterface} from '@clr/angular';
+import {ItemType, itemTypeToString, timestampKeys} from 'src/app/common/menuType';
+import {ItemViewComponent} from "../item-view/item-view.component";
+import {convertTime} from 'src/app/common/timeConverter';
+import {Router} from '@angular/router';
+import {AuthService} from 'src/app/auth/auth.service';
+import {ServiceInstanceStatus} from '../../backend-api/secom'
 
 @Component({
-  selector: 'app-smart-expandable-table',
-  standalone: true,
-  imports: [
-    ClarityModule,
-    ClrDatagridModule,
-    ItemViewComponent,
-],
-  templateUrl: './smart-expandable-table.component.html',
-  styleUrl: './smart-expandable-table.component.css'
+    selector: 'app-smart-expandable-table',
+    standalone: true,
+    imports: [
+        ClarityModule,
+        ClrDatagridModule,
+        ItemViewComponent,
+    ],
+    templateUrl: './smart-expandable-table.component.html',
+    styleUrl: './smart-expandable-table.component.css'
 })
 export class SmartExpandableTableComponent implements OnInit, OnChanges {
-  @Input() itemType: ItemType = ItemType.Device;
-  @Input() labels: Record<string, any> | undefined = undefined;
-  @Input() placeholder = 'We couldn\'t find any data!';
-  @Input() downloadCall: ((selected: any[]) => void) | undefined;
-  @Input() deleteCall: ((selected: any[]) => void) | undefined;
-  @Input() addCall: (() => void) | undefined;
-  @Input() deleteText = 'Delete';
-  @Input() downloadText = 'Download';
-  @Input() addText = 'Add';
-  @Input() totalPages = 0;
-  @Input() totalElements = 0;
-  @Input() hasEditPermission = false;
-  @Input() getData: (
-      itemType: ItemType,
-      pageNumber: number,
-      elementsPerPage: number,
-      xactId: string | undefined
-  ) => Promise<any[] | undefined> = async () => [];
+    @Input() itemType: ItemType = ItemType.Device;
+    @Input() labels: Record<string, any> | undefined = undefined;
+    @Input() placeholder = 'We couldn\'t find any data!';
+    @Input() downloadCall: ((selected: any[]) => void) | undefined;
+    @Input() deleteCall: ((selected: any[]) => void) | undefined;
+    @Input() addCall: (() => void) | undefined;
+    @Input() deleteText = 'Delete';
+    @Input() downloadText = 'Download';
+    @Input() addText = 'Add';
+    @Input() totalPages = 0;
+    @Input() totalElements = 0;
+    @Input() hasEditPermission = false;
+    @Input() getData: (
+        itemType: ItemType,
+        pageNumber: number,
+        elementsPerPage: number,
+        xactId: string | undefined
+    ) => Promise<any[] | undefined> = async () => [];
 
-  @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
-  @Output() revokeCertsEvent = new EventEmitter<any[]>();
-  @Output() downloadCertsEvent = new EventEmitter<any[]>();
-  @Output() editEvent = new EventEmitter<any>();
-  @Output() viewEvent = new EventEmitter<any>();
-  @Output() migrateEvent = new EventEmitter<any>();
-  @Output() refreshEvent = new EventEmitter<any>();
-  @Output() approveEvent = new EventEmitter<any>();
+    @Output() rowSelectEvent: EventEmitter<any> = new EventEmitter<any>();
+    @Output() revokeCertsEvent = new EventEmitter<any[]>();
+    @Output() downloadCertsEvent = new EventEmitter<any[]>();
+    @Output() editEvent = new EventEmitter<any>();
+    @Output() viewEvent = new EventEmitter<any>();
+    @Output() migrateEvent = new EventEmitter<any>();
+    @Output() refreshEvent = new EventEmitter<any>();
+    @Output() approveEvent = new EventEmitter<any>();
 
-  data: any[] | undefined = undefined;
-  selected: any[] = [];
-  detail: any = {};
-  selectedItem: any = {};
-  expanded = false;
-  detailView = false;
-  labelKeys: string[] = [];
-  labelTitles: string[] = [];
-  isLoading = false;
-  hasFetched = false;
-  defaultLoaded = false;
-  pageNumbers: number[] = [];
-  currentPageNumber = 0;
-  currentPageRange = 0;
-  visiblePageNumbers: number[] = [];
-  elementsPerPage = 10;
+    data: any[] | undefined = undefined;
+    selected: any[] = [];
+    detail: any = {};
+    selectedItem: any = {};
+    expanded = false;
+    detailView = false;
+    labelKeys: string[] = [];
+    labelTitles: string[] = [];
+    isLoading = false;
+    hasFetched = false;
+    defaultLoaded = false;
+    pageNumbers: number[] = [];
+    currentPageNumber = 0;
+    currentPageRange = 0;
+    visiblePageNumbers: number[] = [];
+    elementsPerPage = 10;
 
-  constructor(private router: Router,
-              private authService: AuthService,
-  ) {
-    this.isLoading = true;
-  }
-
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-
-    this.loadElementsPerPage();
-
-    this.authService.getOrgMrnFromToken().then((orgMrn) => {
-      if (this.itemType === ItemType.Instance) {
-        return;
-      }
-    });
-  }
-
-  loadElementsPerPage = () => {
-    // Retrieve the number of elements per page from localStorage
-    const storedElementsPerPage = localStorage.getItem('management-portal:elementsPerPage');
-    this.elementsPerPage = storedElementsPerPage ? parseInt(storedElementsPerPage) : 10;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-    if (changes['labels']) {
-      this.labelKeys = Object.keys(this.labels!);
-      this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
+    constructor(private router: Router,
+                private authService: AuthService,
+    ) {
+        this.isLoading = true;
     }
 
-    // apply updates of total pages for pagination
-    if (changes['totalPages']) {
-      this.pageNumbers = Array(this.totalPages).fill(0).map((x, i) => i);
-    }
-    this.updateVisiblePageNumbers();
+    ngOnInit(): void {
+        //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+        //Add 'implements OnInit' to the class.
 
-  }
+        this.loadElementsPerPage();
 
-  updateVisiblePageNumbers() {
-    const startPage = this.currentPageRange * this.elementsPerPage;
-    const endPage = Math.min(startPage + this.elementsPerPage, this.totalPages);
-    this.visiblePageNumbers = Array.from(
-        {length: endPage - startPage},
-        (_, index) => startPage + index
-    );
-  }
-
-  /**
-   * Change the page range (left or right)
-   * @param direction -1 for left, +1 for right
-   */
-  changePageRange(direction: number) {
-    this.currentPageRange += direction;
-    this.updateVisiblePageNumbers();
-  }
-
-  async loadData(pageNumber: number = this.currentPageNumber, xactId?: string) {
-    const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage, xactId) || [];
-
-
-    if (this.defaultLoaded && newRows.length === 0) {
-      this.placeholder = "Search returned no data";   // <-- override message
-    }
-    // If this is a follow-up retrieveResults call, append instead of overwrite
-    if (xactId && this.data && this.data.length) {
-      // naive merge, no de-duplication
-      this.data = [...this.data, ...newRows];
-    } else {
-      this.data = newRows;
+        this.authService.getOrgMrnFromToken().then((orgMrn) => {
+            if (this.itemType === ItemType.Instance) {
+                return;
+            }
+        });
     }
 
-    if (pageNumber !== this.currentPageNumber) {
-      this.currentPageNumber = pageNumber;
+    loadElementsPerPage = () => {
+        // Retrieve the number of elements per page from localStorage
+        const storedElementsPerPage = localStorage.getItem('management-portal:elementsPerPage');
+        this.elementsPerPage = storedElementsPerPage ? parseInt(storedElementsPerPage) : 10;
     }
-    this.isLoading = false;
-    this.defaultLoaded = true;
-  }
 
-
-  // this function is for background loading of data
-  async onRefresh(state: ClrDatagridStateInterface) {
-    if (!this.data) {
-      this.loadData();
-    }
-  }
-
-  userRowSelect = (selectedItem: any) => {
-    if (this.itemType === ItemType.SearchObjectResult) {
-      this.viewEvent.emit(selectedItem);
-    } else {
-      this.expanded = true;
-      this.selectedItem = selectedItem;
-      this.rowSelectEvent.emit(selectedItem);
-    }
-  }
-
-  back = () => {
-    this.expanded = false;
-    this.selectedItem = {};
-  }
-
-  clear = () => {
-    this.data = [];
-  }
-
-  onEdit = (selectedItem: any) => {
-    this.expanded = true;
-    this.selectedItem = selectedItem;
-    this.editEvent.emit(selectedItem);
-  }
-
-  onApprove = (selectedItem: any) => {
-    this.approveEvent.emit(selectedItem);
-  }
-
-  onMigrate = (newServiceMrn: string) => {
-    this.migrateEvent.emit({...this.selectedItem, newServiceMrn: newServiceMrn});
-  }
-
-  deleteItem = (selectedItem: any) => {
-    this.deleteCall?.call(this, [selectedItem]);
-  }
-
-  isTimestampFormat(key: string): boolean {
-    return timestampKeys.includes(key);
-  }
-
-  convertTimeString = (time: string): string => {
-    return convertTime(time);
-  }
-
-  refreshData = () => {
-    this.loadData().then(() => {
-      if (this.selectedItem && this.selectedItem.mrn) {
-        const updatedItem = this.data?.find(item =>
-            this.itemType === ItemType.Service ? item.mrn === this.selectedItem.mrn && item.instanceVersion === this.selectedItem.instanceVersion :
-                this.itemType === ItemType.Role ? item.id === this.selectedItem.id :
-                    item.mrn === this.selectedItem.mrn);
-        if (updatedItem) {
-          this.selectedItem = updatedItem;
+    ngOnChanges(changes: SimpleChanges): void {
+        //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+        //Add '${implements OnChanges}' to the class.
+        if (changes['labels']) {
+            this.labelKeys = Object.keys(this.labels!);
+            this.labelTitles = Object.values(this.labels!).map((label: any) => label.title);
         }
-      }
-    });
-  }
 
-  updateNumberOfElements = (event: any) => {
-    const newElementsPerPage = parseInt(event.target.value.split(':').pop());
-    if (this.elementsPerPage !== newElementsPerPage) {
-      this.currentPageNumber = 0;
-      this.elementsPerPage = newElementsPerPage;
-      // Save the number of elements per page to localStorage
-      localStorage.setItem('management-portal:elementsPerPage', this.elementsPerPage.toString());
-      this.loadData();
-    }
-  }
+        // apply updates of total pages for pagination
+        if (changes['totalPages']) {
+            this.pageNumbers = Array(this.totalPages).fill(0).map((x, i) => i);
+        }
+        this.updateVisiblePageNumbers();
 
-  getItemTypeTitle = (itemType: ItemType) => {
-    return itemTypeToString(itemType);
-  }
-
-  getDisplayValue(key: string, value: any): any {
-    if (key === 'status') {
-      return ServiceInstanceStatus[value] ?? value;
     }
 
-    return value;
-  }
+    updateVisiblePageNumbers() {
+        const startPage = this.currentPageRange * this.elementsPerPage;
+        const endPage = Math.min(startPage + this.elementsPerPage, this.totalPages);
+        this.visiblePageNumbers = Array.from(
+            {length: endPage - startPage},
+            (_, index) => startPage + index
+        );
+    }
+
+    /**
+     * Change the page range (left or right)
+     * @param direction -1 for left, +1 for right
+     */
+    changePageRange(direction: number) {
+        this.currentPageRange += direction;
+        this.updateVisiblePageNumbers();
+    }
+
+    async loadData(pageNumber: number = this.currentPageNumber, xactId?: string) {
+        const newRows = await this.getData(this.itemType, pageNumber, this.elementsPerPage, xactId) || [];
+
+
+        if (this.defaultLoaded && newRows.length === 0) {
+            this.placeholder = "Search returned no data";   // <-- override message
+        }
+        // If this is a follow-up retrieveResults call, append instead of overwrite
+        if (xactId && this.data && this.data.length) {
+            // naive merge, no de-duplication
+            this.data = [...this.data, ...newRows];
+        } else {
+            this.data = newRows;
+        }
+
+        if (pageNumber !== this.currentPageNumber) {
+            this.currentPageNumber = pageNumber;
+        }
+        this.isLoading = false;
+        this.defaultLoaded = true;
+    }
+
+
+    // this function is for background loading of data
+    async onRefresh(state: ClrDatagridStateInterface) {
+        if (!this.data) {
+            this.loadData();
+        }
+    }
+
+    userRowSelect = (selectedItem: any) => {
+        if (this.itemType === ItemType.SearchObjectResult) {
+            this.viewEvent.emit(selectedItem);
+        } else {
+            this.expanded = true;
+            this.selectedItem = selectedItem;
+            this.rowSelectEvent.emit(selectedItem);
+        }
+    }
+
+    back = () => {
+        this.expanded = false;
+        this.selectedItem = {};
+    }
+
+    clear = () => {
+        this.data = [];
+    }
+
+    onEdit = (selectedItem: any) => {
+        this.expanded = true;
+        this.selectedItem = selectedItem;
+        this.editEvent.emit(selectedItem);
+    }
+
+    onApprove = (selectedItem: any) => {
+        this.approveEvent.emit(selectedItem);
+    }
+
+    onMigrate = (newServiceMrn: string) => {
+        this.migrateEvent.emit({...this.selectedItem, newServiceMrn: newServiceMrn});
+    }
+
+    deleteItem = (selectedItem: any) => {
+        this.deleteCall?.call(this, [selectedItem]);
+    }
+
+    isTimestampFormat(key: string): boolean {
+        return timestampKeys.includes(key);
+    }
+
+    convertTimeString = (time: string): string => {
+        return convertTime(time);
+    }
+
+    refreshData = () => {
+        this.loadData().then(() => {
+            if (this.selectedItem && this.selectedItem.mrn) {
+                const updatedItem = this.data?.find(item =>
+                    this.itemType === ItemType.Service ? item.mrn === this.selectedItem.mrn && item.instanceVersion === this.selectedItem.instanceVersion :
+                        this.itemType === ItemType.Role ? item.id === this.selectedItem.id :
+                            item.mrn === this.selectedItem.mrn);
+                if (updatedItem) {
+                    this.selectedItem = updatedItem;
+                }
+            }
+        });
+    }
+
+    updateNumberOfElements = (event: any) => {
+        const newElementsPerPage = parseInt(event.target.value.split(':').pop());
+        if (this.elementsPerPage !== newElementsPerPage) {
+            this.currentPageNumber = 0;
+            this.elementsPerPage = newElementsPerPage;
+            // Save the number of elements per page to localStorage
+            localStorage.setItem('management-portal:elementsPerPage', this.elementsPerPage.toString());
+            this.loadData();
+        }
+    }
+
+    getItemTypeTitle = (itemType: ItemType) => {
+        return itemTypeToString(itemType);
+    }
+
+    getDisplayValue(key: string, value: any): any {
+        if (key === 'status') {
+            // The SECOM search API returns status as a number (see ServiceInstanceStatus),
+            // while the Service Registry API already returns it as a string (e.g. 'RELEASED').
+            return typeof value === 'number' ? ServiceInstanceStatus[value] : value;
+        }
+
+        return value;
+    }
 
 }
