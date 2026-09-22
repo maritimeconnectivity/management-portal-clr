@@ -41,7 +41,7 @@ export interface Certificate {
     /**
      * The serial number of the certificate
      */
-    readonly serialNumber?: number;
+    readonly serialNumber?: string;
     /**
      * The base64 encoded SHA-256 thumbprint of the certificate
      */
