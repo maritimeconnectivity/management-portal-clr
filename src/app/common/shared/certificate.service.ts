@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { CertificateRevocation, DeviceControllerService, MmsControllerService, OrganizationControllerService, ServiceControllerService, UserControllerService, VesselControllerService } from 'src/app/backend-api/identity-registry';
 import { getReasonOptionFromRevocationReason } from '../certRevokeInfo';
 import { ItemType } from '../menuType';
@@ -23,7 +23,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CertificateService {
+export class CertificateService implements OnInit {
   constructor(
     private organizationsService: OrganizationControllerService,
     private devicesService: DeviceControllerService,
@@ -38,7 +38,7 @@ export class CertificateService {
   }
 
   public formatCerts(certificates: any[]): any[] {
-    let formatted = [];
+    const formatted = [];
     for(const key_certs in certificates) {
       const cert = certificates[key_certs];
       for (const key in cert) {
@@ -54,8 +54,8 @@ export class CertificateService {
   }
 
   public splitByRevokeStatus(certificates: any[]): any {
-    let activeCertificates = [];
-    let revokedCertificates = [];
+    const activeCertificates = [];
+    const revokedCertificates = [];
     for(const key_certs in certificates) {
       const cert = certificates[key_certs];
       cert['revoked'] ? revokedCertificates.push(cert) : activeCertificates.push(cert);
@@ -98,8 +98,8 @@ export class CertificateService {
     }
 	}
 
-	public revokeCertificate(itemType: ItemType, entityMrn:string, orgMrn: string,
-      certificateId:number, certificateRevocation:CertificateRevocation, version?: string) : Observable<any> {
+	public revokeCertificate(itemType: ItemType, entityMrn: string, orgMrn: string,
+      certificateId: string, certificateRevocation: CertificateRevocation, version?: string) : Observable<any> {
 		if (itemType == null || !entityMrn) { // We lost our state data somehow???
 			throw new Error('Internal state lost');
 		}

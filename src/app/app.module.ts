@@ -31,6 +31,7 @@ import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 import {NotifierModule} from 'gramli-angular-notifier';
 import {AppConfig} from './app.config';
 import {AuthInterceptor} from './auth/auth.interceptor';
+import {SerialNumberInterceptor} from './common/http/serial-number.interceptor';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -84,6 +85,11 @@ export function HttpLoaderFactory(http: HttpClient) {
         {
             provide: HTTP_INTERCEPTORS,
             useClass: AuthInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: SerialNumberInterceptor,
             multi: true
         },
         provideHttpClient(withInterceptorsFromDi())
