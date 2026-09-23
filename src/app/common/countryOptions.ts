@@ -229,7 +229,7 @@ export const countryOptions = [
     { code: "ES", code3: "ESP", title: "Spain", value: "Spain" },
     { code: "LK", code3: "LKA", title: "Sri Lanka", value: "Sri Lanka" },
     { code: "SD", code3: "SDN", title: "Sudan (the)", value: "Sudan (the)" },
-    { code: "SR", code3: "SUR", title: "Surititle", value: "Surititle" },
+    { code: "SR", code3: "SUR", title: "Suriname", value: "Suriname" },
     { code: "SJ", code3: "SJM", title: "Svalbard and Jan Mayen", value: "Svalbard and Jan Mayen" },
     { code: "SE", code3: "SWE", title: "Sweden", value: "Sweden" },
     { code: "CH", code3: "CHE", title: "Switzerland", value: "Switzerland" },
