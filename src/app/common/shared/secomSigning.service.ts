@@ -100,7 +100,7 @@ export class SecomSigningService {
         const transactionIdPayload = erro.transactionId
 
         const certs = this.toMinifiedPemList(cert);
-        const certPayload = `[${certs.join(', ')}]`;
+        const certPayload = certs.join(',');
         const timestampPayload = this.toUnixTimestampSeconds(erro.envelopeSignatureTime);
 
         const payload =
@@ -213,7 +213,7 @@ export class SecomSigningService {
         const localOnlyPayload = String(esfo.localOnly ?? true).toLowerCase();
 
         const certs = this.toMinifiedPemList(cert);
-        const certPayload = `[${certs.join(', ')}]`;
+        const certPayload = certs.join(',');
         const timestampPayload = this.toUnixTimestampSeconds(esfo.envelopeSignatureTime);
 
         const payload =
@@ -247,11 +247,9 @@ export class SecomSigningService {
         payload += '.';
 
         if (q.keywords && q.keywords.length > 0) {
-            payload += '['
-            for (const keyword of q.keywords) {
-                payload += keyword
-            }
-            payload += ']'
+            payload += q.keywords
+                .map(keyword => this.toBase64(new TextEncoder().encode(keyword)))
+                .join(',');
         }
         payload += '.';
 
@@ -297,13 +295,17 @@ export class SecomSigningService {
         return String(Math.floor(date.getTime() / 1000));
     }
 
-    private toBase64Url(bytes: Uint8Array): string {
+    private toBase64(bytes: Uint8Array): string {
         let binary = '';
         for (const b of bytes) {
             binary += String.fromCharCode(b);
         }
 
-        return btoa(binary)
+        return btoa(binary);
+    }
+
+    private toBase64Url(bytes: Uint8Array): string {
+        return this.toBase64(bytes)
             .replace(/\+/g, '-')
             .replace(/\//g, '_')
             .replace(/=+$/, '');
