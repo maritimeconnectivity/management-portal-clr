@@ -60,7 +60,7 @@ export class LoginComponent {
   currentLangName = "English";
   loggedIn = false;
   version = AppConfig.MP_VERSION;
-  logo_img = AppConfig.LOGO_IMG;
+  loginLogoImg = AppConfig.LOGIN_LOGO_IMG;
   wizardOpen = false;
   termsOfUse = AppConfig.TERMS_OF_USE;
   size = "lg";

@@ -41,6 +41,7 @@ export class AppConfig {
     static FOOTER_NAME: string;
     static FOOTER_LINK: string;
     static LOGO_IMG: string;
+    static LOGIN_LOGO_IMG: string;
     static ROOT_CERT_TP: string;
 
     public static async _initialize() {
@@ -69,6 +70,7 @@ export class AppConfig {
             AppConfig.FOOTER_NAME = config.footerName;
             AppConfig.FOOTER_LINK = config.footerLink;
             AppConfig.LOGO_IMG = config.logoImg;
+            AppConfig.LOGIN_LOGO_IMG = config.loginLogoImg;
             AppConfig.ROOT_CERT_TP = config.rootCertificateThumbprint;
         } catch (error) {
             console.log("No config.json could be loaded, falling back to use built in config:", error);
@@ -99,6 +101,7 @@ export class AppConfig {
         AppConfig.FOOTER_NAME = environment.footerName;
         AppConfig.FOOTER_LINK = environment.footerLink;
         AppConfig.LOGO_IMG = environment.logoImg;
+        AppConfig.LOGIN_LOGO_IMG = environment.loginLogoImg;
         AppConfig.ROOT_CERT_TP = environment.rootCertificateThumbprint;
 
     }
