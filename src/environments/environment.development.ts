@@ -37,5 +37,6 @@ export const environment = {
   footerName: 'Maritime Connectivity Platform Consortium',
   footerLink: 'https://maritimeconnectivity.net',
   logoImg: 'assets/images/logo.svg',
+  loginLogoImg: 'assets/images/logo.svg',
   rootCertificateThumbprint: '9e8718ab697d6f1d2350358b30ab365e364bc0c857aa6ac183a25b341350390ee4a8c32aaee08b9db2567ee7e30e7fdd'
 };
