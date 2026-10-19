@@ -36,6 +36,9 @@ jobs:
         id: pkg
         run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
 
+      - name: Setup QEMU
+        uses: docker/setup-qemu-action@v4
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v4
 
@@ -51,6 +54,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: docker
+          platforms: linux/amd64,linux/arm64
           tags: |
             ghcr.io/maritimeconnectivity/management-portal-clr:${{ steps.pkg.outputs.version }}
             ghcr.io/maritimeconnectivity/management-portal-clr:latest
