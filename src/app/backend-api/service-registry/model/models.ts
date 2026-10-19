@@ -6,7 +6,6 @@ export * from './envelope';
 export * from './geometry';
 export * from './geometryFactory';
 export * from './instanceDto';
-export * from './ledgerRequestDto';
 export * from './point';
 export * from './precisionModel';
 export * from './type';

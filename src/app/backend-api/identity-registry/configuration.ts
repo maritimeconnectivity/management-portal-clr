@@ -14,6 +14,7 @@ export class Configuration {
     accessToken?: string | (() => string);
     basePath?: string;
     withCredentials?: boolean;
+    secomBasePath?: string;
 
     constructor(configurationParameters: ConfigurationParameters = {}) {
         this.apiKeys = configurationParameters.apiKeys;
@@ -22,6 +23,7 @@ export class Configuration {
         this.accessToken = configurationParameters.accessToken;
         this.basePath = configurationParameters.basePath;
         this.withCredentials = configurationParameters.withCredentials;
+        this.secomBasePath = this.basePath + '/api/secom';
     }
 
     /**

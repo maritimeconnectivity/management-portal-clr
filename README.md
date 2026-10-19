@@ -14,7 +14,7 @@ You can experience a live demo from [our public demonstrator environment](https:
 ## Requirements
 - node v20.17.0+
 - pnpm v9.7.0+
-- Go 1.24+
+- Go 1.26+
 
 ## Building the Go WASM module
 The Go WASM module, which is used for generating public/private key-pairs, certificate signing request and PKCS#12 keystores, can be built by running `pnpm run build:go`.

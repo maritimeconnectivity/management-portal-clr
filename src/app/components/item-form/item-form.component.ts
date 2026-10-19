@@ -290,7 +290,6 @@ export class ItemFormComponent {
     } else {
       (event.target as HTMLInputElement).value = this.mrnPrefix;
     }
-    this.itemForm.patchValue(this.item);
   }
 
   onMrnChange(value: string) {

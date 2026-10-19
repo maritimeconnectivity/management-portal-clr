@@ -17,16 +17,18 @@
 import {Component, OnInit} from '@angular/core';
 import {LayoutModule} from "../../layout/layout.module";
 import {Organization, OrganizationControllerService} from "../../backend-api/identity-registry";
-import {LabelValueModel, LabelValueTableComponent} from "../../common/label-value-table/label-value-table.component";
-import { CertChartComponent } from "../../components/cert-chart/cert-chart.component";
-import { ClrTabsModule } from '@clr/angular';
-import { ItemtypeOverviewComponent } from 'src/app/components/itemtype-overview/itemtype-overview.component';
-import { AuthService } from 'src/app/auth/auth.service';
+import {LabelValueModel} from "../../common/label-value-table/label-value-table.component";
+import {ClrIconModule, ClrTabsModule} from '@clr/angular';
+import {ItemtypeOverviewComponent} from 'src/app/components/itemtype-overview/itemtype-overview.component';
+import {AuthService} from 'src/app/auth/auth.service';
+import {ItemManagerService} from "../../common/shared/item-manager.service";
+import {NgIf} from "@angular/common";
+import {AppConfig} from "../../app.config";
 
 @Component({
     selector: 'app-dashboard',
     standalone: true,
-    imports: [LayoutModule, LabelValueTableComponent, CertChartComponent, ClrTabsModule, ItemtypeOverviewComponent],
+    imports: [LayoutModule, ClrTabsModule, ItemtypeOverviewComponent, ClrIconModule, NgIf],
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.css'
 })
@@ -36,9 +38,12 @@ export class DashboardComponent implements OnInit {
     organization?: Organization;
     labelValues?: LabelValueModel[];
     orgMrn = "";
+    msrAvailable: boolean = true;
+    mirAvailable: boolean = true;
 
     constructor(private organizationService: OrganizationControllerService,
-        private authService: AuthService
+        private authService: AuthService,
+        private itemManagerService: ItemManagerService,
     ) {
         this.isLoading = true;
     }
@@ -47,6 +52,17 @@ export class DashboardComponent implements OnInit {
         this.authService.getOrgMrnFromToken().then(mrn => {
             this.orgMrn = mrn;
             this.isLoading = false;
+            this.checkMsrConnection()
+            this.checkMirConnection()
         });
+    }
+
+    private async checkMsrConnection(): Promise<void> {
+        this.msrAvailable = await this.itemManagerService.checkMsrAvailability();
+    }
+
+    private async checkMirConnection(): Promise<void> {
+        const checkPath = AppConfig.IR_BASE_PATH + '/v3/api-docs'
+        this.mirAvailable = await this.itemManagerService.checkMirAvailability(checkPath);
     }
 }

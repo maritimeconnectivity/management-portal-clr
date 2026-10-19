@@ -29,8 +29,18 @@ import { srFieldInfo } from 'src/app/common/lucene-query/service-registry-field-
 import { CommonModule } from '@angular/common';
 import { LuceneTermInputComponent } from '../lucene-term-input/lucene-term-input.component';
 import { LuceneGeoQueryInputComponent } from '../lucene-geo-query-input/lucene-geo-query-input.component';
+import {SearchParameters} from "../../backend-api/secom";
+import { SimpleChanges, OnChanges, AfterViewInit } from '@angular/core';
+import { ServiceInstanceStatus } from '../../backend-api/secom';
 ClarityIcons.addIcons(filterGridIcon, connectIcon);
 const shortid = require('shortid');
+
+const statusMap: Record<string, ServiceInstanceStatus> = {
+  PROVISIONAL: ServiceInstanceStatus.PROVISIONAL,
+  RELEASED: ServiceInstanceStatus.RELEASED,
+  DEPRECATED: ServiceInstanceStatus.DEPRECATED,
+  DELETED: ServiceInstanceStatus.DELETED,
+}
 
 @Component({
   selector: 'app-svc-search-input',
@@ -46,18 +56,25 @@ const shortid = require('shortid');
   templateUrl: './svc-search-input.component.html',
   styleUrl: './svc-search-input.component.css'
 })
-export class SvcSearchInputComponent {
+export class SvcSearchInputComponent implements AfterViewInit {
   group: LuceneComponentItem[] = [];
   luceneTerm: Term[] = [];
   selectedItem = '';
   queryString = '';
   geometryIncluded = false;
+  scope: 'local' | 'global' = 'local';
+  lastBuiltParams: SearchParameters = {};
 
-  @Input() title = 'Service Search';
+  @Input() title = 'Service Search (SECOM Version 2)';
   @Input() btnTitle = 'Search';
   @Input() orgMrn = '';
   @Input() fieldInfo: QueryFieldInfo[] = srFieldInfo;
-  @Output() searchEvent = new EventEmitter<string>();
+  @Input() isLoadingGlobal = false;
+  @Output() searchEvent = new EventEmitter<{
+    scope: 'local' | 'global';
+    searchParams: SearchParameters;
+  }>();
+  @Input() errorMessage: string | null = null;
   @Output() clearAllEvent = new EventEmitter<any>();
 
   @ViewChild('luceneQueryStringInput') luceneQueryStringInput!: { nativeElement: { value: string; }; };
@@ -66,11 +83,80 @@ export class SvcSearchInputComponent {
   constructor(private resolver: ComponentFactoryResolver) {
   }
 
+
+
+
   ngAfterViewInit() {
     if (this.luceneComponentHost) {
       this.loadComponent();
     }
   }
+
+  private lusceneToSearchParams(terms: Term[], allowedKeys: Set<string>): SearchParameters {
+    const statusMap: Record<string, ServiceInstanceStatus> = {
+      PROVISIONAL: ServiceInstanceStatus.PROVISIONAL,
+      RELEASED: ServiceInstanceStatus.RELEASED,
+      DEPRECATED: ServiceInstanceStatus.DEPRECATED,
+      DELETED: ServiceInstanceStatus.DELETED,
+    };
+
+
+    const out: SearchParameters = {};
+
+    const stripQuotes = (s: string) =>
+        (s?.startsWith('"') && s.endsWith('"')) ? s.slice(1, -1) : s;
+
+    const walk = (arr: Term[]) => {
+      for (const t of arr) {
+        // recurse into groups
+        if (t.group && t.group.length) {
+          walk(t.group);
+          continue;
+        }
+        // skip operators
+        if ((t as any).operator !== undefined) continue;
+
+        // copy allowed field(s) from this term object
+        for (const k of Object.keys(t)) {
+          if (k === 'id') continue;
+          if (!allowedKeys.has(k)) continue;
+
+          const raw = (t as any)[k];
+          if (raw == null || raw === '') continue;
+
+          const val = stripQuotes(String(raw)).trim();
+
+          if (k === 'status') {
+            const statusMap: Record<string, ServiceInstanceStatus> = {
+              PROVISIONAL: ServiceInstanceStatus.PROVISIONAL,
+              RELEASED: ServiceInstanceStatus.RELEASED,
+              DEPRECATED: ServiceInstanceStatus.DEPRECATED,
+              DELETED: ServiceInstanceStatus.DELETED,
+            };
+
+            (out as any)[k] = statusMap[val];
+            continue;
+          }
+
+          if (k === 'keywords') {
+            const items = val.split(/[\s,]+/).filter(Boolean);
+            const existing = (out as any)[k] || [];
+            (out as any)[k] = Array.isArray(existing)
+                ? [...existing, ...items]
+                : items;
+          } else {
+            // default: treat as simple string
+            const existing = (out as any)[k];
+            (out as any)[k] = existing ? `${existing} ${val}` : val;
+          }
+        }
+      }
+    };
+
+    walk(terms);
+    return out;
+  }
+
 
   loadComponent() {
     const viewContainerRef = this.luceneComponentHost;
@@ -165,7 +251,6 @@ export class SvcSearchInputComponent {
   addTermToGroup(terms: Term[], groupId: string, key: string): Term[] {
     for (const term of terms) {
       if (term.id === groupId) {
-        term.group?.push({ id: shortid.generate(), 'operator': LogicalOperator.And });
         term.group?.push({ id: shortid.generate(), [key]: '' });
       }
   
@@ -178,7 +263,6 @@ export class SvcSearchInputComponent {
 
   addTerm(terms: Term[], target: Term): Term[] {
     if (terms.length > 0) {
-      terms.push({ id: shortid.generate(), 'operator': LogicalOperator.And });
     }
     terms.push(target);
     return terms;
@@ -230,7 +314,7 @@ export class SvcSearchInputComponent {
 
       // first inject new component into the lucene term.
       this.luceneTerm = this.luceneTerm.map(term => term.id === termToBeExchanged.id ?
-        { id: shortid.generate(), group: [{ ...termToBeExchanged, id: id }, { id: shortid.generate(), operator: LogicalOperator.Or }, { ...termToBeExchanged, id: shortid.generate() }] } : term);
+        { id: shortid.generate(), group: [{ ...termToBeExchanged, id: id }, { id: shortid.generate() }, { ...termToBeExchanged, id: shortid.generate() }] } : term);
 
       // second remove the old component from the group
       this.group = this.group.filter(e => e.id !== id);
@@ -240,29 +324,28 @@ export class SvcSearchInputComponent {
   }
 
   search(): void {
-    this.searchEvent.emit(this.queryString);
+    this.searchEvent.emit({
+      scope: this.scope,
+      searchParams: this.lastBuiltParams,
+    });
   }
+
+
+
 
   updateLuceneQuery = () => {
-    this.queryString = buildQuery(this.luceneTerm);
-    // flattening data array for SearchParameters
-    let data: Record<string, any> = {};
-    this.luceneTerm.forEach((e: { [key: string]: any }) => {
-      if (Object.keys(e).length &&
-        Object.keys(e).pop() !== 'operator') {
-        const key = Object.keys(e).pop();
-        if (key) {
-          data[key] = e[key];
-        }
-      }
-    });
-    this.luceneQueryStringInput.nativeElement.value = this.queryString;
-
-    // get rid of " to convert it to the freetext
-    if (this.queryString && this.queryString.length > 0) {
-      this.queryString = this.queryString.split('"').join('');
+    // (Optional) keep building the Lucene string purely for display in the input
+    this.queryString = buildQuery(this.luceneTerm) || '';
+    if (this.luceneQueryStringInput) {
+      this.luceneQueryStringInput.nativeElement.value = this.queryString;
     }
+
+    // Build SearchParameters from luceneTerm
+    const allowed = new Set(this.fieldInfo.map(f => f.value));
+    this.lastBuiltParams = this.lusceneToSearchParams(this.luceneTerm, allowed);
+
   }
+
 
   onQueryStringChanged = (event: any) => {
     this.queryString = event.target.value;
@@ -315,6 +398,9 @@ export class SvcSearchInputComponent {
     }
     this.updateLuceneQuery();
     this.loadComponent();
-    this.searchEvent.emit(this.queryString);
+    this.searchEvent.emit({
+      scope: this.scope,
+      searchParams: this.lastBuiltParams,
+    });
   }
 }

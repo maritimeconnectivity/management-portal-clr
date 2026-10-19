@@ -47,7 +47,9 @@
         @if (isTimestampFormat(itemName)) {
             <clr-dg-cell (click)="userRowSelect(datum)">{{ convertTimeString(datum[itemName]) }}</clr-dg-cell>
             } @else {
-            <clr-dg-cell (click)="userRowSelect(datum)">{{ datum[itemName] }}</clr-dg-cell>
+            <clr-dg-cell (click)="userRowSelect(datum)">
+                {{ getDisplayValue(itemName, datum[itemName]) }}
+            </clr-dg-cell>
             }
         }
     </clr-dg-row>

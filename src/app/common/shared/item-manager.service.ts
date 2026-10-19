@@ -14,21 +14,49 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { ItemType } from '../menuType';
-import { firstValueFrom, Observable } from 'rxjs';
-import { Device, DeviceControllerService, Organization, OrganizationControllerService, Role, RoleControllerService, Service, ServiceControllerService, ServicePatch, User, UserControllerService, Vessel, VesselControllerService } from 'src/app/backend-api/identity-registry';
-import { preprocess } from '../itemPreprocessor';
-import { InstanceControllerService, InstanceDto, XmlControllerService, XmlDto } from 'src/app/backend-api/service-registry';
-import { FetchedItems } from '../fetchedItems';
-import { SearchObjectResult, SECOMService } from 'src/app/backend-api/secom';
-
+import {Injectable} from '@angular/core';
+import {ItemType} from '../menuType';
+import {firstValueFrom, Observable} from 'rxjs';
+import {
+  Device,
+  DeviceControllerService,
+  Organization,
+  OrganizationControllerService,
+  Role,
+  RoleControllerService,
+  Service,
+  ServiceControllerService,
+  ServicePatch,
+  User,
+  UserControllerService,
+  Vessel,
+  VesselControllerService
+} from 'src/app/backend-api/identity-registry';
+import {preprocess} from '../itemPreprocessor';
+import {
+  InstanceControllerService,
+  InstanceDto,
+  XmlControllerService,
+  XmlDto
+} from 'src/app/backend-api/service-registry';
+import {FetchedItems} from '../fetchedItems';
+import {
+  RetrieveResultObject,
+  SearchFilterObject,
+  ServiceInstanceObject,
+  ServiceRegistryService,
+  ServiceService
+} from 'src/app/backend-api/secom';
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import RoleNameEnum = Role.RoleNameEnum;
+import {SecomSigningService} from "./secomSigning.service";
+
 @Injectable({
   providedIn: 'root'
 })
 export class ItemManagerService {
   private rolesInOrg : RoleNameEnum[] = [];
+  public defaultHeaders = new HttpHeaders();
 
   constructor(
     private deviceService: DeviceControllerService,
@@ -38,24 +66,99 @@ export class ItemManagerService {
     private vesselService: VesselControllerService,
     private roleService: RoleControllerService,
     private instanceService: InstanceControllerService,
-    private secomService: SECOMService,
+    private secomService: ServiceRegistryService,
     private xmlService: XmlControllerService,
+    private pingService: ServiceService,
+    private http: HttpClient,
+    private secomSigningService : SecomSigningService
   ) { }
 
-  fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchParam?: object): Promise<FetchedItems> => {
+  checkMsrAvailability = async (): Promise<boolean> => {
+    try {
+      const res: HttpResponse<any> = await firstValueFrom(
+          this.pingService.v2PingGet('response')
+      );
+        console.log("stauts code from ping msr: ", res.status);
+        return res.status === 200;
+    } catch (e) {
+        console.error('MSR not available:', e);
+        return false;
+    }
+  }
+
+//Checks API availability through the OpenAPI spec
+async checkMirAvailability(url: string): Promise<boolean> {
+  try {
+    const headers = this.defaultHeaders.set('Accept', '*/*');
+
+    const response = await firstValueFrom(
+        this.http.get<any>(url, { headers, withCredentials: false })
+    );
+
+    return !!(response?.info?.version);
+  } catch (error) {
+    return false;
+  }
+}
+
+
+
+
+
+
+fetchListOfData = async (itemType: ItemType, orgMrn: string, pageNumber: number, elementsPerPage: number, secomSearchFilterobj?: SearchFilterObject, secomRetrieveResultsobj? : RetrieveResultObject): Promise<FetchedItems> => {
     let page;
+
     if(itemType === ItemType.Instance) {
       page = await firstValueFrom(this.instanceService.getInstances(pageNumber, elementsPerPage, [], 'response'));
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 0;
       return { data: (page.body! as InstanceDto[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
         totalElements};
-    } else if(itemType === ItemType.SearchObjectResult && secomSearchParam) {
-      page = await firstValueFrom(this.secomService.search(secomSearchParam, pageNumber, elementsPerPage, 'response'));
+
+
+    } else if(itemType === ItemType.SearchObjectResult && secomSearchFilterobj) {
+
+      //Signing
+      const signedRequest : SearchFilterObject = await this.secomSigningService.signSearchFilterObject(secomSearchFilterobj)
+
+      page = await firstValueFrom(this.secomService.v2SearchServicePost(signedRequest, 'response'));
+
+      const newXactId = page.body?.envelope['transactionId'] ?? undefined;
+
+
       const totalElements = parseInt(page.headers.get('X-Total-Count')!) || 10;
-      return { data: (page.body?.searchServiceResult! as SearchObjectResult[]).map(i => preprocess(i, itemType)),
+
+      console.log("Total elements from header: ", page.body?.envelope['serviceInstance']!.length);
+
+      return { data: (page.body?.envelope['serviceInstance']! as ServiceInstanceObject[]).map(i => preprocess(i, itemType)),
         totalPages: Math.ceil( totalElements / elementsPerPage),
-        totalElements};
+        totalElements, transactionId : newXactId};
+
+      // Case: we want to call retrievereults with xactId only
+    } else if(itemType === ItemType.SearchObjectResult && secomRetrieveResultsobj?.envelope.transactionId) {
+
+      const signedRequest : RetrieveResultObject = await this.secomSigningService.signRetrieveResultObject(secomRetrieveResultsobj)
+
+      const transactionId = secomRetrieveResultsobj.envelope.transactionId;
+
+      page = await firstValueFrom(
+          this.secomService.v2RetrieveResultPost(transactionId, signedRequest, 'response')
+      );
+
+      const services = (page.body?.envelope['serviceInstance']) as ServiceInstanceObject[];
+
+      const totalHeader = page.headers.get('X-Total-Count');
+      const totalElements =
+          (totalHeader ? parseInt(totalHeader, 10) : services.length) || 0;
+
+      return {
+        data: services.map(i => preprocess(i, itemType)),
+        totalPages: Math.ceil(totalElements / elementsPerPage || 1),
+        totalElements,
+      };
+
+
     } else if (itemType === ItemType.Device) {
       page = await firstValueFrom(this.deviceService.getOrganizationDevices(orgMrn, pageNumber, elementsPerPage));
     } else if(itemType === ItemType.Organization) {
@@ -218,4 +321,7 @@ export class ItemManagerService {
   updateXml = (xmlDto: XmlDto, id: number) => {
     return this.xmlService.updateXml(xmlDto, id);
   }
+
+
+
 }

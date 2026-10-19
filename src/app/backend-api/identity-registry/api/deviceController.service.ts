@@ -211,10 +211,10 @@ export class DeviceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDeviceCert(orgMrn: string, deviceMrn: string, serialNumber: number, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
-    public getDeviceCert(orgMrn: string, deviceMrn: string, serialNumber: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
-    public getDeviceCert(orgMrn: string, deviceMrn: string, serialNumber: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
-    public getDeviceCert(orgMrn: string, deviceMrn: string, serialNumber: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getDeviceCert(orgMrn: string, deviceMrn: string, serialNumber: BigInt, observe?: 'body', reportProgress?: boolean): Observable<Certificate>;
+    public getDeviceCert(orgMrn: string, deviceMrn: string, serialNumber: BigInt, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Certificate>>;
+    public getDeviceCert(orgMrn: string, deviceMrn: string, serialNumber: BigInt, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Certificate>>;
+    public getDeviceCert(orgMrn: string, deviceMrn: string, serialNumber: BigInt, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (orgMrn === null || orgMrn === undefined) {
             throw new Error('Required parameter orgMrn was null or undefined when calling getDeviceCert.');
@@ -383,10 +383,10 @@ export class DeviceControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public revokeDeviceCert(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public revokeDeviceCert(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public revokeDeviceCert(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public revokeDeviceCert(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public revokeDeviceCert(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public revokeDeviceCert(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public revokeDeviceCert(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public revokeDeviceCert(body: CertificateRevocation, orgMrn: string, deviceMrn: string, certId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling revokeDeviceCert.');

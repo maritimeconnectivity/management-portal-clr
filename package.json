@@ -1,6 +1,6 @@
 {
   "name": "management-portal-clr",
-  "version": "0.6.8",
+  "version": "1.4",
   "license": "Apache license 2.0",
   "repository": {
     "type": "git",
@@ -12,7 +12,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "prebuild": "npm run build:go",
+    "prebuild": "$npm_execpath run build:go",
     "build": "ng build",
     "build:go": "cd go && GOOS=js GOARCH=wasm go build -o ../src/assets/wasm/main.wasm && cp $(go env GOROOT)/lib/wasm/wasm_exec.js ../src/assets/js/wasm_exec.js",
     "watch": "ng build --watch --configuration development",
@@ -33,6 +33,7 @@
     "@bluehalo/ngx-leaflet-draw": "^18.0.4",
     "@cds/core": "^6.13.0",
     "@clr/angular": "^17.3.0",
+    "@clr/icons": "^13.0.2",
     "@clr/ui": "^17.3.0",
     "@ngx-translate/core": "^15.0.0",
     "@ngx-translate/http-loader": "^8.0.0",
@@ -44,6 +45,7 @@
     "d3-scale": "^4.0.2",
     "d3-selection": "^3.0.0",
     "d3-shape": "^3.2.0",
+    "ecdsa-sig-formatter": "^1.0.11",
     "file-saver": "^2.0.5",
     "gramli-angular-notifier": "^16.0.2",
     "jszip": "^3.10.1",
@@ -60,6 +62,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.3",
     "@angular/cli": "^18.2.3",
+    "@eslint/js": "^9.9.1",
     "@types/d3-scale": "^4.0.8",
     "@types/d3-selection": "^3.0.11",
     "@types/d3-shape": "^3.1.6",

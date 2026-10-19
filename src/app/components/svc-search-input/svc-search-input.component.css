@@ -13,3 +13,16 @@
       width: 100%;
     }
 }*/
+
+.loading-indicator {
+    display: flex;
+    align-items: center;      /* vertically center spinner + text */
+    justify-content: center;  /* center the two as a group */
+    gap: 0.4rem;              /* small gap between spinner and text */
+    font-size: 0.85rem;
+    color: var(--clr-gray-700, #555);
+    white-space: nowrap;      /* prevent text wrapping */
+    color: red;
+    margin-left: auto;
+}
+

@@ -26,20 +26,21 @@ export const preprocess = (item: any, itemType: ItemType): any => {
         // when we receive the data from the backend, we need to convert the array to object for serviceType and dataProductType
         // store the list of values
 
-        let serviceTypeStringArray = item.serviceType;
+        let serviceTypeStringArray = item.serviceTypes;
         let dataProductTypeStringArray = item.dataProductType;
 
-        
-        if (item.serviceType && !Array.isArray(item.serviceType) || !item.serviceType.every((type: any) => typeof type === 'string')) {
+        console.log("preprocess instance", item);
+        console.log("item.serviceTypes is ", item.serviceTypes);
+        if (item.serviceTypes && !Array.isArray(item.serviceTypes) || !item.serviceTypes.every((type: any) => typeof type === 'string')) {
             // if the serviceType is already an array of object, we convert it to an array of string
-            serviceTypeStringArray = item.serviceType.map( (e: any) => e.value);
-        } else if (item.serviceType){
+            serviceTypeStringArray = item.serviceTypes.map( (e: any) => e.value);
+        } else if (item.serviceTypes){
             // if the serviceType is an array of string, we convert it to an array of object
 
             // then convert the array of string to object
-            serviceTypeStringArray = item.serviceType; // save this for later
+            serviceTypeStringArray = item.serviceTypes; // save this for later
             // actual conversion
-            item.serviceType = item.serviceType ? Array.isArray(item.serviceType) ? item.serviceType.map((_serviceType: string) => {
+            item.serviceTypes = item.serviceTypes ? Array.isArray(item.serviceTypes) ? item.serviceTypes.map((_serviceType: string) => {
                 const filtered = (ColumnForResource[itemType] as any).serviceType.options.filter((o: any) => o.value === _serviceType);
                 // if we don't find the value, we set it to other
                 return filtered.length > 0 ? filtered.pop() : {value: _serviceType, title: 'Other'};
