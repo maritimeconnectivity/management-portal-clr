@@ -17,14 +17,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ClarityIcons, crownIcon, sunIcon, moonIcon } from '@cds/core/icon';
+import { ClarityIcons, sunIcon, moonIcon } from '@cds/core/icon';
 import { ClrInput } from '@clr/angular';
 import { TranslateService } from '@ngx-translate/core';
+import { AppConfig } from 'src/app/app.config';
 import { AuthService } from 'src/app/auth/auth.service';
 import { languages } from 'src/app/common/languages';
 import { loadTheme, storeTheme } from 'src/app/common/themeHelper';
 import { changeLang, getLang, loadLang } from 'src/app/common/translateHelper';
-ClarityIcons.addIcons(crownIcon, sunIcon, moonIcon);
+ClarityIcons.addIcons(sunIcon, moonIcon);
 
 @Component({
   selector: 'mp-header',
@@ -40,6 +41,7 @@ export class HeaderComponent {
   currentLangName = "English";
   myMrn = '';
   langs = languages;
+  logoImg = AppConfig.LOGO_IMG;
 
   constructor(private authService: AuthService,
     public translate: TranslateService,
