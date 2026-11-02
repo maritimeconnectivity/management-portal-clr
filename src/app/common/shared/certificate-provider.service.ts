@@ -4,7 +4,7 @@ import {AuthService} from "../../auth/auth.service";
 import {issueNewWithLocalKeys} from "../certificateUtil";
 import {ItemType} from "../menuType";
 import {CertificateBundle} from "../certificateBundle";
-import {UserControllerService} from "../../backend-api/identity-registry";
+import {Certificate, UserControllerService} from "../../backend-api/identity-registry";
 import {firstValueFrom} from "rxjs";
 
 interface EncryptedBlob {
@@ -103,6 +103,10 @@ export class CertificateProviderService {
         ));
         const match = user.certificates?.find(c => c.certificate && this.toDerBase64(c.certificate) === ownDer);
 
+        return this.reasonForMatch(match);
+    }
+
+    private reasonForMatch(match: Certificate | undefined): CertificateInvalidReason | null {
         if (!match) {
             return "unregistered";
         }
