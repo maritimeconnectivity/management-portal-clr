@@ -96,7 +96,7 @@ export class CertificateProviderService {
         if (!certBundle.certificate) {
             return null;
         }
-        const ownDer = this.toDerBase64(certBundle.certificate);
+        const ownDer = this.toDerBase64(certBundle.certificate);  // first certificate of the cached chain
         const user = await firstValueFrom(this.userService.getUser(
             await this.authService.getOrgMrnFromToken(),
             await this.authService.getUserMrnFromToken()
@@ -140,10 +140,14 @@ export class CertificateProviderService {
         return bundle;
     }
 
+    /**
+     * Returns the base64 DER content of the first certificate in a PEM string. Certificates issued by the
+     * Identity Registry are returned as a chain (own certificate followed by the issuing CA), while the
+     * registry's certificate list only holds the own certificate, so only the first one is compared.
+     */
     private toDerBase64(pem: string): string {
-        return pem
-            .replace(/-----(BEGIN|END) CERTIFICATE-----/g, '')
-            .replace(/\s+/g, '');
+        const first = pem.match(/-----BEGIN CERTIFICATE-----([\s\S]*?)-----END CERTIFICATE-----/);
+        return (first ? first[1] : pem).replace(/\s+/g, '');
     }
 
     private async createAndStoreCertBundle(ownMrn: string, password: string) {
