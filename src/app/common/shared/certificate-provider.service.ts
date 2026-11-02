@@ -4,6 +4,8 @@ import {AuthService} from "../../auth/auth.service";
 import {issueNewWithLocalKeys} from "../certificateUtil";
 import {ItemType} from "../menuType";
 import {CertificateBundle} from "../certificateBundle";
+import {UserControllerService} from "../../backend-api/identity-registry";
+import {firstValueFrom} from "rxjs";
 
 interface EncryptedBlob {
     salt: Uint8Array,
@@ -23,8 +25,11 @@ export enum SignatureProviderErrorCode {
     PasswordCancelled = "PASSWORD_CANCELLED",
     PasswordRequired = "PASSWORD_REQUIRED",
     DecryptionFailed = "DECRYPTION_FAILED",
-    StorageFailed = "STORAGE_FAILED"
+    StorageFailed = "STORAGE_FAILED",
+    IssuanceFailed = "ISSUANCE_FAILED"
 }
+
+export type CertificateInvalidReason = "revoked" | "expired" | "unregistered";
 
 export class SignatureProviderError extends Error {
     constructor(
@@ -46,7 +51,8 @@ export class CertificateProviderService {
 
     constructor(
         private certificateService: CertificateService,
-        private authService: AuthService
+        private authService: AuthService,
+        private userService: UserControllerService
     ) {
 
     }
@@ -78,6 +84,66 @@ export class CertificateProviderService {
         });
 
         return await this.createAndStoreCertBundle(ownMrn, password);
+    }
+
+    /**
+     * Returns why the given certificate can no longer be used, or null if it is still valid.
+     * The certificate is looked up in the user's certificate list in the Identity Registry, matched by
+     * its DER content so serial number precision is not an issue, and the registry's revocation status
+     * and expiry date are used. A certificate the registry does not know for this user is also unusable.
+     */
+    public async getInvalidReason(certBundle: CertificateBundle): Promise<CertificateInvalidReason | null> {
+        if (!certBundle.certificate) {
+            return null;
+        }
+        const ownDer = this.toDerBase64(certBundle.certificate);
+        const user = await firstValueFrom(this.userService.getUser(
+            await this.authService.getOrgMrnFromToken(),
+            await this.authService.getUserMrnFromToken()
+        ));
+        const match = user.certificates?.find(c => c.certificate && this.toDerBase64(c.certificate) === ownDer);
+
+        if (!match) {
+            return "unregistered";
+        }
+        if (match.revoked) {
+            return "revoked";
+        }
+        // The generated model types `end` as a Date, but over JSON it arrives as a string or epoch millis
+        if (match.end != null) {
+            const end = new Date(match.end as unknown as string | number);
+            if (!isNaN(end.getTime()) && end.getTime() <= Date.now()) {
+                return "expired";
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Issues a new certificate for the current user and replaces the one stored in IndexedDB,
+     * encrypted with the same password the user unlocked the old one with.
+     */
+    public async reissueCertificate(passwordProvider: SignaturePasswordProvider): Promise<CertificateBundle> {
+        const ownMrn = await this.authService.getUserMrnFromToken();
+        const password = await this.getPassword(passwordProvider, {
+            mode: "create",
+            message: "Your certificate is no longer valid. Create a password to encrypt your new certificate in this browser.",
+            requireConfirmation: true
+        });
+        const bundle = await this.createAndStoreCertBundle(ownMrn, password);
+        if (!bundle) {
+            throw new SignatureProviderError(
+                SignatureProviderErrorCode.IssuanceFailed,
+                "Could not issue a new certificate"
+            );
+        }
+        return bundle;
+    }
+
+    private toDerBase64(pem: string): string {
+        return pem
+            .replace(/-----(BEGIN|END) CERTIFICATE-----/g, '')
+            .replace(/\s+/g, '');
     }
 
     private async createAndStoreCertBundle(ownMrn: string, password: string) {

@@ -38,10 +38,12 @@ import {
     SignaturePasswordRequest,
     SignatureProviderError,
     SignatureProviderErrorCode,
-    CertificateProviderService
+    CertificateProviderService,
+    CertificateInvalidReason
 } from "../../common/shared/certificate-provider.service";
 import {SecomSignerProvider} from "../../common/shared/secomSigning.service";
 import {AppConfig} from "../../app.config";
+import {CertificateBundle} from "../../common/certificateBundle";
 
 @Component({
     selector: 'app-sr-search',
@@ -112,12 +114,15 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private initializeCertificate(): void {
         this.signatureServiceProvider.getCertificate(this.requestCertificatePassword.bind(this))
-            .then(cert => this.ssp.setSigningMaterial(
-                {
-                    bundle: cert!,
-                    rootCertificateThumbprint: AppConfig.ROOT_CERT_TP
+            .then(cert => cert ? this.ensureCertificateValid(cert) : null)
+            .then(cert => {
+                if (cert) {
+                    this.ssp.setSigningMaterial({
+                        bundle: cert,
+                        rootCertificateThumbprint: AppConfig.ROOT_CERT_TP
+                    });
                 }
-            ))
+            })
             .catch(error => {
                 if (error instanceof SignatureProviderError && error.code === SignatureProviderErrorCode.PasswordCancelled) {
                     this.notifier.notify(
@@ -145,6 +150,46 @@ export class SrSearchComponent implements OnInit, AfterViewInit, OnDestroy {
 
                 console.error('Could not initialize signature provider certificate', error);
             });
+    }
+
+    /**
+     * Checks whether the certificate loaded from the browser has been revoked, has expired or is unknown to the
+     * Identity Registry, and if so issues a new one. Returns the certificate to sign with, or null if none is usable.
+     */
+    private async ensureCertificateValid(cert: CertificateBundle): Promise<CertificateBundle | null> {
+        let reason;
+        try {
+            reason = await this.signatureServiceProvider.getInvalidReason(cert);
+        } catch (error) {
+            // Don't lock the user out because the Identity Registry is unreachable; keep using the cached certificate
+            console.error('Could not check validity of certificate', error);
+            this.notifier.notify('warning.signature.validity_check_failed', 'Could not check whether your certificate is still valid.');
+            return cert;
+        }
+        if (!reason) {
+            return cert;
+        }
+
+        try {
+            const newCert = await this.signatureServiceProvider.reissueCertificate(this.requestCertificatePassword.bind(this));
+            this.notifier.notify('info.signature.reissued', `${this.describeInvalidCertificate(reason)}, so a new one has been issued.`);
+            return newCert;
+        } catch (error) {
+            console.error('Could not issue a new certificate', error);
+            this.notifier.notify('error.signature.reissue_failed', `${this.describeInvalidCertificate(reason)} and a new one could not be issued.`);
+            return null;
+        }
+    }
+
+    private describeInvalidCertificate(reason: CertificateInvalidReason): string {
+        switch (reason) {
+            case 'expired':
+                return 'Your certificate has expired';
+            case 'revoked':
+                return 'Your certificate has been revoked';
+            case 'unregistered':
+                return 'Your certificate is not registered in the Identity Registry';
+        }
     }
 
     ngOnDestroy(): void {
