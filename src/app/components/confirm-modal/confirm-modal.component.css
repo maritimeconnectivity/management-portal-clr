@@ -1,0 +1,10 @@
+.confirm-items {
+    margin-top: 0.5rem;
+    max-height: 12rem;
+    overflow-y: auto;
+    word-break: break-all;
+}
+
+.confirm-warning {
+    margin-top: 1rem;
+}

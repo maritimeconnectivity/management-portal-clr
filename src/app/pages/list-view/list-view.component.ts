@@ -32,6 +32,8 @@ import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import RoleNameEnum = Role.RoleNameEnum;
 import { isUserEditingTheirOwnData } from 'src/app/common/mrnUtil';
 import {RetrieveResultObject, SearchFilterObject} from 'src/app/backend-api/secom';
+import { ConfirmModalComponent } from 'src/app/components/confirm-modal/confirm-modal.component';
+import { confirmDeletion } from 'src/app/common/deleteConfirmation';
 
 @Component({
   selector: 'app-list-view',
@@ -39,13 +41,15 @@ import {RetrieveResultObject, SearchFilterObject} from 'src/app/backend-api/seco
   imports: [
     ClarityModule,
     ComponentsModule,
-    SmartExpandableTableComponent],
+    SmartExpandableTableComponent,
+    ConfirmModalComponent],
   templateUrl: './list-view.component.html',
   styleUrl: './list-view.component.css'
 })
 
 export class ListViewComponent implements OnInit {
   @ViewChild(SmartExpandableTableComponent) exTable!: SmartExpandableTableComponent;
+  @ViewChild(ConfirmModalComponent) confirmModal?: ConfirmModalComponent;
   @Input() itemType: ItemType = ItemType.None;
   orgMrn = "";
   data: any[] = [];
@@ -154,6 +158,9 @@ export class ListViewComponent implements OnInit {
     } else if (!this.hasEditPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
     } else {
+      if (!await confirmDeletion(this.confirmModal, this.translate, this.itemType, selected)) {
+        return;
+      }
       await selected.forEach(async (item) => {
         await this.itemManagerService.deleteData(this.itemType, this.orgMrn, item.mrn, item.instanceVersion, item.id && parseInt(item.id)).pipe(
           catchError(err => {

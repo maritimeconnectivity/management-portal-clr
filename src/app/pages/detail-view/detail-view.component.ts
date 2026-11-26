@@ -31,6 +31,8 @@ import { ItemManagerService } from 'src/app/common/shared/item-manager.service';
 import { loadLang } from 'src/app/common/translateHelper';
 import { ComponentsModule } from 'src/app/components/components.module';
 import { Role } from 'src/app/backend-api/identity-registry';
+import { ConfirmModalComponent } from 'src/app/components/confirm-modal/confirm-modal.component';
+import { confirmDeletion } from 'src/app/common/deleteConfirmation';
 
 
 @Component({
@@ -40,11 +42,13 @@ import { Role } from 'src/app/backend-api/identity-registry';
     NgIf,
     ComponentsModule,
     ClarityModule,
+    ConfirmModalComponent,
   ],
   templateUrl: './detail-view.component.html',
   styleUrl: './detail-view.component.css'
 })
 export class DetailViewComponent {
+  @ViewChild(ConfirmModalComponent) confirmModal?: ConfirmModalComponent;
   isEditing: boolean = false;
   itemType: ItemType = ItemType.None;
   orgMrn: string = "";
@@ -273,9 +277,12 @@ export class DetailViewComponent {
       });
   }
 
-  deleteItem = () => {
+  deleteItem = async () => {
     if (!this.hasEditPermission) {
       this.notifier.notify('error', this.translate.instant('error.resource.permissionError'));
+      return;
+    }
+    if (!await confirmDeletion(this.confirmModal, this.translate, this.itemType, [this.item])) {
       return;
     }
     this.itemManagerService.deleteData(this.itemType, this.orgMrn, this.id, this.instanceVersion, this.numberId).pipe(

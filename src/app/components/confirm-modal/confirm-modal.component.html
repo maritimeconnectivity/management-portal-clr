@@ -1,0 +1,24 @@
+<clr-modal [clrModalOpen]="modalOpen" (clrModalOpenChange)="onOpenChange($event)">
+    <h3 class="modal-title">{{ options.title }}</h3>
+    <div class="modal-body">
+        <p>{{ options.message }}</p>
+        @if (options.items?.length) {
+            <ul class="confirm-items">
+                @for (item of options.items; track $index) {
+                    <li>{{ item }}</li>
+                }
+            </ul>
+        }
+        @if (options.warning) {
+            <clr-alert clrAlertType="danger" [clrAlertClosable]="false" class="confirm-warning">
+                <clr-alert-item>
+                    <span class="alert-text">{{ options.warning }}</span>
+                </clr-alert-item>
+            </clr-alert>
+        }
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="cancel()">{{ options.cancelText ?? 'Cancel' }}</button>
+        <button type="button" class="btn btn-danger" (click)="confirm()">{{ options.confirmText ?? 'Confirm' }}</button>
+    </div>
+</clr-modal>

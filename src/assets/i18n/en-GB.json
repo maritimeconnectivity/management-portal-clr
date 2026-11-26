@@ -203,6 +203,7 @@
     "warning": {
         "resource": {
             "beforeRevoke": " All certificates under this entity will be revoked",
+            "beforeRevokeMultiple": "All certificates under these entities will be revoked",
             "beforeDeletion": "Are you sure you want to delete?"
         }
     },

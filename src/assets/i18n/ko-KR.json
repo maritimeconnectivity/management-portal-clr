@@ -198,6 +198,7 @@
     "warning": {
         "resource": {
             "beforeRevoke": " 이 자원을 위해 발급된 모든 인증서가 해지됩니다",
+            "beforeRevokeMultiple": "이 자원들을 위해 발급된 모든 인증서가 해지됩니다",
             "beforeDeletion": "삭제 하시겠습니까?"
         }
     },
